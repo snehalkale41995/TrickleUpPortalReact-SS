@@ -285,7 +285,10 @@ class Settings extends Component {
   }
   render() {
     let user = { ...this.state.user };
-    let imagePreviewUrl = `${AppConfig.serverURL}/${user.ImagePath}`;
+    let imagePreviewUrl;
+    if(user.ImagePath){
+      imagePreviewUrl = `${AppConfig.serverURL}/${user.ImagePath}`;
+    }
     let $imagePreview = null;
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} style={{ borderRadius : "50em", width: "100%" , height: '100%'}} />);

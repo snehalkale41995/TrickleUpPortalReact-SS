@@ -187,7 +187,7 @@ class RegistrationForm extends Component {
           "BulkUploadId",
           "UserName"
         ]);
-        user.UpdatedBy = 1;
+        user.UpdatedBy = localStorage.getItem("user");
         user.UpdatedOn = new Date();
         this.props.updateBeneficiary(user.Id, user);
         this.setState({ loading: true });
@@ -233,7 +233,7 @@ class RegistrationForm extends Component {
           "BulkUploadId",
           "UserName"
         ]);
-        user.CreatedBy = 1;
+        user.CreatedBy = localStorage.getItem("user");
         user.CreatedOn = new Date();
         this.props.createBeneficiary(user);
         this.setState({loading: true});
