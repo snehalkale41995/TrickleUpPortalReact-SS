@@ -57,6 +57,8 @@ class Settings extends Component {
         DeletedBy: "",
         DeletedOn: "",
         file: "",
+        ImagePath :"",
+        BulkUploadId : "",
         imagePreviewUrl:""
       },
       genderRequired: false,
@@ -193,8 +195,8 @@ class Settings extends Component {
         "CreatedOn",
         "UpdatedBy",
         "UpdatedOn",
-        "DeletedBy",
-        "DeletedOn"
+        "ImagePath",
+        "BulkUploadId",
       ]);
         user.UpdatedBy = 1;
         user.UpdatedOn = new Date();
