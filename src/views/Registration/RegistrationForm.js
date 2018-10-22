@@ -10,25 +10,29 @@ import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import AppConfig from "../../constants/AppConfig";
+
 
 const grampanchayatList = [
-  { label: "abc", value: "1" },
-  { label: "deef", value: "2" },
-  { label: "asd", value: "3" }
+  { label: "grampanchayat1", value: 1 },
+  { label: "grampanchayat2", value: 2 },
+  { label: "grampanchayat3", value: 3 }
 ];
 const villageList = [
-  { label: "ghf", value: "1" },
-  { label: "no", value: "2" },
-  { label: "abgfhc", value: "3" }
+  { label: "village1", value: 1 },
+  { label: "village2", value: 2 },
+  { label: "village3", value: 3 }
 ];
+
 class RegistrationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       user: {
-        Id: "",
+        Id : "",
         UserId: null,
+        Active : true,
         Name: "",
         NameRequired: false,
         PhoneNumber: "", //no
@@ -51,8 +55,10 @@ class RegistrationForm extends Component {
         CreatedOn: "",
         UpdatedBy: "",
         UpdatedOn: "",
-        DeletedBy: "",
-        DeletedOn: ""
+        ActiveBy :"",
+        ActiveOn :"",
+        ImagePath :"",
+        BulkUploadId: ""
       },
       genderRequired: false,
       stateRequired: false,
@@ -64,6 +70,7 @@ class RegistrationForm extends Component {
       updateFlag: false
     };
   }
+ 
   componentWillMount() {
     setTimeout(() => {
       this.setState({ loading: false });
@@ -150,31 +157,34 @@ class RegistrationForm extends Component {
     let user = { ...this.state.user };
     let compRef = this;
     if (this.validData()) {
-      user = _.pick(user, [
-        "Id",
-        "UserId",
-        "Name",
-        "PhoneNumber",
-        "Age",
-        "Gender",
-        "State",
-        "District",
-        "Village",
-        "Grampanchayat",
-        "Aadhaar",
-        "IMEI1",
-        "IMEI2",
-        "Role",
-        "Language",
-        "FCMToken",
-        "CreatedBy",
-        "CreatedOn",
-        "UpdatedBy",
-        "UpdatedOn",
-        "DeletedBy",
-        "DeletedOn"
-      ]);
       if (this.state.updateFlag) {
+        user = _.pick(user, [
+          "Id",
+          "Active",
+          "UserId",
+          "Name",
+          "PhoneNumber",
+          "Age",
+          "Gender",
+          "State",
+          "District",
+          "Village",
+          "Grampanchayat",
+          "Aadhaar",
+          "IMEI1",
+          "IMEI2",
+          "Role",
+          "Language",
+          "FCMToken",
+          "CreatedBy",
+          "CreatedOn",
+          "UpdatedBy",
+          "UpdatedOn",
+          "ActiveBy" ,
+          "ActiveOn",
+          "ImagePath",
+          "BulkUploadId"
+        ]);
         user.UpdatedBy = 1;
         user.UpdatedOn = new Date();
         this.props.updateBeneficiary(user.Id, user);
@@ -194,6 +204,32 @@ class RegistrationForm extends Component {
           }, 1000);
         }, 1000);
       } else {
+        user = _.pick(user, [
+          "Active",
+          "UserId",
+          "Name",
+          "PhoneNumber",
+          "Age",
+          "Gender",
+          "State",
+          "District",
+          "Village",
+          "Grampanchayat",
+          "Aadhaar",
+          "IMEI1",
+          "IMEI2",
+          "Role",
+          "Language",
+          "FCMToken",
+          "CreatedBy",
+          "CreatedOn",
+          "UpdatedBy",
+          "UpdatedOn",
+          "ActiveBy" ,
+          "ActiveOn",
+          "ImagePath",
+          "BulkUploadId"
+        ]);
         user.CreatedBy = 1;
         user.CreatedOn = new Date();
         this.props.createBeneficiary(user);
@@ -290,179 +326,84 @@ class RegistrationForm extends Component {
   }
   render() {
     let user = { ...this.state.user };
-    return this.state.loading ? (
-      <Loader loading={this.state.loading} />
-    ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Beneficiary Form"
-          navigation={true}
-          navigationRoute="/beneficiary/beneficiaryList"
-        >
+    return this.state.loading ? <Loader loading={this.state.loading} /> : <div style={{ marginTop: 30 }}>
+        <CardLayout name="Beneficiary Form" navigation={true} navigationRoute="/beneficiary/beneficiaryList">
           <FormGroup row />
           <div style={{ margin: 20 }}>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement
-                  type="text"
-                  label="Name"
-                  name="Name"
-                  placeholder="Please enter name "
-                  value={user.Name}
-                  required={user.NameRequired}
-                  onChange={event => this.onChangeInput(event)}
-                />
+                <InputElement type="text" label="Name" name="Name" placeholder="Please enter name " value={user.Name} required={user.NameRequired} onChange={event => this.onChangeInput(event)} />
               </Col>
               <Col md="5">
-                <InputElement
-                  type="text"
-                  label="Phone number"
-                  name="PhoneNumber"
-                  maxLength={10}
-                  placeholder="Please enter phone number "
-                  value={user.PhoneNumber}
-                  required={user.PhoneNumberRequired}
-                  invalid={user.PhoneNumberInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
+                <InputElement type="text" label="Phone number" name="PhoneNumber" maxLength={10} placeholder="Please enter phone number " value={user.PhoneNumber} required={user.PhoneNumberRequired} invalid={user.PhoneNumberInvalid} onChange={event => this.onChangeInput(event)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement
-                  type="number"
-                  label="Age"
-                  name="Age"
-                  maxLength={3}
-                  placeholder="Please enter age "
-                  value={user.Age}
-                  required={user.AgeRequired}
-                  onChange={event => this.onChangeInput(event)}
-                />
+                <InputElement type="number" label="Age" name="Age" maxLength={3} placeholder="Please enter age " value={user.Age} required={user.AgeRequired} onChange={event => this.onChangeInput(event)} />
               </Col>
               <Col md="5">
                 <Label>Gender</Label>
-                <DropdownSelect
-                  id="1"
-                  name="Gender"
-                  placeholder="Select gender "
-                  options={this.props.gendersList}
-                  value={user.Gender}
-                  required={this.state.genderRequired}
-                  onChange={this.onGenderSelection.bind(this)}
-                />
+                <DropdownSelect id="1" name="Gender" placeholder="Select gender " options={this.props.gendersList} value={user.Gender} required={this.state.genderRequired} onChange={this.onGenderSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>State</Label>
-                <DropdownSelect
-                  name="State"
-                  placeholder="Select state"
-                  options={this.props.statesList}
-                  value={user.State}
-                  required={this.state.stateRequired}
-                  onChange={this.onStateSelection.bind(this)}
-                />
+                <DropdownSelect name="State" placeholder="Select state" options={this.props.statesList} value={user.State} required={this.state.stateRequired} onChange={this.onStateSelection.bind(this)} />
               </Col>
               <Col md="5">
                 <Label>District</Label>
-                <DropdownSelect
-                  name="District"
-                  placeholder="Select district "
-                  options={this.props.districtsList}
-                  value={user.District}
-                  required={this.state.districtRequired}
-                  onChange={this.onDistrictSelection.bind(this)}
-                />
+                <DropdownSelect name="District" placeholder="Select district " options={this.props.districtsList} value={user.District} required={this.state.districtRequired} onChange={this.onDistrictSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>Grampanchayat</Label>
-                <DropdownSelect
-                  name="Grampanchayat"
-                  placeholder="Select grampanchayat "
-                  value={user.Grampanchayat}
-                  options={grampanchayatList}
-                  required={this.state.grampanchayatRequired}
-                  onChange={this.onGrampanchayatSelection.bind(this)}
-                />
+                <DropdownSelect name="Grampanchayat" placeholder="Select grampanchayat " value={user.Grampanchayat} options={grampanchayatList} required={this.state.grampanchayatRequired} onChange={this.onGrampanchayatSelection.bind(this)} />
               </Col>
               <Col md="5">
                 <Label>Village</Label>
-                <DropdownSelect
-                  name="Village"
-                  placeholder="Select village "
-                  value={user.Village}
-                  options={villageList}
-                  required={this.state.villageRequired}
-                  onChange={this.onVillageSelection.bind(this)}
-                />
+                <DropdownSelect name="Village" placeholder="Select village " value={user.Village} options={villageList} required={this.state.villageRequired} onChange={this.onVillageSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement
-                  type="text"
-                  label="Aadhaar number"
-                  name="Aadhaar"
-                  placeholder="Please enter aadhaar number "
-                  value={user.Aadhaar}
-                  onChange={event => this.onChangeInput(event)}
-                />
+                <InputElement type="text" label="Aadhaar number" name="Aadhaar" placeholder="Please enter aadhaar number " value={user.Aadhaar} onChange={event => this.onChangeInput(event)} />
               </Col>
               <Col md="5">
                 <Label>Role</Label>
-                <DropdownSelect
-                  name="Role"
-                  placeholder="Select role "
-                  options={this.props.rolesList}
-                  value={user.Role}
-                  required={this.state.roleRequired}
-                  onChange={this.onRoleSelection.bind(this)}
-                />
+                <DropdownSelect name="Role" placeholder="Select role " options={this.props.rolesList} value={user.Role} required={this.state.roleRequired} onChange={this.onRoleSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>Language</Label>
-                <DropdownSelect
-                  name="Language"
-                  placeholder="Select language "
-                  options={this.props.languagesList}
-                  value={user.Language}
-                  required={this.state.languageRequired}
-                  onChange={this.onLanguageSelection.bind(this)}
-                />
+                <DropdownSelect name="Language" placeholder="Select language " options={this.props.languagesList} value={user.Language} required={this.state.languageRequired} onChange={this.onLanguageSelection.bind(this)} />
+              </Col>
+              <Col md="5">
+                {this.state.user.ImagePath ? <div>
+                    
+                      <Label> Profile Image :</Label>
+                   
+                      <img src={`${AppConfig.serverURL}/${this.state.user.ImagePath}`} style={{ height: 90, width: 100,marginLeft :20 }} alt="" />{" "}
+              
+                  </div> : null}
               </Col>
             </FormGroup>
             <FormGroup row>
-              {this.state.updateFlag ? (
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
+              {this.state.updateFlag ? <Col md="1">
+                  <Button className="theme-positive-btn" onClick={this.onSubmit.bind(this)}>
                     Edit
                   </Button>
-                </Col>
-              ) : (
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
+                </Col> : <Col md="1">
+                  <Button className="theme-positive-btn" onClick={this.onSubmit.bind(this)}>
                     Submit
                   </Button>
-                </Col>
-              )}
+                </Col>}
 
               <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
-                >
+                <Button className="theme-reset-btn" onClick={this.onReset.bind(this)}>
                   Reset
                 </Button>
               </Col>
@@ -470,8 +411,7 @@ class RegistrationForm extends Component {
           </div>
         </CardLayout>
         <ToastContainer autoClose={2000} />
-      </div>
-    );
+      </div>;
   }
 }
 const mapStateToProps = state => {

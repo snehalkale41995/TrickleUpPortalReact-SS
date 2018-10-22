@@ -52,6 +52,7 @@ class RegistrationList extends Component {
   }
   onConfirmDelete() {
     let user = { ...this.state.userToDelete };
+    user.Active  = false;
     this.props.deleteBeneficiary(user.Id, user);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -113,7 +114,7 @@ class RegistrationList extends Component {
                 search={true}
                 options={sortingOptions}
                 exportCSV={true}
-                csvFileName="Beneficiary List"
+                csvFileName="BeneficiaryList.csv"
                 hover={true}
               >
                 <TableHeaderColumn
@@ -124,6 +125,7 @@ class RegistrationList extends Component {
                 >
                   Id
                 </TableHeaderColumn>
+               
                 <TableHeaderColumn
                   dataField="Name"
                   headerAlign="left"
@@ -151,6 +153,30 @@ class RegistrationList extends Component {
                 >
                   Role
                 </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="StateName"
+                  csvHeader="State"
+                  export={true}
+                  hidden
+                />
+                {/* <TableHeaderColumn
+                  dataField="DistrictName"
+                  csvHeader="District"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
+                  dataField="VillageName"
+                  csvHeader="Village"
+                  export={true}
+                  hidden
+                /> */}
+                <TableHeaderColumn
+                  dataField="GenderName"
+                  csvHeader="Gender"
+                  export={true}
+                  hidden
+                />
                 <TableHeaderColumn
                   dataField="edit"
                   dataFormat={this.onEditBeneficiary.bind(this)}

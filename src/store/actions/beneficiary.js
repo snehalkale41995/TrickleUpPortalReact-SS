@@ -31,7 +31,6 @@ let beneficiaryList = [];
           beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
               return beneficiary.Active === true ;
           });
-          console.log("beneficiary", beneficiaryList);
             dispatch(storeBeneficiaryList(beneficiaryList));
       })
       .catch(error => {
@@ -60,7 +59,7 @@ export const createBeneficiary = (beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PostUser`, beneficiary)
       .then(response => {
-          
+          console.log("Created", response);
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));
