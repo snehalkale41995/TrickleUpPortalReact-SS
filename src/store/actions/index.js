@@ -30,4 +30,6 @@ export {
     getRolesList,
     getGendersList,
     getLanguageList
-} from './rolesMaster.js'
+} from './rolesMaster.js';
+
+export { loginUser} from "./login";
