@@ -5,6 +5,7 @@ import districtReducer from './districtReducer';
 import beneficiaryReducer from './beneficiaryReducer';
 import cropsReducer from './cropsReducer';
 import rolesReducer from './rolesReducer';
+import loginReducer from './loginReducer';
 
 const rootReducer = combineReducers({
     dashboard: dashboardReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     districtReducer : districtReducer,
     beneficiaryReducer : beneficiaryReducer,
     cropsReducer:cropsReducer,
-    rolesReducer:rolesReducer
+    rolesReducer:rolesReducer,
+    loginReducer: loginReducer
 });
 
 export default rootReducer;
