@@ -65,10 +65,22 @@ export default {
         }
       ]
     },
-    {
+     {
       name: "Settings",
       url: "/settings",
-      icon: "fa fa-cog"
-    }
+      icon: "fa fa-cog",
+      children: [
+        {
+          name: "My Profile",
+          url: "/settings",
+          icon: "fa fa-users"
+        },
+        // {
+        //   name: "Forgot Password",
+        //   url: "/settings",
+        //   icon: "fa fa-upload"
+        // }
+      ]
+    },
   ]
 };
