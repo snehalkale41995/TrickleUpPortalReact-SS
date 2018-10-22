@@ -13,6 +13,10 @@ import { AppHeader ,AppFooter} from "@coreui/react";
 import InputElement from "../../components/InputElement/InputElement";
 import LoginHeader from "../../components/LoginHeader";
 import LoginFooter from "../../components/LoginFooter";
+import * as actions from "../../store/actions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { connect } from "react-redux";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -28,19 +32,16 @@ class Login extends Component {
   }
   
   onSubmit = () => {
+    let compRef = this;
     const { userName, password } = { ...this.state.user };
+    let user = this.state.user;
     if (userName && password) {
-      if (userName === "chandan.mishra@gmail.com" && password == 12345) {
-        //post reqeuest
-        //store Id in loastoryage
-        localStorage.setItem("user" ,userName);
-        setTimeout(()=>{
-          localStorage.clear();
-        },3600000);
-       this.props.history.push('/dashboard');
-      } else{
-          this.setState({inCorrect :true})
-      }
+      this.props.loginUser(user);
+      setTimeout(() => {
+        let loginError = compRef.props.loginError;
+        let loginErrorMsg = compRef.props.loginErrorMsg;
+        compRef.Toaster(loginError, "Login", loginErrorMsg);
+      }, 1000);
     } else {
       this.setState({
         userNameRequired: true,
@@ -48,6 +49,28 @@ class Login extends Component {
       });
     }
   };
+
+    Toaster(loginError, actionName, loginErrorMsg) {
+    let compRef = this;
+    if (!loginError) {
+      localStorage.setItem("user", compRef.props.loggedInUserId);
+       setTimeout(()=>{
+          localStorage.clear();
+        },3600000);
+      toast.success(actionName + " Successfull...", {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+      setTimeout(() => {
+       compRef.props.history.push('/dashboard');
+      }, 1000);
+      
+    } else {
+      toast.error(loginErrorMsg, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+    }
+  }
+
   onChangeHandler(event) {
     let user = { ...this.state.user };
     user[event.target.name] = event.target.value;
@@ -105,6 +128,7 @@ class Login extends Component {
                       </CardGroup>
                     </Col>
                   </Row>
+                  <ToastContainer autoClose={2000} />
                 </div>
               </Container>
             {/* </div> */}
@@ -116,4 +140,20 @@ class Login extends Component {
       </div>;
   }
 }
-export default Login;
+const mapStateToProps = state => {
+  return {
+    loggedInUserId : state.loginReducer.loggedInUserId,
+    loginError: state.loginReducer.loginError,
+    loginErrorMsg: state.loginReducer.loginErrorMsg
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    loginUser: user => dispatch(actions.loginUser(user))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
+
