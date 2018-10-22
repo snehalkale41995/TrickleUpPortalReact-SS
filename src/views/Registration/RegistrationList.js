@@ -159,18 +159,6 @@ class RegistrationList extends Component {
                   export={true}
                   hidden
                 />
-                {/* <TableHeaderColumn
-                  dataField="DistrictName"
-                  csvHeader="District"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="VillageName"
-                  csvHeader="Village"
-                  export={true}
-                  hidden
-                /> */}
                 <TableHeaderColumn
                   dataField="GenderName"
                   csvHeader="Gender"

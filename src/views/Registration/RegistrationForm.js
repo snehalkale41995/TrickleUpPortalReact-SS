@@ -31,7 +31,8 @@ class RegistrationForm extends Component {
       loading: true,
       user: {
         Id : "",
-        UserId: null,
+        //UserId: null,
+        UserName : "",
         Active : true,
         Name: "",
         NameRequired: false,
@@ -183,7 +184,8 @@ class RegistrationForm extends Component {
           "ActiveBy" ,
           "ActiveOn",
           "ImagePath",
-          "BulkUploadId"
+          "BulkUploadId",
+          "UserName"
         ]);
         user.UpdatedBy = 1;
         user.UpdatedOn = new Date();
@@ -228,7 +230,8 @@ class RegistrationForm extends Component {
           "ActiveBy" ,
           "ActiveOn",
           "ImagePath",
-          "BulkUploadId"
+          "BulkUploadId",
+          "UserName"
         ]);
         user.CreatedBy = 1;
         user.CreatedOn = new Date();

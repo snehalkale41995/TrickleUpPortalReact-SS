@@ -10,6 +10,8 @@ import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import AppConfig from "../../constants/AppConfig";
+
 
 const grampanchayatList = [
   { label: "abc", value: "1" },
@@ -28,6 +30,7 @@ class Settings extends Component {
       loading: true,
       user: {
         Id: "",
+        Active : true,
         UserId: null,
         Name: "",
         NameRequired: false,
@@ -170,6 +173,7 @@ class Settings extends Component {
     if (this.validData()) {
       user = _.pick(user, [
         "Id",
+        "Active",
         "UserId",
         "Name",
         "PhoneNumber",
@@ -279,7 +283,7 @@ class Settings extends Component {
   }
   render() {
     let user = { ...this.state.user };
-    let {imagePreviewUrl} = user;
+    let imagePreviewUrl = `${AppConfig.serverURL}/${user.ImagePath}`;
     let $imagePreview = null;
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} style={{ borderRadius : "50em", width: "100%" , height: '100%'}} />);
