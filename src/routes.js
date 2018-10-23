@@ -66,6 +66,12 @@ const Settings = Loadable({
   loader: () => import("./views/Settings/Settings.js"),
   loading: Loading
 });
+
+const ChangePassword = Loadable({
+  loader: () => import("./views/Settings/ChangePassword.js"),
+  loading: Loading
+});
+
 const routes = [
   { path: "/", exact: true, name: "Dashboard", component: Main },
   { path: "/dashboard", component: Dashboard },
@@ -96,7 +102,8 @@ const routes = [
     component: ApplicationContacts
   },
   { path: "/master/crops", name: "Crops Data", component: CropsData },
-  { path: "/settings", name: "Settings", component: Settings }
+  { path: "/settings", name: "Settings", component: Settings },
+  { path: "/ChangePassword", name: "ChangePassword", component: ChangePassword }
 ];
 
 export default routes;

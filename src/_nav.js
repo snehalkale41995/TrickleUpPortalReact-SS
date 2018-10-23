@@ -22,7 +22,6 @@ export default {
         }
       ]
     },
-
     {
       name: "Training Program",
       url: "/mediaLibrary",
@@ -73,13 +72,13 @@ export default {
         {
           name: "My Profile",
           url: "/settings",
-          icon: "fa fa-users"
+          icon: "fa fa-user"
         },
-        // {
-        //   name: "Forgot Password",
-        //   url: "/settings",
-        //   icon: "fa fa-upload"
-        // }
+        {
+          name: "Change Password",
+          url: "/ChangePassword",
+          icon: "fa fa-cog"
+        }
       ]
     },
   ]
