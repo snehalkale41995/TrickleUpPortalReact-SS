@@ -69,6 +69,7 @@ class ChangePassword extends Component {
     Toaster(changePasswordError, actionName, changePasswordErrorMsg) {
     let compRef = this;
     if (!changePasswordError) {
+        compRef.onReset();
       toast.success(actionName + " Successfully...", {
         position: toast.POSITION.BOTTOM_RIGHT
       });
