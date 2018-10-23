@@ -81,13 +81,12 @@ class Login extends Component {
       inCorrect :false
     });
   }
+  
   render() {
     return <div className="app">
         <AppHeader fixed>
           <LoginHeader />
         </AppHeader>
-        
-        
         {/*  style={{ backgroundSize: "cover",backgroundImage : `url(${"../../assets/img/backgroundImage.jpg"})`}}*/}
         <div className="app-body" style={{backgroundColor : "#d3ecec"}}>
           <main className="main">

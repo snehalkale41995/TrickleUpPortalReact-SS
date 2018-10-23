@@ -32,4 +32,4 @@ export {
     getLanguageList
 } from './rolesMaster.js';
 
-export { loginUser} from "./login";
+export { loginUser, changePassword} from "./login";
