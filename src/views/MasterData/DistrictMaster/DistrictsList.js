@@ -9,6 +9,8 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import DistrictForm from "./DistrictForm";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+
 
 class DistrictsList extends Component {
   constructor(props) {
@@ -18,7 +20,9 @@ class DistrictsList extends Component {
       modalFlag: false,
       stateToEdit: {},
       loading: true,
-      showForm: false
+      showForm: false,
+      modalStatus: false,
+      districtToDelete: {}
     };
   }
   componentWillMount() {
@@ -39,16 +43,38 @@ class DistrictsList extends Component {
   onDeleteDistrict(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}>
+      <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
     //onClick={() => componentRef.deleteConfirm(row._id)}
   }
+  onDelete(row) {
+    this.setState({
+      districtToDelete: row
+    });
+    this.onModalToggle();
+  }
+  onConfirmDelete() {
+    let district = { ...this.state.districtToDelete };
+    district.Active  = false;
+    this.props.deleteDistrict(district.Id, district);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
 
   onEditDistrict(cell, row) {
     return (
-      <Link to={this} onClick={() => this.editDistrict(row)}>
+      <Link
+        to={this}
+        onClick={() => this.editDistrict(row)}
+      >
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -91,9 +117,8 @@ class DistrictsList extends Component {
       <div style={{ marginTop: 30 }}>
         <CardLayout name="Districts">
           <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              {/* <Link to={`${this.props.match.url}/districtForm`}> */}
+            <Col xs="12" md="10" />
+            <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}>
               <Button
                 type="button"
                 className="theme-positive-btn"
@@ -103,7 +128,6 @@ class DistrictsList extends Component {
               >
                 <i className="fa fa-plus" />&nbsp; Add district
               </Button>
-              {/* </Link> */}
               &nbsp;&nbsp;
             </Col>
           </FormGroup>
@@ -167,6 +191,13 @@ class DistrictsList extends Component {
             </Col>
           </FormGroup>
         </CardLayout>
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this district record ?"
+        />
       </div>
     );
   }
@@ -180,7 +211,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getDistrictsList: () => dispatch(actions.getDistrictsList())
+    getDistrictsList: () => dispatch(actions.getDistrictsList()),
+    deleteDistrict : (id, district) => dispatch(actions.deleteDistrict(id, district))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DistrictsList);

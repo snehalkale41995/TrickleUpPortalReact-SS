@@ -9,6 +9,8 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import StateForm from "./StateForm";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+
 class StatesList extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,9 @@ class StatesList extends Component {
       modalFlag: false,
       stateToEdit: {},
       loading: true,
-      showForm: false
+      showForm: false,
+      modalStatus: false,
+      stateToDelete: {}
     };
   }
   componentWillMount() {
@@ -39,11 +43,29 @@ class StatesList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}>
-        <i className="fa fa-trash" title="Delete" />
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i className="fa fa-trash" title="Delete"  />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
+  }
+  onDelete(row) {
+    this.setState({
+      stateToDelete: row
+    });
+    this.onModalToggle();
+  }
+  onConfirmDelete() {
+    let state = { ...this.state.stateToDelete };
+    state.Active  = false;
+    this.props.deleteState(state.Id, state);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
   }
 
   onEditState(cell, row) {
@@ -166,6 +188,13 @@ class StatesList extends Component {
             </Col>
           </FormGroup>
         </CardLayout>
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this state record ?"
+        />
       </div>
     );
   }
@@ -179,7 +208,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getStatesList: () => dispatch(actions.getStatesList())
+    getStatesList: () => dispatch(actions.getStatesList()),
+    deleteState : (id,state) => dispatch(actions.deleteState(id,state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(StatesList);

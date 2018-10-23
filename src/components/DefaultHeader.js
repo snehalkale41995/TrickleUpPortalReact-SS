@@ -33,7 +33,7 @@ class DefaultHeader extends Component {
       
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <img src={'http://192.168.101.20:1826/Images/Users/UserImageMale.jpg'} className="img-avatar"  />
+              <img src={'http://192.168.101.20:1826/Images/Users/UserImageMale.jpg'} className="img-avatar" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem onClick={this.onLogout}><i className="fa fa-lock" ></i> Logout</DropdownItem>

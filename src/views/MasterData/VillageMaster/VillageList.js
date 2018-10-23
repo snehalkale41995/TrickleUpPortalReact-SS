@@ -20,8 +20,8 @@ class VillageList extends Component {
     };
   }
   componentWillMount() {
-    this.props.getStatesList();
-    this.props.getDistrictsList();
+   // this.props.getStatesList();
+    //this.props.getDistrictsList();
     let compRef =this;
     setTimeout(() => {
       compRef.setState({
@@ -33,7 +33,7 @@ class VillageList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} >
+      <Link to={this} style={{ pointerEvents: 'none' }} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -42,7 +42,7 @@ class VillageList extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={this} onClick={() => this.onEdit(row)}>
+      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onEdit(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -55,7 +55,7 @@ class VillageList extends Component {
   }
   render() {
     const sortingOptions = {
-      defaultSortName: "StateName",
+      defaultSortName: "VillageName",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -72,7 +72,7 @@ class VillageList extends Component {
         },
         {
           text: "All",
-          value: this.props.states.length
+          value: this.props.villages.length
         }
       ],
       sizePerPage: 5
@@ -86,7 +86,7 @@ class VillageList extends Component {
         <CardLayout name="Villages">
         <FormGroup row>
         <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >              {/* <Link to={`${this.props.match.url}/stateForm`}> */}
+          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} > 
               <Button
                 type="button"
                 className="theme-positive-btn"
@@ -96,7 +96,6 @@ class VillageList extends Component {
               >
                 <i className="fa fa-plus" /> &nbsp; Add village
               </Button>
-              {/* </Link> */}
               &nbsp;&nbsp;
             </Col>
           </FormGroup>
@@ -104,44 +103,53 @@ class VillageList extends Component {
             <Col xs="12" >
             <BootstrapTable
               ref="table"
-              data={this.props.states}
+              data={this.props.villages}
               pagination={true}
               search={true}
               options={sortingOptions}
               //exportCSV={true}
               hover={true}
-              csvFileName="Villages List"
+              csvFileName="VillagesList.csv"
             >
               <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="StateName"
+                dataField="VillageName"
                 headerAlign="left"
                 width="40"
-                csvHeader="State Name"
+                csvHeader="Village Name"
                 dataSort={true}
               >
                 Village Name
               </TableHeaderColumn>
               <TableHeaderColumn
-                //dataField="StateCode"
+                dataField="GrampanchayatName"
                 headerAlign="left"
                 width="40"
-                csvHeader="Code"
+                csvHeader="Grampanchayat"
                 dataSort={true}
               >
-                District Name
+              Grampanchayat
               </TableHeaderColumn>
               <TableHeaderColumn
-                //dataField="StateCode"
-                headerAlign="left"
-                width="40"
-                csvHeader="Code"
-                dataSort={true}
-              >
-                State Name
-              </TableHeaderColumn>
+              dataField="DistrictName"
+              headerAlign="left"
+              width="40"
+              csvHeader="District"
+              dataSort={true}
+            >
+            District 
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="StateName"
+              headerAlign="left"
+              width="40"
+              csvHeader="State"
+              dataSort={true}
+            >
+            State
+            </TableHeaderColumn>
               <TableHeaderColumn
               dataField="edit"
               dataFormat={this.onEditState.bind(this)}
@@ -171,16 +179,13 @@ class VillageList extends Component {
 }
  const mapStateToProps = state => {
   return {
-    statesList: state.stateReducer.statesList,
-    states: state.stateReducer.states,
-    districtsList: state.districtReducer.districtsList,
+      villages : state.villageReducer.villages
   };
 };
 
  const mapDispatchToProps = dispatch => {
   return {
-    getStatesList: () => dispatch(actions.getStatesList()),
-    getDistrictsList: () => dispatch(actions.getDistrictsList())
+    
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VillageList);

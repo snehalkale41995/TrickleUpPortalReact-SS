@@ -37,11 +37,11 @@ export default {
           url: "/master/address",
           icon: "icon-star"
         },
-        {
-          name: "Roles",
-          url: "/master/roles",
-          icon: "icon-star"
-        },
+        // {
+        //   name: "Roles",
+        //   url: "/master/roles",
+        //   icon: "icon-star"
+        // },
         // {
         //   name: "Gender",
         //   url: "/master/genders",
@@ -57,11 +57,11 @@ export default {
           url: "/master/crops",
           icon: "icon-star"
         },
-        {
-          name: "Contacts",
-          url: "/master/contacts",
-          icon: "icon-star"
-        }
+        // {
+        //   name: "Contacts",
+        //   url: "/master/contacts",
+        //   icon: "icon-star"
+        // }
       ]
     },
      {

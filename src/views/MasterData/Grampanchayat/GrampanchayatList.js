@@ -33,7 +33,7 @@ class GrampanchayatList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} >
+      <Link to={this} style={{ pointerEvents: 'none' }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );

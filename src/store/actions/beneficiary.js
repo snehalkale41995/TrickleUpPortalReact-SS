@@ -60,12 +60,30 @@ export const createBeneficiary = (beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PostUser`, beneficiary)
       .then(response => {
-          console.log("Created", response);
+        let userCredentials = {
+          UserName : beneficiary.PhoneNumber,
+          Password: beneficiary.PhoneNumber,
+          UserId : response.data.data.id
+        };
+        dispatch(postUserCredentials(userCredentials));
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));
       });
   };
+}
+
+export const postUserCredentials = (user) => {
+  return dispatch => {
+    axios
+    .post(`${AppConfig.serverURL}/api/UserCredentials/PostUserCredential`, user)
+    .then(response => {
+          console.log("Reposnoe userCredentials", response);
+    })
+    .catch(error => {
+      dispatch(logBeneficiaryError(error));
+    });
+  }
 }
 export const updateBeneficiary = (id, beneficiary) => {
   return dispatch => {

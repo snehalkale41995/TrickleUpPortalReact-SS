@@ -31,28 +31,27 @@ class RegistrationForm extends Component {
       loading: true,
       user: {
         Id : "",
-        //UserId: null,
         UserName : "",
         Active : true,
         Name: "",
         NameRequired: false,
-        PhoneNumber: "", //no
+        PhoneNumber: "",
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
-        Age: "", //no
+        Age: "",
         AgeRequired: false,
-        Gender: "", //id //no
-        State: "", //id //no
-        District: "", //id
-        Village: "", //id
-        Grampanchayat: "", //id
+        Gender: "",
+        State: "",
+        District: "",
+        Village: "",
+        Grampanchayat: "",
         Aadhaar: "",
         IMEI1: null,
         IMEI2: null,
-        Role: "", //id
+        Role: "",
         Language: "",
         FCMToken: "",
-        CreatedBy: "", //logged in user userid
+        CreatedBy: "",
         CreatedOn: "",
         UpdatedBy: "",
         UpdatedOn: "",
@@ -68,7 +67,10 @@ class RegistrationForm extends Component {
       villageRequired: false,
       roleRequired: false,
       languageRequired: false,
-      updateFlag: false
+      updateFlag: false,
+      districtOptions : [],
+      grampanchayatOptions: [],
+      villageOptions : []
     };
   }
  
@@ -109,17 +111,33 @@ class RegistrationForm extends Component {
   onStateSelection(value) {
     let user = { ...this.state.user };
     user.State = value;
+    let districtArray = _.filter(this.props.districts , function(district) {
+      return district.State === value ;
+    });
+    let districtOptions = [];
+    districtArray.forEach((district) => {
+      districtOptions.push({label : district.DistrictName , value : district.Id});
+    })
     this.setState({
       user: user,
-      stateRequired: false
+      stateRequired: false,
+      districtOptions : districtOptions
     });
   }
   onDistrictSelection(value) {
     let user = { ...this.state.user };
     user.District = value;
+    let GrampanchayatArray = _.filter(this.props.grampanchayats , function(grampanchayat) {
+      return grampanchayat.District === value ;
+    });
+    let grampanchayatOptions = [];
+    GrampanchayatArray.forEach((grampanchayat) => {
+      grampanchayatOptions.push({label : grampanchayat.GrampanchayatName , value : grampanchayat.Id});
+    })
     this.setState({
       user: user,
-      districtRequired: false
+      districtRequired: false,
+      grampanchayatOptions : grampanchayatOptions
     });
   }
   onVillageSelection(value) {
@@ -133,9 +151,17 @@ class RegistrationForm extends Component {
   onGrampanchayatSelection(value) {
     let user = { ...this.state.user };
     user.Grampanchayat = value;
+    let VillageArray = _.filter(this.props.villages , function(village) {
+      return village.Grampanchayat === value ;
+    });
+    let villageOptions = [];
+    VillageArray.forEach((village) => {
+      villageOptions.push({label : village.VillageName , value : village.Id});
+    })
     this.setState({
       user: user,
-      grampanchayatRequired: false
+      grampanchayatRequired: false,
+      villageOptions: villageOptions
     });
   }
   onRoleSelection(value) {
@@ -357,17 +383,17 @@ class RegistrationForm extends Component {
               </Col>
               <Col md="5">
                 <Label>District</Label>
-                <DropdownSelect name="District" placeholder="Select district " options={this.props.districtsList} value={user.District} required={this.state.districtRequired} onChange={this.onDistrictSelection.bind(this)} />
+                <DropdownSelect name="District" placeholder="Select district " options={this.state.districtOptions} value={user.District} required={this.state.districtRequired} onChange={this.onDistrictSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>Grampanchayat</Label>
-                <DropdownSelect name="Grampanchayat" placeholder="Select grampanchayat " value={user.Grampanchayat} options={grampanchayatList} required={this.state.grampanchayatRequired} onChange={this.onGrampanchayatSelection.bind(this)} />
+                <DropdownSelect name="Grampanchayat" placeholder="Select grampanchayat " value={user.Grampanchayat} options={this.state.grampanchayatOptions} required={this.state.grampanchayatRequired} onChange={this.onGrampanchayatSelection.bind(this)} />
               </Col>
               <Col md="5">
                 <Label>Village</Label>
-                <DropdownSelect name="Village" placeholder="Select village " value={user.Village} options={villageList} required={this.state.villageRequired} onChange={this.onVillageSelection.bind(this)} />
+                <DropdownSelect name="Village" placeholder="Select village " value={user.Village} options={this.state.villageOptions} required={this.state.villageRequired} onChange={this.onVillageSelection.bind(this)} />
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -420,7 +446,10 @@ class RegistrationForm extends Component {
 const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
-    districtsList: state.districtReducer.districtsList,
+    districts : state.districtReducer.districts,
+    grampanchayats : state.grampanchayatReducer.grampanchayats,
+    villages : state.villageReducer.villages,
+    //districtsList: state.districtReducer.districtsList,
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.rolesReducer.gendersList,

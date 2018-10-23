@@ -25,7 +25,7 @@ class DistrictForm extends Component {
         UpdatedOn: "",
         CreatedBy: "",
         CreatedOn: "",
-        Active: 1,
+        Active: true,
         DistrictNameRequired: false,
         StateRequired: false
       },
@@ -69,6 +69,8 @@ class DistrictForm extends Component {
           "State",
           "UpdatedBy",
           "UpdatedOn",
+          "CreatedBy",
+          "CreatedOn",
           "Active"
         ]);
         updateDistrict.UpdatedBy = 1;
@@ -92,6 +94,8 @@ class DistrictForm extends Component {
         district = _.pick(district, [
           "DistrictName",
           "State",
+          "UpdatedBy",
+          "UpdatedOn",
           "CreatedBy",
           "CreatedOn",
           "Active"

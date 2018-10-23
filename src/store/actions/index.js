@@ -1,15 +1,22 @@
 export {
     getStatesList,
     createState,
-    updateState
+    updateState,
+    deleteState
 } from './statesMaster.js'
 
 export {
     getDistrictsList,
     updateDistrict,
-    createDistrict
+    createDistrict,
+    deleteDistrict
 } from './districtsMaster.js'
-
+export {
+    getGrampanchayatsList
+} from './grampanchayatMaster.js'
+export {
+    getVillagesList
+} from './villagesMaster.js';
 export {
     postMediaContent
 } from './mediaLibrary.js'

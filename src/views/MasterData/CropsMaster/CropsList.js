@@ -31,7 +31,7 @@ class CropsList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}>
+      <Link to={this} style={{ pointerEvents: 'none' }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -40,7 +40,7 @@ class CropsList extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/cropsForm/${row.Id}`}>
+      <Link to={`${this.props.match.url}/cropsForm/${row.Id}`} style={{ pointerEvents: 'none' }}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -82,7 +82,7 @@ class CropsList extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              <Link to={`${this.props.match.url}/cropsForm`}>
+              <Link to={`${this.props.match.url}/cropsForm`} style={{ pointerEvents: 'none' }}>
                 <Button type="button" className="theme-positive-btn">
                   <i className="fa fa-plus" />&nbsp; Add crop
                 </Button>

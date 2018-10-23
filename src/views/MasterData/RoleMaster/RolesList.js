@@ -32,7 +32,7 @@ class RolesList extends Component {
   onDelete(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} >
+      <Link to={this} style={{ pointerEvents: 'none' }} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -41,7 +41,7 @@ class RolesList extends Component {
 
   onEdit(cell, row) {
     return (
-      <Link to={this} onClick={() => this.onEditRole(row)}>
+      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onEditRole(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );

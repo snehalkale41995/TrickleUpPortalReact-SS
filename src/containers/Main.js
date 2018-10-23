@@ -34,6 +34,8 @@ class Main extends Component {
     this.props.getRolesList();
     this.props.getGendersList();
     this.props.getLanguageList();
+    this.props.getVillagesList();
+    this.props.getGrampanchayatsList();
   }
   render() {
     let user = localStorage.getItem("user");
@@ -107,6 +109,8 @@ const mapDispatchToProps = dispatch => {
     getRolesList : () => dispatch(actions.getRolesList()),
     getGendersList : () => dispatch(actions.getGendersList()),
     getLanguageList : () => dispatch(actions.getLanguageList()),
+    getVillagesList : () => dispatch(actions.getVillagesList()),
+    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList())
   };
 };
 export default connect(mapStateToProps,mapDispatchToProps)(Main);

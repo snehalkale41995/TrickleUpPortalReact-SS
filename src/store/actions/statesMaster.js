@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
+import _ from "lodash";
 
 export const storeStatesList = (stateList, states) => {
   return {
@@ -23,7 +24,10 @@ export const getStatesList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/States/GetStates`)
       .then(response => {
-        response.data.data.States.forEach(state => {
+        let StateData = _.filter( response.data.data.States, function(state) {
+          return state.Active === true ;
+      });
+      StateData.forEach(state => {
           if (state.StateName !== null) {
             stateList.push({ label: state.StateName, value: state.Id });
             states.push(state);
@@ -61,16 +65,16 @@ export const updateState = (id ,state) => {
       });
   };
 }
-//delete pending
-// export const deleteState = (id) => {
-//   return dispatch => {
-//     axios
-//       .delete(`${AppConfig.serverURL}/api/States/PutState?id=${id}`)
-//       .then(response => {
-//           //delete success
-//       })
-//       .catch(error => {
-//         dispatch(stateMasterError(error));
-//       });
-//   };
-// }
+
+export const deleteState = (id, state) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/States/PutState?id=${id}`, state)
+      .then(response => {
+          dispatch(getStatesList());
+      })
+      .catch(error => {
+        dispatch(stateMasterError(error));
+      });
+  };
+}

@@ -1,20 +1,21 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
+import _ from "lodash";
 
 export const storeVillagesList = (villageList, villages) => {
   return {
-    type: actionTypes.GET_STATES_LIST,
-    villageList: villageList,
+    type: actionTypes.GET_VILLAGE_LIST,
+    villagesList: villageList,
     villages: villages
   };
 };
-export const villageMasterError = (error) => {
+export const villageMasterError = error => {
   return {
-    type : actionTypes.LOG_STATE_ERROR,
-    error : error
-  }
-}
+    type: actionTypes.LOG_VILLAGE_ERROR,
+    error: error
+  };
+};
 
 export const getVillagesList = () => {
   let villageList = [];
@@ -23,7 +24,10 @@ export const getVillagesList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Villages/GetVillages`)
       .then(response => {
-        response.data.data.Villages.forEach(village => {
+        let Villages = _.filter(response.data.data.Villagedata, function(village) {
+          return village.Active === true;
+        });
+        Villages.forEach(village => {
           if (village.VillageName !== null) {
             villageList.push({ label: village.VillageName, value: village.Id });
             villages.push(village);

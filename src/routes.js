@@ -80,7 +80,7 @@ const routes = [
   { path: "/beneficiary/bulkUploadBeneficiary", name: "", component: BulkRegistration },
   { path: "/mediaLibrary", name: "Media List", component: MediaLibrary },
   { path: "/mediaLibrary/media", name: "Media" },
-  { path: "/master", exact: true, component: StatesMaster },
+  { path: "/master", exact: true, component: AddressMaster },
   { path: "/master/roles", name: "Roles", component: RolesMaster },
   { path: "/master/address", name: "Address", component: AddressMaster },
   // { path: "/master/states", name: "States List", component: StatesMaster },
