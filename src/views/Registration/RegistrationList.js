@@ -98,7 +98,7 @@ class RegistrationList extends Component {
               <Link to={`${this.props.match.url}/registration`}>
                 <Button type="button" className="theme-positive-btn">
                   <i className="fa fa-plus" />
-                  &nbsp; Add beneficiary
+                  &nbsp; Add user
                 </Button>
               </Link>
               &nbsp;&nbsp;

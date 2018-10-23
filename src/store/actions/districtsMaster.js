@@ -32,7 +32,8 @@ export const getDistrictsList = () => {
           if (district.DistrictName !== null) {
             districtList.push({
               label: district.DistrictName,
-              value: district.Id
+              value: district.Id,
+              stateId : district.State
             });
             districts.push(district);
           }

@@ -12,7 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
 
-
 const grampanchayatList = [
   { label: "grampanchayat1", value: 1 },
   { label: "grampanchayat2", value: 2 },
@@ -30,9 +29,9 @@ class RegistrationForm extends Component {
     this.state = {
       loading: true,
       user: {
-        Id : "",
-        UserName : "",
-        Active : true,
+        Id: "",
+        UserName: "",
+        Active: true,
         Name: "",
         NameRequired: false,
         PhoneNumber: "",
@@ -46,6 +45,7 @@ class RegistrationForm extends Component {
         Village: "",
         Grampanchayat: "",
         Aadhaar: "",
+        AadhaarInvalid: false,
         IMEI1: null,
         IMEI2: null,
         Role: "",
@@ -55,9 +55,9 @@ class RegistrationForm extends Component {
         CreatedOn: "",
         UpdatedBy: "",
         UpdatedOn: "",
-        ActiveBy :"",
-        ActiveOn :"",
-        ImagePath :"",
+        ActiveBy: "",
+        ActiveOn: "",
+        ImagePath: "",
         BulkUploadId: ""
       },
       genderRequired: false,
@@ -68,27 +68,27 @@ class RegistrationForm extends Component {
       roleRequired: false,
       languageRequired: false,
       updateFlag: false,
-      districtOptions : [],
-      grampanchayatOptions: [],
-      villageOptions : []
+      districtOptions: this.props.districtsList,
+      grampanchayatOptions: this.props.grampanchayatsList,
+      villageOptions: this.props.villagesList
     };
   }
- 
+
   componentWillMount() {
     setTimeout(() => {
       this.setState({ loading: false });
     }, 2000);
     if (this.props.match.params.id !== undefined) {
-      let id = this.props.match.params.id
+      let id = this.props.match.params.id;
       this.props.getBeneficiaryById(id);
       setTimeout(() => {
-          if(this.props.currentBeneficiary){
-            this.setState({
-              user : this.props.currentBeneficiary,
-              updateFlag: true
-            })
-          }
-      },1000)
+        if (this.props.currentBeneficiary) {
+          this.setState({
+            user: this.props.currentBeneficiary,
+            updateFlag: true
+          });
+        }
+      }, 1000);
     }
   }
   onChangeInput(event) {
@@ -111,33 +111,34 @@ class RegistrationForm extends Component {
   onStateSelection(value) {
     let user = { ...this.state.user };
     user.State = value;
-    let districtArray = _.filter(this.props.districts , function(district) {
-      return district.State === value ;
+    user.District = "";
+    user.Grampanchayat = "";
+    user.Village = "";
+    let districtOptions = _.filter(this.props.districtsList, function(
+      district
+    ) {
+      return district.stateId === value;
     });
-    let districtOptions = [];
-    districtArray.forEach((district) => {
-      districtOptions.push({label : district.DistrictName , value : district.Id});
-    })
     this.setState({
       user: user,
       stateRequired: false,
-      districtOptions : districtOptions
+      districtOptions: districtOptions,
+      grampanchayatOptions: [],
+      villageOptions: []
     });
   }
   onDistrictSelection(value) {
     let user = { ...this.state.user };
     user.District = value;
-    let GrampanchayatArray = _.filter(this.props.grampanchayats , function(grampanchayat) {
-      return grampanchayat.District === value ;
+    let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
+      grampanchayat
+    ) {
+      return grampanchayat.districtId === value;
     });
-    let grampanchayatOptions = [];
-    GrampanchayatArray.forEach((grampanchayat) => {
-      grampanchayatOptions.push({label : grampanchayat.GrampanchayatName , value : grampanchayat.Id});
-    })
     this.setState({
       user: user,
       districtRequired: false,
-      grampanchayatOptions : grampanchayatOptions
+      grampanchayatOptions: grampanchayatOptions
     });
   }
   onVillageSelection(value) {
@@ -151,13 +152,9 @@ class RegistrationForm extends Component {
   onGrampanchayatSelection(value) {
     let user = { ...this.state.user };
     user.Grampanchayat = value;
-    let VillageArray = _.filter(this.props.villages , function(village) {
-      return village.Grampanchayat === value ;
+    let villageOptions = _.filter(this.props.villagesList, function(village) {
+      return village.grampanchayatId === value;
     });
-    let villageOptions = [];
-    VillageArray.forEach((village) => {
-      villageOptions.push({label : village.VillageName , value : village.Id});
-    })
     this.setState({
       user: user,
       grampanchayatRequired: false,
@@ -207,7 +204,7 @@ class RegistrationForm extends Component {
           "CreatedOn",
           "UpdatedBy",
           "UpdatedOn",
-          "ActiveBy" ,
+          "ActiveBy",
           "ActiveOn",
           "ImagePath",
           "BulkUploadId",
@@ -253,7 +250,7 @@ class RegistrationForm extends Component {
           "CreatedOn",
           "UpdatedBy",
           "UpdatedOn",
-          "ActiveBy" ,
+          "ActiveBy",
           "ActiveOn",
           "ImagePath",
           "BulkUploadId",
@@ -262,7 +259,7 @@ class RegistrationForm extends Component {
         user.CreatedBy = localStorage.getItem("user");
         user.CreatedOn = new Date();
         this.props.createBeneficiary(user);
-        this.setState({loading: true});
+        this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
@@ -285,6 +282,7 @@ class RegistrationForm extends Component {
 
   validData() {
     let user = { ...this.state.user };
+
     if (
       user.Name &&
       user.PhoneNumber &&
@@ -296,6 +294,7 @@ class RegistrationForm extends Component {
       user.Village &&
       user.Grampanchayat &&
       user.Role &&
+      user.Aadhaar.length === 12 &&
       user.Language
     ) {
       return true;
@@ -304,10 +303,10 @@ class RegistrationForm extends Component {
     }
   }
   showValidations(user) {
+    let validPhone =
+      /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
     !user.Name ? (user.NameRequired = true) : null;
-    user.PhoneNumber && user.PhoneNumber.length !== 10
-      ? (user.PhoneNumberInvalid = true)
-      : null;
+    user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
@@ -318,6 +317,9 @@ class RegistrationForm extends Component {
     !user.Village ? this.setState({ villageRequired: true }) : null;
     !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
     !user.Role ? this.setState({ roleRequired: true }) : null;
+    user.Aadhaar && user.Aadhaar.length !== 12
+      ? (user.AadhaarInvalid = true)
+      : null;
     !user.Language ? this.setState({ languageRequired: true }) : null;
     this.setState({
       user: user
@@ -355,84 +357,193 @@ class RegistrationForm extends Component {
   }
   render() {
     let user = { ...this.state.user };
-    return this.state.loading ? <Loader loading={this.state.loading} /> : <div style={{ marginTop: 30 }}>
-        <CardLayout name="Beneficiary Form" navigation={true} navigationRoute="/beneficiary/beneficiaryList">
+    return this.state.loading ? (
+      <Loader loading={this.state.loading} />
+    ) : (
+      <div style={{ marginTop: 30 }}>
+        <CardLayout
+          name="User Form"
+          navigation={true}
+          navigationRoute="/beneficiary/beneficiaryList"
+        >
           <FormGroup row />
           <div style={{ margin: 20 }}>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement type="text" label="Name" name="Name" placeholder="Please enter name " value={user.Name} required={user.NameRequired} onChange={event => this.onChangeInput(event)} />
+                <InputElement
+                  type="text"
+                  label="Name"
+                  name="Name"
+                  placeholder="Please enter name "
+                  value={user.Name}
+                  required={user.NameRequired}
+                  onChange={event => this.onChangeInput(event)}
+                />
               </Col>
               <Col md="5">
-                <InputElement type="text" label="Phone number" name="PhoneNumber" maxLength={10} placeholder="Please enter phone number " value={user.PhoneNumber} required={user.PhoneNumberRequired} invalid={user.PhoneNumberInvalid} onChange={event => this.onChangeInput(event)} />
+                <InputElement
+                  type="text"
+                  label="Phone number"
+                  name="PhoneNumber"
+                  maxLength={10}
+                  placeholder="Please enter phone number "
+                  value={user.PhoneNumber}
+                  required={user.PhoneNumberRequired}
+                  invalid={user.PhoneNumberInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement type="number" label="Age" name="Age" maxLength={3} placeholder="Please enter age " value={user.Age} required={user.AgeRequired} onChange={event => this.onChangeInput(event)} />
+                <InputElement
+                  type="number"
+                  label="Age"
+                  name="Age"
+                  maxLength={3}
+                  placeholder="Please enter age "
+                  value={user.Age}
+                  required={user.AgeRequired}
+                  onChange={event => this.onChangeInput(event)}
+                />
               </Col>
               <Col md="5">
                 <Label>Gender</Label>
-                <DropdownSelect id="1" name="Gender" placeholder="Select gender " options={this.props.gendersList} value={user.Gender} required={this.state.genderRequired} onChange={this.onGenderSelection.bind(this)} />
+                <DropdownSelect
+                  id="1"
+                  name="Gender"
+                  placeholder="Select gender "
+                  options={this.props.gendersList}
+                  value={user.Gender}
+                  required={this.state.genderRequired}
+                  onChange={this.onGenderSelection.bind(this)}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>State</Label>
-                <DropdownSelect name="State" placeholder="Select state" options={this.props.statesList} value={user.State} required={this.state.stateRequired} onChange={this.onStateSelection.bind(this)} />
+                <DropdownSelect
+                  name="State"
+                  placeholder="Select state"
+                  options={this.props.statesList}
+                  value={user.State}
+                  required={this.state.stateRequired}
+                  onChange={this.onStateSelection.bind(this)}
+                />
               </Col>
               <Col md="5">
                 <Label>District</Label>
-                <DropdownSelect name="District" placeholder="Select district " options={this.state.districtOptions} value={user.District} required={this.state.districtRequired} onChange={this.onDistrictSelection.bind(this)} />
+                <DropdownSelect
+                  name="District"
+                  placeholder="Select district "
+                  options={this.state.districtOptions}
+                  value={user.District}
+                  required={this.state.districtRequired}
+                  onChange={this.onDistrictSelection.bind(this)}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>Grampanchayat</Label>
-                <DropdownSelect name="Grampanchayat" placeholder="Select grampanchayat " value={user.Grampanchayat} options={this.state.grampanchayatOptions} required={this.state.grampanchayatRequired} onChange={this.onGrampanchayatSelection.bind(this)} />
+                <DropdownSelect
+                  name="Grampanchayat"
+                  placeholder="Select grampanchayat "
+                  value={user.Grampanchayat}
+                  options={this.state.grampanchayatOptions}
+                  required={this.state.grampanchayatRequired}
+                  onChange={this.onGrampanchayatSelection.bind(this)}
+                />
               </Col>
               <Col md="5">
                 <Label>Village</Label>
-                <DropdownSelect name="Village" placeholder="Select village " value={user.Village} options={this.state.villageOptions} required={this.state.villageRequired} onChange={this.onVillageSelection.bind(this)} />
+                <DropdownSelect
+                  name="Village"
+                  placeholder="Select village "
+                  value={user.Village}
+                  options={this.state.villageOptions}
+                  required={this.state.villageRequired}
+                  onChange={this.onVillageSelection.bind(this)}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
-                <InputElement type="text" label="Aadhaar number" name="Aadhaar" placeholder="Please enter aadhaar number " value={user.Aadhaar} onChange={event => this.onChangeInput(event)} />
+                <InputElement
+                  type="text"
+                  label="Aadhaar number"
+                  name="Aadhaar"
+                  placeholder="Please enter aadhaar number "
+                  value={user.Aadhaar}
+                  invalid={user.AadhaarInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
               </Col>
               <Col md="5">
                 <Label>Role</Label>
-                <DropdownSelect name="Role" placeholder="Select role " options={this.props.rolesList} value={user.Role} required={this.state.roleRequired} onChange={this.onRoleSelection.bind(this)} />
+                <DropdownSelect
+                  name="Role"
+                  placeholder="Select role "
+                  options={this.props.rolesList}
+                  value={user.Role}
+                  required={this.state.roleRequired}
+                  onChange={this.onRoleSelection.bind(this)}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col xs="12" md="5">
                 <Label>Language</Label>
-                <DropdownSelect name="Language" placeholder="Select language " options={this.props.languagesList} value={user.Language} required={this.state.languageRequired} onChange={this.onLanguageSelection.bind(this)} />
+                <DropdownSelect
+                  name="Language"
+                  placeholder="Select language "
+                  options={this.props.languagesList}
+                  value={user.Language}
+                  required={this.state.languageRequired}
+                  onChange={this.onLanguageSelection.bind(this)}
+                />
               </Col>
               <Col md="5">
-                {this.state.user.ImagePath ? <div>
-                    
-                      <Label> Profile Image :</Label>
-                   
-                      <img src={`${AppConfig.serverURL}/${this.state.user.ImagePath}`} style={{ height: 90, width: 100,marginLeft :20 }} alt="" />{" "}
-              
-                  </div> : null}
+                {this.state.user.ImagePath ? (
+                  <div>
+                    <Label> Profile Image :</Label>
+                    <img
+                      src={`${AppConfig.serverURL}/${this.state.user
+                        .ImagePath}`}
+                      style={{ height: 90, width: 100, marginLeft: 20 }}
+                      alt=""
+                    />{" "}
+                  </div>
+                ) : null}
               </Col>
             </FormGroup>
             <FormGroup row>
-              {this.state.updateFlag ? <Col md="1">
-                  <Button className="theme-positive-btn" onClick={this.onSubmit.bind(this)}>
+              {this.state.updateFlag ? (
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
                     Edit
                   </Button>
-                </Col> : <Col md="1">
-                  <Button className="theme-positive-btn" onClick={this.onSubmit.bind(this)}>
+                </Col>
+              ) : (
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
                     Submit
                   </Button>
-                </Col>}
+                </Col>
+              )}
 
               <Col md="1">
-                <Button className="theme-reset-btn" onClick={this.onReset.bind(this)}>
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
                   Reset
                 </Button>
               </Col>
@@ -440,22 +551,22 @@ class RegistrationForm extends Component {
           </div>
         </CardLayout>
         <ToastContainer autoClose={2000} />
-      </div>;
+      </div>
+    );
   }
 }
 const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
-    districts : state.districtReducer.districts,
-    grampanchayats : state.grampanchayatReducer.grampanchayats,
-    villages : state.villageReducer.villages,
-    //districtsList: state.districtReducer.districtsList,
+    districtsList: state.districtReducer.districtsList,
+    grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
+    villagesList: state.villageReducer.villagesList,
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.rolesReducer.gendersList,
     languagesList: state.rolesReducer.languagesList,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
-    currentBeneficiary : state.beneficiaryReducer.currentBeneficiary
+    currentBeneficiary: state.beneficiaryReducer.currentBeneficiary
   };
 };
 
@@ -466,7 +577,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.createBeneficiary(beneficiary)),
     updateBeneficiary: (id, beneficiary) =>
       dispatch(actions.updateBeneficiary(id, beneficiary)),
-      getBeneficiaryById : (id) => dispatch(actions.getBeneficiaryById(id))
+    getBeneficiaryById: id => dispatch(actions.getBeneficiaryById(id))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

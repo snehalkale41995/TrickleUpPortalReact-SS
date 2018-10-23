@@ -24,12 +24,20 @@ export const getGrampanchayatsList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Grampanchayats/GetGrampanchayats`)
       .then(response => {
-        let Grampanchayat = _.filter(response.data.data.Grampanchayatdata, function(grampanchayat) {
-          return grampanchayat.Active === true;
-        });
+        let Grampanchayat = _.filter(
+          response.data.data.Grampanchayatdata,
+          function(grampanchayat) {
+            return grampanchayat.Active === true;
+          }
+        );
         Grampanchayat.forEach(grampanchayat => {
           if (grampanchayat.GrampanchayatName !== null) {
-            grampanchayatList.push({ label: grampanchayat.GrampanchayatName, value: grampanchayat.Id });
+            grampanchayatList.push({
+              label: grampanchayat.GrampanchayatName,
+              value: grampanchayat.Id,
+              districtId: grampanchayat.District,
+              stateId : grampanchayat.State
+            });
             grampanchayats.push(grampanchayat);
           }
         });
@@ -41,18 +49,18 @@ export const getGrampanchayatsList = () => {
   };
 };
 
-// export const createVillage = (grampanchayat) => {
-//   return dispatch => {
-//     axios
-//       .post(`${AppConfig.serverURL}/api/Grampanchayat/PostVillage`, grampanchayat)
-//       .then(response => {
-//           //create success
-//       })
-//       .catch(error => {
-//         dispatch(grampanchayatMasterError(error));
-//       });
-//   };
-// }
+export const createGrampanchayat = (grampanchayat) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Grampanchayats/PostGrampanchayat`, grampanchayat)
+      .then(response => {
+          console.log("Post /api/Grampanchayats/PostGrampanchayat", response);
+      })
+      .catch(error => {
+        dispatch(grampanchayatMasterError(error));
+      });
+  };
+}
 // export const updateVillage = (id ,grampanchayat) => {
 //   return dispatch => {
 //     axios

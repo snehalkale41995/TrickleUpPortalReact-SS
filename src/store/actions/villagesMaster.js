@@ -24,12 +24,20 @@ export const getVillagesList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Villages/GetVillages`)
       .then(response => {
-        let Villages = _.filter(response.data.data.Villagedata, function(village) {
+        let Villages = _.filter(response.data.data.Villagedata, function(
+          village
+        ) {
           return village.Active === true;
         });
         Villages.forEach(village => {
           if (village.VillageName !== null) {
-            villageList.push({ label: village.VillageName, value: village.Id });
+            villageList.push({
+              label: village.VillageName,
+              value: village.Id,
+              stateId: village.State,
+              districtId: village.District,
+              grampanchayatId : village.Grampanchayat
+            });
             villages.push(village);
           }
         });

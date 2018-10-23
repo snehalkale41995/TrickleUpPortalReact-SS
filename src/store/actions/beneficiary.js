@@ -46,7 +46,7 @@ export const getBeneficiaryById = (id) => {
         .then(response => {
               let currentBeneficiary = response.data.data[0];
               currentBeneficiary.PhoneNumber = currentBeneficiary.PhoneNumber.toString();
-              console.log("currentBeneficiary", currentBeneficiary)
+              //console.log("currentBeneficiary", currentBeneficiary)
               dispatch(storeCurrentBeneficiary(currentBeneficiary));
         })
         .catch(error => {

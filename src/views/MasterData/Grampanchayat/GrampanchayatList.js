@@ -20,6 +20,7 @@ class GrampanchayatList extends Component {
     };
   }
   componentWillMount() {
+    this.props.getGrampanchayatsList();
     //this.props.getStatesList();
     //this.props.getDistrictsList();
     let compRef =this;
@@ -30,17 +31,17 @@ class GrampanchayatList extends Component {
     },2000)
   }
 
-  onDeleteState(cell, row) {
+  onDeleteGrampanchayat(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
     //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
-  onEditState(cell, row) {
+  onEditGrampanchayat(cell, row) {
     return (
       <Link to={this} onClick={() => this.onEdit(row)}>
         <i className="fa fa-pencil" title="Edit" />
@@ -55,7 +56,7 @@ class GrampanchayatList extends Component {
   }
   render() {
     const sortingOptions = {
-     // defaultSortName: "StateName",
+      defaultSortName: "GrampanchayatName",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -72,7 +73,7 @@ class GrampanchayatList extends Component {
         },
         {
           text: "All",
-          value: this.props.states.length
+          value: this.props.grampanchayats.length
         }
       ],
       sizePerPage: 5
@@ -104,47 +105,43 @@ class GrampanchayatList extends Component {
             <Col xs="12" >
             <BootstrapTable
               ref="table"
-              data={this.props.states}
+              data={this.props.grampanchayats}
               pagination={true}
               search={true}
               options={sortingOptions}
-              //exportCSV={true}
               hover={true}
-              csvFileName="Villages List"
+              csvFileName="grampanchayatList.csv"
             >
               <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
+                dataField="GrampanchayatName"
+                headerAlign="left"
+                width="40"
+                dataSort={true}
+              >
+              Grampanchayat
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="DistrictName"
+                headerAlign="left"
+                width="40"
+                dataSort={true}
+              >
+                District 
+              </TableHeaderColumn>
+              <TableHeaderColumn
                 dataField="StateName"
                 headerAlign="left"
                 width="40"
-                csvHeader="State Name"
                 dataSort={true}
               >
-                Village Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                //dataField="StateCode"
-                headerAlign="left"
-                width="40"
-                csvHeader="Code"
-                dataSort={true}
-              >
-                District Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                //dataField="StateCode"
-                headerAlign="left"
-                width="40"
-                csvHeader="Code"
-                dataSort={true}
-              >
-                State Name
+                State
               </TableHeaderColumn>
               <TableHeaderColumn
               dataField="edit"
-              dataFormat={this.onEditState.bind(this)}
+              dataFormat={this.onEditGrampanchayat.bind(this)}
               headerAlign="left"
               width="20"
               export={false}
@@ -153,7 +150,7 @@ class GrampanchayatList extends Component {
               </TableHeaderColumn>
               <TableHeaderColumn
               dataField="delete"
-              dataFormat={this.onDeleteState.bind(this)}
+              dataFormat={this.onDeleteGrampanchayat.bind(this)}
               headerAlign="left"
               width="20"
               export={false}
@@ -171,16 +168,15 @@ class GrampanchayatList extends Component {
 }
  const mapStateToProps = state => {
   return {
-    statesList: state.stateReducer.statesList,
-    states: state.stateReducer.states,
-    districtsList: state.districtReducer.districtsList,
+      grampanchayats : state.grampanchayatReducer.grampanchayats
   };
 };
 
  const mapDispatchToProps = dispatch => {
   return {
     getStatesList: () => dispatch(actions.getStatesList()),
-    getDistrictsList: () => dispatch(actions.getDistrictsList())
+    getDistrictsList: () => dispatch(actions.getDistrictsList()),
+    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrampanchayatList);

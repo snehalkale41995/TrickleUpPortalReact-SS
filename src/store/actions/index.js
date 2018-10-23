@@ -12,7 +12,8 @@ export {
     deleteDistrict
 } from './districtsMaster.js'
 export {
-    getGrampanchayatsList
+    getGrampanchayatsList,
+    createGrampanchayat
 } from './grampanchayatMaster.js'
 export {
     getVillagesList

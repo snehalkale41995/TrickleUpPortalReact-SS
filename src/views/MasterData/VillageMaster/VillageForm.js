@@ -18,7 +18,7 @@ class VillageForm extends Component {
         CreatedBy: "",
         UpdatedOn: "",
         UpdatedBy: "",
-        Active: 1,
+        Active: true,
         VillageNameRequired: false,
         DistrictRequired: false,
         StateRequired: false,
@@ -29,14 +29,12 @@ class VillageForm extends Component {
     };
   }
   componentDidMount() {
-    if (this.props.match.params.id !== undefined) {
       if (this.state.stateToEdit) {
         this.setState({
           updateFlag: true,
           village: this.state.villageToEdit
         });
       }
-    }
   }
   onChangeHandler(event) {
     let village = { ...this.state.village }
@@ -122,7 +120,7 @@ class VillageForm extends Component {
                   <DropdownSelect
                     name="States"
                     placeholder="Select State..."
-                    //options={this.props.statesList}
+                    options={this.props.statesList}
                     value={village.State}
                     required={village.StateRequired}
                     onChange={this.onStateValueChange.bind(this)}
@@ -134,7 +132,7 @@ class VillageForm extends Component {
                   <DropdownSelect
                     name="District"
                     placeholder="Select district..."
-                    // options={this.props.districtsList}
+                    options={this.props.districtsList}
                     value={village.District}
                     required={village.DistrictRequired}
                     onChange={this.onDistrictValueChange.bind(this)}
@@ -194,9 +192,9 @@ class VillageForm extends Component {
 }
 const mapStateToProps = state => {
   return {
-    // statesList: state.stateReducer.statesList,
+     statesList: state.stateReducer.statesList,
     // statesData: state.stateReducer.states,
-    // districtsList: state.districtReducer.districtsList,
+     districtsList: state.districtReducer.districtsList,
   };
 };
 

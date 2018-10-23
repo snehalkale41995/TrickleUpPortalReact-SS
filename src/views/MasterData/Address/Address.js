@@ -17,8 +17,8 @@ import GrampanchayatList from "../Grampanchayat/GrampanchayatList";
 const tabsList = [
   { id: "1", name: "States" },
   { id: "2", name: "Districts" },
-  { id: "3", name: "Villages" },
-  { id: "4", name: "Grampanchayats" }
+  { id: "3", name: "Grampanchayats" },
+  { id: "4", name: "Villages" }
 ];
 
 export default class Address extends Component {
@@ -64,17 +64,17 @@ export default class Address extends Component {
                 {tabs}
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1" style={{height: 600}}>
+                <TabPane tabId="1" style={{ height: 600 }}>
                   <StateList {...this.props} />
                 </TabPane>
-                <TabPane tabId="2" style={{height: 600}}>
+                <TabPane tabId="2" style={{ height: 600 }}>
                   <DistrictList {...this.props} />
                 </TabPane>
-                <TabPane tabId="3" style={{height: 600}}>
-                  <VillageList {...this.props} />
-                </TabPane>
-                <TabPane tabId="4" style={{height: 600}}>
+                <TabPane tabId="3" style={{ height: 600 }}>
                   <GrampanchayatList {...this.props} />
+                </TabPane>
+                <TabPane tabId="4" style={{ height: 600 }}>
+                  <VillageList {...this.props} />
                 </TabPane>
               </TabContent>
             </Col>

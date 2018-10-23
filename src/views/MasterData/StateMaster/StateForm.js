@@ -26,7 +26,7 @@ class StatesForm extends Component {
         CreatedBy: "",
         UpdatedOn: "",
         UpdatedBy: "",
-        Active: 1
+        Active: true
       },
       showList: false,
       stateToEdit: this.props.edit
