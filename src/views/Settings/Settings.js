@@ -300,7 +300,7 @@ class Settings extends Component {
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Beneficiary Form"
+          name="Profile Settings"
         >
           <FormGroup row />
           <div style={{ margin: 20 }}>

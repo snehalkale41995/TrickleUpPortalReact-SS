@@ -34,7 +34,7 @@ class GrampanchayatForm extends Component {
     };
   }
   componentDidMount() {
-    if ( Object.keys(this.state.grampanchayatToEdit).length !== 0) {
+    if (Object.keys(this.state.grampanchayatToEdit).length !== 0) {
       this.setState({
         updateFlag: true,
         grampanchayat: this.state.grampanchayatToEdit
@@ -74,14 +74,17 @@ class GrampanchayatForm extends Component {
   }
   onSubmit() {
     let compRef = this;
-    let grampanchayat = { ...this.state.grampanchayat};
+    let grampanchayat = { ...this.state.grampanchayat };
     if (this.valid(grampanchayat)) {
       let grampanchayatUpdate = _.pick(grampanchayat, [
+        "Id",
         "GrampanchayatName",
         "District",
         "State",
         "UpdatedOn",
-        "UpdatedBy"]);
+        "UpdatedBy",
+        "Active"
+      ]);
       grampanchayatUpdate.UpdatedBy = localStorage.getItem("user");
       grampanchayatUpdate.UpdatedOn = new Date();
       grampanchayatUpdate.Active = true;
@@ -90,17 +93,23 @@ class GrampanchayatForm extends Component {
         "District",
         "State",
         "CreatedOn",
-        "CreatedBy"]);
+        "CreatedBy",
+        "Active"
+      ]);
       grampanchayatCreate.CreatedBy = localStorage.getItem("user");
       grampanchayatCreate.CreatedOn = new Date();
       grampanchayatCreate.Active = true;
-      this.state.updateFlag ? console.log("Update") : this.props.createGrampanchayat(grampanchayatCreate);
-      this.setState({loading :true});
+      this.state.updateFlag
+        ? this.props.updateGrampanchayat(grampanchayatUpdate.Id , grampanchayatUpdate)
+        : this.props.createGrampanchayat(grampanchayatCreate);
+      this.setState({ loading: true });
       setTimeout(() => {
         let message = "";
         compRef.props.stateMasterError
-          ? message = "Something went wrong !"
-          : compRef.state.updateFlag ?  message = "Grampanchayat updated successfully" : message = "Grampanchayat created successfully";
+          ? (message = "Something went wrong !")
+          : compRef.state.updateFlag
+            ? (message = "Grampanchayat updated successfully")
+            : (message = "Grampanchayat created successfully");
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.grampanchayatMasterError);
         setTimeout(() => {
@@ -109,8 +118,8 @@ class GrampanchayatForm extends Component {
             compRef.setState({ showList: true });
           }
         }, 1000);
-       }, 1000);
-  }
+      }, 1000);
+    }
   }
   valid(grampanchayat) {
     if (
@@ -205,23 +214,35 @@ class GrampanchayatForm extends Component {
               </Col>
               <Col md="5" />
             </FormGroup>
-            <FormGroup row>
+
+            {this.state.updateFlag ? (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Save
+                  </Button>
+                </Col>
+                {/* <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                  </Button>
+                </Col> */}
+              </FormGroup>
+            ) : (
+              <FormGroup row>
               <Col md="1">
-                {this.state.updateFlag ? (
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Edit
-                  </Button>
-                ) : (
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                )}
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Submit
+                </Button>
               </Col>
               <Col md="1">
                 <Button
@@ -232,6 +253,7 @@ class GrampanchayatForm extends Component {
                 </Button>
               </Col>
             </FormGroup>
+            )}
           </div>
         </CardLayout>
         <ToastContainer autoClose={2000} />
@@ -244,13 +266,16 @@ const mapStateToProps = state => {
     statesList: state.stateReducer.statesList,
     statesData: state.stateReducer.states,
     districtsList: state.districtReducer.districtsList,
-    grampanchayatMasterError: state.grampanchayatReducer.grampanchayatMasterError
+    grampanchayatMasterError:
+      state.grampanchayatReducer.grampanchayatMasterError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    createGrampanchayat : (grampanchayat) => dispatch(actions.createGrampanchayat(grampanchayat))
+    createGrampanchayat: grampanchayat =>
+      dispatch(actions.createGrampanchayat(grampanchayat)),
+    updateGrampanchayat : (id ,grampanchayat) => dispatch(actions.updateGrampanchayat(id, grampanchayat))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrampanchayatForm);

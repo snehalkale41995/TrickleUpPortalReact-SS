@@ -21,23 +21,23 @@ class VillageForm extends Component {
         Active: true,
         VillageNameRequired: false,
         DistrictRequired: false,
-        StateRequired: false,
+        StateRequired: false
       },
       showList: false,
       villageToEdit: this.props.edit,
-      updateFlag: false,
+      updateFlag: false
     };
   }
   componentDidMount() {
-      if (this.state.stateToEdit) {
-        this.setState({
-          updateFlag: true,
-          village: this.state.villageToEdit
-        });
-      }
+    if (this.state.stateToEdit) {
+      this.setState({
+        updateFlag: true,
+        village: this.state.villageToEdit
+      });
+    }
   }
   onChangeHandler(event) {
-    let village = { ...this.state.village }
+    let village = { ...this.state.village };
     village[event.target.name] = event.target.value;
     village[event.target.name + "Required"] = false;
     this.setState({
@@ -45,7 +45,7 @@ class VillageForm extends Component {
     });
   }
   onStateValueChange(value) {
-    let village = { ...this.state.village }
+    let village = { ...this.state.village };
     village.State = value;
     village.StateRequired = false;
     this.setState({
@@ -53,7 +53,7 @@ class VillageForm extends Component {
     });
   }
   onDistrictValueChange(value) {
-    let village = { ...this.state.village }
+    let village = { ...this.state.village };
     village.District = value;
     village.DistrictRequired = false;
     this.setState({
@@ -74,9 +74,9 @@ class VillageForm extends Component {
     if (village.VillageName && village.District && village.State) {
       return true;
     } else {
-      !village.VillageName ? village.VillageNameRequired = true : null;
-      !village.District ? village.DistrictRequired = true : null;
-      !village.State ? village.StateRequired = true : null;
+      !village.VillageName ? (village.VillageNameRequired = true) : null;
+      !village.District ? (village.DistrictRequired = true) : null;
+      !village.State ? (village.StateRequired = true) : null;
 
       this.setState({
         village: village
@@ -96,7 +96,7 @@ class VillageForm extends Component {
       Active: 1,
       VillageNameRequired: false,
       DistrictRequired: false,
-      StateRequired: false,
+      StateRequired: false
     };
     this.setState({
       village: village
@@ -107,73 +107,85 @@ class VillageForm extends Component {
     return this.state.showList ? (
       <VillageList {...this.props} />
     ) : (
-        <div style={{ marginTop: 30 }}>
-          <CardLayout name="Village Form" buttonNavigation={true}
-            navigationCondition={() => {
-              this.setState({ showList: true });
-            }}>
-            <div style={{ margin: 20 }}>
-              <FormGroup row />
-              <FormGroup row>
-                <Col xs="10" md="5">
-                  <Label >State</Label>
-                  <DropdownSelect
-                    name="States"
-                    placeholder="Select State..."
-                    options={this.props.statesList}
-                    value={village.State}
-                    required={village.StateRequired}
-                    onChange={this.onStateValueChange.bind(this)}
-                    simpleValue
-                  />
-                </Col>
-                <Col md="5">
-                  <Label >District</Label>
-                  <DropdownSelect
-                    name="District"
-                    placeholder="Select district..."
-                    options={this.props.districtsList}
-                    value={village.District}
-                    required={village.DistrictRequired}
-                    onChange={this.onDistrictValueChange.bind(this)}
-                    simpleValue
-                  />
+      <div style={{ marginTop: 30 }}>
+        <CardLayout
+          name="Village Form"
+          buttonNavigation={true}
+          navigationCondition={() => {
+            this.setState({ showList: true });
+          }}
+        >
+          <div style={{ margin: 20 }}>
+            <FormGroup row />
+            <FormGroup row>
+              <Col xs="10" md="5">
+                <Label>State</Label>
+                <DropdownSelect
+                  name="States"
+                  placeholder="Select State..."
+                  options={this.props.statesList}
+                  value={village.State}
+                  required={village.StateRequired}
+                  onChange={this.onStateValueChange.bind(this)}
+                  simpleValue
+                />
+              </Col>
+              <Col md="5">
+                <Label>District</Label>
+                <DropdownSelect
+                  name="District"
+                  placeholder="Select district..."
+                  options={this.props.districtsList}
+                  value={village.District}
+                  required={village.DistrictRequired}
+                  onChange={this.onDistrictValueChange.bind(this)}
+                  simpleValue
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col xs="10" md="5">
+                <InputElement
+                  type="text"
+                  label="Village"
+                  name="VillageName"
+                  placeholder="Please enter village name"
+                  value={village.VillageName}
+                  required={village.VillageNameRequired}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </Col>
+              <Col md="5" />
+            </FormGroup>
 
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col xs="10" md="5">
-                  <InputElement
-                    type="text"
-                    label="Village"
-                    name="VillageName"
-                    placeholder="Please enter village name"
-                    value={village.VillageName}
-                    required={village.VillageNameRequired}
-                    onChange={(event) => this.onChangeHandler(event)}
-                  />
-                </Col>
-                <Col md="5">
-
-                </Col>
-              </FormGroup>
+            {this.state.updateFlag ? (
               <FormGroup row>
                 <Col md="1">
-                  {this.state.updateFlag ? (
-                    <Button
-                      className="theme-positive-btn"
-                      onClick={this.onSubmit.bind(this)}
-                    >
-                      Edit
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Save
                   </Button>
-                  ) : (
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={this.onSubmit.bind(this)}
-                      >
-                        Submit
+                </Col>
+                {/* <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                </Button>
+                </Col> */}
+              </FormGroup>
+            ) : (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Submit
                   </Button>
-                    )}
                 </Col>
                 <Col md="1">
                   <Button
@@ -181,20 +193,21 @@ class VillageForm extends Component {
                     onClick={this.onReset.bind(this)}
                   >
                     Reset
-                </Button>
+                  </Button>
                 </Col>
               </FormGroup>
-            </div>
-          </CardLayout>
-        </div>
-      );
+            )}
+          </div>
+        </CardLayout>
+      </div>
+    );
   }
 }
 const mapStateToProps = state => {
   return {
-     statesList: state.stateReducer.statesList,
+    statesList: state.stateReducer.statesList,
     // statesData: state.stateReducer.states,
-     districtsList: state.districtReducer.districtsList,
+    districtsList: state.districtReducer.districtsList
   };
 };
 

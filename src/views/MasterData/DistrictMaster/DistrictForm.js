@@ -188,33 +188,46 @@ class DistrictForm extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup row>
-              <Col md="1">
-                {this.state.updateFlag ? (
+
+            {this.state.updateFlag ? (
+              <FormGroup row>
+                <Col md="1">
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
                   >
-                    Edit
+                    Save
                   </Button>
-                ) : (
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                )}
-              </Col>
-              <Col md="1">
+                </Col>
+                {/* <Col md="1">
                 <Button
                   className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
+                  onClick={()}
                 >
                   Reset
                 </Button>
+                </Col> */}
+              </FormGroup>
+            ) : (
+              <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+              <Button
+                className="theme-reset-btn"
+                onClick={this.onReset.bind(this)}
+              >
+                Reset
+              </Button>
               </Col>
             </FormGroup>
+            )}
           </div>
           <ToastContainer autoClose={2000} />
         </CardLayout>

@@ -39,6 +39,7 @@ class RegistrationForm extends Component {
         PhoneNumberInvalid: false,
         Age: "",
         AgeRequired: false,
+        AgeInvalid: false,
         Gender: "",
         State: "",
         District: "",
@@ -70,7 +71,10 @@ class RegistrationForm extends Component {
       updateFlag: false,
       districtOptions: this.props.districtsList,
       grampanchayatOptions: this.props.grampanchayatsList,
-      villageOptions: this.props.villagesList
+      villageOptions: this.props.villagesList,
+      districtDisabled: false,
+      grampanchayatDisabled: false,
+      villageDisabled: false
     };
   }
 
@@ -89,6 +93,12 @@ class RegistrationForm extends Component {
           });
         }
       }, 1000);
+    } else {
+      this.setState({
+        districtDisabled: true,
+        grampanchayatDisabled: true,
+        villageDisabled: true
+      });
     }
   }
   onChangeInput(event) {
@@ -124,7 +134,8 @@ class RegistrationForm extends Component {
       stateRequired: false,
       districtOptions: districtOptions,
       grampanchayatOptions: [],
-      villageOptions: []
+      villageOptions: [],
+      districtDisabled: false
     });
   }
   onDistrictSelection(value) {
@@ -138,7 +149,8 @@ class RegistrationForm extends Component {
     this.setState({
       user: user,
       districtRequired: false,
-      grampanchayatOptions: grampanchayatOptions
+      grampanchayatOptions: grampanchayatOptions,
+      grampanchayatDisabled: false
     });
   }
   onVillageSelection(value) {
@@ -158,7 +170,8 @@ class RegistrationForm extends Component {
     this.setState({
       user: user,
       grampanchayatRequired: false,
-      villageOptions: villageOptions
+      villageOptions: villageOptions,
+      villageDisabled: false
     });
   }
   onRoleSelection(value) {
@@ -180,6 +193,7 @@ class RegistrationForm extends Component {
   onSubmit() {
     let user = { ...this.state.user };
     let compRef = this;
+
     if (this.validData()) {
       if (this.state.updateFlag) {
         user = _.pick(user, [
@@ -218,7 +232,7 @@ class RegistrationForm extends Component {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = "Beneficiary updated successfully");
+            : (message = `User updated successfully`);
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
@@ -264,7 +278,7 @@ class RegistrationForm extends Component {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = "Beneficiary created successfully");
+            : (message = "User created successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
@@ -282,20 +296,24 @@ class RegistrationForm extends Component {
 
   validData() {
     let user = { ...this.state.user };
-
+    let InvalidAdhaar = false;
+    if (user.Aadhaar) {
+      user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
+    }
     if (
       user.Name &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
       user.Age &&
+      user.Age > 0 &&
       user.Gender &&
       user.State &&
       user.District &&
       user.Village &&
       user.Grampanchayat &&
       user.Role &&
-      user.Aadhaar.length === 12 &&
-      user.Language
+      user.Language &&
+      !InvalidAdhaar
     ) {
       return true;
     } else {
@@ -310,7 +328,8 @@ class RegistrationForm extends Component {
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
-    !user.Age ? (user.AgeRequired = true) : null;
+    user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
+    !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
     !user.Gender ? this.setState({ genderRequired: true }) : null;
     !user.State ? this.setState({ stateRequired: true }) : null;
     !user.District ? this.setState({ districtRequired: true }) : null;
@@ -335,12 +354,14 @@ class RegistrationForm extends Component {
       PhoneNumberInvalid: false,
       Age: "", //no
       AgeRequired: false,
+      AgeInvalid :false,
       Gender: "", //id
       State: "", //id
       District: "", //id
       Village: "", //id
       Grampanchayat: "", //id
       Aadhaar: "",
+      AadhaarInvalid :false,
       Role: "",
       Language: ""
     };
@@ -404,6 +425,7 @@ class RegistrationForm extends Component {
                   placeholder="Please enter age "
                   value={user.Age}
                   required={user.AgeRequired}
+                  invalid={user.AgeInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
               </Col>
@@ -439,6 +461,7 @@ class RegistrationForm extends Component {
                   placeholder="Select district "
                   options={this.state.districtOptions}
                   value={user.District}
+                  disabled={this.state.districtDisabled}
                   required={this.state.districtRequired}
                   onChange={this.onDistrictSelection.bind(this)}
                 />
@@ -452,6 +475,7 @@ class RegistrationForm extends Component {
                   placeholder="Select grampanchayat "
                   value={user.Grampanchayat}
                   options={this.state.grampanchayatOptions}
+                  disabled={this.state.grampanchayatDisabled}
                   required={this.state.grampanchayatRequired}
                   onChange={this.onGrampanchayatSelection.bind(this)}
                 />
@@ -462,6 +486,7 @@ class RegistrationForm extends Component {
                   name="Village"
                   placeholder="Select village "
                   value={user.Village}
+                  disabled={this.state.villageDisabled}
                   options={this.state.villageOptions}
                   required={this.state.villageRequired}
                   onChange={this.onVillageSelection.bind(this)}
@@ -474,6 +499,7 @@ class RegistrationForm extends Component {
                   type="text"
                   label="Aadhaar number"
                   name="Aadhaar"
+                  maxLength={12}
                   placeholder="Please enter aadhaar number "
                   value={user.Aadhaar}
                   invalid={user.AadhaarInvalid}
@@ -525,7 +551,7 @@ class RegistrationForm extends Component {
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
                   >
-                    Edit
+                    Save
                   </Button>
                 </Col>
               ) : (
@@ -538,15 +564,27 @@ class RegistrationForm extends Component {
                   </Button>
                 </Col>
               )}
-
-              <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
-                >
-                  Reset
-                </Button>
-              </Col>
+              {this.state.updateFlag ? (
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={() => {
+                      this.props.history.push("/beneficiary/beneficiaryList");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              ) : (
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              )}
             </FormGroup>
           </div>
         </CardLayout>
@@ -561,7 +599,7 @@ const mapStateToProps = state => {
     districtsList: state.districtReducer.districtsList,
     grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
     villagesList: state.villageReducer.villagesList,
-    beneficiaryList: state.beneficiaryReducer.beneficiaryList,
+    //beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.rolesReducer.gendersList,
     languagesList: state.rolesReducer.languagesList,

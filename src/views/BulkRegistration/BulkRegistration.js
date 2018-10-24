@@ -7,6 +7,9 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import { CSVLink } from "react-csv";
+import uuid from "uuid";
+import { connect } from "react-redux";
+import * as actions from "../../store/actions";
 const csvData = [
   [
     "UserId",
@@ -27,15 +30,16 @@ const csvData = [
     "CreatedBy",
     "CreatedOn",
     "Active"
+    //"BulkUploadId"
   ]
 ];
-export default class BulkRegistration extends Component {
+class BulkRegistration extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showDataTable: false,
       CSVdata: [],
-      showTableHeaderFormat :false
+      showTableHeaderFormat: false
     };
   }
   handleData = data => {
@@ -51,16 +55,17 @@ export default class BulkRegistration extends Component {
     });
   }
   onSubmit() {
-    let csvFileData = [ ...this.state.CSVdata];
-    csvFileData.forEach((data) => {
-      data.PhoneNumber = parseInt(data.PhoneNumber);
-    })
-    console.log("Bulk data submit" , this.state.CSVdata);
+    let beneficiaries = [...this.state.CSVdata];
+    let guid = uuid.v1(new Date());
+    beneficiaries.forEach(beneficiary => {
+      beneficiary.BulkUploadId = guid;
+    });
+    this.props.bulkUploadBeneficiary(beneficiaries);
   }
   onShowTableFormat() {
     let showTableHeaderFormat = this.state.showTableHeaderFormat;
     this.setState({
-      showTableHeaderFormat : !showTableHeaderFormat
+      showTableHeaderFormat: !showTableHeaderFormat
     });
   }
   render() {
@@ -116,7 +121,7 @@ export default class BulkRegistration extends Component {
         <CardLayout name="Bulk Registration">
           <div style={{ margin: 20 }}>
             <FormGroup row>
-              <Col xs="8" md="3">
+              <Col xs="12" md="3">
                 <FormGroup row>
                   <CsvParse
                     keys={keys}
@@ -136,7 +141,7 @@ export default class BulkRegistration extends Component {
                   <Label />
                   <h6>Format required for CSV : </h6> &nbsp; &nbsp;
                   <div style={{ fontSize: 14, margin: -3 }}>
-                    <CSVLink filename="_fileFormat.csv" data={csvData}>
+                    <CSVLink filename="_users.csv" data={csvData}>
                       Download
                     </CSVLink>
                   </div>
@@ -149,10 +154,27 @@ export default class BulkRegistration extends Component {
                   </div>
                 </FormGroup>
                 <FormGroup row>
+                {this.state.showTableHeaderFormat ? (
+                <Col xs="12" md="12">
+                  {/* <h6>Format required for CSV : </h6> */}
+                  <table className="csv-table-border">
+                    <tr className="csv-table-border">{tableFormat}</tr>
+                  </table>
+                  <div
+                    style={{ color: "red", fontSize: "12px" ,width:400}}
+                    className="help-block"
+                  >
+                    *Please note : Sequence of headers should be exactly same.
+                  </div>
+                </Col>
+              ) : null}
+                  </FormGroup>
+                <FormGroup row>
                   <Col xs="8" md="4">
                     <Button
                       className="theme-positive-btn"
                       onClick={this.onSubmit.bind(this)}
+                      style={{ pointerEvents: 'none' }}
                     >
                       Submit
                     </Button>
@@ -161,26 +183,14 @@ export default class BulkRegistration extends Component {
                     <Button
                       className="theme-reset-btn"
                       onClick={this.onReset.bind(this)}
+                      style={{ pointerEvents: 'none' }}
                     >
                       Reset
                     </Button>
                   </Col>
                 </FormGroup>
               </Col>
-              {this.state.showTableHeaderFormat ? (
-                <Col md="5">
-                  <h6>Format required for CSV : </h6>
-                  <table className="csv-table-border">
-                    <tr className="csv-table-border">{tableFormat}</tr>
-                  </table>
-                  <div
-                    style={{ color: "red", fontSize: "12px" }}
-                    className="help-block"
-                  >
-                    *Please note : Sequence of headers should be exactly same.
-                  </div>
-                </Col>
-              ) : null}
+            
             </FormGroup>
             {this.state.showDataTable ? (
               <div>
@@ -232,10 +242,7 @@ export default class BulkRegistration extends Component {
                   >
                     Grampanchayat
                   </TableHeaderColumn>
-                  <TableHeaderColumn
-                    dataField="Aadhaar"
-                    headerAlign="left"
-                  >
+                  <TableHeaderColumn dataField="Aadhaar" headerAlign="left">
                     Aadhar Number
                   </TableHeaderColumn>
                 </BootstrapTable>
@@ -247,3 +254,14 @@ export default class BulkRegistration extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    bulkUploadBeneficiary: beneficiaries =>
+      dispatch(actions.bulkUploadBeneficiary(beneficiaries))
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(BulkRegistration);

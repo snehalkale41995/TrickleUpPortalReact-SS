@@ -6,17 +6,17 @@ export default {
       icon: "icon-home"
     },
     {
-      name: "Beneficiary",
+      name: "Users",
       url: "/beneficiary",
       icon: "fa fa-user",
       children: [
         {
-          name: "Add beneficiary",
+          name: "Add Users",
           url: "/beneficiary/beneficiaryList",
           icon: "fa fa-users"
         },
         {
-          name: "Bulk upload beneficiary",
+          name: "Bulk upload users",
           url: "/beneficiary/bulkUploadBeneficiary",
           icon: "fa fa-upload"
         }
@@ -37,11 +37,11 @@ export default {
           url: "/master/address",
           icon: "icon-star"
         },
-        // {
-        //   name: "Roles",
-        //   url: "/master/roles",
-        //   icon: "icon-star"
-        // },
+        {
+          name: "Roles",
+          url: "/master/roles",
+          icon: "icon-star"
+        },
         // {
         //   name: "Gender",
         //   url: "/master/genders",

@@ -44,9 +44,8 @@ export const getBeneficiaryById = (id) => {
       axios
         .get(`${AppConfig.serverURL}/api/Users/GetUser/${id}`)
         .then(response => {
-              let currentBeneficiary = response.data.data[0];
+              let currentBeneficiary = response.data.data.Users[0];
               currentBeneficiary.PhoneNumber = currentBeneficiary.PhoneNumber.toString();
-              //console.log("currentBeneficiary", currentBeneficiary)
               dispatch(storeCurrentBeneficiary(currentBeneficiary));
         })
         .catch(error => {

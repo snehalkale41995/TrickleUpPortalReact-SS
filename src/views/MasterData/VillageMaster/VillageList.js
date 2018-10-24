@@ -90,6 +90,7 @@ class VillageList extends Component {
               <Button
                 type="button"
                 className="theme-positive-btn"
+                style={{ pointerEvents: 'none' }}
                 onClick={() => {
                   this.setState({ showForm: true });
                 }}

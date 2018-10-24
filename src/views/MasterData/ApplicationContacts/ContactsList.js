@@ -27,7 +27,7 @@ class ContactsList extends Component {
 
   onDeleteState(cell, row) {
     return (
-      <Link to={this}>
+      <Link to={this} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );

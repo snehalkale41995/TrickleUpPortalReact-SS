@@ -13,7 +13,8 @@ export {
 } from './districtsMaster.js'
 export {
     getGrampanchayatsList,
-    createGrampanchayat
+    createGrampanchayat,
+    updateGrampanchayat
 } from './grampanchayatMaster.js'
 export {
     getVillagesList
@@ -27,7 +28,8 @@ export {
     createBeneficiary,
     updateBeneficiary,
     getBeneficiaryById,
-    deleteBeneficiary
+    deleteBeneficiary,
+    bulkUploadBeneficiary
 } from './beneficiary.js'
 
 export {

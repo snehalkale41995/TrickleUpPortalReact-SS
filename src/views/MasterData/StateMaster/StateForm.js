@@ -178,17 +178,28 @@ class StatesForm extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup row>
-              {this.state.updateFlag ? (
+
+            {this.state.updateFlag ? (
+              <FormGroup row>
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmitState.bind(this)}
                   >
-                    Edit
+                    Save
                   </Button>
                 </Col>
-              ) : (
+                {/* <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={() => {this.setState({ showList: true });}}
+                  >
+                    Cancel
+                  </Button>
+                </Col> */}
+              </FormGroup>
+            ) : (
+              <FormGroup row>
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
@@ -197,17 +208,17 @@ class StatesForm extends Component {
                     Submit
                   </Button>
                 </Col>
-              )}
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </FormGroup>
+            )}
 
-              <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
-                >
-                  Reset
-                </Button>
-              </Col>
-            </FormGroup>
             <ToastContainer autoClose={2000} />
           </div>
         </CardLayout>

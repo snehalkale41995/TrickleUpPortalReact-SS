@@ -173,17 +173,17 @@ class ChangePassword extends Component {
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
                   >
-                    Submit
+                    Save
                 </Button>
                 </Col>
-                <Col md="1">
+                {/* <Col md="1">
                   <Button
                     className="theme-reset-btn"
                     onClick={this.onReset.bind(this)}
                   >
                     Reset
                 </Button>
-                </Col>
+                </Col> */}
               </FormGroup>
                <ToastContainer autoClose={2000} />
             </div>

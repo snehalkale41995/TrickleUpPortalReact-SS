@@ -102,7 +102,7 @@ onChangeValue(event){
         <FormGroup row>
         <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-            <Button className="theme-positive-btn" onClick={this.onToggleModal.bind(this)}>Add role</Button>
+            <Button style={{ pointerEvents: 'none' }} className="theme-positive-btn" onClick={this.onToggleModal.bind(this)}>Add role</Button>
             </Col>
           </FormGroup>
           <FormGroup row>

@@ -96,7 +96,7 @@ class RegistrationList extends Component {
             <Col xs="12" md="10" />
             <Col md="2" style={{ marginTop: -55 }}>
               <Link to={`${this.props.match.url}/registration`}>
-                <Button type="button" className="theme-positive-btn">
+                <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
                   <i className="fa fa-plus" />
                   &nbsp; Add user
                 </Button>
@@ -145,6 +145,18 @@ class RegistrationList extends Component {
                   Phone Number
                 </TableHeaderColumn>
                 <TableHeaderColumn
+                  dataField="Age"
+                  csvHeader="Age"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
+                  dataField="GenderName"
+                  csvHeader="Gender"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
                   dataField="RoleName"
                   headerAlign="left"
                   width="40"
@@ -160,8 +172,38 @@ class RegistrationList extends Component {
                   hidden
                 />
                 <TableHeaderColumn
-                  dataField="GenderName"
-                  csvHeader="Gender"
+                  dataField="DistrictName"
+                  csvHeader="District"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
+                  dataField="GrampanchayatName"
+                  csvHeader="Grampanchayat"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
+                  dataField="VillageName"
+                  csvHeader="Village"
+                  export={true}
+                  hidden
+                />
+                <TableHeaderColumn
+                  dataField="LanguageName"
+                  csvHeader="Language"
+                  export={true}
+                  hidden
+                />
+                {/* <TableHeaderColumn
+                  dataField="Aadhar"
+                  csvHeader="Aadhar number"
+                  export={true}
+                  hidden
+                /> */}
+                <TableHeaderColumn
+                  dataField="Active"
+                  csvHeader="Active"
                   export={true}
                   hidden
                 />

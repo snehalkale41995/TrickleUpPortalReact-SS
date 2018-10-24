@@ -69,88 +69,88 @@ export default class MediaList extends Component {
 }
 
 const mediaListControl = [
-  {
-    id: 0,
-    category: "Crops",
-    subCategory: "Chilli",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
-  },
+  // {
+  //   id: 0,
+  //   category: "Crops",
+  //   subCategory: "Cucumber Harvest",
+  //   mediaURL: "http://192.168.100.130:1823/MediaContent/CucumberHarvest.mp4"
+  // },
   {
     id: 1,
     category: "Crops",
     subCategory: "Chilli",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    mediaURL: "http://192.168.100.130:1823/MediaContent/ChilliCrop.mp4"
   },
   {
     id: 2,
     category: "Crops",
-    subCategory: "Chilli",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    subCategory: "Bitter Gourd",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/BitterGourdFarming.mp4"
   },
   {
     id: 3,
-    category: "Live stock",
-    subCategory: "Goat",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    category: "Crops",
+    subCategory: "Brinjal",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/Brinjalfarm.mp4"
   },
   {
     id: 4,
-    category: "Live stock",
-    subCategory: "Cow",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    category: "Crops",
+    subCategory: "Cauliflower",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/Cauliflower.mp4"
   },
   {
     id: 5,
-    category: "Live stock",
-    subCategory: "Sheep",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    category: "Crops",
+    subCategory: "Ladies Finger",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/LadiesFingerFarming.mp4"
   },
   {
     id: 6,
-    category: "Live stock",
-    subCategory: "Goat",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
-  },
-  {
-    id: 7,
-    category: "Live stock",
-    subCategory: "Buffalo",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
-  },
-  {
-    id: 8,
     category: "Crops",
-    subCategory: "Bhendi",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    subCategory: "Onion",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/Onion.mp4"
   },
-  {
-    id: 9,
-    category: "Crops",
-    subCategory: "Bhendi",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
-  },
+  // {
+  //   id: 7,
+  //   category: "Crops",
+  //   subCategory: "Pumpkin",
+  //   mediaURL: "http://192.168.100.130:1823/MediaContent/Pumpkin.mp4"
+  // },
+  // {
+  //   id: 8,
+  //   category: "Crops",
+  //   subCategory: "Tomato",
+  //   mediaURL: "http://192.168.100.130:1823/MediaContent/Tomato.mp4"
+  // },
+  // {
+  //   id: 9,
+  //   category: "Crops",
+  //   subCategory: "LongBeans",
+  //   mediaURL: "http://192.168.100.130:1823/MediaContent/LongBeans.mp4"
+  // },
   {
     id: 10,
     category: "Crops",
-    subCategory: "Bhendi",
-    mediaURL: "http://192.168.101.20:1826/MediaContent/chilli_crop.mp4"
+    subCategory: "Radish",
+    mediaURL: "http://192.168.100.130:1823/MediaContent/Radish.mp4"
   },
-  {
-    id: 11,
-    category: "Small business",
-    subCategory: "Vendor",
-    mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
-  },
-  {
-    id: 12,
-    category: "Small business",
-    subCategory: "Transport",
-    mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
-  },
-  {
-    id: 13,
-    category: "Small business",
-    subCategory: "Vendor",
-    mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
-  }
+  // {
+  //   id: 11,
+  //   category: "Small business",
+  //   subCategory: "Vendor",
+  //   mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
+  // },
+  // {
+  //   id: 12,
+  //   category: "Small business",
+  //   subCategory: "Transport",
+  //   mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
+  // },
+  // {
+  //   id: 13,
+  //   category: "Small business",
+  //   subCategory: "Vendor",
+  //   mediaURL: "http://techslides.com/demos/sample-videos/small.mp4"
+  // }
 ];
