@@ -42,11 +42,17 @@ export default {
           url: "/master/roles",
           icon: "icon-star"
         },
-        // {
-        //   name: "Gender",
-        //   url: "/master/genders",
-        //   icon: "icon-star"
-        // },
+         {
+          name: "Gender",
+          url: "/master/genders",
+          icon: "icon-star"
+        },
+         {
+          name: "Languages",
+          url: "/master/languages",
+          icon: "icon-star"
+        },
+       
         // {
         //   name: "Languages",
         //   url: "/dashboard",

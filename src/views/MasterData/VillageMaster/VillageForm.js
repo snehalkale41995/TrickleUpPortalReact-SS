@@ -9,6 +9,7 @@ import VillageList from "./VillageList";
 class VillageForm extends Component {
   constructor(props) {
     super(props);
+    console.log("this.props.edit", this.props.edit);
     this.state = {
       village: {
         VillageName: "",
@@ -29,7 +30,8 @@ class VillageForm extends Component {
     };
   }
   componentDidMount() {
-    if (this.state.stateToEdit) {
+
+   if (Object.keys(this.state.villageToEdit).length !== 0) {
       this.setState({
         updateFlag: true,
         village: this.state.villageToEdit
@@ -104,6 +106,7 @@ class VillageForm extends Component {
   }
   render() {
     let village = { ...this.state.village };
+  
     return this.state.showList ? (
       <VillageList {...this.props} />
     ) : (
@@ -182,6 +185,7 @@ class VillageForm extends Component {
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
+                    style={{ pointerEvents: 'none' }}
                     onClick={this.onSubmit.bind(this)}
                   >
                     Submit

@@ -6,7 +6,9 @@ const initialState = {
     gendersList : [],
     languagesList : [],
     genders :[],
-    languages : []
+    languages : [],
+    createRoleError : false,
+    updateRoleError : false
 };
 
 const rolesReducer = (state = initialState, action) => {
@@ -29,6 +31,27 @@ const rolesReducer = (state = initialState, action) => {
         languagesList : action.languagesList,
         languages : action.languages
       };
+      case actionTypes.CREATE_ROLE_SUCCESS:
+      return {
+        ...state,
+         createRoleError : false
+      };
+      case actionTypes.CREATE_ROLE_FAIL:
+      return {
+        ...state,
+         createRoleError : true
+      };
+      case actionTypes.UPDATE_ROLE_SUCCESS:
+      return {
+        ...state,
+         updateRoleError : false
+      };
+      case actionTypes.UPDATE_ROLE_FAIL:
+      return {
+        ...state,
+         updateRoleError : true
+      };
+
     default:
       return state;
   }

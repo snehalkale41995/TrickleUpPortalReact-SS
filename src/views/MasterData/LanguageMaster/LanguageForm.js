@@ -4,24 +4,23 @@ import * as actions from "../../../store/actions";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../../components/InputElement/InputElement";
-import StatesList from "./RolesList";
 import _ from "lodash";
 import Loader from "../../../components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
-class RolesForm extends Component {
+class LanguagesForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
       updateFlag: false,
-      currentRole: {
+      currentLanguage: {
         Id: "",
-        RoleName: "",
-        RoleId: "",
-        RoleNameRequired: false,
-        RoleIdRequired: false,
+        LanguageName: "",
+        LanguageCode: "",
+        LanguageNameRequired: false,
+        LanguageCodeRequired: false,
         CreatedOn: "",
         CreatedBy: "",
         UpdatedOn: "",
@@ -31,38 +30,37 @@ class RolesForm extends Component {
       stateToEdit: this.props.edit
     };
   }
-  
   componentWillMount() {
     if (this.props.match.params.id !== undefined) {
-      let currentRole = this.props.roleList.find(
-        role => role.Id == this.props.match.params.id
+      let currentLanguage = this.props.languageList.find(
+        language => language.Id == this.props.match.params.id
       );
-      if (currentRole) {
+      if (currentLanguage) {
         this.setState({
-          currentRole: currentRole
+          currentLanguage: currentLanguage
         });
       }
     }
   }
 
   onChangeHandler(event) {
-    let state = { ...this.state.currentRole };
+    let state = { ...this.state.currentLanguage };
     state[event.target.name] = event.target.value;
     state[event.target.name + "Required"] = false;
     this.setState({
-      currentRole: state
+      currentLanguage: state
     });
   }
 
   onSubmitState() {
-    let currentRole = { ...this.state.currentRole };
+    let currentLanguage = { ...this.state.currentLanguage };
     let compRef = this;
-    if (this.valid(currentRole)) {
+    if (this.valid(currentLanguage)) {
       if (this.state.updateFlag) {
-        let state = _.pick(currentRole, [
+        let state = _.pick(currentLanguage, [
           "Id",
-          "RoleName",
-          "RoleId",
+          "LanguageName",
+          "LanguageCode",
           "UpdatedOn",
           "UpdatedBy",
           "Active"
@@ -85,16 +83,16 @@ class RolesForm extends Component {
           }, 1000);
         }, 1000);
       } else {
-        let role = _.pick(currentRole, [
-          "RoleName",
-          "RoleId",
+        let language = _.pick(currentLanguage, [
+          "LanguageName",
+          "LanguageCode",
           "CreatedOn",
           "CreatedBy",
           "Active"
         ]);
-        role.CreatedOn = new Date();
-        role.CreatedBy = 1;
-        this.props.createRole(role);
+        language.CreatedOn = new Date();
+        language.CreatedBy = 1;
+        this.props.createLanguage(language);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
@@ -102,7 +100,7 @@ class RolesForm extends Component {
             ? (message = "Something went wrong !")
             : (message = "State created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.createRoleError);
+          Toaster.Toaster(message, compRef.props.createLanguageError);
           setTimeout(() => {
             if (!compRef.props.createRoleError) {
               compRef.onReset();
@@ -112,25 +110,25 @@ class RolesForm extends Component {
       }
     }
   }
-  valid(currentRole) {
-    if (currentRole.RoleName && currentRole.RoleId) {
+  valid(currentLanguage) {
+    if (currentLanguage.LanguageName && currentLanguage.LanguageCode) {
       return true;
     } else {
-      if (!currentRole.RoleName) currentRole.RoleNameRequired = true;
-      if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
+      if (!currentLanguage.LanguageName) currentLanguage.LanguageNameRequired = true;
+      if (!currentLanguage.LanguageCode) currentLanguage.LanguageCodeRequired = true;
       this.setState({
-        currentRole: currentRole
+        currentLanguage: currentLanguage
       });
       return false;
     }
   }
   onReset() {
-    let currentRole = {
+    let currentLanguage = {
       Id: "",
-      RoleName: "",
-      RoleId: "",
-      RoleNameRequired: false,
-      RoleIdRequired: false,
+      LanguageName: "",
+      LanguageCode: "",
+      LanguageNameRequired: false,
+      LanguageCodeRequired: false,
       CreatedOn: "",
       CreatedBy: "",
       UpdatedOn: "",
@@ -138,19 +136,19 @@ class RolesForm extends Component {
       Active: 1
     };
     this.setState({
-      currentRole: currentRole
+      currentLanguage: currentLanguage
     });
   }
   render() {
-    const { currentRole } = this.state;
+    const { currentLanguage } = this.state;
     return  this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Role Form"
+          name="Language Form"
           navigation={true}
-          navigationRoute="/master/roles"
+          navigationRoute="/master/languages"
         >
           <div style={{ margin: 20 }}>
             <FormGroup row />
@@ -158,22 +156,22 @@ class RolesForm extends Component {
               <Col xs="8" md="4">
                 <InputElement
                   type="text"
-                  label="Role Name"
-                  placeholder="Role Name"
-                  name="RoleName"
-                  required={currentRole.RoleNameRequired}
-                  value={currentRole.RoleName}
+                  label="Language Name"
+                  placeholder="Language Name"
+                  name="LanguageName"
+                  required={currentLanguage.LanguageNameRequired}
+                  value={currentLanguage.LanguageName}
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
               <Col md="4">
                 <InputElement
                   type="text"
-                  label="Role Id"
-                  placeholder="Role Id"
-                  name="RoleId"
-                  required={currentRole.RoleIdRequired}
-                  value={currentRole.RoleId}
+                  label="Language Id"
+                  placeholder="Language Id"
+                  name="LanguageCode"
+                  required={currentLanguage.LanguageCodeRequired}
+                  value={currentLanguage.LanguageCode}
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
@@ -222,15 +220,15 @@ class RolesForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    createRoleError: state.rolesReducer.createRoleError,
-    roleList : state.rolesReducer.roles
+    createLanguageError: state.languageReducer.createLanguageError,
+    languageList : state.rolesReducer.languages
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    createRole: role => dispatch(actions.createRole(role)),
+    createLanguage: language => dispatch(actions.createLanguage(language)),
    // getRoleById: (id) => dispatch(actions.getRoleById(id))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RolesForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LanguagesForm);

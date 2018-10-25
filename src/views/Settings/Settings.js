@@ -291,9 +291,9 @@ class Settings extends Component {
     }
     let $imagePreview = null;
     if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} style={{ borderRadius : "50em", width: "100%" , height: '100%'}} />);
+      $imagePreview = (<img src={imagePreviewUrl} style={{ borderRadius : "50em", borderColor: 'white', width: "100%" , height: '100%'}} />);
     } else {
-      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+      $imagePreview = (<div style={{border:0}} className="previewText">Please select an Image for Preview</div>);
     }
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
@@ -452,7 +452,7 @@ class Settings extends Component {
                 />
             </Col>
              <Col md="2">
-             <div style={{ height: "100px", width : "100px", border: '1px solid gray', img: {width : "100px", height : "100px"}}}>
+             <div style={{ height: "100px", width : "100px", border: 0, img: {width : "100px", height : "100px"}}}>
               {$imagePreview}
               </div>
             </Col>

@@ -39,7 +39,10 @@ export {
 export {
     getRolesList,
     getGendersList,
-    getLanguageList
+    getLanguageList,
+    createRole
 } from './rolesMaster.js';
 
 export { loginUser, changePassword} from "./login";
+
+export {getAllLanguages, createLanguage} from "./languageMaster"

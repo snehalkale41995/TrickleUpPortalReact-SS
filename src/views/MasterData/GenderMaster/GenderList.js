@@ -8,10 +8,9 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
-import StateForm from "./RoleForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-class RolesList extends Component {
+class GenderList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +22,7 @@ class RolesList extends Component {
   }
 
   componentWillMount() {
-    this.props.getRolesList();
+    this.props.getGendersList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -35,7 +34,7 @@ class RolesList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onDelete(row)}>
+      <Link style={{ pointerEvents: 'none' }} to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete"  />
       </Link>
     );
@@ -65,7 +64,7 @@ class RolesList extends Component {
   onEditState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={`${componentRef.props.match.url}/RoleForm/${row.Id}`}>
+      <Link to={`${componentRef.props.match.url}/GenderForm/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -75,8 +74,9 @@ class RolesList extends Component {
    
   }
   render() {
+    console.log("this.props.genders", this.props.genders)
     const sortingOptions = {
-      defaultSortName: "RoleName",
+      defaultSortName: "GenderName",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -93,7 +93,7 @@ class RolesList extends Component {
         },
         {
           text: "All",
-          value: this.props.Roles.length
+          value: this.props.genders.length
         }
       ],
       sizePerPage: 5
@@ -102,15 +102,15 @@ class RolesList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Roles">
+        <CardLayout name="Genders">
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
-             <Link to={`${this.props.match.url}/RoleForm`}  style={{ pointerEvents: 'none' }}> 
+             <Link to={`${this.props.match.url}/GenderForm`} style={{ pointerEvents: 'none' }}> 
               <Button
                 type="button"
                 className="theme-positive-btn">
-                <i className="fa fa-plus" /> &nbsp; Add Role
+                <i className="fa fa-plus" /> &nbsp; Add Gender
               </Button>
                </Link> 
               &nbsp;&nbsp;
@@ -118,15 +118,15 @@ class RolesList extends Component {
           </FormGroup>
           <FormGroup row>
             <Col xs="12">
-              <BootstrapTable
+               <BootstrapTable
                 ref="table"
-                data={this.props.Roles}
+                data={this.props.genders}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
                 //exportCSV={true}
                 hover={true}
-                csvFileName="Roles List"
+                csvFileName="Language List"
               >
                 <TableHeaderColumn
                   dataField="Id"
@@ -137,22 +137,13 @@ class RolesList extends Component {
                   Id
                 </TableHeaderColumn>
                  <TableHeaderColumn
-                  dataField="RoleId"
+                  dataField="GenderName"
                   headerAlign="left"
-                  width="30"
-                  csvHeader="Role Id"
+                  width="20"
+                  csvHeader="State Name"
                   dataSort={true}
                 >
-                  Role Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="RoleName"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Role Name"
-                  dataSort={true}
-                >
-                  Role Name
+                  Gender
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="edit"
@@ -172,7 +163,7 @@ class RolesList extends Component {
                 >
                   Delete
                 </TableHeaderColumn>
-              </BootstrapTable>
+              </BootstrapTable> 
             </Col>
           </FormGroup>
         </CardLayout>
@@ -181,7 +172,7 @@ class RolesList extends Component {
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
           title="Deactivate"
-          message="Are you sure you want to deactivate this role record ?"
+          message="Are you sure you want to deactivate this language record ?"
         />
       </div>
     );
@@ -189,14 +180,13 @@ class RolesList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    Roles: state.rolesReducer.roles
+     genders: state.rolesReducer.genders
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getRolesList: () => dispatch(actions.getRolesList()),
-    deleteState : (id,state) => dispatch(actions.deleteState(id,state))
+    getGendersList : () => dispatch(actions.getGendersList())
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RolesList);
+export default connect(mapStateToProps, mapDispatchToProps)(GenderList);
