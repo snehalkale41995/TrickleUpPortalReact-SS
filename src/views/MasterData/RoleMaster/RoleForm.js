@@ -185,6 +185,7 @@ class RolesForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmitState.bind(this)}
+                    style={{ pointerEvents: 'none' }}
                   >
                     Save
                   </Button>

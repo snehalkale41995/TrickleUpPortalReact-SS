@@ -35,6 +35,7 @@ class GrampanchayatForm extends Component {
   }
   componentDidMount() {
     if (Object.keys(this.state.grampanchayatToEdit).length !== 0) {
+   // if (this.state.grampanchayatToEdit) {
       this.setState({
         updateFlag: true,
         grampanchayat: this.state.grampanchayatToEdit

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import CardLayout from "../../../components/Cards/CardLayout";
+import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
-import * as actions from "../../../store/actions";
+import * as actions from "../../store/actions";
 import { FormGroup, Col, Button } from "reactstrap";
-import DropdownSelect from "../../../components/InputElement/Dropdown";
+import DropdownSelect from "../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
-import Loader from "../../../components/Loader/Loader";
-import AppConfig from "../../../constants/AppConfig";
+import Loader from "../../components/Loader/Loader";
+import AppConfig from "../../constants/AppConfig";
 
-class CropsList extends Component {
+class CropSteps extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +31,7 @@ class CropsList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -40,14 +40,14 @@ class CropsList extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/cropsForm/${row.Id}`} >
+      <Link to={`${this.props.match.url}/CropStepForm/${row.Id}`} >
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
   showImage(cell, row){
       return(
-          <img src={`${AppConfig.serverURL}/${row.FilePath}`} style={{height: 50,width:50}}/>
+          <img src={`${AppConfig.serverURL}/${row.MediaURL}`} style={{height: 50,width:50}}/>
       )
   }
   render() {
@@ -69,7 +69,7 @@ class CropsList extends Component {
         },
         {
           text: "All",
-          value: this.props.cropsList.length
+          value: this.props.cropSteps.length
         }
       ],
       sizePerPage: 5
@@ -78,13 +78,13 @@ class CropsList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Crops">
+        <CardLayout name="Crop Steps">
           <FormGroup row>
           <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              <Link to={`${this.props.match.url}/cropsForm`} >
+          <Col md="1" style={{ marginTop: -55, marginLeft: 15 }} style={{ pointerEvents: 'none' }} >      
+              <Link to={`${this.props.match.url}/CropStepForm`} >
                 <Button type="button" className="theme-positive-btn">
-                  <i className="fa fa-plus" />&nbsp; Add crop
+                  <i className="fa fa-plus" />&nbsp; Add crop step
                 </Button>
               </Link>
               &nbsp;&nbsp;
@@ -94,7 +94,7 @@ class CropsList extends Component {
             <Col xs="12">
               <BootstrapTable
                 ref="table"
-                data={this.props.cropsList}
+                data={this.props.cropSteps}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
@@ -113,30 +113,39 @@ class CropsList extends Component {
                 <TableHeaderColumn
                   dataField="CropName"
                   headerAlign="left"
-                  width="40"
+                  width="20"
                   csvHeader="Crop Name"
                   dataSort={true}
                 >
                   Crop Name
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                  dataField="FilePath"
+                  dataField="Step_Name"
                   headerAlign="left"
                   width="40"
+                  csvHeader="Crop Name"
+                  dataSort={true}
+                >
+                  Step Name
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="Step_Description"
+                  headerAlign="left"
+                  width="60"
+                  csvHeader="Crop Name"
+                  dataSort={true}
+                >
+                Step Description
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="FilePath"
+                  headerAlign="left"
+                  width="20"
                   dataFormat={this.showImage.bind(this)}
                   csvHeader="FilePath"
                   dataSort={true}
                 >
                   Image
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Ready"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Active"
-                  dataSort={true}
-                >
-                  Active
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="edit"
@@ -166,7 +175,7 @@ class CropsList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cropsList: state.cropsReducer.cropsList
+    cropSteps: state.cropsReducer.cropSteps
   };
 };
 
@@ -175,4 +184,4 @@ const mapDispatchToProps = dispatch => {
     getCropsList: () => dispatch(actions.getCropsList())
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CropsList);
+export default connect(mapStateToProps, mapDispatchToProps)(CropSteps);

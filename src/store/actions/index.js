@@ -14,7 +14,8 @@ export {
 export {
     getGrampanchayatsList,
     createGrampanchayat,
-    updateGrampanchayat
+    updateGrampanchayat,
+    deleteGrampanchayat
 } from './grampanchayatMaster.js'
 export {
     getVillagesList
@@ -29,11 +30,15 @@ export {
     updateBeneficiary,
     getBeneficiaryById,
     deleteBeneficiary,
-    bulkUploadBeneficiary
+    bulkUploadBeneficiary,
+    getBulkUploadHistory
 } from './beneficiary.js'
 
 export {
-    getCropsList
+    getCropsList,
+    getCropCultivationSteps,
+    getCropSteps,
+    getCropStepsMaterial
 } from './cropsMaster.js';
 
 export {

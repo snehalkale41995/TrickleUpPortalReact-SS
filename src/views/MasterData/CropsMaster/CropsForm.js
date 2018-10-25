@@ -8,6 +8,9 @@ import InputElement from "../../../components/InputElement/InputElement";
 import { AppSwitch } from "@coreui/react";
 import AppConfig from "../../../constants/AppConfig";
 import CropSteps from "./CropSteps";
+import Loader from "../../../components/Loader/Loader";
+
+//const cropData = require('./crop.json');
 class CropsForm extends Component {
   constructor(props) {
     super(props);
@@ -21,27 +24,36 @@ class CropsForm extends Component {
         CropNameRequired: false,
         FilePathRequired: false,
         Ready: false,
-        CultivationSteps: []
+        Cultivation_Steps: [],
+        renderURL: ""
       },
-      filePath: ""
+      filePath: "",
+      loading : true
     };
   }
-  componentWillMount() {
+  componentDidMount() {
+    this.props.getCropsList();
+    let compRef = this;
     if (this.props.match.params.id !== undefined) {
-      let currentCrop = this.props.cropsList.find(
-        crop => crop.Id == this.props.match.params.id
-      );
-      currentCrop.CultivationSteps = [];
-      if (currentCrop) {
-        let renderURL = `${AppConfig.serverURL}/${currentCrop.FilePath}`;
-        let filePath = "";
-        this.setState({
-          updateFlag: true,
-          crop: currentCrop,
-          renderURL: renderURL,
-          filePath: ""
-        });
+      if (this.props.cropsList.length !== 0) {
+        this.props.CropsCultivationSteps(this.props.match.params.id);
+        setTimeout(() => {
+          if (compRef.props.currentCropData) {
+            this.props.currentCropData.renderURL = `${AppConfig.serverURL}/${compRef.props.currentCropData.FilePath}`;
+            let filePath = "";
+            compRef.setState({
+              loading :false,
+              updateFlag: true,
+              crop: compRef.props.currentCropData,
+            });
+          }
+        }, 2000)
+        //currentCrop.Cultivation_Steps = []; 
       }
+    }else{
+      this.setState({
+        loading :false
+      })
     }
   }
 
@@ -50,7 +62,9 @@ class CropsForm extends Component {
   }
   render() {
     const crop = { ...this.state.crop };
-    return (
+    return this.state.loading ? (
+      <Loader loading={this.state.loading} />
+    ) :  (
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="Crops"
@@ -76,13 +90,15 @@ class CropsForm extends Component {
 }
 const mapStateToProps = state => {
   return {
-    //cropsList: state.cropsReducer.cropsList
+    cropsList: state.cropsReducer.cropsList,
+    currentCropData: state.cropsReducer.currentCropData
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    //getCropsList: () => dispatch(actions.getCropsList())
+    getCropsList: () => dispatch(actions.getCropsList()),
+    CropsCultivationSteps: (id) => dispatch(actions.getCropCultivationSteps(id))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropsForm);

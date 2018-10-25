@@ -21,6 +21,7 @@ const InputElement = props => (
       className={props.type}
       maxLength={props.maxLength}
       accept={props.accept}
+      disabled = {props.disabled}
     />
     {props.required ? (
       <div style={{ color: "red", fontSize: "12px" }} className="help-block">

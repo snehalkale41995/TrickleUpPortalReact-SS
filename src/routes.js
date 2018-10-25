@@ -64,6 +64,10 @@ const GenderMaster = Loadable({
 //   loader: () => import("./views/MasterData/Grampanchayat.js"),
 //   loading: Loading
 // });
+const CropsCultivations = Loadable({
+  loader: () => import("./views/CropsCultivation/CropsCultivation.js"),
+  loading: Loading
+});
 const ApplicationContacts = Loadable({
   loader: () => import("./views/MasterData/ApplicationContacts/Contacts"),
   loading: Loading
@@ -97,6 +101,8 @@ const routes = [
  { path: "/master/genders", name: "Genders", component: GenderMaster },
    
   // { path: "/master/states", name: "States List", component: StatesMaster },
+  { path: "/cropCultivations", name: "States List", component: CropsCultivations },
+  
   // { path: "/states/stateForm", name: "States Form" },
   // {
   //   path: "/master/districts",

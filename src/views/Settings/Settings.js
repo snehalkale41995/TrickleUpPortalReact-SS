@@ -14,14 +14,14 @@ import AppConfig from "../../constants/AppConfig";
 
 
 const grampanchayatList = [
-  { label: "abc", value: "1" },
-  { label: "deef", value: "2" },
-  { label: "asd", value: "3" }
+  { label: "gram1", value: "1" },
+  { label: "gram1", value: "2" },
+  { label: "gram1", value: "3" }
 ];
 const villageList = [
-  { label: "ghf", value: "1" },
-  { label: "no", value: "2" },
-  { label: "abgfhc", value: "3" }
+  { label: "village1", value: "1" },
+  { label: "village1", value: "2" },
+  { label: "village1", value: "3" }
 ];
 class Settings extends Component {
   constructor(props) {
@@ -210,7 +210,7 @@ class Settings extends Component {
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
         }, 1000);
-      } 
+      }
   }
 
   validData() {
@@ -291,10 +291,11 @@ class Settings extends Component {
     }
     let $imagePreview = null;
     if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} style={{ borderRadius : "50em", borderColor: 'white', width: "100%" , height: '100%'}} />);
-    } else {
-      $imagePreview = (<div style={{border:0}} className="previewText">Please select an Image for Preview</div>);
+      $imagePreview = (<img src={imagePreviewUrl} style={{ borderColor: 'white', width: "100%" , height: '100%'}} />);
     }
+    // else {
+    //   $imagePreview = (<div style={{border:0}} className="previewText">Please select an Image for Preview</div>);
+    // }
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -440,7 +441,8 @@ class Settings extends Component {
                 />
               </Col>
             <Col md="3">
-             <InputElement
+            <Label>Profile Picture : </Label>
+             {/* <InputElement
                   type="file"
                   label="Profile Image"
                  // name="Age"
@@ -449,7 +451,7 @@ class Settings extends Component {
                  // value={user.Age}
                  // required={user.AgeRequired}
                  onChange={(e)=>this._handleImageChange(e)}
-                />
+                /> */}
             </Col>
              <Col md="2">
              <div style={{ height: "100px", width : "100px", border: 0, img: {width : "100px", height : "100px"}}}>

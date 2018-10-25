@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import CardLayout from "../../../components/Cards/CardLayout";
+import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
-import * as actions from "../../../store/actions";
+import * as actions from "../../store/actions";
 import { FormGroup, Col, Button } from "reactstrap";
-import DropdownSelect from "../../../components/InputElement/Dropdown";
+import DropdownSelect from "../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
-import Loader from "../../../components/Loader/Loader";
-import AppConfig from "../../../constants/AppConfig";
+import Loader from "../../components/Loader/Loader";
+import AppConfig from "../../constants/AppConfig";
 
-class CropsList extends Component {
+class Crops extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +31,7 @@ class CropsList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -40,7 +40,7 @@ class CropsList extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/cropsForm/${row.Id}`} >
+      <Link to={`${this.props.match.url}/CropForm/${row.Id}`} >
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -82,8 +82,8 @@ class CropsList extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              <Link to={`${this.props.match.url}/cropsForm`} >
-                <Button type="button" className="theme-positive-btn">
+              <Link to={`${this.props.match.url}/CropForm`} >
+                <Button type="button" className="theme-positive-btn" style={{ pointerEvents: 'none' }}>
                   <i className="fa fa-plus" />&nbsp; Add crop
                 </Button>
               </Link>
@@ -175,4 +175,4 @@ const mapDispatchToProps = dispatch => {
     getCropsList: () => dispatch(actions.getCropsList())
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CropsList);
+export default connect(mapStateToProps, mapDispatchToProps)(Crops);

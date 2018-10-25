@@ -12,17 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
 
-const grampanchayatList = [
-  { label: "grampanchayat1", value: 1 },
-  { label: "grampanchayat2", value: 2 },
-  { label: "grampanchayat3", value: 3 }
-];
-const villageList = [
-  { label: "village1", value: 1 },
-  { label: "village2", value: 2 },
-  { label: "village3", value: 3 }
-];
-
 class RegistrationForm extends Component {
   constructor(props) {
     super(props);

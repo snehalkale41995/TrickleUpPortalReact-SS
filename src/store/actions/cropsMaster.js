@@ -2,22 +2,75 @@ import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 
-export const storeCropsList = (cropsList) => {
+export const storeCropsList = cropsList => {
   return {
     type: actionTypes.GET_CROPS,
-    cropsList :cropsList
+    cropsList: cropsList
   };
 };
+export const storeCurrentCrop = cropData => {
+  return {
+    type: actionTypes.GET_CURRENT_CROP_DATA,
+    currentCropData: cropData
+  };
+};
+export const storeCropSteps = cropSteps => {
+  return {
+    type: actionTypes.GET_CROPS_STEPS,
+    cropSteps: cropSteps
+  };
+};
+export const storeCropStepMaterials = cropStepsMaterial => {
+  return {
+    type: actionTypes.GET_CROPS_STEPS_MATERIAL,
+    cropStepsMaterial: cropStepsMaterial
+  };
+}
 export const getCropsList = () => {
   let cropsList = [];
-  
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Crops/GetCrops`)
       .then(response => {
-          cropsList = response.data.data.Crops;
-          dispatch(storeCropsList(cropsList));
+        cropsList = response.data.data.Crops;
+        dispatch(storeCropsList(cropsList));
       })
       .catch(error => {});
   };
 };
+export const getCropSteps = () => {
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/Cultivation_Steps/GetCultivation_Steps`)
+      .then(response => {
+        let cropSteps = response.data.data.Cultivation_Steps;
+        dispatch(storeCropSteps(cropSteps));
+      })
+      .catch(error => {});
+  };
+}
+
+export const getCropStepsMaterial = () => {
+  let cropCultivationSteps = {};
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material`)
+      .then(response => {
+          dispatch(storeCropStepMaterials(response.data.data.CropSteps_Material));
+      })
+      .catch(error => {});
+  };
+};
+export const getCropCultivationSteps = id => {
+  let cropCultivationSteps = {};
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/Crops/GetCropStepMaterialData?id=${id}`)
+      .then(response => {
+          dispatch(storeCurrentCrop(response.data.data));
+      })
+      .catch(error => {});
+  };
+};
+
+

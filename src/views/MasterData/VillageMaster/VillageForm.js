@@ -167,6 +167,7 @@ class VillageForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
+                    style={{ pointerEvents: 'none' }}
                   >
                     Save
                   </Button>

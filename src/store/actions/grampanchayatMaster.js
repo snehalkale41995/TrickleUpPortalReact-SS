@@ -66,23 +66,22 @@ export const updateGrampanchayat = (id ,grampanchayat) => {
     axios
       .post(`${AppConfig.serverURL}/api/Grampanchayats/PutGrampanchayat?id=${id}`, grampanchayat)
       .then(response => {
-        console.log("Post /api/Grampanchayats/PutGrampanchayat", response);
+       // console.log("Post /api/Grampanchayats/PutGrampanchayat", response);
       })
       .catch(error => {
         dispatch(grampanchayatMasterError(error));
       });
   };
 }
-//delete pending
-// export const deleteVillage = (id) => {
-//   return dispatch => {
-//     axios
-//       .delete(`${AppConfig.serverURL}/api/Grampanchayat/PutVillage?id=${id}`)
-//       .then(response => {
-//           //delete success
-//       })
-//       .catch(error => {
-//         dispatch(grampanchayatMasterError(error));
-//       });
-//   };
-// }
+export const deleteGrampanchayat = (id, grampanchayat ) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Grampanchayats/PutGrampanchayat?id=${id}`,grampanchayat)
+      .then(response => {
+         dispatch(getGrampanchayatsList());
+      })
+      .catch(error => {
+        dispatch(grampanchayatMasterError(error));
+      });
+  };
+}

@@ -3,7 +3,8 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   beneficiaryList: [],
   beneficiaryError: null,
-  currentBeneficiary: null
+  currentBeneficiary: null,
+  bulkUploadHistory: []
 };
 
 const beneficiaryReducer = (state = initialState, action) => {
@@ -23,6 +24,11 @@ const beneficiaryReducer = (state = initialState, action) => {
       return {
         ...state,
         currentBeneficiary: action.currentBeneficiary
+      };
+    case actionTypes.STORE_BULK_UPLOAD_HISTORY:
+      return {
+        ...state,
+        bulkUploadHistory: action.bulkUploadHistory
       };
     default:
       return state;

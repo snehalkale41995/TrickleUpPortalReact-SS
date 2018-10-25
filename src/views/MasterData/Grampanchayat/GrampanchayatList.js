@@ -9,6 +9,7 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from '../../../components/Loader/Loader';
 import GrampanchayatForm from "./GrampanchayatForm";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 class GrampanchayatList extends Component {
   constructor(props) {
@@ -16,13 +17,13 @@ class GrampanchayatList extends Component {
     this.state = {
       loading : true,
       showForm : false,
-      grampanchayatToEdit  :{}
+      grampanchayatToEdit  :{},
+      grampanchayatToDelete : {},
+      modalStatus: false,
     };
   }
   componentWillMount() {
     this.props.getGrampanchayatsList();
-    //this.props.getStatesList();
-    //this.props.getDistrictsList();
     let compRef =this;
     setTimeout(() => {
       compRef.setState({
@@ -34,16 +35,34 @@ class GrampanchayatList extends Component {
   onDeleteGrampanchayat(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}>
+      <Link to={this} onClick={() => this.onDelete(row)} >
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
+  }
+  onDelete(row) {
+    this.setState({
+      grampanchayatToDelete: row
+    });
+    this.onModalToggle();
+  }
+  onConfirmDelete() {
+    let grampanchayat = { ...this.state.grampanchayatToDelete };
+    grampanchayat.Active  = false;
+    this.props.deleteGrampanchayat(grampanchayat.Id, grampanchayat);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
   }
 
   onEditGrampanchayat(cell, row) {
     return (
-      <Link to={this} onClick={() => this.onEdit(row)}>
+      <Link to={this} onClick={() => this.onEdit(row)} >
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -91,6 +110,7 @@ class GrampanchayatList extends Component {
               <Button
                 type="button"
                 className="theme-positive-btn"
+                
                 onClick={() => {
                   this.setState({ showForm: true });
                 }}
@@ -161,6 +181,13 @@ class GrampanchayatList extends Component {
             </Col>
           </FormGroup>
         </CardLayout>
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this state record ?"
+        />
         </div>
       )
      
@@ -176,7 +203,8 @@ class GrampanchayatList extends Component {
   return {
     getStatesList: () => dispatch(actions.getStatesList()),
     getDistrictsList: () => dispatch(actions.getDistrictsList()),
-    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList())
+    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList()),
+    deleteGrampanchayat : (id,grampanchayat) => dispatch(actions.deleteGrampanchayat(id, grampanchayat))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrampanchayatList);

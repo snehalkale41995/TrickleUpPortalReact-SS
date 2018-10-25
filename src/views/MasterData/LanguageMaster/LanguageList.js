@@ -104,7 +104,7 @@ class LanguageList extends Component {
         <CardLayout name="Languages">
           <FormGroup row>
           <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
+          <Col md="1" style={{ marginTop: -55, marginLeft: 10 }}> 
              <Link to={`${this.props.match.url}/LanguageForm`} style={{ pointerEvents: 'none' }}> 
               <Button
                 type="button"

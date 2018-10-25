@@ -58,16 +58,38 @@ export default {
         //   url: "/dashboard",
         //   icon: "icon-star"
         // },
-        {
-          name: "Crops List",
-          url: "/master/crops",
-          icon: "icon-star"
-        },
+        // {
+        //   name: "Crops List",
+        //   url: "/master/crops",
+        //   icon: "icon-star"
+        // },
         // {
         //   name: "Contacts",
         //   url: "/master/contacts",
         //   icon: "icon-star"
         // }
+      ]
+    },
+    {
+      name: "Crops Cultivation",
+      url: "/cropCultivations",
+      icon: "fa fa-leaf",
+      children: [
+        {
+          name: "Crops",
+          url: "/cropCultivations/crops",
+          icon: "fa fa-leaf"
+        },
+        {
+          name: "Crop Steps",
+          url: "/cropCultivations/CropSteps",
+          icon: "fa fa-align-left"
+        },
+        {
+          name: "Crop Material",
+          url: "/cropCultivations/CropsMaterial",
+          icon: "fa fa-tint"
+        }
       ]
     },
      {

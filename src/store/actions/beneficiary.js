@@ -15,6 +15,12 @@ export const storeCurrentBeneficiary = (currentBeneficiary) => {
     currentBeneficiary : currentBeneficiary
   };
 }
+export const storeBulkUploadHistory = (bulkUploadHistory) => {
+  return {
+    type: actionTypes.STORE_BULK_UPLOAD_HISTORY,
+    bulkUploadHistory : bulkUploadHistory
+  };
+}
 export const logBeneficiaryError = (error) => {
   return {
     type: actionTypes.LOG_BENEFICIARY_ERROR,
@@ -60,9 +66,10 @@ export const createBeneficiary = (beneficiary) => {
       .post(`${AppConfig.serverURL}/api/Users/PostUser`, beneficiary)
       .then(response => {
         let userCredentials = {
-          UserName : beneficiary.PhoneNumber,
+          UserName : beneficiary.PhoneNumber, //addd userName [email]
           Password: beneficiary.PhoneNumber,
-          UserId : response.data.data.id
+          UserId : response.data.data.id,
+          PhoneNumber : beneficiary.PhoneNumber
         };
         dispatch(postUserCredentials(userCredentials));
       })
@@ -119,4 +126,25 @@ export const bulkUploadBeneficiary = (beneficiary) => {
       });
   };
 }
+
+export const getBulkUploadHistory = () => {
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/BulkUploadRefs/GetBulkUploadRefs`)
+      .then(response => {
+        if(response.data.success){
+          let bulkUploadHistory  = response.data.data.BulkUpload;
+          bulkUploadHistory.forEach((record) => {
+            record.CreatedOn = record.CreatedOn.slice(0,10);
+          })
+          dispatch(storeBulkUploadHistory(bulkUploadHistory));
+        }else{
+          dispatch(logBeneficiaryError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logBeneficiaryError(error));
+      });
+  };
+} 
 
