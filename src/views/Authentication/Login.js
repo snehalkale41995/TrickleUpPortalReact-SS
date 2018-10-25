@@ -53,7 +53,9 @@ class Login extends Component {
     Toaster(loginError, actionName, loginErrorMsg) {
     let compRef = this;
     if (!loginError) {
+      let loggedInUserDetails = JSON.stringify(compRef.props.loggedInUserDetails);
       localStorage.setItem("user", compRef.props.loggedInUserId);
+      localStorage.setItem("userDetails", loggedInUserDetails);
        setTimeout(()=>{
           localStorage.clear();
         },3600000);
@@ -142,6 +144,7 @@ class Login extends Component {
 const mapStateToProps = state => {
   return {
     loggedInUserId : state.loginReducer.loggedInUserId,
+    loggedInUserDetails : state.loginReducer.loggedInUserDetails,
     loginError: state.loginReducer.loginError,
     loginErrorMsg: state.loginReducer.loginErrorMsg
   };

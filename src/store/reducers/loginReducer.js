@@ -2,6 +2,7 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   loggedInUserId: "",
+  loggedInUserDetails : {},
   loginError: false,
   loginErrorMsg: "",
   changePasswordError : false,
@@ -14,6 +15,7 @@ const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         loggedInUserId: action.loggedInUserId,
+        loggedInUserDetails : action.loggedInUserDetails,
         loginError: false,
         loginErrorMsg: ""
       };

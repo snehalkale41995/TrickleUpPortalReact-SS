@@ -22,9 +22,11 @@ export const loginUser = user => {
 };
 
 export const storeUser = userData => {
+ 
   return {
     type: actionTypes.LOGIN_USER,
-    loggedInUserId: userData.UserId
+    loggedInUserId: userData.UserId,
+    loggedInUserDetails : userData
   };
 };
 
