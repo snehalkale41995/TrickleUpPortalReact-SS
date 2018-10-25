@@ -42,7 +42,7 @@ class VillageList extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onEdit(row)}>
+      <Link to={this}  onClick={() => this.onEdit(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );

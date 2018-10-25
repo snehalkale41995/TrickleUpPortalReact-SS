@@ -50,6 +50,16 @@ const RolesMaster = Loadable({
   loading: Loading
 });
 
+const LanguageMaster = Loadable({
+  loader: () => import("./views/MasterData/LanguageMaster/Languages.js"),
+  loading: Loading
+});
+
+const GenderMaster = Loadable({
+  loader: () => import("./views/MasterData/GenderMaster/Genders.js"),
+  loading: Loading
+});
+
 // const Grampanchayat = Loadable({
 //   loader: () => import("./views/MasterData/Grampanchayat.js"),
 //   loading: Loading
@@ -83,6 +93,9 @@ const routes = [
   { path: "/master", exact: true, component: AddressMaster },
   { path: "/master/roles", name: "Roles", component: RolesMaster },
   { path: "/master/address", name: "Address", component: AddressMaster },
+   { path: "/master/languages", name: "Languages", component: LanguageMaster },
+ { path: "/master/genders", name: "Genders", component: GenderMaster },
+   
   // { path: "/master/states", name: "States List", component: StatesMaster },
   // { path: "/states/stateForm", name: "States Form" },
   // {

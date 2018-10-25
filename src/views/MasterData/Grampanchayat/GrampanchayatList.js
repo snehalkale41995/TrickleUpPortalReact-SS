@@ -34,7 +34,7 @@ class GrampanchayatList extends Component {
   onDeleteGrampanchayat(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -43,7 +43,7 @@ class GrampanchayatList extends Component {
 
   onEditGrampanchayat(cell, row) {
     return (
-      <Link to={this} onClick={() => this.onEdit(row)} style={{ pointerEvents: 'none' }}>
+      <Link to={this} onClick={() => this.onEdit(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );

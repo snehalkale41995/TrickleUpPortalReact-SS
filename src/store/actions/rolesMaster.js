@@ -79,3 +79,42 @@ export const getLanguageList = () => {
       .catch(error => {});
   };
 };
+
+export const createRole = (role) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Roles/PostRole`, role)
+      .then(response => {
+         dispatch(createRoleSuccess()); 
+      })
+      .catch(error => {
+        dispatch(createRoleFail(error));
+      });
+  };
+}
+
+export const getRoleById = (id) => {
+  let currentBeneficiary = {};
+    return dispatch => {
+      axios
+        .get(`${AppConfig.serverURL}/api/Roles/GetSepecificRole/${id}`)
+        .then(response => {
+         // dispatch(storeCurrentRole(currentBeneficiary));
+        })
+        .catch(error => {
+         // dispatch(logBeneficiaryError(error));
+        });
+    };
+  };
+
+export const createRoleSuccess = () => {
+  return {
+    type : actionTypes.CREATE_ROLE_SUCCESS
+  }
+}
+
+export const createRoleFail = () => {
+  return {
+    type : actionTypes.CREATE_ROLE_FAIL
+  }
+}

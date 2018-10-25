@@ -8,7 +8,7 @@ import rolesReducer from './rolesReducer';
 import loginReducer from './loginReducer';
 import villageReducer from './villageReducer';
 import grampanchayatReducer from './grampanchayatReducer';
-
+import languageReducer from './languageReducer';
 
 const rootReducer = combineReducers({
     dashboard: dashboardReducer,
@@ -19,7 +19,8 @@ const rootReducer = combineReducers({
     rolesReducer:rolesReducer,
     loginReducer: loginReducer,
     villageReducer :villageReducer,
-    grampanchayatReducer: grampanchayatReducer
+    grampanchayatReducer: grampanchayatReducer,
+    languageReducer : languageReducer
 });
 
 export default rootReducer;

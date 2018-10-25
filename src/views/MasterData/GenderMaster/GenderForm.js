@@ -4,21 +4,20 @@ import * as actions from "../../../store/actions";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../../components/InputElement/InputElement";
-import StatesList from "./RolesList";
 import _ from "lodash";
 import Loader from "../../../components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
-class RolesForm extends Component {
+class GenderForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
       updateFlag: false,
-      currentRole: {
+      currentGender: {
         Id: "",
-        RoleName: "",
+        GenderName: "",
         RoleId: "",
         RoleNameRequired: false,
         RoleIdRequired: false,
@@ -34,34 +33,34 @@ class RolesForm extends Component {
   
   componentWillMount() {
     if (this.props.match.params.id !== undefined) {
-      let currentRole = this.props.roleList.find(
-        role => role.Id == this.props.match.params.id
+      let currentGender = this.props.genderList.find(
+        gender => gender.Id == this.props.match.params.id
       );
-      if (currentRole) {
+      if (currentGender) {
         this.setState({
-          currentRole: currentRole
+          currentGender: currentGender
         });
       }
     }
   }
 
   onChangeHandler(event) {
-    let state = { ...this.state.currentRole };
+    let state = { ...this.state.currentGender };
     state[event.target.name] = event.target.value;
     state[event.target.name + "Required"] = false;
     this.setState({
-      currentRole: state
+      currentGender: state
     });
   }
 
   onSubmitState() {
-    let currentRole = { ...this.state.currentRole };
+    let currentGender = { ...this.state.currentGender };
     let compRef = this;
-    if (this.valid(currentRole)) {
+    if (this.valid(currentGender)) {
       if (this.state.updateFlag) {
-        let state = _.pick(currentRole, [
+        let state = _.pick(currentGender, [
           "Id",
-          "RoleName",
+          "GenderName",
           "RoleId",
           "UpdatedOn",
           "UpdatedBy",
@@ -85,8 +84,8 @@ class RolesForm extends Component {
           }, 1000);
         }, 1000);
       } else {
-        let role = _.pick(currentRole, [
-          "RoleName",
+        let role = _.pick(currentGender, [
+          "GenderName",
           "RoleId",
           "CreatedOn",
           "CreatedBy",
@@ -112,22 +111,22 @@ class RolesForm extends Component {
       }
     }
   }
-  valid(currentRole) {
-    if (currentRole.RoleName && currentRole.RoleId) {
+  valid(currentGender) {
+    if (currentGender.GenderName && currentGender.RoleId) {
       return true;
     } else {
-      if (!currentRole.RoleName) currentRole.RoleNameRequired = true;
-      if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
+      if (!currentGender.GenderName) currentGender.RoleNameRequired = true;
+      if (!currentGender.RoleId) currentGender.RoleIdRequired = true;
       this.setState({
-        currentRole: currentRole
+        currentGender: currentGender
       });
       return false;
     }
   }
   onReset() {
-    let currentRole = {
+    let currentGender = {
       Id: "",
-      RoleName: "",
+      GenderName: "",
       RoleId: "",
       RoleNameRequired: false,
       RoleIdRequired: false,
@@ -138,11 +137,11 @@ class RolesForm extends Component {
       Active: 1
     };
     this.setState({
-      currentRole: currentRole
+      currentGender: currentGender
     });
   }
   render() {
-    const { currentRole } = this.state;
+    const { currentGender } = this.state;
     return  this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -150,7 +149,7 @@ class RolesForm extends Component {
         <CardLayout
           name="Role Form"
           navigation={true}
-          navigationRoute="/master/roles"
+          navigationRoute="/master/genders"
         >
           <div style={{ margin: 20 }}>
             <FormGroup row />
@@ -158,22 +157,11 @@ class RolesForm extends Component {
               <Col xs="8" md="4">
                 <InputElement
                   type="text"
-                  label="Role Name"
-                  placeholder="Role Name"
-                  name="RoleName"
-                  required={currentRole.RoleNameRequired}
-                  value={currentRole.RoleName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="4">
-                <InputElement
-                  type="text"
-                  label="Role Id"
-                  placeholder="Role Id"
-                  name="RoleId"
-                  required={currentRole.RoleIdRequired}
-                  value={currentRole.RoleId}
+                  label="Gender Name"
+                  placeholder="Gender Name"
+                  name="GenderName"
+                  required={currentGender.RoleNameRequired}
+                  value={currentGender.GenderName}
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
@@ -223,9 +211,10 @@ class RolesForm extends Component {
 const mapStateToProps = state => {
   return {
     createRoleError: state.rolesReducer.createRoleError,
-    roleList : state.rolesReducer.roles
+    genderList : state.rolesReducer.genders
   };
 };
+
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -233,4 +222,4 @@ const mapDispatchToProps = dispatch => {
    // getRoleById: (id) => dispatch(actions.getRoleById(id))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RolesForm);
+export default connect(mapStateToProps, mapDispatchToProps)(GenderForm);
