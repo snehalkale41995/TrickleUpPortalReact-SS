@@ -105,7 +105,7 @@ class GenderList extends Component {
         <CardLayout name="Genders">
           <FormGroup row>
           <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
+          <Col md="1" style={{ marginTop: -55, marginLeft: 25 }}> 
              <Link to={`${this.props.match.url}/GenderForm`} style={{ pointerEvents: 'none' }}> 
               <Button
                 type="button"

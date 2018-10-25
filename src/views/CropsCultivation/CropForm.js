@@ -94,7 +94,7 @@ class CropForm extends Component {
         });
   }
   onSubmit() {
-    //console.log("onSubmit", Crop);
+    this.props.history.push("/cropCultivations/crops");
   }
   render() {
     let crop = { ...this.state.crop };
