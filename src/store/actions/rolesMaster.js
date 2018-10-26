@@ -61,6 +61,9 @@ export const getGendersList = () => {
       .catch(error => {});
   };
 };
+
+
+
 export const getLanguageList = () => {
   let languageList = [];
   let languages = [];
@@ -109,7 +112,7 @@ export const updateRole = (id ,role) => {
 export const deleteRole = (id, role) => {
   return dispatch => {
     axios
-      .post(`${AppConfig.serverURL}/api/Roles/PutRole?id=${id}`, role)
+      .post(`${AppConfig.serverURL}/api/Roles/PutRole?id?id=${id}`, role)
       .then(response => {
           dispatch(getRolesList());
       })

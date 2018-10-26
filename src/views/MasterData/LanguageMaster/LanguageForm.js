@@ -15,6 +15,7 @@ class LanguagesForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
+       loggedinUserId : "",
       currentLanguage: {
         Id: "",
         LanguageName: "",
@@ -26,18 +27,20 @@ class LanguagesForm extends Component {
         UpdatedOn: "",
         UpdatedBy: "",
         Active: true
-      },
-      stateToEdit: this.props.edit
+      }
     };
   }
   componentWillMount() {
+    let loggedinUserId = localStorage.getItem("user");
+   this.setState({loggedinUserId:loggedinUserId})
     if (this.props.match.params.id !== undefined) {
       let currentLanguage = this.props.languageList.find(
         language => language.Id == this.props.match.params.id
       );
       if (currentLanguage) {
         this.setState({
-          currentLanguage: currentLanguage
+          currentLanguage: currentLanguage,
+          updateFlag: true
         });
       }
     }
@@ -57,7 +60,7 @@ class LanguagesForm extends Component {
     let compRef = this;
     if (this.valid(currentLanguage)) {
       if (this.state.updateFlag) {
-        let state = _.pick(currentLanguage, [
+        let language = _.pick(currentLanguage, [
           "Id",
           "LanguageName",
           "LanguageCode",
@@ -65,20 +68,21 @@ class LanguagesForm extends Component {
           "UpdatedBy",
           "Active"
         ]);
-        state.UpdatedOn = new Date();
-        state.UpdatedBy = 1;
-        this.props.updateState(state.Id, state);
+        language.UpdatedOn = new Date();
+        language.UpdatedBy = this.state.loggedinUserId;
+        this.props.updateLanguage(language.Id, language);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.stateMasterError
+          compRef.props.languageMasterError
             ? (message = "Something went wrong !")
-            : (message = "State updated successfully");
+            : (message = "Language updated successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.stateMasterError);
+          Toaster.Toaster(message, compRef.props.languageMasterError);
           setTimeout(() => {
-            if (!compRef.props.stateMasterError) {
+            if (!compRef.props.languageMasterError) {
               compRef.onReset();
+            compRef.props.history.push('/master/languages');
             }
           }, 1000);
         }, 1000);
@@ -91,19 +95,20 @@ class LanguagesForm extends Component {
           "Active"
         ]);
         language.CreatedOn = new Date();
-        language.CreatedBy = 1;
+        language.CreatedBy = this.state.loggedinUserId;
         this.props.createLanguage(language);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.createRoleError
+          compRef.props.languageMasterError
             ? (message = "Something went wrong !")
-            : (message = "State created successfully");
+            : (message = "Language created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.createLanguageError);
+          Toaster.Toaster(message, compRef.props.languageMasterError);
           setTimeout(() => {
-            if (!compRef.props.createRoleError) {
+            if (!compRef.props.languageMasterError) {
               compRef.onReset();
+             compRef.props.history.push('/master/languages');
             }
           }, 1000);
         }, 1000);
@@ -193,7 +198,6 @@ class LanguagesForm extends Component {
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
-                    style={{ pointerEvents: 'none' }}
                     onClick={this.onSubmitState.bind(this)}
                   >
                     Submit
@@ -209,7 +213,6 @@ class LanguagesForm extends Component {
                 </Col>
               </FormGroup>
             )}
-
             <ToastContainer autoClose={2000} />
           </div>
         </CardLayout>
@@ -220,15 +223,15 @@ class LanguagesForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    createLanguageError: state.languageReducer.createLanguageError,
-    languageList : state.rolesReducer.languages
+    languageMasterError: state.languagesReducer.languageMasterError,
+    languageList : state.languagesReducer.languages
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     createLanguage: language => dispatch(actions.createLanguage(language)),
-   // getRoleById: (id) => dispatch(actions.getRoleById(id))
+   updateLanguage: (id,language) => dispatch(actions.updateLanguage(id,language)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LanguagesForm);

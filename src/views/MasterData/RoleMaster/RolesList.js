@@ -67,7 +67,7 @@ class RolesList extends Component {
       modalStatus: !this.state.modalStatus
     });
   }
-  
+
   onModalToggle() {
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -82,10 +82,7 @@ class RolesList extends Component {
       </Link>
     );
   }
-
-  onEdit(row) {
-   
-  }
+  
   render() {
     const sortingOptions = {
       defaultSortName: "RoleName",
@@ -202,7 +199,7 @@ class RolesList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    Roles: state.rolesReducer.roles,
+     Roles: state.rolesReducer.roles,
      roleMasterError: state.rolesReducer.roleMasterError,
   };
 };

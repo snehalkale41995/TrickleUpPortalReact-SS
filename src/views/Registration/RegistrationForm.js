@@ -590,8 +590,8 @@ const mapStateToProps = state => {
     villagesList: state.villageReducer.villagesList,
     //beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
-    gendersList: state.rolesReducer.gendersList,
-    languagesList: state.rolesReducer.languagesList,
+    gendersList: state.gendersReducer.gendersList,
+    languagesList: state.languagesReducer.languagesList,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
     currentBeneficiary: state.beneficiaryReducer.currentBeneficiary
   };

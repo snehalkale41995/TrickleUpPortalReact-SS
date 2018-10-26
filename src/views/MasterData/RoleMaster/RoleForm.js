@@ -16,6 +16,7 @@ class RolesForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
+      loggedinUserId : "",
       currentRole: {
         Id: "",
         RoleName: "",
@@ -32,6 +33,8 @@ class RolesForm extends Component {
   }
   
   componentWillMount() {
+   let loggedinUserId = localStorage.getItem("user");
+   this.setState({loggedinUserId:loggedinUserId})
     if (this.props.match.params.id !== undefined) {
       let currentRole = this.props.roleList.find(
         role => role.Id == this.props.match.params.id
@@ -68,14 +71,14 @@ class RolesForm extends Component {
           "Active"
         ]);
         role.UpdatedOn = new Date();
-        role.UpdatedBy = 1;
+        role.UpdatedBy = this.state.loggedinUserId;
         this.props.updateRole(role.Id, role);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.roleMasterError
             ? (message = "Something went wrong !")
-            : (message = "State updated successfully");
+            : (message = "Role updated successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.roleMasterError);
           setTimeout(() => {
@@ -94,14 +97,14 @@ class RolesForm extends Component {
           "Active"
         ]);
         role.CreatedOn = new Date();
-        role.CreatedBy = 1;
+        role.CreatedBy = this.state.loggedinUserId;
         this.props.createRole(role);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.roleMasterError
             ? (message = "Something went wrong !")
-            : (message = "State created successfully");
+            : (message = "Role created successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.roleMasterError);
           setTimeout(() => {

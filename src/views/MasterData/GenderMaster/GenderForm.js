@@ -15,30 +15,32 @@ class GenderForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
+      loggedinUserId : "",
       currentGender: {
         Id: "",
         GenderName: "",
-        RoleId: "",
-        RoleNameRequired: false,
-        RoleIdRequired: false,
+        GenderNameRequired: false,
         CreatedOn: "",
         CreatedBy: "",
         UpdatedOn: "",
         UpdatedBy: "",
         Active: true
-      },
-      stateToEdit: this.props.edit
+      }
     };
   }
   
   componentWillMount() {
+   let loggedinUserId = localStorage.getItem("user");
+   this.setState({loggedinUserId:loggedinUserId})
+   this.setState({loggedinUserId:loggedinUserId})
     if (this.props.match.params.id !== undefined) {
       let currentGender = this.props.genderList.find(
         gender => gender.Id == this.props.match.params.id
       );
       if (currentGender) {
         this.setState({
-          currentGender: currentGender
+          currentGender: currentGender,
+          updateFlag: true
         });
       }
     }
@@ -58,53 +60,53 @@ class GenderForm extends Component {
     let compRef = this;
     if (this.valid(currentGender)) {
       if (this.state.updateFlag) {
-        let state = _.pick(currentGender, [
+        let gender = _.pick(currentGender, [
           "Id",
           "GenderName",
-          "RoleId",
           "UpdatedOn",
           "UpdatedBy",
           "Active"
         ]);
-        state.UpdatedOn = new Date();
-        state.UpdatedBy = 1;
-        this.props.updateState(state.Id, state);
+        gender.UpdatedOn = new Date();
+        gender.UpdatedBy = this.state.loggedinUserId;
+        this.props.updateGender(gender.Id, gender);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.stateMasterError
+          compRef.props.genderMasterError
             ? (message = "Something went wrong !")
-            : (message = "State updated successfully");
+            : (message = "Gender updated successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.stateMasterError);
+          Toaster.Toaster(message, compRef.props.genderMasterError);
           setTimeout(() => {
-            if (!compRef.props.stateMasterError) {
+            if (!compRef.props.genderMasterError) {
               compRef.onReset();
+              compRef.props.history.push('/master/genders');
             }
           }, 1000);
         }, 1000);
       } else {
-        let role = _.pick(currentGender, [
+        let gender = _.pick(currentGender, [
           "GenderName",
-          "RoleId",
           "CreatedOn",
           "CreatedBy",
           "Active"
         ]);
-        role.CreatedOn = new Date();
-        role.CreatedBy = 1;
-        this.props.createRole(role);
+        gender.CreatedOn = new Date();
+        gender.CreatedBy = this.state.loggedinUserId;
+        this.props.createGender(gender);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.createRoleError
+          compRef.props.genderMasterError
             ? (message = "Something went wrong !")
-            : (message = "State created successfully");
+            : (message = "Gender created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.createRoleError);
+          Toaster.Toaster(message, compRef.props.genderMasterError);
           setTimeout(() => {
-            if (!compRef.props.createRoleError) {
+            if (!compRef.props.genderMasterError) {
               compRef.onReset();
+               compRef.props.history.push('/master/genders');
             }
           }, 1000);
         }, 1000);
@@ -112,11 +114,10 @@ class GenderForm extends Component {
     }
   }
   valid(currentGender) {
-    if (currentGender.GenderName && currentGender.RoleId) {
+    if (currentGender.GenderName) {
       return true;
     } else {
-      if (!currentGender.GenderName) currentGender.RoleNameRequired = true;
-      if (!currentGender.RoleId) currentGender.RoleIdRequired = true;
+      if (!currentGender.GenderName) currentGender.GenderNameRequired = true;
       this.setState({
         currentGender: currentGender
       });
@@ -127,14 +128,12 @@ class GenderForm extends Component {
     let currentGender = {
       Id: "",
       GenderName: "",
-      RoleId: "",
-      RoleNameRequired: false,
-      RoleIdRequired: false,
+      GenderNameRequired: false,
       CreatedOn: "",
       CreatedBy: "",
       UpdatedOn: "",
       UpdatedBy: "",
-      Active: 1
+      Active: true
     };
     this.setState({
       currentGender: currentGender
@@ -147,7 +146,7 @@ class GenderForm extends Component {
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Role Form"
+          name="Gender Form"
           navigation={true}
           navigationRoute="/master/genders"
         >
@@ -160,7 +159,7 @@ class GenderForm extends Component {
                   label="Gender Name"
                   placeholder="Gender Name"
                   name="GenderName"
-                  required={currentGender.RoleNameRequired}
+                  required={currentGender.GenderNameRequired}
                   value={currentGender.GenderName}
                   onChange={event => this.onChangeHandler(event)}
                 />
@@ -183,7 +182,6 @@ class GenderForm extends Component {
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
-                    style={{ pointerEvents: 'none' }}
                     onClick={this.onSubmitState.bind(this)}
                   >
                     Submit
@@ -199,7 +197,6 @@ class GenderForm extends Component {
                 </Col>
               </FormGroup>
             )}
-
             <ToastContainer autoClose={2000} />
           </div>
         </CardLayout>
@@ -210,16 +207,16 @@ class GenderForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    createRoleError: state.rolesReducer.createRoleError,
-    genderList : state.rolesReducer.genders
+    genderMasterError: state.rolesReducer.genderMasterError,
+    genderList : state.gendersReducer.genders
   };
 };
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    createRole: role => dispatch(actions.createRole(role)),
-   // getRoleById: (id) => dispatch(actions.getRoleById(id))
+    createGender: gender => dispatch(actions.createGender(gender)),
+    updateGender: (id,gender) => dispatch(actions.updateGender(id,gender)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GenderForm);

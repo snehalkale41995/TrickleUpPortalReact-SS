@@ -9,7 +9,9 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 class GenderList extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,7 @@ class GenderList extends Component {
       modalFlag: false,
       loading: true,
       modalStatus: false,
-      stateToDelete: {}
+      genderToDelete: {}
     };
   }
 
@@ -34,7 +36,7 @@ class GenderList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link style={{ pointerEvents: 'none' }} to={this} onClick={() => this.onDelete(row)}>
+      <Link  to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete"  />
       </Link>
     );
@@ -42,15 +44,25 @@ class GenderList extends Component {
 
   onDelete(row) {
     this.setState({
-      stateToDelete: row
+      genderToDelete: row
     });
     this.onModalToggle();
   }
 
   onConfirmDelete() {
-    let state = { ...this.state.stateToDelete };
-    state.Active  = false;
-    this.props.deleteState(state.Id, state);
+    let gender = { ...this.state.genderToDelete };
+    let compRef = this;
+    gender.Active  = false;
+    this.props.deleteGender(gender.Id, gender);
+     this.setState({ loading: true });
+        setTimeout(() => {
+          let message = "";
+          compRef.props.genderMasterError
+            ? (message = "Something went wrong !")
+            : (message = "Gender deleted successfully");
+          compRef.setState({ loading: false });
+          Toaster.Toaster(message, compRef.props.genderMasterError);
+        }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -70,11 +82,7 @@ class GenderList extends Component {
     );
   }
 
-  onEdit(row) {
-   
-  }
   render() {
-    console.log("this.props.genders", this.props.genders)
     const sortingOptions = {
       defaultSortName: "GenderName",
       defaultSortOrder: "asc",
@@ -106,7 +114,7 @@ class GenderList extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 25 }}> 
-             <Link to={`${this.props.match.url}/GenderForm`} style={{ pointerEvents: 'none' }}> 
+             <Link to={`${this.props.match.url}/GenderForm`} > 
               <Button
                 type="button"
                 className="theme-positive-btn">
@@ -165,6 +173,7 @@ class GenderList extends Component {
                 </TableHeaderColumn>
               </BootstrapTable> 
             </Col>
+          <ToastContainer autoClose={2000} />
           </FormGroup>
         </CardLayout>
         <ConfirmModal
@@ -172,7 +181,7 @@ class GenderList extends Component {
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
           title="Deactivate"
-          message="Are you sure you want to deactivate this language record ?"
+          message="Are you sure you want to deactivate this gender record ?"
         />
       </div>
     );
@@ -180,13 +189,15 @@ class GenderList extends Component {
 }
 const mapStateToProps = state => {
   return {
-     genders: state.rolesReducer.genders
+     genders: state.gendersReducer.genders,
+     genderMasterError: state.gendersReducer.genderMasterError,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getGendersList : () => dispatch(actions.getGendersList())
+    getGendersList : () => dispatch(actions.getGendersList()),
+    deleteGender : (id,state) => dispatch(actions.deleteGender(id,state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GenderList);
