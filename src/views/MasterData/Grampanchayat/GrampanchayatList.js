@@ -186,7 +186,7 @@ class GrampanchayatList extends Component {
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
           title="Deactivate"
-          message="Are you sure you want to deactivate this state record ?"
+          message="Are you sure you want to deactivate this grampanchayat record ?"
         />
         </div>
       )

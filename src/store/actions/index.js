@@ -18,7 +18,10 @@ export {
     deleteGrampanchayat
 } from './grampanchayatMaster.js'
 export {
-    getVillagesList
+    getVillagesList,
+    createVillage,
+    updateVillage,
+    deleteVillage
 } from './villagesMaster.js';
 export {
     postMediaContent

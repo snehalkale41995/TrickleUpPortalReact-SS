@@ -46,6 +46,7 @@ class DefaultHeader extends Component {
         <div style ={{backgroundColor : "#ffffff"}}>
         <AppSidebarToggler className="d-lg-none" display="md" mobile  />
         <AppNavbarBrand
+          onClick = {() => {this.props.history.push("/")}}
           full={{ src: logo, width: 89, height: 25, alt: 'Trickle Up Logo' }}
           minimized={{ src: smallLogo, width: 30, height: 30, alt: 'Trickle Up Logo' }}
         />

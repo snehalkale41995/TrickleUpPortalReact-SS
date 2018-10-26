@@ -6,15 +6,21 @@ import { FormGroup, Col, Button, Label } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import InputElement from "../../../components/InputElement/InputElement";
 import VillageList from "./VillageList";
+import _ from "lodash";
+import Loader from "../../../components/Loader/Loader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
+
 class VillageForm extends Component {
   constructor(props) {
     super(props);
-    console.log("this.props.edit", this.props.edit);
     this.state = {
       village: {
         VillageName: "",
         District: "",
         State: "",
+        Grampanchayat: "",
         CreatedOn: "",
         CreatedBy: "",
         UpdatedOn: "",
@@ -22,19 +28,25 @@ class VillageForm extends Component {
         Active: true,
         VillageNameRequired: false,
         DistrictRequired: false,
-        StateRequired: false
+        StateRequired: false,
+        GrampanchayatRequired: false
       },
       showList: false,
       villageToEdit: this.props.edit,
-      updateFlag: false
+      updateFlag: false,
+      districtOptions: this.props.districtsList,
+      grampanchayatOptions: this.props.grampanchayatsList,
+      districtDisabled: true,
+      grampanchayatDisabled: true
     };
   }
   componentDidMount() {
-
-   if (Object.keys(this.state.villageToEdit).length !== 0) {
+    if (Object.keys(this.state.villageToEdit).length !== 0) {
       this.setState({
         updateFlag: true,
-        village: this.state.villageToEdit
+        village: this.state.villageToEdit,
+        districtDisabled: false,
+        grampanchayatDisabled: false
       });
     }
   }
@@ -50,26 +62,89 @@ class VillageForm extends Component {
     let village = { ...this.state.village };
     village.State = value;
     village.StateRequired = false;
+    let districtOptions = _.filter(this.props.districtsList, function(
+      district
+    ) {
+      return district.stateId === value;
+    });
     this.setState({
-      village: village
+      village: village,
+      districtOptions: districtOptions,
+      districtDisabled: false
     });
   }
   onDistrictValueChange(value) {
     let village = { ...this.state.village };
     village.District = value;
     village.DistrictRequired = false;
+    let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
+      grampanchayat
+    ) {
+      return grampanchayat.districtId === value;
+    });
+    this.setState({
+      village: village,
+      grampanchayatOptions: grampanchayatOptions,
+      grampanchayatDisabled: false
+    });
+  }
+  onGrampanchayatValueChange(value) {
+    let village = { ...this.state.village };
+    village.Grampanchayat = value;
+    village.GrampanchayatRequired = false;
     this.setState({
       village: village
     });
   }
   onSubmit() {
     let village = { ...this.state.village };
+    let compRef = this;
     if (this.valid(village)) {
-      if (this.state.updateFlag) {
-        //TODO update village
-      } else {
-        //TODO create village
-      }
+      let villageUpdate = _.pick(village, [
+        "Id",
+        "VillageName",
+        "Grampanchayat",
+        "District",
+        "State",
+        "UpdatedOn",
+        "UpdatedBy",
+        "Active"
+      ]);
+      villageUpdate.UpdatedBy = localStorage.getItem("user");
+      villageUpdate.UpdatedOn = new Date();
+      villageUpdate.Active = true;
+      let villageCreate = _.pick(this.state.village, [
+        "VillageName",
+        "Grampanchayat",
+        "District",
+        "State",
+        "CreatedOn",
+        "CreatedBy",
+        "Active"
+      ]);
+      villageCreate.CreatedBy = localStorage.getItem("user");
+      villageCreate.CreatedOn = new Date();
+      villageCreate.Active = true;
+      this.state.updateFlag
+        ? this.props.updateVillage(villageUpdate.Id, villageUpdate)
+        : this.props.createVillage(villageUpdate);
+      this.setState({ loading: true });
+      setTimeout(() => {
+        let message = "";
+        compRef.props.villageMasterError
+          ? (message = "Something went wrong !")
+          : compRef.state.updateFlag
+            ? (message = "Village updated successfully")
+            : (message = "Village created successfully");
+        compRef.setState({ loading: false });
+        Toaster.Toaster(message, compRef.props.villageMasterError);
+        setTimeout(() => {
+          if (!compRef.props.villageMasterError) {
+            compRef.onReset();
+            compRef.setState({ showList: true });
+          }
+        }, 1000);
+      }, 1000);
     }
   }
   valid(village) {
@@ -79,7 +154,7 @@ class VillageForm extends Component {
       !village.VillageName ? (village.VillageNameRequired = true) : null;
       !village.District ? (village.DistrictRequired = true) : null;
       !village.State ? (village.StateRequired = true) : null;
-
+      !village.Grampanchayat ? (village.GrampanchayatRequired = true) : null;
       this.setState({
         village: village
       });
@@ -91,14 +166,16 @@ class VillageForm extends Component {
       VillageName: "",
       District: "",
       State: "",
+      Grampanchayat: "",
       CreatedOn: "",
       CreatedBy: "",
       UpdatedOn: "",
       UpdatedBy: "",
-      Active: 1,
+      Active: true,
       VillageNameRequired: false,
       DistrictRequired: false,
-      StateRequired: false
+      StateRequired: false,
+      GrampanchayatRequired: false
     };
     this.setState({
       village: village
@@ -106,9 +183,11 @@ class VillageForm extends Component {
   }
   render() {
     let village = { ...this.state.village };
-  
+
     return this.state.showList ? (
       <VillageList {...this.props} />
+    ) : this.state.loading ? (
+      <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
@@ -138,8 +217,9 @@ class VillageForm extends Component {
                 <DropdownSelect
                   name="District"
                   placeholder="Select district..."
-                  options={this.props.districtsList}
+                  options={this.state.districtOptions}
                   value={village.District}
+                  disabled={this.state.districtDisabled}
                   required={village.DistrictRequired}
                   onChange={this.onDistrictValueChange.bind(this)}
                   simpleValue
@@ -148,6 +228,19 @@ class VillageForm extends Component {
             </FormGroup>
             <FormGroup row>
               <Col xs="10" md="5">
+                <Label>Grampanchayat</Label>
+                <DropdownSelect
+                  name="Grampanchayat"
+                  placeholder="Select grampanchayat..."
+                  options={this.state.grampanchayatOptions}
+                  value={village.Grampanchayat}
+                  disabled={this.state.grampanchayatDisabled}
+                  required={village.GrampanchayatRequired}
+                  onChange={this.onGrampanchayatValueChange.bind(this)}
+                  simpleValue
+                />
+              </Col>
+              <Col md="5">
                 <InputElement
                   type="text"
                   label="Village"
@@ -158,7 +251,6 @@ class VillageForm extends Component {
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
-              <Col md="5" />
             </FormGroup>
 
             {this.state.updateFlag ? (
@@ -167,7 +259,6 @@ class VillageForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
-                    style={{ pointerEvents: 'none' }}
                   >
                     Save
                   </Button>
@@ -186,7 +277,6 @@ class VillageForm extends Component {
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
-                    style={{ pointerEvents: 'none' }}
                     onClick={this.onSubmit.bind(this)}
                   >
                     Submit
@@ -204,6 +294,7 @@ class VillageForm extends Component {
             )}
           </div>
         </CardLayout>
+        <ToastContainer autoClose={2000} />
       </div>
     );
   }
@@ -211,12 +302,16 @@ class VillageForm extends Component {
 const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
-    // statesData: state.stateReducer.states,
-    districtsList: state.districtReducer.districtsList
+    grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
+    districtsList: state.districtReducer.districtsList,
+    villageMasterError: state.villageReducer.villageMasterError
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    createVillage : (village) => dispatch(actions.createVillage(village)),
+    updateVillage : (id, village) => dispatch(actions.updateVillage(id, village))
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VillageForm);

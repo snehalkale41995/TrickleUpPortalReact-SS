@@ -49,40 +49,39 @@ export const getVillagesList = () => {
   };
 };
 
-// export const createVillage = (village) => {
-//   return dispatch => {
-//     axios
-//       .post(`${AppConfig.serverURL}/api/Villages/PostVillage`, village)
-//       .then(response => {
-//           //create success
-//       })
-//       .catch(error => {
-//         dispatch(villageMasterError(error));
-//       });
-//   };
-// }
-// export const updateVillage = (id ,village) => {
-//   return dispatch => {
-//     axios
-//       .post(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`, village)
-//       .then(response => {
-//           //update success
-//       })
-//       .catch(error => {
-//         dispatch(villageMasterError(error));
-//       });
-//   };
-// }
-//delete pending
-// export const deleteVillage = (id) => {
-//   return dispatch => {
-//     axios
-//       .delete(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`)
-//       .then(response => {
-//           //delete success
-//       })
-//       .catch(error => {
-//         dispatch(villageMasterError(error));
-//       });
-//   };
-// }
+export const createVillage = (village) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Villages/PostVillage`, village)
+      .then(response => {
+        dispatch(getVillagesList());
+      })
+      .catch(error => {
+        dispatch(villageMasterError(error));
+      });
+  };
+}
+export const updateVillage = (id ,village) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`, village)
+      .then(response => {
+        dispatch(getVillagesList());
+      })
+      .catch(error => {
+        dispatch(villageMasterError(error));
+      });
+  };
+}
+export const deleteVillage = (id, village) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`, village)
+      .then(response => {
+        dispatch(getVillagesList());
+      })
+      .catch(error => {
+        dispatch(villageMasterError(error));
+      });
+  };
+}

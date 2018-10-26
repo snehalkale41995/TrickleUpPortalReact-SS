@@ -10,6 +10,8 @@ import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
+import Loader from "../../../components/Loader/Loader";
+
 class GrampanchayatForm extends Component {
   constructor(props) {
     super(props);
@@ -106,7 +108,7 @@ class GrampanchayatForm extends Component {
       this.setState({ loading: true });
       setTimeout(() => {
         let message = "";
-        compRef.props.stateMasterError
+        compRef.props.grampanchayatMasterError
           ? (message = "Something went wrong !")
           : compRef.state.updateFlag
             ? (message = "Grampanchayat updated successfully")
@@ -164,7 +166,9 @@ class GrampanchayatForm extends Component {
     let grampanchayat = { ...this.state.grampanchayat };
     return this.state.showList ? (
       <GrampanchayatList {...this.props} />
-    ) : (
+    ) : this.state.loading ? (
+      <Loader loading={this.state.loading} />
+    ) :  (
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="Grampanchayat Form"

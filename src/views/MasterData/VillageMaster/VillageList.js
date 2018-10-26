@@ -9,6 +9,8 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from '../../../components/Loader/Loader';
 import VillageForm from "./VillageForm";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+
 
 class VillageList extends Component {
   constructor(props) {
@@ -16,12 +18,12 @@ class VillageList extends Component {
     this.state = {
       loading : true,
       showForm : false,
-      villageToEdit  :{}
+      villageToEdit  :{},
+      villageToDelete : {},
+      modalStatus: false,
     };
   }
   componentWillMount() {
-   // this.props.getStatesList();
-    //this.props.getDistrictsList();
     let compRef =this;
     setTimeout(() => {
       compRef.setState({
@@ -33,13 +35,31 @@ class VillageList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} >
+      <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
     //onClick={() => componentRef.deleteConfirm(row._id)}
   }
-
+  onDelete(row) {
+    this.setState({
+      villageToDelete: row
+    });
+    this.onModalToggle();
+  }
+  onConfirmDelete() {
+    let village = { ...this.state.villageToDelete };
+    village.Active  = false;
+    this.props.deleteVillage(village.Id, village);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
   onEditState(cell, row) {
     return (
       <Link to={this}  onClick={() => this.onEdit(row)}>
@@ -90,7 +110,6 @@ class VillageList extends Component {
               <Button
                 type="button"
                 className="theme-positive-btn"
-                style={{ pointerEvents: 'none' }}
                 onClick={() => {
                   this.setState({ showForm: true });
                 }}
@@ -173,6 +192,13 @@ class VillageList extends Component {
             </Col>
           </FormGroup>
         </CardLayout>
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this village record ?"
+        />
         </div>
       )
      
@@ -186,7 +212,7 @@ class VillageList extends Component {
 
  const mapDispatchToProps = dispatch => {
   return {
-    
+    deleteVillage : (id,village) => dispatch(actions.deleteVillage(id,village))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VillageList);
