@@ -16,7 +16,7 @@ export default {
           icon: "fa fa-users"
         },
         {
-          name: "Bulk upload users",
+          name: "Bulk upload beneficiary",
           url: "/beneficiary/bulkUploadBeneficiary",
           icon: "fa fa-upload"
         }

@@ -144,7 +144,7 @@ class GrampanchayatForm extends Component {
   }
   onReset() {
     let grampanchayat = {
-      VillageName: "",
+      GrampanchayatName: "",
       District: "",
       State: "",
       CreatedOn: "",
@@ -152,7 +152,7 @@ class GrampanchayatForm extends Component {
       UpdatedOn: "",
       UpdatedBy: "",
       Active: true,
-      VillageNameRequired: false,
+      GrampanchayatNameRequired: false,
       DistrictRequired: false,
       StateRequired: false
     };

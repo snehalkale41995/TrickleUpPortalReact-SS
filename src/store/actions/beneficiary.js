@@ -27,6 +27,11 @@ export const logBeneficiaryError = (error) => {
     error : error
   };
 }
+export const clearBeneficiaryError = () => {
+  return {
+    type: actionTypes.CLEAR_BENEFICIARY_ERROR,
+  };
+}
 export const getBeneficiaryList = () => {
 let beneficiaryList = [];
   return dispatch => {
@@ -119,7 +124,7 @@ export const bulkUploadBeneficiary = (beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/BulkUploadUser`, beneficiary)
       .then(response => {
-         console.log("BULK Uplaod", response);
+         dispatch(clearBeneficiaryError());
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));

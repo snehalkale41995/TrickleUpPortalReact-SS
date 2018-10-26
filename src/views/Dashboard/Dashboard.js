@@ -51,7 +51,7 @@ const dataLiveStock = {
   labels: ["Sheep", "Cow", "Buffalo", "Chicken","Goat","Buffalo", "Chicken","Goat"],
   datasets: [
     {
-      label: "Live Stock",
+      label: "Live stock",
       backgroundColor: "#93D7AB",
       borderColor: "#4dbd74",
       borderWidth: 1,
@@ -126,7 +126,7 @@ class Dashboard extends Component {
             <Col xs="12" md="4">
               <Card className="text-white bg-success">
                 <CardBody>
-                  <div className="text-value">Live Stock</div>
+                  <div className="text-value">Live stock</div>
                 </CardBody>
                 <div className="chart-wrapper mx-6" style={{ padding: 20 }}>
                   <Bar data={dataLiveStock} width={100} height={60} options={graphConstant.liveStockOptions} />

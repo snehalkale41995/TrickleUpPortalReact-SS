@@ -147,7 +147,7 @@ class BulkRegistration extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Bulk Registration">
+        <CardLayout name="Bulk upload beneficiary">
           <div style={{ margin: 20 }}>
             <FormGroup row>
               <Col xs="12"> 

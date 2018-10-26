@@ -30,6 +30,11 @@ const beneficiaryReducer = (state = initialState, action) => {
         ...state,
         bulkUploadHistory: action.bulkUploadHistory
       };
+      case actionTypes.CLEAR_BENEFICIARY_ERROR:
+      return {
+        ...state,
+        beneficiaryError: null
+      };
     default:
       return state;
   }

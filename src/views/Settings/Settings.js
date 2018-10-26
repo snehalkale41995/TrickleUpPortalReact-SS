@@ -465,7 +465,7 @@ class Settings extends Component {
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
                   >
-                    Edit
+                    Save
                   </Button>
                 </Col>
               <Col md="1">

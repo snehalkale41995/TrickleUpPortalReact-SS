@@ -102,7 +102,7 @@ class GenderList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Genders">
+        <CardLayout name="Gender">
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 25 }}> 

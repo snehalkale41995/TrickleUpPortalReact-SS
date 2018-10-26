@@ -49,17 +49,17 @@ export default class MediaList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Media List">
+        <CardLayout name="Training program">
           <FormGroup row>
           <Col xs="12" md="11" />
-            <Col md="1" style={{marginLeft: -50 ,marginTop: -55}}>
+            {/* <Col md="1" style={{marginLeft: -50 ,marginTop: -55}}>
               <Link to={`${this.props.match.url}/media`} style={{ pointerEvents: 'none' }}>
                 <Button type="button" className="theme-positive-btn">
                   <i className="fa fa-plus" />&nbsp; Add media
                 </Button>
               </Link>
               &nbsp;&nbsp;
-            </Col>
+            </Col> */}
           </FormGroup>
           <Row>{videoCards}</Row>
         </CardLayout>
