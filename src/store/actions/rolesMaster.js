@@ -61,6 +61,9 @@ export const getGendersList = () => {
       .catch(error => {});
   };
 };
+
+
+
 export const getLanguageList = () => {
   let languageList = [];
   let languages = [];
@@ -85,36 +88,56 @@ export const createRole = (role) => {
     axios
       .post(`${AppConfig.serverURL}/api/Roles/PostRole`, role)
       .then(response => {
-         dispatch(createRoleSuccess()); 
+        dispatch(createRoleSuccess());
       })
       .catch(error => {
-        dispatch(createRoleFail(error));
+        dispatch(roleMasterError(error));
       });
   };
 }
 
-export const getRoleById = (id) => {
-  let currentBeneficiary = {};
-    return dispatch => {
-      axios
-        .get(`${AppConfig.serverURL}/api/Roles/GetSepecificRole/${id}`)
-        .then(response => {
-         // dispatch(storeCurrentRole(currentBeneficiary));
-        })
-        .catch(error => {
-         // dispatch(logBeneficiaryError(error));
-        });
-    };
+export const updateRole = (id ,role) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Roles/PutRole?id=${id}`, role)
+      .then(response => {
+         dispatch(updateRoleSuccess());
+      })
+      .catch(error => {
+        dispatch(roleMasterError(error));
+      });
   };
+}
 
-export const createRoleSuccess = () => {
+export const deleteRole = (id, role) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Roles/PutRole?id?id=${id}`, role)
+      .then(response => {
+          dispatch(getRolesList());
+      })
+      .catch(error => {
+         dispatch(roleMasterError(error));
+      });
+  };
+}
+
+export const roleMasterError = (error) => {
+  return {
+    type : actionTypes.LOG_ROLE_ERROR,
+    error : error
+  }
+}
+
+export const createRoleSuccess= () =>{
   return {
     type : actionTypes.CREATE_ROLE_SUCCESS
   }
 }
 
-export const createRoleFail = () => {
+export const updateRoleSuccess= () =>{
   return {
-    type : actionTypes.CREATE_ROLE_FAIL
+    type : actionTypes.UPDATE_ROLE_SUCCESS
   }
 }
+

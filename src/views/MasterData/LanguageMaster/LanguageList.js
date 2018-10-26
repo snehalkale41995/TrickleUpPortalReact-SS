@@ -9,7 +9,9 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 class LanguageList extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class LanguageList extends Component {
   }
 
   componentWillMount() {
-    this.props.getAllLanguages();
+    this.props.getLanguageList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -34,7 +36,7 @@ class LanguageList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onDelete(row)}>
+      <Link to={this}  onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete"  />
       </Link>
     );
@@ -48,9 +50,19 @@ class LanguageList extends Component {
   }
 
   onConfirmDelete() {
-    let state = { ...this.state.stateToDelete };
-    state.Active  = false;
-    this.props.deleteState(state.Id, state);
+    let compRef = this;
+    let language = { ...this.state.stateToDelete };
+    language.Active  = false;
+    this.props.deleteLanguage(language.Id, language);
+    this.setState({ loading: true });
+        setTimeout(() => {
+          let message = "";
+          compRef.props.languageMasterError
+            ? (message = "Something went wrong !")
+            : (message = "Language deleted successfully");
+          compRef.setState({ loading: false });
+          Toaster.Toaster(message, compRef.props.languageMasterError);
+        }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -70,9 +82,6 @@ class LanguageList extends Component {
     );
   }
 
-  onEdit(row) {
-   
-  }
   render() {
     const sortingOptions = {
       defaultSortName: "LanguageName",
@@ -92,7 +101,7 @@ class LanguageList extends Component {
         },
         {
           text: "All",
-          value: this.props.languagesList.length
+          value: this.props.languages.length
         }
       ],
       sizePerPage: 5
@@ -105,7 +114,7 @@ class LanguageList extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 10 }}> 
-             <Link to={`${this.props.match.url}/LanguageForm`} style={{ pointerEvents: 'none' }}> 
+             <Link to={`${this.props.match.url}/LanguageForm`} > 
               <Button
                 type="button"
                 className="theme-positive-btn">
@@ -119,7 +128,7 @@ class LanguageList extends Component {
             <Col xs="12">
                <BootstrapTable
                 ref="table"
-                data={this.props.languagesList}
+                data={this.props.languages}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
@@ -173,6 +182,7 @@ class LanguageList extends Component {
                 </TableHeaderColumn>
               </BootstrapTable> 
             </Col>
+            <ToastContainer autoClose={2000} />
           </FormGroup>
         </CardLayout>
         <ConfirmModal
@@ -188,14 +198,15 @@ class LanguageList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    languagesList: state.languageReducer.languagesList
+    languages: state.languagesReducer.languages,
+    languageMasterError: state.languagesReducer.languageMasterError,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllLanguages: () => dispatch(actions.getAllLanguages()),
-    deleteState : (id,state) => dispatch(actions.deleteState(id,state))
+    getLanguageList: () => dispatch(actions.getLanguageList()),
+    deleteLanguage : (id,language) => dispatch(actions.deleteLanguage(id,language))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LanguageList);

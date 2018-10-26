@@ -43,11 +43,24 @@ export {
 
 export {
     getRolesList,
-    getGendersList,
-    getLanguageList,
-    createRole
+    createRole,
+    updateRole,
+    deleteRole
 } from './rolesMaster.js';
+
+export {
+    getGendersList,
+    createGender,
+    updateGender,
+    deleteGender
+} from './gendersMaster.js';
+
+export {
+    getLanguageList,
+    createLanguage,
+    updateLanguage,
+    deleteLanguage
+} from './languagesMaster.js';
 
 export { loginUser, changePassword} from "./login";
 
-export {getAllLanguages, createLanguage} from "./languageMaster"

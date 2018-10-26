@@ -8,9 +8,10 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
-import StateForm from "./RoleForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 class RolesList extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,7 @@ class RolesList extends Component {
       modalFlag: false,
       loading: true,
       modalStatus: false,
-      stateToDelete: {}
+      roleToDelete: {}
     };
   }
 
@@ -35,7 +36,7 @@ class RolesList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} onClick={() => this.onDelete(row)}>
+      <Link to={this}  onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete"  />
       </Link>
     );
@@ -43,19 +44,30 @@ class RolesList extends Component {
 
   onDelete(row) {
     this.setState({
-      stateToDelete: row
+      roleToDelete: row
     });
     this.onModalToggle();
   }
 
   onConfirmDelete() {
-    let state = { ...this.state.stateToDelete };
-    state.Active  = false;
-    this.props.deleteState(state.Id, state);
+    let compRef = this;
+    let role = { ...this.state.roleToDelete };
+    role.Active  = false;
+    this.props.deleteRole(role.Id, role);
+      this.setState({ loading: true });
+        setTimeout(() => {
+          let message = "";
+          compRef.props.roleMasterError
+            ? (message = "Something went wrong !")
+            : (message = "Role deleted successfully");
+          compRef.setState({ loading: false });
+          Toaster.Toaster(message, compRef.props.roleMasterError);
+        }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
   }
+
   onModalToggle() {
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -70,10 +82,7 @@ class RolesList extends Component {
       </Link>
     );
   }
-
-  onEdit(row) {
-   
-  }
+  
   render() {
     const sortingOptions = {
       defaultSortName: "RoleName",
@@ -106,7 +115,7 @@ class RolesList extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
-             <Link to={`${this.props.match.url}/RoleForm`}  style={{ pointerEvents: 'none' }}> 
+             <Link to={`${this.props.match.url}/RoleForm`}  > 
               <Button
                 type="button"
                 className="theme-positive-btn">
@@ -174,6 +183,7 @@ class RolesList extends Component {
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
+             <ToastContainer autoClose={2000} />
           </FormGroup>
         </CardLayout>
         <ConfirmModal
@@ -189,14 +199,15 @@ class RolesList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    Roles: state.rolesReducer.roles
+     Roles: state.rolesReducer.roles,
+     roleMasterError: state.rolesReducer.roleMasterError,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getRolesList: () => dispatch(actions.getRolesList()),
-    deleteState : (id,state) => dispatch(actions.deleteState(id,state))
+    deleteRole : (id,state) => dispatch(actions.deleteRole(id,state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RolesList);

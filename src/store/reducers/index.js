@@ -8,7 +8,8 @@ import rolesReducer from './rolesReducer';
 import loginReducer from './loginReducer';
 import villageReducer from './villageReducer';
 import grampanchayatReducer from './grampanchayatReducer';
-import languageReducer from './languageReducer';
+import languagesReducer from './languagesReducer';
+import gendersReducer from './gendersReducer';
 
 const rootReducer = combineReducers({
     dashboard: dashboardReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     loginReducer: loginReducer,
     villageReducer :villageReducer,
     grampanchayatReducer: grampanchayatReducer,
-    languageReducer : languageReducer
+    languagesReducer : languagesReducer,
+    gendersReducer : gendersReducer
 });
 
 export default rootReducer;
