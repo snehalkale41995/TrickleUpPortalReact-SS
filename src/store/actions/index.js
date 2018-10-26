@@ -45,7 +45,9 @@ export {
     getRolesList,
     getGendersList,
     getLanguageList,
-    createRole
+    createRole,
+    updateRole,
+    deleteRole
 } from './rolesMaster.js';
 
 export { loginUser, changePassword} from "./login";

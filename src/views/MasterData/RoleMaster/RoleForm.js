@@ -28,7 +28,6 @@ class RolesForm extends Component {
         UpdatedBy: "",
         Active: true
       },
-      stateToEdit: this.props.edit
     };
   }
   
@@ -39,7 +38,8 @@ class RolesForm extends Component {
       );
       if (currentRole) {
         this.setState({
-          currentRole: currentRole
+          currentRole: currentRole,
+          updateFlag: true
         });
       }
     }
@@ -59,7 +59,7 @@ class RolesForm extends Component {
     let compRef = this;
     if (this.valid(currentRole)) {
       if (this.state.updateFlag) {
-        let state = _.pick(currentRole, [
+        let role = _.pick(currentRole, [
           "Id",
           "RoleName",
           "RoleId",
@@ -67,20 +67,21 @@ class RolesForm extends Component {
           "UpdatedBy",
           "Active"
         ]);
-        state.UpdatedOn = new Date();
-        state.UpdatedBy = 1;
-        this.props.updateState(state.Id, state);
+        role.UpdatedOn = new Date();
+        role.UpdatedBy = 1;
+        this.props.updateRole(role.Id, role);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.stateMasterError
+          compRef.props.roleMasterError
             ? (message = "Something went wrong !")
             : (message = "State updated successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.stateMasterError);
+          Toaster.Toaster(message, compRef.props.roleMasterError);
           setTimeout(() => {
-            if (!compRef.props.stateMasterError) {
+            if (!compRef.props.roleMasterError) {
               compRef.onReset();
+              compRef.props.history.push('/master/roles');
             }
           }, 1000);
         }, 1000);
@@ -98,20 +99,22 @@ class RolesForm extends Component {
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
-          compRef.props.createRoleError
+          compRef.props.roleMasterError
             ? (message = "Something went wrong !")
             : (message = "State created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.createRoleError);
+          Toaster.Toaster(message, compRef.props.roleMasterError);
           setTimeout(() => {
-            if (!compRef.props.createRoleError) {
+            if (!compRef.props.roleMasterError) {
               compRef.onReset();
+             compRef.props.history.push('/master/roles');
             }
           }, 1000);
         }, 1000);
       }
     }
   }
+
   valid(currentRole) {
     if (currentRole.RoleName && currentRole.RoleId) {
       return true;
@@ -158,17 +161,6 @@ class RolesForm extends Component {
               <Col xs="8" md="4">
                 <InputElement
                   type="text"
-                  label="Role Name"
-                  placeholder="Role Name"
-                  name="RoleName"
-                  required={currentRole.RoleNameRequired}
-                  value={currentRole.RoleName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="4">
-                <InputElement
-                  type="text"
                   label="Role Id"
                   placeholder="Role Id"
                   name="RoleId"
@@ -177,16 +169,24 @@ class RolesForm extends Component {
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
+              <Col md="4">
+                <InputElement
+                  type="text"
+                  label="Role Name"
+                  placeholder="Role Name"
+                  name="RoleName"
+                  required={currentRole.RoleNameRequired}
+                  value={currentRole.RoleName}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </Col>
             </FormGroup>
-
             {this.state.updateFlag ? (
               <FormGroup row>
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                    style={{ pointerEvents: 'none' }}
-                  >
+                    onClick={this.onSubmitState.bind(this)}>
                     Save
                   </Button>
                 </Col>
@@ -196,7 +196,7 @@ class RolesForm extends Component {
                 <Col md="1">
                   <Button
                     className="theme-positive-btn"
-                    style={{ pointerEvents: 'none' }}
+                    //style={{ pointerEvents: 'none' }}
                     onClick={this.onSubmitState.bind(this)}
                   >
                     Submit
@@ -223,7 +223,7 @@ class RolesForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    createRoleError: state.rolesReducer.createRoleError,
+    roleMasterError: state.rolesReducer.roleMasterError,
     roleList : state.rolesReducer.roles
   };
 };
@@ -231,6 +231,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     createRole: role => dispatch(actions.createRole(role)),
+    updateRole: (id,role) => dispatch(actions.updateRole(id,role)),
    // getRoleById: (id) => dispatch(actions.getRoleById(id))
   };
 };
