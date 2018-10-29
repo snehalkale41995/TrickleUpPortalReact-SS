@@ -6,12 +6,12 @@ export default {
       icon: "icon-home"
     },
     {
-      name: "Users",
+      name: "Beneficiary",
       url: "/beneficiary",
       icon: "fa fa-user",
       children: [
         {
-          name: "Add Users",
+          name: "Add Beneficiary",
           url: "/beneficiary/beneficiaryList",
           icon: "fa fa-users"
         },
@@ -19,6 +19,11 @@ export default {
           name: "Bulk upload beneficiary",
           url: "/beneficiary/bulkUploadBeneficiary",
           icon: "fa fa-upload"
+        },
+         {
+          name: "Inactive Beneficiary List",
+          url: "/beneficiary/inactiveUser",
+          icon: "fa fa-users"
         }
       ]
     },

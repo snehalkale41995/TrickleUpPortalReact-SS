@@ -60,6 +60,7 @@ const GenderMaster = Loadable({
   loading: Loading
 });
 
+
 // const Grampanchayat = Loadable({
 //   loader: () => import("./views/MasterData/Grampanchayat.js"),
 //   loading: Loading
@@ -83,6 +84,11 @@ const Settings = Loadable({
 
 const ChangePassword = Loadable({
   loader: () => import("./views/Settings/ChangePassword.js"),
+  loading: Loading
+});
+
+const InactiveUser = Loadable({
+  loader: () => import("./views/Registration/InactiveUser.js"),
   loading: Loading
 });
 
@@ -121,7 +127,8 @@ const routes = [
   },
   { path: "/master/crops", name: "Crops Data", component: CropsData },
   { path: "/settings", name: "Settings", component: Settings },
-  { path: "/ChangePassword", name: "ChangePassword", component: ChangePassword }
+  { path: "/ChangePassword", name: "ChangePassword", component: ChangePassword },
+   { path: "/beneficiary/inactiveUser", name: "InactiveUser", component: InactiveUser }
 ];
 
 export default routes;

@@ -26,8 +26,10 @@ class RegistrationForm extends Component {
         PhoneNumber: "",
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
+        UserId : "",
+        UserIdRequired : false,
+        UserIdInvalid : false,
         Age: "",
-        AgeRequired: false,
         AgeInvalid: false,
         Gender: "",
         State: "",
@@ -50,13 +52,6 @@ class RegistrationForm extends Component {
         ImagePath: "",
         BulkUploadId: ""
       },
-      genderRequired: false,
-      stateRequired: false,
-      districtRequired: false,
-      grampanchayatRequired: false,
-      villageRequired: false,
-      roleRequired: false,
-      languageRequired: false,
       updateFlag: false,
       districtOptions: this.props.districtsList,
       grampanchayatOptions: this.props.grampanchayatsList,
@@ -103,8 +98,7 @@ class RegistrationForm extends Component {
     let user = { ...this.state.user };
     user.Gender = value;
     this.setState({
-      user: user,
-      genderRequired: false
+      user: user
     });
   }
   onStateSelection(value) {
@@ -120,7 +114,6 @@ class RegistrationForm extends Component {
     });
     this.setState({
       user: user,
-      stateRequired: false,
       districtOptions: districtOptions,
       grampanchayatOptions: [],
       villageOptions: [],
@@ -137,7 +130,6 @@ class RegistrationForm extends Component {
     });
     this.setState({
       user: user,
-      districtRequired: false,
       grampanchayatOptions: grampanchayatOptions,
       grampanchayatDisabled: false
     });
@@ -146,8 +138,7 @@ class RegistrationForm extends Component {
     let user = { ...this.state.user };
     user.Village = value;
     this.setState({
-      user: user,
-      villageRequired: false
+      user: user
     });
   }
   onGrampanchayatSelection(value) {
@@ -158,25 +149,23 @@ class RegistrationForm extends Component {
     });
     this.setState({
       user: user,
-      grampanchayatRequired: false,
       villageOptions: villageOptions,
       villageDisabled: false
     });
   }
+
   onRoleSelection(value) {
     let user = { ...this.state.user };
     user.Role = value;
     this.setState({
-      user: user,
-      roleRequired: false
+      user: user
     });
   }
   onLanguageSelection(value) {
     let user = { ...this.state.user };
     user.Language = value;
     this.setState({
-      user: user,
-      languageRequired: false
+      user: user
     });
   }
   onSubmit() {
@@ -191,6 +180,7 @@ class RegistrationForm extends Component {
           "UserId",
           "Name",
           "PhoneNumber",
+          "UserId",
           "Age",
           "Gender",
           "State",
@@ -215,13 +205,14 @@ class RegistrationForm extends Component {
         ]);
         user.UpdatedBy = localStorage.getItem("user");
         user.UpdatedOn = new Date();
+        user.Role = 3;
         this.props.updateBeneficiary(user.Id, user);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = `User updated successfully`);
+            : (message = `Beneficiary updated successfully`);
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
@@ -237,6 +228,7 @@ class RegistrationForm extends Component {
           "UserId",
           "Name",
           "PhoneNumber",
+          "UserId",
           "Age",
           "Gender",
           "State",
@@ -261,13 +253,14 @@ class RegistrationForm extends Component {
         ]);
         user.CreatedBy = localStorage.getItem("user");
         user.CreatedOn = new Date();
+        user.Role = 3;
         this.props.createBeneficiary(user);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = "User created successfully");
+            : (message = "Beneficiary created successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
@@ -292,16 +285,8 @@ class RegistrationForm extends Component {
     if (
       user.Name &&
       user.PhoneNumber &&
+      user.UserId &&
       user.PhoneNumber.length === 10 &&
-      user.Age &&
-      user.Age > 0 &&
-      user.Gender &&
-      user.State &&
-      user.District &&
-      user.Village &&
-      user.Grampanchayat &&
-      user.Role &&
-      user.Language &&
       !InvalidAdhaar
     ) {
       return true;
@@ -309,26 +294,26 @@ class RegistrationForm extends Component {
       return false;
     }
   }
+
   showValidations(user) {
+    let validUserId;
     let validPhone =
       /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
+    if (user.UserId) {
+      validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    }
     !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
-    user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
-    !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
-    !user.Gender ? this.setState({ genderRequired: true }) : null;
-    !user.State ? this.setState({ stateRequired: true }) : null;
-    !user.District ? this.setState({ districtRequired: true }) : null;
-    !user.Village ? this.setState({ villageRequired: true }) : null;
-    !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
-    !user.Role ? this.setState({ roleRequired: true }) : null;
+    user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
+    !user.UserId
+      ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
+      : null;
     user.Aadhaar && user.Aadhaar.length !== 12
       ? (user.AadhaarInvalid = true)
       : null;
-    !user.Language ? this.setState({ languageRequired: true }) : null;
     this.setState({
       user: user
     });
@@ -341,8 +326,9 @@ class RegistrationForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
+      UserIdRequired: false,
+      UserIdInvalid : false,
       Age: "", //no
-      AgeRequired: false,
       AgeInvalid :false,
       Gender: "", //id
       State: "", //id
@@ -355,14 +341,7 @@ class RegistrationForm extends Component {
       Language: ""
     };
     this.setState({
-      user: userObj,
-      genderRequired: false,
-      stateRequired: false,
-      districtRequired: false,
-      grampanchayatRequired: false,
-      villageRequired: false,
-      roleRequired: false,
-      languageRequired: false
+      user: userObj
     });
   }
   render() {
@@ -372,7 +351,7 @@ class RegistrationForm extends Component {
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="User Form"
+          name="Beneficiary Form"
           navigation={true}
           navigationRoute="/beneficiary/beneficiaryList"
         >
@@ -396,7 +375,7 @@ class RegistrationForm extends Component {
                   label="Phone number"
                   name="PhoneNumber"
                   maxLength={10}
-                  placeholder="Please enter phone number "
+                  placeholder="Please enter phone number"
                   value={user.PhoneNumber}
                   required={user.PhoneNumberRequired}
                   invalid={user.PhoneNumberInvalid}
@@ -407,18 +386,31 @@ class RegistrationForm extends Component {
             <FormGroup row>
               <Col xs="12" md="5">
                 <InputElement
+                  type="text"
+                  label="Email"
+                  name="UserId"
+                  placeholder="Please enter Email"
+                  value={user.UserId}
+                  required={user.UserIdRequired}
+                  invalid={user.UserIdInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
+              </Col>
+               <Col md="5">
+                <InputElement
                   type="number"
                   label="Age"
                   name="Age"
                   maxLength={3}
                   placeholder="Please enter age "
                   value={user.Age}
-                  required={user.AgeRequired}
                   invalid={user.AgeInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
               </Col>
-              <Col md="5">
+            </FormGroup>
+            <FormGroup row>
+              <Col xs="12" md="5">
                 <Label>Gender</Label>
                 <DropdownSelect
                   id="1"
@@ -426,24 +418,22 @@ class RegistrationForm extends Component {
                   placeholder="Select gender "
                   options={this.props.gendersList}
                   value={user.Gender}
-                  required={this.state.genderRequired}
                   onChange={this.onGenderSelection.bind(this)}
                 />
               </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
+               <Col  md="5">
                 <Label>State</Label>
                 <DropdownSelect
                   name="State"
                   placeholder="Select state"
                   options={this.props.statesList}
                   value={user.State}
-                  required={this.state.stateRequired}
                   onChange={this.onStateSelection.bind(this)}
                 />
               </Col>
-              <Col md="5">
+            </FormGroup>
+            <FormGroup row>
+              <Col xs="12" md="5">
                 <Label>District</Label>
                 <DropdownSelect
                   name="District"
@@ -451,13 +441,10 @@ class RegistrationForm extends Component {
                   options={this.state.districtOptions}
                   value={user.District}
                   disabled={this.state.districtDisabled}
-                  required={this.state.districtRequired}
                   onChange={this.onDistrictSelection.bind(this)}
                 />
               </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
+               <Col  md="5">
                 <Label>Grampanchayat</Label>
                 <DropdownSelect
                   name="Grampanchayat"
@@ -465,11 +452,12 @@ class RegistrationForm extends Component {
                   value={user.Grampanchayat}
                   options={this.state.grampanchayatOptions}
                   disabled={this.state.grampanchayatDisabled}
-                  required={this.state.grampanchayatRequired}
                   onChange={this.onGrampanchayatSelection.bind(this)}
                 />
               </Col>
-              <Col md="5">
+            </FormGroup>
+            <FormGroup row>
+              <Col xs="12" md="5">
                 <Label>Village</Label>
                 <DropdownSelect
                   name="Village"
@@ -477,13 +465,10 @@ class RegistrationForm extends Component {
                   value={user.Village}
                   disabled={this.state.villageDisabled}
                   options={this.state.villageOptions}
-                  required={this.state.villageRequired}
                   onChange={this.onVillageSelection.bind(this)}
                 />
               </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
+               <Col  md="5">
                 <InputElement
                   type="text"
                   label="Aadhaar number"
@@ -495,19 +480,18 @@ class RegistrationForm extends Component {
                   onChange={event => this.onChangeInput(event)}
                 />
               </Col>
-              <Col md="5">
+            </FormGroup>
+            <FormGroup row>
+              {/* <Col xs="12" md="5">
                 <Label>Role</Label>
                 <DropdownSelect
                   name="Role"
                   placeholder="Select role "
                   options={this.props.rolesList}
                   value={user.Role}
-                  required={this.state.roleRequired}
                   onChange={this.onRoleSelection.bind(this)}
                 />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
+              </Col> */}
               <Col xs="12" md="5">
                 <Label>Language</Label>
                 <DropdownSelect
@@ -515,10 +499,11 @@ class RegistrationForm extends Component {
                   placeholder="Select language "
                   options={this.props.languagesList}
                   value={user.Language}
-                  required={this.state.languageRequired}
                   onChange={this.onLanguageSelection.bind(this)}
                 />
               </Col>
+            </FormGroup>
+            <FormGroup row>
               <Col md="5">
                 {this.state.user.ImagePath ? (
                   <div>
@@ -528,7 +513,7 @@ class RegistrationForm extends Component {
                         .ImagePath}`}
                       style={{ height: 90, width: 100, marginLeft: 20 }}
                       alt=""
-                    />{" "}
+                    />
                   </div>
                 ) : null}
               </Col>
