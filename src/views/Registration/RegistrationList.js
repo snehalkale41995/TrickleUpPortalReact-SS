@@ -32,7 +32,7 @@ class RegistrationList extends Component {
   onDeleteBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete" />
+        <i className="fa fa-trash" title="Deactivate" />
       </Link>
     );
     //onClick={() => componentRef.deleteConfirm(row._id)}
@@ -91,14 +91,14 @@ class RegistrationList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="User List">
+        <CardLayout name="Beneficiary List">
           <FormGroup row>
             <Col xs="12" md="10" />
             <Col md="2" style={{ marginTop: -55 }}>
               <Link to={`${this.props.match.url}/registration`}>
                 <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
                   <i className="fa fa-plus" />
-                  &nbsp; Add user
+                  &nbsp; Add Beneficiary
                 </Button>
               </Link>
               &nbsp;&nbsp;
@@ -129,7 +129,7 @@ class RegistrationList extends Component {
                 <TableHeaderColumn
                   dataField="Name"
                   headerAlign="left"
-                  width="60"
+                  width="40"
                   csvHeader="Name"
                   dataSort={true}
                 >
@@ -139,10 +139,19 @@ class RegistrationList extends Component {
                   dataField="PhoneNumber"
                   headerAlign="left"
                   width="40"
-                  csvHeader="PhoneNumber"
+                  csvHeader="Phone Number"
                   dataSort={true}
                 >
                   Phone Number
+                </TableHeaderColumn>
+                 <TableHeaderColumn
+                  dataField="UserId"
+                  headerAlign="left"
+                  width="40"
+                  csvHeader="Email Id"
+                  dataSort={true}
+                >
+                  Email Id
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="Age"
@@ -156,15 +165,6 @@ class RegistrationList extends Component {
                   export={true}
                   hidden
                 />
-                <TableHeaderColumn
-                  dataField="RoleName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="RoleName"
-                  dataSort={true}
-                >
-                  Role
-                </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="StateName"
                   csvHeader="State"
@@ -223,7 +223,7 @@ class RegistrationList extends Component {
                   width="20"
                   export={false}
                 >
-                  Delete
+                  Deactivate
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
