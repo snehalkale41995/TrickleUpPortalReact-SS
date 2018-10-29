@@ -82,8 +82,8 @@ class Crops extends Component {
           <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              <Link to={`${this.props.match.url}/CropForm`} style={{ pointerEvents: 'none' }}>
-                <Button type="button" className="theme-positive-btn" style={{ pointerEvents: 'none' }} >
+              <Link to={`${this.props.match.url}/CropForm`} >
+                <Button type="button" className="theme-positive-btn"  >
                   <i className="fa fa-plus" />&nbsp; Add crop
                 </Button>
               </Link>

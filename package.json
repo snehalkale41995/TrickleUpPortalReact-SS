@@ -25,6 +25,7 @@
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
+    "react-audio-player": "^0.11.0",
     "react-bootstrap-table": "^4.3.1",
     "react-chartjs-2": "^2.7.2",
     "react-csv": "^1.0.15-RC2",

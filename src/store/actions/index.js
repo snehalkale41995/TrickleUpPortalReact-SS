@@ -41,7 +41,8 @@ export {
     getCropsList,
     getCropCultivationSteps,
     getCropSteps,
-    getCropStepsMaterial
+    getCropStepsMaterial,
+    storeCropImage
 } from './cropsMaster.js';
 
 export {

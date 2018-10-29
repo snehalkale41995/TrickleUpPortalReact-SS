@@ -64,15 +64,19 @@ class CropForm extends Component {
       let file = event.target.files[0];
       let crop = { ...this.state.Crop };
       
-      let data = new FormData();
-      data.append("FileName", file.name);
-      data.append("FileSize", file.size);
-      data.append("MediaType", file.type);
-      for (var key of data.entries()) {
-        console.log(key[0] + ', ' + key[1])
-      }
+      //let data = new FormData();
+      let formData = new FormData();
+     // var imagefile = document.querySelector('#file');
+      formData.append("image", event.target.files[0]);
+      formData.append("fileName", "Snehl");
+      // data.append("FileName", file.name);
+      // data.append("FileSize", file.size);
+      // data.append("MediaType", file.type);
+      // for (var key of data.entries()) {
+      //   console.log(key[0] + ', ' + key[1])
+      // }
       //console.log("FormData", data.entries());
-      crop.FilePath = data;
+      crop.FilePath = formData;
       crop.CropImageRequired = false;
       crop.renderURL = URL.createObjectURL(event.target.files[0]);
       this.setState({
@@ -99,7 +103,10 @@ class CropForm extends Component {
         });
   }
   onSubmit() {
-    this.props.history.push("/cropCultivations/crops");
+    let crop = {...this.state.crop};
+    let imagedata= crop.FilePath;
+    this.props.storeCropImage(imagedata);
+    //this.props.history.push("/cropCultivations/crops");
   }
   render() {
     let crop = { ...this.state.crop };
@@ -208,6 +215,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    storeCropImage : (image) => dispatch(actions.storeCropImage(image))
     ///   getCropsList: () => dispatch(actions.getCropsList()),
     // CropsCultivationSteps: (id) => dispatch(actions.getCropCultivationSteps(id))
   };

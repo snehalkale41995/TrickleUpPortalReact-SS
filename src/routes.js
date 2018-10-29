@@ -24,7 +24,7 @@ const BulkRegistration = Loadable({
   loader: () => import("./views/BulkRegistration/BulkRegistration.js"),
   loading: Loading
 });
-const MediaLibrary = Loadable({
+const MediaContent = Loadable({
   loader: () => import("./views/MediaLibrary/Media.js"),
   loading: Loading
 });
@@ -92,8 +92,7 @@ const routes = [
   {path: "/beneficiary", exact: true,name: "Beneficiary", component: Registration },
   { path: "/beneficiary/beneficiaryList", name: "Registration", component: Registration },
   { path: "/beneficiary/bulkUploadBeneficiary", name: "", component: BulkRegistration },
-  { path: "/mediaLibrary", name: "Media List", component: MediaLibrary },
-  { path: "/mediaLibrary/media", name: "Media" },
+  { path: "/mediaContent", name: "Media Content", component: MediaContent },
   { path: "/master", exact: true, component: AddressMaster },
   { path: "/master/roles", name: "Roles", component: RolesMaster },
   { path: "/master/address", name: "Address", component: AddressMaster },

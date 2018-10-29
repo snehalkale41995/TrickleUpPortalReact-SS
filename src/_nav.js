@@ -23,9 +23,26 @@ export default {
       ]
     },
     {
-      name: "Training Program",
-      url: "/mediaLibrary",
-      icon: "fa fa-picture-o"
+      name: "Media Content",
+      url: "/mediaContent",
+      icon: "fa fa-folder-open",
+      children: [
+        {
+          name: "Audio",
+          url: "/mediaContent/audioContent",
+          icon: "fa fa-volume-up"
+        },
+        {
+          name: "Video",
+          url: "/mediaContent/videoContent",
+          icon: "fa fa-video-camera"
+        },
+         {
+          name: "Image",
+          url: "/mediaContent/imageContent",
+          icon: "fa fa-picture-o"
+        }
+      ]
     },
     {
       name: "Master Data",
@@ -51,23 +68,7 @@ export default {
           name: "Languages",
           url: "/master/languages",
           icon: "icon-star"
-        },
-       
-        // {
-        //   name: "Languages",
-        //   url: "/dashboard",
-        //   icon: "icon-star"
-        // },
-        // {
-        //   name: "Crops List",
-        //   url: "/master/crops",
-        //   icon: "icon-star"
-        // },
-        // {
-        //   name: "Contacts",
-        //   url: "/master/contacts",
-        //   icon: "icon-star"
-        // }
+        }
       ]
     },
     {
@@ -86,7 +87,7 @@ export default {
           icon: "fa fa-align-left"
         },
         {
-          name: "Crop Material",
+          name: "Crop Materials",
           url: "/cropCultivations/CropsMaterial",
           icon: "fa fa-tint"
         }

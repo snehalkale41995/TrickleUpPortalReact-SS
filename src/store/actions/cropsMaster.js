@@ -25,7 +25,7 @@ export const storeCropStepMaterials = cropStepsMaterial => {
     type: actionTypes.GET_CROPS_STEPS_MATERIAL,
     cropStepsMaterial: cropStepsMaterial
   };
-}
+};
 export const getCropsList = () => {
   let cropsList = [];
   return dispatch => {
@@ -48,15 +48,17 @@ export const getCropSteps = () => {
       })
       .catch(error => {});
   };
-}
+};
 
 export const getCropStepsMaterial = () => {
   let cropCultivationSteps = {};
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material`)
+      .get(
+        `${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material`
+      )
       .then(response => {
-          dispatch(storeCropStepMaterials(response.data.data.CropSteps_Material));
+        dispatch(storeCropStepMaterials(response.data.data.CropSteps_Material));
       })
       .catch(error => {});
   };
@@ -67,10 +69,20 @@ export const getCropCultivationSteps = id => {
     axios
       .get(`${AppConfig.serverURL}/api/Crops/GetCropStepMaterialData?id=${id}`)
       .then(response => {
-          dispatch(storeCurrentCrop(response.data.data));
+        dispatch(storeCurrentCrop(response.data.data));
       })
       .catch(error => {});
   };
 };
-
-
+export const storeCropImage = Files => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/FileUpload/PostVideos`, Files)
+      .then(response => {
+        console.log("Post Image Resopnse", response);
+      })
+      .catch(error => {
+        console.log("Post Image error", error);
+      });
+  };
+};

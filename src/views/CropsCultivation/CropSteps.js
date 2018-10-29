@@ -81,7 +81,7 @@ class CropSteps extends Component {
         <CardLayout name="Crop Steps">
           <FormGroup row>
           <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 15 }} style={{ pointerEvents: 'none' }} >      
+          <Col md="1" style={{ marginTop: -55, marginLeft: 15 }}>      
               <Link to={`${this.props.match.url}/CropStepForm`} >
                 <Button type="button" className="theme-positive-btn">
                   <i className="fa fa-plus" />&nbsp; Add crop step
