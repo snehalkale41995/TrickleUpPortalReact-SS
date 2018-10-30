@@ -8,7 +8,7 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-class RegistrationList extends Component {
+class InactiveUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,30 +26,25 @@ class RegistrationList extends Component {
       });
     }, 2000);
   }
+
   componentDidMount() {
     this.props.getBeneficiaryList();
   }
+
   onDeleteBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Deactivate" />
+        <i className="fa fa-trash" title="Activate" />
       </Link>
     );
     //onClick={() => componentRef.deleteConfirm(row._id)}
   }
+
   onDelete(row) {
-    this.setState({
-      userToDelete: row
-    });
-    this.onModalToggle();
+     row.Active  = true;
+    this.props.deleteBeneficiary(row.Id, row);
   }
-  onEditBeneficiary(cell, row) {
-    return (
-      <Link to={`${this.props.match.url}/registration/${row.Id}`}>
-        <i className="fa fa-pencil" title="Edit" />
-      </Link>
-    );
-  }
+
   onConfirmDelete() {
     let user = { ...this.state.userToDelete };
     user.Active  = false;
@@ -91,19 +86,7 @@ class RegistrationList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Beneficiary List">
-          <FormGroup row>
-            <Col xs="12" md="10" />
-            <Col md="2" style={{ marginTop: -55 }}>
-              <Link to={`${this.props.match.url}/registration`}>
-                <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
-                  <i className="fa fa-plus" />
-                  &nbsp; Add Beneficiary
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
+        <CardLayout name="Inactive Beneficiary List">
           <FormGroup row>
             <Col xs="12" md="12">
               <BootstrapTable
@@ -114,7 +97,7 @@ class RegistrationList extends Component {
                 search={true}
                 options={sortingOptions}
                 exportCSV={true}
-                csvFileName="BeneficiaryList.csv"
+                csvFileName="Inactive BeneficiaryList.csv"
                 hover={true}
               >
                 <TableHeaderColumn
@@ -208,22 +191,13 @@ class RegistrationList extends Component {
                   hidden
                 />
                 <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
                   dataField="delete"
                   dataFormat={this.onDeleteBeneficiary.bind(this)}
                   headerAlign="left"
                   width="20"
                   export={false}
                 >
-                  Deactivate
+                  Activate
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
@@ -233,7 +207,7 @@ class RegistrationList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
+          title="Activate"
           message="Are you sure you want to deactivate this beneficiary ?"
         />
       </div>
@@ -253,4 +227,4 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.deleteBeneficiary(id, beneficiary))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationList);
+export default connect(mapStateToProps, mapDispatchToProps)(InactiveUser);

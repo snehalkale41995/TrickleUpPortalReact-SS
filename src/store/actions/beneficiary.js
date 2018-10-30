@@ -40,8 +40,9 @@ let beneficiaryList = [];
       .then(response => {
             beneficiaryList = response.data.data;
           beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
+             // return beneficiary.Active === true && beneficiary.Role === 3 ;
               return beneficiary.Active === true ;
-          });
+            });
             dispatch(storeBeneficiaryList(beneficiaryList));
       })
       .catch(error => {
