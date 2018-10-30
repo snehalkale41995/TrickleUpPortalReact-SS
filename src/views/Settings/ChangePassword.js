@@ -17,14 +17,18 @@ class ChangePassword extends Component {
       loading: true,
       userCredential: {
         UserId:"",
-	    OldPassword:"",
+	      OldPassword:"",
         NewPassword:"",
         ConfirmPassword:"",    
         OldPasswordRequired: false,
         NewPasswordRequired: false,
         ConfirmPasswordRequired: false,
         InvalidPassword : false
-      }
+      },
+      showNewPassword : false,
+      showConfirmPassword : false,
+      newPasswordType : "password",
+      confirmPasswordType : "password"
     };
   }
 
@@ -138,9 +142,15 @@ class ChangePassword extends Component {
                 </Col>
                 <Col md="5">
                   <InputElement
-                    type="password"
+                    type={this.state.newPasswordType}
                     label="New Password"
                     name="NewPassword"
+                    isPassword = {true}
+                    showPassword = {this.state.showNewPassword}
+                    onEyeToggle ={() => {this.setState({
+                        showNewPassword : !this.state.showNewPassword,
+                        newPasswordType : this.state.newPasswordType === "password" ? "input" : "password"
+                    })}}
                     maxLength={10}
                     placeholder="New Password"
                     value={userCredential.NewPassword}
@@ -152,10 +162,16 @@ class ChangePassword extends Component {
               <FormGroup row>
                 <Col xs="12" md="5">
                   <InputElement
-                    type="password"
+                    type={this.state.confirmPasswordType}
                     label="Confirm Password"
                     name="ConfirmPassword"
                     placeholder="Confirm Password"
+                    isPassword = {true}
+                    showPassword = {this.state.showConfirmPassword}
+                    onEyeToggle ={() => {this.setState({
+                        showConfirmPassword : !this.state.showConfirmPassword,
+                        confirmPasswordType : this.state.confirmPasswordType === "password" ? "input" : "password"
+                    })}}
                     value={userCredential.ConfirmPassword}
                     required={userCredential.ConfirmPasswordRequired}
                     onChange={event => this.onChangeInput(event)}
