@@ -40,9 +40,6 @@ let beneficiaryList = [];
       .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
       .then(response => {
             beneficiaryList = response.data.data;
-          beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
-             return beneficiary.Active === true && beneficiary.Role === 3 ;
-            });
             dispatch(storeBeneficiaryList(beneficiaryList));
       })
       .catch(error => {
@@ -68,6 +65,8 @@ let beneficiaryList = [];
       });
   };
 };
+
+
 
 export const getBeneficiaryById = (id) => {
   let currentBeneficiary = {};

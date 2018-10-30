@@ -8,41 +8,52 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from 'lodash'
 class RegistrationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      beneficiaryList:[],
       loading: true,
       modalStatus: false,
       userToDelete: {}
     };
   }
-  componentWillMount() {
-    this.props.getBeneficiaryList();
+
+  componentDidMount() {
     let compRef = this;
+    this.props.getBeneficiaryList();
     setTimeout(() => {
-      compRef.setState({
-        loading: false
-      });
+     compRef.setBeneficiary()
     }, 2000);
   }
-  componentDidMount() {
-    this.props.getBeneficiaryList();
-  }
+
+   setBeneficiary(){
+     let compRef = this;
+     let  beneficiaryList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
+     return beneficiary.Active === true && beneficiary.Role === 3;
+       });
+      compRef.setState({
+        loading: false,
+        beneficiaryList : beneficiaryList
+      });
+   }
+
   onDeleteBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Deactivate" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
+
   onDelete(row) {
     this.setState({
       userToDelete: row
     });
     this.onModalToggle();
   }
+
   onEditBeneficiary(cell, row) {
     return (
       <Link to={`${this.props.match.url}/registration/${row.Id}`}>
@@ -50,10 +61,15 @@ class RegistrationList extends Component {
       </Link>
     );
   }
+
   onConfirmDelete() {
+    let compRef = this;
     let user = { ...this.state.userToDelete };
     user.Active  = false;
     this.props.deleteBeneficiary(user.Id, user);
+    setTimeout(() => {
+     compRef.setBeneficiary()
+    }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -82,7 +98,7 @@ class RegistrationList extends Component {
         },
         {
           text: "All",
-          value: this.props.beneficiaryList.length
+          value: this.state.beneficiaryList.length
         }
       ],
       sizePerPage: 5
@@ -109,7 +125,7 @@ class RegistrationList extends Component {
               <BootstrapTable
                 style={{ marginTop: -18 }}
                 ref="table"
-                data={this.props.beneficiaryList}
+                data={this.state.beneficiaryList}
                 pagination={true}
                 search={true}
                 options={sortingOptions}

@@ -8,30 +8,37 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from 'lodash';
 
 class OperationalUserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      operationalUserList : [],
       loading: true,
       modalStatus: false,
       userToDelete: {}
     };
   }
 
-  componentWillMount() {
-    this.props.getOperationalUserList();
+ componentDidMount() {
     let compRef = this;
+    this.props.getBeneficiaryList();
     setTimeout(() => {
-      compRef.setState({
-        loading: false
-      });
+     compRef.setOperationalUser()
     }, 2000);
   }
 
-  componentDidMount() {
-    this.props.getOperationalUserList();
-  }
+  setOperationalUser(){
+     let compRef = this;
+     let  operationalUserList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
+     return beneficiary.Active === true && beneficiary.Role === 2;
+       });
+      compRef.setState({
+        loading: false,
+        operationalUserList : operationalUserList
+      });
+   }
 
   onDeleteBeneficiary(cell, row) {
     return (
@@ -58,9 +65,13 @@ class OperationalUserList extends Component {
   }
 
   onConfirmDelete() {
+    let compRef = this;
     let user = { ...this.state.userToDelete };
     user.Active  = false;
     this.props.deleteBeneficiary(user.Id, user);
+     setTimeout(() => {
+     compRef.setOperationalUser()
+    }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -91,7 +102,7 @@ class OperationalUserList extends Component {
         },
         {
           text: "All",
-          value: this.props.beneficiaryList.length
+          value: this.state.operationalUserList.length
         }
       ],
       sizePerPage: 5
@@ -119,7 +130,7 @@ class OperationalUserList extends Component {
               <BootstrapTable
                 style={{ marginTop: -18 }}
                 ref="table"
-                data={this.props.beneficiaryList}
+                data={this.state.operationalUserList}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
@@ -258,7 +269,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getOperationalUserList: () => dispatch(actions.getOperationalUserList()),
+    getBeneficiaryList: () => dispatch(actions.getBeneficiaryList()),
     deleteBeneficiary: (id, beneficiary) =>
       dispatch(actions.deleteBeneficiary(id, beneficiary))
   };
