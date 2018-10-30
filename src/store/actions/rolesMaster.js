@@ -1,7 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
-
+import _ from 'lodash'
 export const storeRolesList = (rolesList, roles) => {
   return {
     type: actionTypes.GET_ROLES,
@@ -31,10 +31,12 @@ export const getRolesList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Roles/GetRoles`)
       .then(response => {
+       roles =  _.filter(response.data.data.Roles, function(role) {
+             return role.Active === true ;
+              });
         response.data.data.Roles.forEach(role => {
           if (role.RoleName !== null && role.Active === true) {
             rolesList.push({ label: role.RoleName, value: role.Id });
-            roles.push(role);
           }
         });
         dispatch(storeRolesList(rolesList, roles));
@@ -43,45 +45,8 @@ export const getRolesList = () => {
   };
 };
 
-// export const getGendersList = () => {
-//   let gendersList = [];
-//   let genders = [];
-//   return dispatch => {
-//     axios
-//       .get(`${AppConfig.serverURL}/api/Genders/GetGenders`)
-//       .then(response => {
-//         response.data.data.Genders.forEach(gender => {
-//           if (gender.GenderName !== null && gender.Active === true) {
-//             gendersList.push({ label: gender.GenderName, value: gender.Id });
-//             genders.push(gender);
-//           }
-//         });
-//         dispatch(storeGendersList(genders,gendersList));
-//       })
-//       .catch(error => {});
-//   };
-// };
 
-// export const getLanguageList = () => {
-//   let languageList = [];
-//   let languages = [];
-//   return dispatch => {
-//     axios
-//       .get(`${AppConfig.serverURL}/api/Languages/GetLanguages`)
-//       .then(response => {
-//         response.data.data.Languages.forEach(language => {
-//           if (language.LanguageName !== null && language.Active === true) {
-//             languageList.push({ label: language.LanguageName, value: language.Id });
-//             languages.push(language);
-//           }
-//         });
-//         dispatch(storeLanguagesList(languages, languageList));
-//       })
-//       .catch(error => {});
-//   };
-// };
-
-export const createRole = role => {
+export const createRole = (role) => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Roles/PostRole`, role)
