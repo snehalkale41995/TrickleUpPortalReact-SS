@@ -37,6 +37,9 @@ class Login extends Component {
     let user = this.state.user;
     if (userName && password) {
       this.props.loginUser(user);
+      setTimeout(()=>{
+        localStorage.clear();
+      },900000);
       setTimeout(() => {
         let loginError = compRef.props.loginError;
         let loginErrorMsg = compRef.props.loginErrorMsg;

@@ -54,13 +54,13 @@ class GenderList extends Component {
     let compRef = this;
     gender.Active  = false;
     this.props.deleteGender(gender.Id, gender);
-     this.setState({ loading: true });
+    // this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.genderMasterError
             ? (message = "Something went wrong !")
             : (message = "Gender deleted successfully");
-          compRef.setState({ loading: false });
+        //  compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.genderMasterError);
         }, 1000);
     this.setState({

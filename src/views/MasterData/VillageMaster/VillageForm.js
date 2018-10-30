@@ -42,9 +42,22 @@ class VillageForm extends Component {
   }
   componentDidMount() {
     if (Object.keys(this.state.villageToEdit).length !== 0) {
+      let compRef = this;
+      let districtOptions = _.filter(this.props.districtsList, function(
+        district
+      ) {
+        return district.stateId === compRef.state.villageToEdit.State;
+      });
+      let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
+        grampanchayat
+      ) {
+        return grampanchayat.districtId === compRef.state.villageToEdit.District;
+      });
       this.setState({
         updateFlag: true,
         village: this.state.villageToEdit,
+        districtOptions : districtOptions,
+        grampanchayatOptions : grampanchayatOptions,
         districtDisabled: false,
         grampanchayatDisabled: false
       });
@@ -62,6 +75,7 @@ class VillageForm extends Component {
     let village = { ...this.state.village };
     village.State = value;
     village.StateRequired = false;
+    village.District = "";
     let districtOptions = _.filter(this.props.districtsList, function(
       district
     ) {
@@ -77,11 +91,13 @@ class VillageForm extends Component {
     let village = { ...this.state.village };
     village.District = value;
     village.DistrictRequired = false;
+    village.Grampanchayat = "";
     let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
       grampanchayat
     ) {
       return grampanchayat.districtId === value;
     });
+    
     this.setState({
       village: village,
       grampanchayatOptions: grampanchayatOptions,
@@ -148,7 +164,7 @@ class VillageForm extends Component {
     }
   }
   valid(village) {
-    if (village.VillageName && village.District && village.State) {
+    if (village.VillageName && village.District && village.State && village.Grampanchayat) {
       return true;
     } else {
       !village.VillageName ? (village.VillageNameRequired = true) : null;
@@ -192,9 +208,10 @@ class VillageForm extends Component {
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="Village Form"
-          buttonNavigation={true}
-          navigationCondition={() => {
-            this.setState({ showList: true });
+          navigation={true}
+          navigationRoute={this}
+          onClick={() => {
+           this.setState({ showList: true });
           }}
         >
           <div style={{ margin: 20 }}>

@@ -20,7 +20,7 @@ export default {
           url: "/beneficiary/bulkUploadBeneficiary",
           icon: "fa fa-upload"
         },
-         {
+        {
           name: "Inactive Beneficiary List",
           url: "/beneficiary/inactiveUser",
           icon: "fa fa-users"
@@ -42,7 +42,7 @@ export default {
           url: "/mediaContent/videoContent",
           icon: "fa fa-video-camera"
         },
-         {
+        {
           name: "Image",
           url: "/mediaContent/imageContent",
           icon: "fa fa-picture-o"
@@ -64,12 +64,12 @@ export default {
           url: "/master/roles",
           icon: "icon-star"
         },
-         {
+        {
           name: "Gender",
           url: "/master/genders",
           icon: "icon-star"
         },
-         {
+        {
           name: "Languages",
           url: "/master/languages",
           icon: "icon-star"
@@ -98,7 +98,7 @@ export default {
         }
       ]
     },
-     {
+    {
       name: "Settings",
       url: "/settings",
       icon: "fa fa-cog",
@@ -114,6 +114,6 @@ export default {
           icon: "fa fa-cog"
         }
       ]
-    },
+    }
   ]
 };

@@ -156,8 +156,8 @@ class GenderForm extends Component {
               <Col xs="8" md="4">
                 <InputElement
                   type="text"
-                  label="Gender Name"
-                  placeholder="Gender Name"
+                  label="Gender name"
+                  placeholder="Gender name"
                   name="GenderName"
                   required={currentGender.GenderNameRequired}
                   value={currentGender.GenderName}

@@ -158,9 +158,10 @@ class DistrictForm extends Component {
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="District Form"
-          buttonNavigation={true}
-          navigationCondition={() => {
-            this.setState({ showList: true });
+          navigation={true}
+          navigationRoute={this}
+          onClick={() => {
+           this.setState({ showList: true });
           }}
         >
           <FormGroup row />
@@ -169,6 +170,7 @@ class DistrictForm extends Component {
               <Col xs="10" md="5">
                 <Label>State</Label>
                 <DropdownSelect
+                  name="State name"
                   placeholder="Please select state"
                   required={district.StateRequired}
                   options={this.props.statesList}

@@ -119,11 +119,11 @@ class RolesForm extends Component {
   }
 
   valid(currentRole) {
-    if (currentRole.RoleName && currentRole.RoleId) {
+    if (currentRole.RoleName) {
       return true;
     } else {
       if (!currentRole.RoleName) currentRole.RoleNameRequired = true;
-      if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
+     // if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
       this.setState({
         currentRole: currentRole
       });
@@ -134,7 +134,7 @@ class RolesForm extends Component {
     let currentRole = {
       Id: "",
       RoleName: "",
-      RoleId: "",
+     // RoleId: "",
       RoleNameRequired: false,
       RoleIdRequired: false,
       CreatedOn: "",
@@ -162,7 +162,7 @@ class RolesForm extends Component {
             <FormGroup row />
             <FormGroup row>
               <Col xs="8" md="4">
-                <InputElement
+                {/* <InputElement
                   type="text"
                   label="Role Id"
                   placeholder="Role Id"
@@ -172,11 +172,11 @@ class RolesForm extends Component {
                   onChange={event => this.onChangeHandler(event)}
                 />
               </Col>
-              <Col md="4">
+              <Col md="4"> */}
                 <InputElement
                   type="text"
-                  label="Role Name"
-                  placeholder="Role Name"
+                  label="Role name"
+                  placeholder="Role name"
                   name="RoleName"
                   required={currentRole.RoleNameRequired}
                   value={currentRole.RoleName}

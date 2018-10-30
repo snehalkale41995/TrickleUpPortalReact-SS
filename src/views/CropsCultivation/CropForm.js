@@ -63,19 +63,8 @@ class CropForm extends Component {
     if (event.target.files.length !== 0) {
       let file = event.target.files[0];
       let crop = { ...this.state.Crop };
-      
-      //let data = new FormData();
       let formData = new FormData();
-     // var imagefile = document.querySelector('#file');
       formData.append("image", event.target.files[0]);
-      formData.append("fileName", "Snehl");
-      // data.append("FileName", file.name);
-      // data.append("FileSize", file.size);
-      // data.append("MediaType", file.type);
-      // for (var key of data.entries()) {
-      //   console.log(key[0] + ', ' + key[1])
-      // }
-      //console.log("FormData", data.entries());
       crop.FilePath = formData;
       crop.CropImageRequired = false;
       crop.renderURL = URL.createObjectURL(event.target.files[0]);

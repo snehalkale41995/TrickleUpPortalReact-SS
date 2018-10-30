@@ -94,7 +94,7 @@ class RegistrationList extends Component {
         <CardLayout name="Beneficiary List">
           <FormGroup row>
             <Col xs="12" md="10" />
-            <Col md="2" style={{ marginTop: -55 }}>
+            <Col md="2" style={{ marginTop: -55,marginLeft :-42 }}>
               <Link to={`${this.props.match.url}/registration`}>
                 <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
                   <i className="fa fa-plus" />

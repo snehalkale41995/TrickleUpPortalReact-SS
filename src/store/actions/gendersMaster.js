@@ -18,7 +18,7 @@ export const getGendersList = () => {
       .get(`${AppConfig.serverURL}/api/Genders/GetGenders`)
       .then(response => {
         response.data.data.Genders.forEach(gender => {
-          if (gender.GenderName !== null) {
+          if (gender.GenderName !== null && gender.Active) {
             gendersList.push({ label: gender.GenderName, value: gender.Id });
             genders.push(gender);
           }
@@ -35,6 +35,7 @@ export const createGender = (gender) => {
     axios
       .post(`${AppConfig.serverURL}/api/Genders/PostGender`, gender)
       .then(response => {
+        dispatch(getGendersList());
         dispatch(createGenderSuccess());
       })
       .catch(error => {
@@ -48,6 +49,7 @@ export const updateGender = (id ,gender) => {
     axios
       .post(`${AppConfig.serverURL}/api/Genders/PutGender?id=${id}`, gender)
       .then(response => {
+        dispatch(getGendersList());
          dispatch(updateGenderSuccess());
       })
       .catch(error => {

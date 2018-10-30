@@ -4,19 +4,21 @@ import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
-import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
-class AudioForm extends Component {
+import "../../../node_modules/video-react/dist/video-react.css"; // import css
+import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
+
+class VideoForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      audioFile: null,
+      videoFile: null,
       uploadedFile: null,
       renderURL: "",
-      audioTitle: "",
-      audioRequired: false
+      videoTitle: "",
+      videoRequired: false
     };
   }
   componentDidMount() {
@@ -26,44 +28,44 @@ class AudioForm extends Component {
   }
   handleUploadFile = event => {
     if (event.target.files.length !== 0) {
-      let audio = event.target.files[0];
+      let video = event.target.files[0];
       this.setState({
-        audioFile: audio,
-        renderURL: URL.createObjectURL(audio),
-        audioTitle: audio.name,
-        audioRequired: false
+        videoFile: video,
+        renderURL: URL.createObjectURL(video),
+        videoTitle: video.name,
+        videoRequired: false
       });
     } else {
       this.setState({
-        audioFile: null,
+        videoFile: null,
         renderURL: "",
-        audioTitle: "",
-        audioRequired: true
+        videoTitle: "",
+        videoRequired: true
       });
     }
   };
 
   onSubmitMedia() {
-    let audioFile = this.state.audioFile;
-    if (audioFile) {
-      let audioData = new FormData();
-      audioData.append("audio", audioFile);
+    let videoFile = this.state.videoFile;
+    if (videoFile) {
+      let videoData = new FormData();
+      videoData.append("video", videoFile);
       this.setState({ loading: true });
-      this.props.history.push("/mediaContent/audioContent");
+      this.props.history.push("/mediaContent/videoContent");
     } else {
-      this.setState({ audioRequired: true });
+      this.setState({ videoRequired: true });
     }
   }
   render() {
-    const { audioTitle, renderURL, audioRequired } = this.state;
+    const { videoTitle, renderURL, videoRequired } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Audio Upload"
+          name="Video Upload"
           navigation={true}
-          navigationRoute="/mediaContent/audioContent"
+          navigationRoute="/mediaContent/videoContent"
         >
           <div style={{ margin: 20 }}>
             <FormGroup row />
@@ -71,23 +73,20 @@ class AudioForm extends Component {
               <Col xs="12" md="6">
                 <InputElement
                   type="file"
-                  label="Audio file"
-                  name="Audio file"
-                  accept="audio/*"
-                  required={audioRequired}
+                  label="Video file"
+                  name="Video file"
+                  accept="video/*"
+                  required={videoRequired}
                   onChange={event => this.handleUploadFile(event)}
                 />
               </Col>
               {renderURL ? (
-                <Col md="6">
-                  <Label> {audioTitle}</Label>
-                  <AudioPlayer
-                    source={renderURL}
-                    autoPlay={true}
-                    title={audioTitle}
-                  />
+                <Col md="4">
+                  <Label> {videoTitle}</Label>
+                  <VideoPlayer source={renderURL} />
                 </Col>
               ) : null}
+              <Col md="2" />
             </FormGroup>
             <FormGroup row>
               <Col md="3">
@@ -114,4 +113,4 @@ export const mapDispatchToProps = dispatch => {
     //storeMedia: fileData => dispatch(actions.postMediaContent(fileData))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(AudioForm);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoForm);

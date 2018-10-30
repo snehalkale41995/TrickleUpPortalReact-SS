@@ -138,7 +138,7 @@ class LanguagesForm extends Component {
       CreatedBy: "",
       UpdatedOn: "",
       UpdatedBy: "",
-      Active: 1
+      Active: true
     };
     this.setState({
       currentLanguage: currentLanguage
@@ -161,8 +161,8 @@ class LanguagesForm extends Component {
               <Col xs="8" md="4">
                 <InputElement
                   type="text"
-                  label="Language Name"
-                  placeholder="Language Name"
+                  label="Language name"
+                  placeholder="Language name"
                   name="LanguageName"
                   required={currentLanguage.LanguageNameRequired}
                   value={currentLanguage.LanguageName}
@@ -172,8 +172,8 @@ class LanguagesForm extends Component {
               <Col md="4">
                 <InputElement
                   type="text"
-                  label="Language Id"
-                  placeholder="Language Id"
+                  label="Language code"
+                  placeholder="Language code"
                   name="LanguageCode"
                   required={currentLanguage.LanguageCodeRequired}
                   value={currentLanguage.LanguageCode}

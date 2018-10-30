@@ -54,13 +54,13 @@ class RolesList extends Component {
     let role = { ...this.state.roleToDelete };
     role.Active  = false;
     this.props.deleteRole(role.Id, role);
-      this.setState({ loading: true });
+      //this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.roleMasterError
             ? (message = "Something went wrong !")
             : (message = "Role deleted successfully");
-          compRef.setState({ loading: false });
+          //compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.roleMasterError);
         }, 1000);
     this.setState({
@@ -145,7 +145,7 @@ class RolesList extends Component {
                 >
                   Id
                 </TableHeaderColumn>
-                 <TableHeaderColumn
+                 {/* <TableHeaderColumn
                   dataField="RoleId"
                   headerAlign="left"
                   width="30"
@@ -153,7 +153,7 @@ class RolesList extends Component {
                   dataSort={true}
                 >
                   Role Id
-                </TableHeaderColumn>
+                </TableHeaderColumn> */}
                 <TableHeaderColumn
                   dataField="RoleName"
                   headerAlign="left"

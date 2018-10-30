@@ -37,9 +37,15 @@ class GrampanchayatForm extends Component {
   }
   componentDidMount() {
     if (Object.keys(this.state.grampanchayatToEdit).length !== 0) {
-   // if (this.state.grampanchayatToEdit) {
+      let compRef = this;
+      let districtOptions = _.filter(this.props.districtsList, function(
+        district
+      ) {
+        return district.stateId === compRef.state.grampanchayatToEdit.State;
+      });
       this.setState({
         updateFlag: true,
+        districtOptions: districtOptions,
         grampanchayat: this.state.grampanchayatToEdit
       });
     }
@@ -103,7 +109,10 @@ class GrampanchayatForm extends Component {
       grampanchayatCreate.CreatedOn = new Date();
       grampanchayatCreate.Active = true;
       this.state.updateFlag
-        ? this.props.updateGrampanchayat(grampanchayatUpdate.Id , grampanchayatUpdate)
+        ? this.props.updateGrampanchayat(
+            grampanchayatUpdate.Id,
+            grampanchayatUpdate
+          )
         : this.props.createGrampanchayat(grampanchayatCreate);
       this.setState({ loading: true });
       setTimeout(() => {
@@ -168,13 +177,14 @@ class GrampanchayatForm extends Component {
       <GrampanchayatList {...this.props} />
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
-    ) :  (
+    ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="Grampanchayat Form"
-          buttonNavigation={true}
-          navigationCondition={() => {
-            this.setState({ showList: true });
+          navigation={true}
+          navigationRoute={this}
+          onClick={() => {
+           this.setState({ showList: true });
           }}
         >
           <div style={{ margin: 20 }}>
@@ -241,23 +251,23 @@ class GrampanchayatForm extends Component {
               </FormGroup>
             ) : (
               <FormGroup row>
-              <Col md="1">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={this.onSubmit.bind(this)}
-                >
-                  Submit
-                </Button>
-              </Col>
-              <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
-                >
-                  Reset
-                </Button>
-              </Col>
-            </FormGroup>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Submit
+                  </Button>
+                </Col>
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </FormGroup>
             )}
           </div>
         </CardLayout>
@@ -280,7 +290,8 @@ const mapDispatchToProps = dispatch => {
   return {
     createGrampanchayat: grampanchayat =>
       dispatch(actions.createGrampanchayat(grampanchayat)),
-    updateGrampanchayat : (id ,grampanchayat) => dispatch(actions.updateGrampanchayat(id, grampanchayat))
+    updateGrampanchayat: (id, grampanchayat) =>
+      dispatch(actions.updateGrampanchayat(id, grampanchayat))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrampanchayatForm);

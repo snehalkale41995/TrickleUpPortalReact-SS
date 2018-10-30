@@ -18,7 +18,7 @@ export const getLanguageList = () => {
       .get(`${AppConfig.serverURL}/api/Languages/GetLanguages`)
       .then(response => {
         response.data.data.Languages.forEach(language => {
-          if (language.LanguageName !== null) {
+          if (language.LanguageName !== null && language.Active) {
             languageList.push({ label: language.LanguageName, value: language.Id });
             languages.push(language);
           }

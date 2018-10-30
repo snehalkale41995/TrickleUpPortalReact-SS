@@ -34,10 +34,19 @@ class StatesForm extends Component {
   }
   componentDidMount() {
     if (this.state.stateToEdit) {
-      this.setState({
-        updateFlag: true,
-        currentState: this.state.stateToEdit
-      });
+      this.setState(prevState => ({
+        currentState: {
+            ...prevState.currentState,
+            StateName:this.state.stateToEdit.StateName,
+            StateCode: this.state.stateToEdit.StateCode,
+            Id : this.state.stateToEdit.Id
+        },
+        updateFlag: true
+    }))
+      // this.setState({
+      //   updateFlag: true,
+      //   currentState: this.state.stateToEdit
+      // });
     }
   }
   onChangeHandler(event) {
@@ -147,9 +156,10 @@ class StatesForm extends Component {
       <div style={{ marginTop: 30 }}>
         <CardLayout
           name="State Form"
-          buttonNavigation={true}
-          navigationCondition={() => {
-            this.setState({ showList: true });
+          navigation={true}
+          navigationRoute={this}
+          onClick={() => {
+           this.setState({ showList: true });
           }}
         >
           <div style={{ margin: 20 }}>
@@ -172,7 +182,7 @@ class StatesForm extends Component {
                   label="State code"
                   placeholder="State code"
                   name="StateCode"
-                  required={currentState.StateNameRequired}
+                  required={currentState.StateCodeRequired}
                   value={currentState.StateCode}
                   onChange={event => this.onChangeHandler(event)}
                 />

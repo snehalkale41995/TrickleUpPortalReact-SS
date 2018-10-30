@@ -27,7 +27,7 @@ export default class VideoContent extends Component {
           <FormGroup row>
           <Col xs="12" md="11" />
             <Col md="1" style={{marginLeft: -50 ,marginTop: -55}}>
-              <Link to={this} style={{ pointerEvents: 'none' }}>
+              <Link to={`${this.props.match.url}/videoUpload`}>
                 <Button type="button" className="theme-positive-btn">
                   <i className="fa fa-plus" />&nbsp; Add video
                 </Button>

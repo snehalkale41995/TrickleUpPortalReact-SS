@@ -9,7 +9,7 @@ const CardLayout = props => (
           <CardBody className="p-8">
             <Row style={{margin :10}}>
               {props.navigation ? (
-                <Link to={props.navigationRoute}>
+                <Link to={props.navigationRoute} onClick={props.onClick}>
                   <i
                     className="fa fa-chevron-circle-left"
                     style={{ fontSize: 30, margin: 8 }}

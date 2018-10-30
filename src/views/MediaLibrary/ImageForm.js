@@ -7,16 +7,16 @@ import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
-class AudioForm extends Component {
+class ImageForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      audioFile: null,
+      imageFile: null,
       uploadedFile: null,
       renderURL: "",
-      audioTitle: "",
-      audioRequired: false
+      imageTitle: "",
+      imageRequired: false
     };
   }
   componentDidMount() {
@@ -26,44 +26,44 @@ class AudioForm extends Component {
   }
   handleUploadFile = event => {
     if (event.target.files.length !== 0) {
-      let audio = event.target.files[0];
+      let image = event.target.files[0];
       this.setState({
-        audioFile: audio,
-        renderURL: URL.createObjectURL(audio),
-        audioTitle: audio.name,
-        audioRequired: false
+        imageFile: image,
+        renderURL: URL.createObjectURL(image),
+        imageTitle: image.name,
+        imageRequired: false
       });
     } else {
       this.setState({
-        audioFile: null,
+        imageFile: null,
         renderURL: "",
-        audioTitle: "",
-        audioRequired: true
+        imageTitle: "",
+        imageRequired: true
       });
     }
   };
 
   onSubmitMedia() {
-    let audioFile = this.state.audioFile;
-    if (audioFile) {
-      let audioData = new FormData();
-      audioData.append("audio", audioFile);
+    let imageFile = this.state.imageFile;
+    if (imageFile) {
+      let imageData = new FormData();
+      imageData.append("image", imageFile);
       this.setState({ loading: true });
-      this.props.history.push("/mediaContent/audioContent");
+      this.props.history.push("/mediaContent/imageContent");
     } else {
-      this.setState({ audioRequired: true });
+      this.setState({ imageRequired: true });
     }
   }
   render() {
-    const { audioTitle, renderURL, audioRequired } = this.state;
+    const { imageTitle, renderURL, imageRequired } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Audio Upload"
+          name="Image Upload"
           navigation={true}
-          navigationRoute="/mediaContent/audioContent"
+          navigationRoute="/mediaContent/imageContent"
         >
           <div style={{ margin: 20 }}>
             <FormGroup row />
@@ -71,23 +71,20 @@ class AudioForm extends Component {
               <Col xs="12" md="6">
                 <InputElement
                   type="file"
-                  label="Audio file"
-                  name="Audio file"
-                  accept="audio/*"
-                  required={audioRequired}
+                  label="Image file"
+                  name="Image file"
+                  accept="image/*"
+                  required={imageRequired}
                   onChange={event => this.handleUploadFile(event)}
                 />
               </Col>
               {renderURL ? (
-                <Col md="6">
-                  <Label> {audioTitle}</Label>
-                  <AudioPlayer
-                    source={renderURL}
-                    autoPlay={true}
-                    title={audioTitle}
-                  />
+                <Col md="3">
+                  <Label> {imageTitle}</Label>
+                  <img src={renderURL} height={300} width={450} />
                 </Col>
               ) : null}
+              <Col md="3" />
             </FormGroup>
             <FormGroup row>
               <Col md="3">
@@ -114,4 +111,4 @@ export const mapDispatchToProps = dispatch => {
     //storeMedia: fileData => dispatch(actions.postMediaContent(fileData))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(AudioForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ImageForm);
