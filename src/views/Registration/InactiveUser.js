@@ -23,6 +23,7 @@ class InactiveUser extends Component {
 
   componentDidMount() {
     let compRef = this;
+    compRef.props.getBeneficiaryList();
     setTimeout(() => {
      compRef.setBeneficiary()
     }, 2000);
