@@ -30,6 +30,7 @@ class OperationalUserForm extends Component {
         UserIdRequired : false,
         UserIdInvalid : false,
         Age: "",
+        AgeRequired: false,
         AgeInvalid: false,
         Gender: "",
         State: "",
@@ -52,6 +53,13 @@ class OperationalUserForm extends Component {
         ImagePath: "",
         BulkUploadId: ""
       },
+      genderRequired: false,
+      stateRequired: false,
+      districtRequired: false,
+      grampanchayatRequired: false,
+      villageRequired: false,
+      roleRequired: false,
+      languageRequired: false,
       updateFlag: false,
       districtOptions: this.props.districtsList,
       grampanchayatOptions: this.props.grampanchayatsList,
@@ -98,7 +106,8 @@ class OperationalUserForm extends Component {
     let user = { ...this.state.user };
     user.Gender = value;
     this.setState({
-      user: user
+      user: user,
+      genderRequired: false
     });
   }
   onStateSelection(value) {
@@ -114,13 +123,13 @@ class OperationalUserForm extends Component {
     });
     this.setState({
       user: user,
+      stateRequired: false,
       districtOptions: districtOptions,
       grampanchayatOptions: [],
       villageOptions: [],
       districtDisabled: false
     });
   }
-
   onDistrictSelection(value) {
     let user = { ...this.state.user };
     user.District = value;
@@ -131,16 +140,17 @@ class OperationalUserForm extends Component {
     });
     this.setState({
       user: user,
+      districtRequired: false,
       grampanchayatOptions: grampanchayatOptions,
       grampanchayatDisabled: false
     });
   }
-  
   onVillageSelection(value) {
     let user = { ...this.state.user };
     user.Village = value;
     this.setState({
-      user: user
+      user: user,
+      villageRequired: false
     });
   }
   onGrampanchayatSelection(value) {
@@ -151,23 +161,25 @@ class OperationalUserForm extends Component {
     });
     this.setState({
       user: user,
+      grampanchayatRequired: false,
       villageOptions: villageOptions,
       villageDisabled: false
     });
   }
-
   onRoleSelection(value) {
     let user = { ...this.state.user };
     user.Role = value;
     this.setState({
-      user: user
+      user: user,
+      roleRequired: false
     });
   }
   onLanguageSelection(value) {
     let user = { ...this.state.user };
     user.Language = value;
     this.setState({
-      user: user
+      user: user,
+      languageRequired: false
     });
   }
   onSubmit() {
@@ -182,7 +194,6 @@ class OperationalUserForm extends Component {
           "UserId",
           "Name",
           "PhoneNumber",
-          "UserId",
           "Age",
           "Gender",
           "State",
@@ -207,20 +218,20 @@ class OperationalUserForm extends Component {
         ]);
         user.UpdatedBy = localStorage.getItem("user");
         user.UpdatedOn = new Date();
-        user.Role = 3;
+        user.Role = 2;
         this.props.updateBeneficiary(user.Id, user);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = `Beneficiary updated successfully`);
+            : (message = `User updated successfully`);
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/beneficiary/beneficiaryList");
+              compRef.props.history.push("/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -230,7 +241,6 @@ class OperationalUserForm extends Component {
           "UserId",
           "Name",
           "PhoneNumber",
-          "UserId",
           "Age",
           "Gender",
           "State",
@@ -255,14 +265,14 @@ class OperationalUserForm extends Component {
         ]);
         user.CreatedBy = localStorage.getItem("user");
         user.CreatedOn = new Date();
-        user.Role = 3;
+        user.Role = 2;
         this.props.createBeneficiary(user);
         this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
             ? (message = "Something went wrong !")
-            : (message = "Beneficiary created successfully");
+            : (message = "User created successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
@@ -287,8 +297,16 @@ class OperationalUserForm extends Component {
     if (
       user.Name &&
       user.PhoneNumber &&
-      user.UserId &&
       user.PhoneNumber.length === 10 &&
+      user.Age &&
+      user.Age > 0 &&
+      user.Gender &&
+      user.UserId &&
+      user.State &&
+      user.District &&
+      user.Village &&
+      user.Grampanchayat &&
+      user.Language &&
       !InvalidAdhaar
     ) {
       return true;
@@ -296,7 +314,6 @@ class OperationalUserForm extends Component {
       return false;
     }
   }
-
   showValidations(user) {
     let validUserId;
     let validPhone =
@@ -304,7 +321,7 @@ class OperationalUserForm extends Component {
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
-    !user.Name ? (user.NameRequired = true) : null;
+      !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
@@ -313,9 +330,18 @@ class OperationalUserForm extends Component {
     !user.UserId
       ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
+      user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
+    !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
+    !user.Gender ? this.setState({ genderRequired: true }) : null;
+    !user.State ? this.setState({ stateRequired: true }) : null;
+    !user.District ? this.setState({ districtRequired: true }) : null;
+    !user.Village ? this.setState({ villageRequired: true }) : null;
+    !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
+    !user.Role ? this.setState({ roleRequired: true }) : null;
     user.Aadhaar && user.Aadhaar.length !== 12
       ? (user.AadhaarInvalid = true)
       : null;
+    !user.Language ? this.setState({ languageRequired: true }) : null;
     this.setState({
       user: user
     });
@@ -328,9 +354,10 @@ class OperationalUserForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
-      UserIdRequired: false,
+       UserIdRequired: false,
       UserIdInvalid : false,
       Age: "", //no
+      AgeRequired: false,
       AgeInvalid :false,
       Gender: "", //id
       State: "", //id
@@ -343,7 +370,14 @@ class OperationalUserForm extends Component {
       Language: ""
     };
     this.setState({
-      user: userObj
+      user: userObj,
+      genderRequired: false,
+      stateRequired: false,
+      districtRequired: false,
+      grampanchayatRequired: false,
+      villageRequired: false,
+      roleRequired: false,
+      languageRequired: false
     });
   }
   render() {
@@ -353,7 +387,7 @@ class OperationalUserForm extends Component {
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="Beneficiary Form"
+          name="User Form"
           navigation={true}
           navigationRoute="/operationalUser"
         >
@@ -385,8 +419,8 @@ class OperationalUserForm extends Component {
                 />
               </Col>
             </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
+              <FormGroup row>
+             <Col xs="12" md="5">
                 <InputElement
                   type="text"
                   label="Email"
@@ -406,6 +440,7 @@ class OperationalUserForm extends Component {
                   maxLength={3}
                   placeholder="Please enter age "
                   value={user.Age}
+                  required={user.AgeRequired}
                   invalid={user.AgeInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
@@ -420,16 +455,18 @@ class OperationalUserForm extends Component {
                   placeholder="Select gender "
                   options={this.props.gendersList}
                   value={user.Gender}
+                  required={this.state.genderRequired}
                   onChange={this.onGenderSelection.bind(this)}
                 />
               </Col>
-               <Col  md="5">
+              <Col  md="5">
                 <Label>State</Label>
                 <DropdownSelect
                   name="State"
                   placeholder="Select state"
                   options={this.props.statesList}
                   value={user.State}
+                  required={this.state.stateRequired}
                   onChange={this.onStateSelection.bind(this)}
                 />
               </Col>
@@ -443,6 +480,7 @@ class OperationalUserForm extends Component {
                   options={this.state.districtOptions}
                   value={user.District}
                   disabled={this.state.districtDisabled}
+                  required={this.state.districtRequired}
                   onChange={this.onDistrictSelection.bind(this)}
                 />
               </Col>
@@ -454,11 +492,13 @@ class OperationalUserForm extends Component {
                   value={user.Grampanchayat}
                   options={this.state.grampanchayatOptions}
                   disabled={this.state.grampanchayatDisabled}
+                  required={this.state.grampanchayatRequired}
                   onChange={this.onGrampanchayatSelection.bind(this)}
                 />
               </Col>
             </FormGroup>
             <FormGroup row>
+             
               <Col xs="12" md="5">
                 <Label>Village</Label>
                 <DropdownSelect
@@ -467,10 +507,11 @@ class OperationalUserForm extends Component {
                   value={user.Village}
                   disabled={this.state.villageDisabled}
                   options={this.state.villageOptions}
+                  required={this.state.villageRequired}
                   onChange={this.onVillageSelection.bind(this)}
                 />
               </Col>
-               <Col  md="5">
+               <Col md="5">
                 <InputElement
                   type="text"
                   label="Aadhaar number"
@@ -484,16 +525,6 @@ class OperationalUserForm extends Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-              {/* <Col xs="12" md="5">
-                <Label>Role</Label>
-                <DropdownSelect
-                  name="Role"
-                  placeholder="Select role "
-                  options={this.props.rolesList}
-                  value={user.Role}
-                  onChange={this.onRoleSelection.bind(this)}
-                />
-              </Col> */}
               <Col xs="12" md="5">
                 <Label>Language</Label>
                 <DropdownSelect
@@ -501,12 +532,13 @@ class OperationalUserForm extends Component {
                   placeholder="Select language "
                   options={this.props.languagesList}
                   value={user.Language}
+                  required={this.state.languageRequired}
                   onChange={this.onLanguageSelection.bind(this)}
                 />
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Col md="5">
+              <Col xs="12" md="5">
                 {this.state.user.ImagePath ? (
                   <div>
                     <Label> Profile Image :</Label>
@@ -515,7 +547,7 @@ class OperationalUserForm extends Component {
                         .ImagePath}`}
                       style={{ height: 90, width: 100, marginLeft: 20 }}
                       alt=""
-                    />
+                    />{" "}
                   </div>
                 ) : null}
               </Col>
@@ -545,7 +577,7 @@ class OperationalUserForm extends Component {
                   <Button
                     className="theme-reset-btn"
                     onClick={() => {
-                      this.props.history.push("/operationalUser");
+                      this.props.history.push("/beneficiary/beneficiaryList");
                     }}
                   >
                     Cancel

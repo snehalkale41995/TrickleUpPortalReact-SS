@@ -306,7 +306,6 @@ class RegistrationForm extends Component {
       user.District &&
       user.Village &&
       user.Grampanchayat &&
-      user.Role &&
       user.Language &&
       !InvalidAdhaar
     ) {
