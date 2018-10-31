@@ -112,13 +112,13 @@ export default {
           name: "Change Password",
           url: "/ChangePassword",
           icon: "fa fa-cog"
-        },
-          {
-          name: "Operational User",
-          url: "/operationalUser",
-          icon: "fa fa-users"
         }
       ]
+    },
+     {
+      name: "Operational User",
+      url: "/operationalUser",
+      icon: "fa fa-users"
     }
   ]
 };

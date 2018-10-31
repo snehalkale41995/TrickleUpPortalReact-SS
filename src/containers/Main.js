@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import { connect } from "react-redux";
 import * as actions from "../store/actions";
-
+import _ from 'lodash'
 import {
   AppAside,
   AppBreadcrumb,
@@ -39,8 +39,20 @@ class Main extends Component {
     this.props.getCropSteps();
     this.props.getCropStepsMaterial();
   }
+
   render() {
+    let navArray = [], navigationMenu = navigation;
     let user = localStorage.getItem("user");
+    let userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    if(userDetails){
+      if(userDetails.role!=undefined && userDetails.role===2){
+       navArray =  _.filter(navigation.items, function(item) {
+       return item.url != '/operationalUser'
+       });
+       navigationMenu = { items : navArray}
+    }
+    else navigationMenu = navigation
+    }
     if (user) {
       routeStack = (
         <div className="app">
@@ -51,7 +63,7 @@ class Main extends Component {
             <AppSidebar fixed display="lg">
               <AppSidebarHeader />
               <AppSidebarForm />
-              <AppSidebarNav navConfig={navigation} {...this.props} />
+              <AppSidebarNav navConfig={navigationMenu} {...this.props} />
               <AppSidebarFooter />
               <AppSidebarMinimizer />
             </AppSidebar>
@@ -92,7 +104,6 @@ class Main extends Component {
         </Switch>
       );
     }
-
     return <div>{routeStack}</div>;
   }
 }
