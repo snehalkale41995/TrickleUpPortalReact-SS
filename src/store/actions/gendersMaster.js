@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
+import _ from "lodash";
 
 export const storeGendersList = (genders ,gendersList) => {
   return {
@@ -17,10 +18,12 @@ export const getGendersList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Genders/GetGenders`)
       .then(response => {
+         genders =  _.filter(response.data.data.Genders, function(gender) {
+             return gender.Active === true ;
+              });
         response.data.data.Genders.forEach(gender => {
           if (gender.GenderName !== null && gender.Active) {
             gendersList.push({ label: gender.GenderName, value: gender.Id });
-            genders.push(gender);
           }
         });
         dispatch(storeGendersList(genders,gendersList));

@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
 
-class RegistrationForm extends Component {
+class OperationalUserForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -218,7 +218,7 @@ class RegistrationForm extends Component {
         ]);
         user.UpdatedBy = localStorage.getItem("user");
         user.UpdatedOn = new Date();
-        user.Role = 3;
+        user.Role = 2;
         this.props.updateBeneficiary(user.Id, user);
         this.setState({ loading: true });
         setTimeout(() => {
@@ -231,7 +231,7 @@ class RegistrationForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/beneficiary/beneficiaryList");
+              compRef.props.history.push("/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -265,7 +265,7 @@ class RegistrationForm extends Component {
         ]);
         user.CreatedBy = localStorage.getItem("user");
         user.CreatedOn = new Date();
-        user.Role = 3;
+        user.Role = 2;
         this.props.createBeneficiary(user);
         this.setState({ loading: true });
         setTimeout(() => {
@@ -278,7 +278,7 @@ class RegistrationForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/beneficiary/beneficiaryList");
+              compRef.props.history.push("/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -389,7 +389,7 @@ class RegistrationForm extends Component {
         <CardLayout
           name="User Form"
           navigation={true}
-          navigationRoute="/beneficiary/beneficiaryList"
+          navigationRoute="/operationalUser"
         >
           <FormGroup row />
           <div style={{ margin: 20 }}>
@@ -626,4 +626,4 @@ const mapDispatchToProps = dispatch => {
     getBeneficiaryById: id => dispatch(actions.getBeneficiaryById(id))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);
+export default connect(mapStateToProps, mapDispatchToProps)(OperationalUserForm);

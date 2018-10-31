@@ -34,7 +34,9 @@ export {
     getBeneficiaryById,
     deleteBeneficiary,
     bulkUploadBeneficiary,
-    getBulkUploadHistory
+    getBulkUploadHistory,
+    getOperationalUserList,
+    bulkValidateBeneficiary
 } from './beneficiary.js'
 
 export {

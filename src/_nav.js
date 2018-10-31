@@ -114,6 +114,12 @@ export default {
           icon: "fa fa-cog"
         }
       ]
+    },
+     {
+      name: "Operational User",
+      url: "/operationalUser",
+      icon: "fa fa-users"
     }
   ]
 };
+

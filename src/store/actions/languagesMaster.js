@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
+import _ from 'lodash';
 
 export const storeLanguagesList = (languages, languagesList) => {
   return {
@@ -17,10 +18,12 @@ export const getLanguageList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Languages/GetLanguages`)
       .then(response => {
+        languages =  _.filter(response.data.data.Languages, function(language) {
+            return language.Active === true ;
+          });
         response.data.data.Languages.forEach(language => {
           if (language.LanguageName !== null && language.Active) {
             languageList.push({ label: language.LanguageName, value: language.Id });
-            languages.push(language);
           }
         });
         dispatch(storeLanguagesList(languages, languageList));

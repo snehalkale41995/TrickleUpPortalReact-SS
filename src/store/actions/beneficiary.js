@@ -32,6 +32,7 @@ export const clearBeneficiaryError = () => {
     type: actionTypes.CLEAR_BENEFICIARY_ERROR,
   };
 }
+
 export const getBeneficiaryList = () => {
 let beneficiaryList = [];
   return dispatch => {
@@ -39,9 +40,23 @@ let beneficiaryList = [];
       .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
       .then(response => {
             beneficiaryList = response.data.data;
-          beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
-             // return beneficiary.Active === true && beneficiary.Role === 3 ;
-              return beneficiary.Active === true ;
+            dispatch(storeBeneficiaryList(beneficiaryList));
+      })
+      .catch(error => {
+        dispatch(logBeneficiaryError(error));
+      });
+  };
+};
+
+export const getOperationalUserList = () => {
+let beneficiaryList = [];
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
+      .then(response => {
+            beneficiaryList = response.data.data;
+            beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
+             return beneficiary.Active === true && beneficiary.Role === 2 ;
             });
             dispatch(storeBeneficiaryList(beneficiaryList));
       })
@@ -50,6 +65,9 @@ let beneficiaryList = [];
       });
   };
 };
+
+
+
 export const getBeneficiaryById = (id) => {
   let currentBeneficiary = {};
     return dispatch => {
@@ -108,6 +126,7 @@ export const updateBeneficiary = (id, beneficiary) => {
       });
   };
 }
+
 export const deleteBeneficiary = (id, beneficiary) => {
   return dispatch => {
     axios
@@ -120,6 +139,7 @@ export const deleteBeneficiary = (id, beneficiary) => {
       });
   };
 }
+
 export const bulkUploadBeneficiary = (beneficiary) => {
   return dispatch => {
     axios
@@ -132,6 +152,21 @@ export const bulkUploadBeneficiary = (beneficiary) => {
       });
   };
 }
+
+export const bulkValidateBeneficiary = (beneficiary) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Users/ValidateUploadUser`, beneficiary)
+      .then(response => {
+        console.log("response", response.data.data.userList);
+       // dispatch(storeBulkBeneficiary(response.data.data.userList))
+      })
+      .catch(error => {
+      //  dispatch(logBeneficiaryError(error));
+      });
+  };
+}
+
 
 export const getBulkUploadHistory = () => {
   return dispatch => {

@@ -8,34 +8,35 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import _ from 'lodash'
-class RegistrationList extends Component {
+import _ from 'lodash';
+
+class OperationalUserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beneficiaryList:[],
+      operationalUserList : [],
       loading: true,
       modalStatus: false,
       userToDelete: {}
     };
   }
 
-  componentDidMount() {
+ componentDidMount() {
     let compRef = this;
     compRef.props.getBeneficiaryList();
     setTimeout(() => {
-     compRef.setBeneficiary()
+     compRef.setOperationalUser()
     }, 2000);
   }
 
-   setBeneficiary(){
+  setOperationalUser(){
      let compRef = this;
-     let  beneficiaryList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
-     return beneficiary.Active === true && beneficiary.Role === 3;
+     let  operationalUserList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
+     return beneficiary.Active === true && beneficiary.Role === 2;
        });
       compRef.setState({
         loading: false,
-        beneficiaryList : beneficiaryList
+        operationalUserList : operationalUserList
       });
    }
 
@@ -45,6 +46,7 @@ class RegistrationList extends Component {
         <i className="fa fa-trash" title="Deactivate" />
       </Link>
     );
+    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
   onDelete(row) {
@@ -56,7 +58,7 @@ class RegistrationList extends Component {
 
   onEditBeneficiary(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/registration/${row.Id}`}>
+      <Link to={`${this.props.match.url}/operationalUser/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -67,18 +69,20 @@ class RegistrationList extends Component {
     let user = { ...this.state.userToDelete };
     user.Active  = false;
     this.props.deleteBeneficiary(user.Id, user);
-    setTimeout(() => {
-     compRef.setBeneficiary()
+     setTimeout(() => {
+     compRef.setOperationalUser()
     }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
   }
+
   onModalToggle() {
     this.setState({
       modalStatus: !this.state.modalStatus
     });
   }
+  
   render() {
     const sortingOptions = {
       defaultSortName: "Name",
@@ -98,7 +102,7 @@ class RegistrationList extends Component {
         },
         {
           text: "All",
-          value: this.state.beneficiaryList.length
+          value: this.state.operationalUserList.length
         }
       ],
       sizePerPage: 5
@@ -106,17 +110,18 @@ class RegistrationList extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Beneficiary List">
+       <div style={{ marginTop: 30 }}>
+        <CardLayout name="Operational User">
           <FormGroup row>
-            <Col xs="12" md="10" />
-            <Col md="2" style={{ marginTop: -55,marginLeft :-42 }}>
-              <Link to={`${this.props.match.url}/registration`}>
-                <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
-                  <i className="fa fa-plus" />
-                  &nbsp; Add Beneficiary
-                </Button>
-              </Link>
+          <Col xs="12" md="10" />
+          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
+             <Link to={`${this.props.match.url}/operationalUser`}  > 
+              <Button
+                type="button"
+                className="theme-positive-btn">
+                <i className="fa fa-plus" /> &nbsp; Add User
+              </Button>
+               </Link> 
               &nbsp;&nbsp;
             </Col>
           </FormGroup>
@@ -125,12 +130,12 @@ class RegistrationList extends Component {
               <BootstrapTable
                 style={{ marginTop: -18 }}
                 ref="table"
-                data={this.state.beneficiaryList}
+                data={this.state.operationalUserList}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
                 exportCSV={true}
-                csvFileName="BeneficiaryList.csv"
+                csvFileName="OperationalUserList.csv"
                 hover={true}
               >
                 <TableHeaderColumn
@@ -250,7 +255,7 @@ class RegistrationList extends Component {
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
           title="Deactivate"
-          message="Are you sure you want to deactivate this beneficiary ?"
+          message="Are you sure you want to deactivate this user?"
         />
       </div>
     );
@@ -269,4 +274,4 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.deleteBeneficiary(id, beneficiary))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationList);
+export default connect(mapStateToProps, mapDispatchToProps)(OperationalUserList);
