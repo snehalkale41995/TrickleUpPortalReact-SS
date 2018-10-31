@@ -8,8 +8,8 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from 'lodash';
 import { AppSwitch } from "@coreui/react";
-import _ from 'lodash'
 class InactiveUser extends Component {
   constructor(props) {
     super(props);
@@ -21,15 +21,14 @@ class InactiveUser extends Component {
     };
   }
 
- componentDidMount() {
+  componentDidMount() {
     let compRef = this;
-    this.props.getBeneficiaryList();
     setTimeout(() => {
      compRef.setBeneficiary()
     }, 2000);
   }
 
- setBeneficiary(){
+   setBeneficiary(){
      let compRef = this;
      let  beneficiaryList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
      return beneficiary.Active === false && beneficiary.Role === 3;
@@ -43,26 +42,25 @@ class InactiveUser extends Component {
   onDeleteBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Activate" />
+      <i class="fa fa-check-square-o" aria-hidden="true" title="Activate"></i>
       </Link>
-      // <AppSwitch
-      //  className={"mx-2"}
-      //  variant={"pill"}
-      //  color={"primary"}
-      //  checked={false}
-      //  // onChange={this.onSwitch.bind(this)}
-      // />
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
- onDelete(row) {
+  onDelete(row) {
     this.setState({
       userToDelete: row
     });
     this.onModalToggle();
   }
 
+  onEditBeneficiary(cell, row) {
+    return (
+      <Link to={`${this.props.match.url}/registration/${row.Id}`}>
+        <i className="fa fa-pencil" title="Edit" />
+      </Link>
+    );
+  }
 
   onConfirmDelete() {
     let compRef = this;
@@ -76,7 +74,6 @@ class InactiveUser extends Component {
       modalStatus: !this.state.modalStatus
     });
   }
-
   onModalToggle() {
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -121,7 +118,7 @@ class InactiveUser extends Component {
                 search={true}
                 options={sortingOptions}
                 exportCSV={true}
-                csvFileName="Inactive BeneficiaryList.csv"
+                csvFileName="BeneficiaryList.csv"
                 hover={true}
               >
                 <TableHeaderColumn
@@ -231,8 +228,8 @@ class InactiveUser extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Activate"
-          message="Are you sure you want to deactivate this beneficiary ?"
+          title="Deactivate"
+          message="Are you sure you want to activate this beneficiary ?"
         />
       </div>
     );

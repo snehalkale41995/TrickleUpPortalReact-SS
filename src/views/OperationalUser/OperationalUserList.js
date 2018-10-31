@@ -23,7 +23,6 @@ class OperationalUserList extends Component {
 
  componentDidMount() {
     let compRef = this;
-    this.props.getBeneficiaryList();
     setTimeout(() => {
      compRef.setOperationalUser()
     }, 2000);

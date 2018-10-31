@@ -22,7 +22,6 @@ class RegistrationList extends Component {
 
   componentDidMount() {
     let compRef = this;
-    this.props.getBeneficiaryList();
     setTimeout(() => {
      compRef.setBeneficiary()
     }, 2000);
