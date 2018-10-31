@@ -69,13 +69,12 @@ class CropStepsForm extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
         <CardLayout
           name="Crops Material Form"
           navigation={true}
           navigationRoute="/cropCultivations/CropsMaterial"
         >
-          <div style={{ margin: 20 }}>
+          <div className="div-padding">
             <FormGroup row>
               <Col xs="12" md="5">
                 <InputElement
@@ -170,7 +169,7 @@ class CropStepsForm extends Component {
             )}
           </div>
         </CardLayout>
-      </div>
+    
     );
   }
 }

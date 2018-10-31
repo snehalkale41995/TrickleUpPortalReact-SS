@@ -24,9 +24,12 @@ export default class AudioContent extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Audio">
-          <FormGroup row>
+      <CardLayout
+        name="Audio"
+        buttonName="Add audio"
+        buttonLink={`${this.props.match.url}/audioUpload`}
+      >
+        {/* <FormGroup row>
             <Col xs="12" md="11" />
             <Col md="1" style={{ marginLeft: -50, marginTop: -55 }}>
               <Link to={`${this.props.match.url}/audioUpload`}>
@@ -36,8 +39,8 @@ export default class AudioContent extends Component {
               </Link>
               &nbsp;&nbsp;
             </Col>
-          </FormGroup>
-          <Row>
+          </FormGroup> */}
+        {/* <Row>
             <Col xs="12" md="4">
               <AudioCards
                 category="Snehal"
@@ -48,9 +51,8 @@ export default class AudioContent extends Component {
                 source={this.state.renderURL}
               />
             </Col>
-          </Row>
-        </CardLayout>
-      </div>
+          </Row> */}
+      </CardLayout>
     );
   }
 }

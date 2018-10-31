@@ -88,7 +88,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <div className="text-value">Active beneficiaries  by villages</div>
                 </CardBody>
-                <div className="chart-wrapper mx-3" style={{ padding: 20 }}>
+                <div className="chart-wrapper mx-3 div-padding" >
                 <Line width={120} height={20} options={graphConstant.userOptions} data={data} />
                 </div>
               </Card>
@@ -100,7 +100,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <div className="text-value">Crops</div>
                 </CardBody>
-                <div className="chart-wrapper mx-6" style={{ padding: 20 }}>
+                <div className="chart-wrapper mx-6 div-padding" >
                   <Bar data={dataCrops} width={100} height={60} options={graphConstant.cropOptions} />
                 </div>
               </Card>
@@ -110,7 +110,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <div className="text-value">Small business</div>
                 </CardBody>
-                <div className="chart-wrapper mx-6" style={{ padding: 20 }}>
+                <div className="chart-wrapper mx-6 div-padding" >
                   <Bar data={dataSmallBusiness} width={100} height={60} options={graphConstant.smallBusinessOptions} />
                 </div>
               </Card>
@@ -128,7 +128,7 @@ class Dashboard extends Component {
                 <CardBody>
                   <div className="text-value">Live stock</div>
                 </CardBody>
-                <div className="chart-wrapper mx-6" style={{ padding: 20 }}>
+                <div className="chart-wrapper mx-6 div-padding" >
                   <Bar data={dataLiveStock} width={100} height={60} options={graphConstant.liveStockOptions} />
                 </div>
               </Card>

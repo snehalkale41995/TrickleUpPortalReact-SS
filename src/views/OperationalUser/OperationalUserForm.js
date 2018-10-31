@@ -26,9 +26,9 @@ class OperationalUserForm extends Component {
         PhoneNumber: "",
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
-        UserId : "",
-        UserIdRequired : false,
-        UserIdInvalid : false,
+        UserId: "",
+        UserIdRequired: false,
+        UserIdInvalid: false,
         Age: "",
         AgeRequired: false,
         AgeInvalid: false,
@@ -321,7 +321,7 @@ class OperationalUserForm extends Component {
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
-      !user.Name ? (user.NameRequired = true) : null;
+    !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
@@ -330,7 +330,7 @@ class OperationalUserForm extends Component {
     !user.UserId
       ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
-      user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
+    user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
     !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
     !user.Gender ? this.setState({ genderRequired: true }) : null;
     !user.State ? this.setState({ stateRequired: true }) : null;
@@ -354,18 +354,18 @@ class OperationalUserForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
-       UserIdRequired: false,
-      UserIdInvalid : false,
+      UserIdRequired: false,
+      UserIdInvalid: false,
       Age: "", //no
       AgeRequired: false,
-      AgeInvalid :false,
+      AgeInvalid: false,
       Gender: "", //id
       State: "", //id
       District: "", //id
       Village: "", //id
       Grampanchayat: "", //id
       Aadhaar: "",
-      AadhaarInvalid :false,
+      AadhaarInvalid: false,
       Role: "",
       Language: ""
     };
@@ -385,219 +385,215 @@ class OperationalUserForm extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="User Form"
-          navigation={true}
-          navigationRoute="/operationalUser"
-        >
-          <FormGroup row />
-          <div style={{ margin: 20 }}>
-            <FormGroup row>
-              <Col xs="12" md="5">
-                <InputElement
-                  type="text"
-                  label="Name"
-                  name="Name"
-                  placeholder="Please enter name "
-                  value={user.Name}
-                  required={user.NameRequired}
-                  onChange={event => this.onChangeInput(event)}
-                />
+      <CardLayout
+        name="User Form"
+        navigation={true}
+        navigationRoute="/operationalUser"
+      >
+        <FormGroup row />
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <InputElement
+                type="text"
+                label="Name"
+                name="Name"
+                placeholder="Please enter name "
+                value={user.Name}
+                required={user.NameRequired}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+            <Col md="5">
+              <InputElement
+                type="text"
+                label="Phone number"
+                name="PhoneNumber"
+                maxLength={10}
+                placeholder="Please enter phone number"
+                value={user.PhoneNumber}
+                required={user.PhoneNumberRequired}
+                invalid={user.PhoneNumberInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <InputElement
+                type="text"
+                label="Email"
+                name="UserId"
+                placeholder="Please enter Email"
+                value={user.UserId}
+                required={user.UserIdRequired}
+                invalid={user.UserIdInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+            <Col md="5">
+              <InputElement
+                type="number"
+                label="Age"
+                name="Age"
+                maxLength={3}
+                placeholder="Please enter age "
+                value={user.Age}
+                required={user.AgeRequired}
+                invalid={user.AgeInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <Label>Gender</Label>
+              <DropdownSelect
+                id="1"
+                name="Gender"
+                placeholder="Select gender "
+                options={this.props.gendersList}
+                value={user.Gender}
+                required={this.state.genderRequired}
+                onChange={this.onGenderSelection.bind(this)}
+              />
+            </Col>
+            <Col md="5">
+              <Label>State</Label>
+              <DropdownSelect
+                name="State"
+                placeholder="Select state"
+                options={this.props.statesList}
+                value={user.State}
+                required={this.state.stateRequired}
+                onChange={this.onStateSelection.bind(this)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <Label>District</Label>
+              <DropdownSelect
+                name="District"
+                placeholder="Select district "
+                options={this.state.districtOptions}
+                value={user.District}
+                disabled={this.state.districtDisabled}
+                required={this.state.districtRequired}
+                onChange={this.onDistrictSelection.bind(this)}
+              />
+            </Col>
+            <Col md="5">
+              <Label>Grampanchayat</Label>
+              <DropdownSelect
+                name="Grampanchayat"
+                placeholder="Select grampanchayat "
+                value={user.Grampanchayat}
+                options={this.state.grampanchayatOptions}
+                disabled={this.state.grampanchayatDisabled}
+                required={this.state.grampanchayatRequired}
+                onChange={this.onGrampanchayatSelection.bind(this)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <Label>Village</Label>
+              <DropdownSelect
+                name="Village"
+                placeholder="Select village "
+                value={user.Village}
+                disabled={this.state.villageDisabled}
+                options={this.state.villageOptions}
+                required={this.state.villageRequired}
+                onChange={this.onVillageSelection.bind(this)}
+              />
+            </Col>
+            <Col md="5">
+              <InputElement
+                type="text"
+                label="Aadhaar number"
+                name="Aadhaar"
+                maxLength={12}
+                placeholder="Please enter aadhaar number "
+                value={user.Aadhaar}
+                invalid={user.AadhaarInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <Label>Language</Label>
+              <DropdownSelect
+                name="Language"
+                placeholder="Select language "
+                options={this.props.languagesList}
+                value={user.Language}
+                required={this.state.languageRequired}
+                onChange={this.onLanguageSelection.bind(this)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              {this.state.user.ImagePath ? (
+                <div>
+                  <Label> Profile Image :</Label>
+                  <img
+                    src={`${AppConfig.serverURL}/${this.state.user.ImagePath}`}
+                    style={{ height: 90, width: 100, marginLeft: 20 }}
+                    alt=""
+                  />{" "}
+                </div>
+              ) : null}
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            {this.state.updateFlag ? (
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
-              <Col md="5">
-                <InputElement
-                  type="text"
-                  label="Phone number"
-                  name="PhoneNumber"
-                  maxLength={10}
-                  placeholder="Please enter phone number"
-                  value={user.PhoneNumber}
-                  required={user.PhoneNumberRequired}
-                  invalid={user.PhoneNumberInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
+            ) : (
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Submit
+                </Button>
               </Col>
-            </FormGroup>
-              <FormGroup row>
-             <Col xs="12" md="5">
-                <InputElement
-                  type="text"
-                  label="Email"
-                  name="UserId"
-                  placeholder="Please enter Email"
-                  value={user.UserId}
-                  required={user.UserIdRequired}
-                  invalid={user.UserIdInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
+            )}
+            {this.state.updateFlag ? (
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={() => {
+                    this.props.history.push("/beneficiary/beneficiaryList");
+                  }}
+                >
+                  Cancel
+                </Button>
               </Col>
-               <Col md="5">
-                <InputElement
-                  type="number"
-                  label="Age"
-                  name="Age"
-                  maxLength={3}
-                  placeholder="Please enter age "
-                  value={user.Age}
-                  required={user.AgeRequired}
-                  invalid={user.AgeInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
+            ) : (
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
               </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
-                <Label>Gender</Label>
-                <DropdownSelect
-                  id="1"
-                  name="Gender"
-                  placeholder="Select gender "
-                  options={this.props.gendersList}
-                  value={user.Gender}
-                  required={this.state.genderRequired}
-                  onChange={this.onGenderSelection.bind(this)}
-                />
-              </Col>
-              <Col  md="5">
-                <Label>State</Label>
-                <DropdownSelect
-                  name="State"
-                  placeholder="Select state"
-                  options={this.props.statesList}
-                  value={user.State}
-                  required={this.state.stateRequired}
-                  onChange={this.onStateSelection.bind(this)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
-                <Label>District</Label>
-                <DropdownSelect
-                  name="District"
-                  placeholder="Select district "
-                  options={this.state.districtOptions}
-                  value={user.District}
-                  disabled={this.state.districtDisabled}
-                  required={this.state.districtRequired}
-                  onChange={this.onDistrictSelection.bind(this)}
-                />
-              </Col>
-               <Col  md="5">
-                <Label>Grampanchayat</Label>
-                <DropdownSelect
-                  name="Grampanchayat"
-                  placeholder="Select grampanchayat "
-                  value={user.Grampanchayat}
-                  options={this.state.grampanchayatOptions}
-                  disabled={this.state.grampanchayatDisabled}
-                  required={this.state.grampanchayatRequired}
-                  onChange={this.onGrampanchayatSelection.bind(this)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-             
-              <Col xs="12" md="5">
-                <Label>Village</Label>
-                <DropdownSelect
-                  name="Village"
-                  placeholder="Select village "
-                  value={user.Village}
-                  disabled={this.state.villageDisabled}
-                  options={this.state.villageOptions}
-                  required={this.state.villageRequired}
-                  onChange={this.onVillageSelection.bind(this)}
-                />
-              </Col>
-               <Col md="5">
-                <InputElement
-                  type="text"
-                  label="Aadhaar number"
-                  name="Aadhaar"
-                  maxLength={12}
-                  placeholder="Please enter aadhaar number "
-                  value={user.Aadhaar}
-                  invalid={user.AadhaarInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
-                <Label>Language</Label>
-                <DropdownSelect
-                  name="Language"
-                  placeholder="Select language "
-                  options={this.props.languagesList}
-                  value={user.Language}
-                  required={this.state.languageRequired}
-                  onChange={this.onLanguageSelection.bind(this)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="12" md="5">
-                {this.state.user.ImagePath ? (
-                  <div>
-                    <Label> Profile Image :</Label>
-                    <img
-                      src={`${AppConfig.serverURL}/${this.state.user
-                        .ImagePath}`}
-                      style={{ height: 90, width: 100, marginLeft: 20 }}
-                      alt=""
-                    />{" "}
-                  </div>
-                ) : null}
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              {this.state.updateFlag ? (
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-              ) : (
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-              )}
-              {this.state.updateFlag ? (
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={() => {
-                      this.props.history.push("/beneficiary/beneficiaryList");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </Col>
-              ) : (
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              )}
-            </FormGroup>
-          </div>
-        </CardLayout>
+            )}
+          </FormGroup>
+        </div>
         <ToastContainer autoClose={2000} />
-      </div>
+      </CardLayout>
     );
   }
 }
@@ -626,4 +622,6 @@ const mapDispatchToProps = dispatch => {
     getBeneficiaryById: id => dispatch(actions.getBeneficiaryById(id))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(OperationalUserForm);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  OperationalUserForm
+);

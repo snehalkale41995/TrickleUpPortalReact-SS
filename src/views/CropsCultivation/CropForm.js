@@ -92,8 +92,8 @@ class CropForm extends Component {
         });
   }
   onSubmit() {
-    let crop = {...this.state.crop};
-    let imagedata= crop.FilePath;
+    let crop = { ...this.state.crop };
+    let imagedata = crop.FilePath;
     this.props.storeCropImage(imagedata);
     //this.props.history.push("/cropCultivations/crops");
   }
@@ -102,96 +102,94 @@ class CropForm extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Crop Form"
-          navigation={true}
-          navigationRoute="/cropCultivations/crops"
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row>
-              <Col xs="12" md="6">
-                <FormGroup row>
-                  <Col xs="10" md="8">
-                    <InputElement
-                      type="text"
-                      name="CropName"
-                      label="Crop name "
-                      placeholder="Crop name"
-                      value={crop.CropName}
-                      required={crop.CropNameRequired}
-                      onChange={event => this.onChangeName(event)}
+      <CardLayout
+        name="Crop Form"
+        navigation={true}
+        navigationRoute="/cropCultivations/crops"
+      >
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="12" md="6">
+              <FormGroup row>
+                <Col xs="10" md="8">
+                  <InputElement
+                    type="text"
+                    name="CropName"
+                    label="Crop name "
+                    placeholder="Crop name"
+                    value={crop.CropName}
+                    required={crop.CropNameRequired}
+                    onChange={event => this.onChangeName(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="10" md="8">
+                  <InputElement
+                    type="file"
+                    accept="image/*"
+                    name="Crop Image"
+                    label="Crop Image"
+                    required={crop.CropImageRequired}
+                    onChange={event => this.onImageChange(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="10" md="8">
+                  <Label />
+                  <Label>
+                    Crop status :
+                    <AppSwitch
+                      className={"mx-2"}
+                      variant={"pill"}
+                      color={"primary"}
+                      checked={crop.Ready}
+                      onChange={this.onSwitch.bind(this)}
                     />
-                  </Col>
-                </FormGroup>
+                    {this.state.cropStatus}
+                  </Label>
+                </Col>
+              </FormGroup>
+              {this.state.updateFlag ? (
                 <FormGroup row>
-                  <Col xs="10" md="8">
-                    <InputElement
-                      type="file"
-                      accept="image/*"
-                      name="Crop Image"
-                      label="Crop Image"
-                      required={crop.CropImageRequired}
-                      onChange={event => this.onImageChange(event)}
-                    />
+                  <Col md="1">
+                    <Button
+                      className="theme-positive-btn"
+                      onClick={() => this.onSubmit()}
+                    >
+                      Save
+                    </Button>
                   </Col>
                 </FormGroup>
+              ) : (
                 <FormGroup row>
-                  <Col xs="10" md="8">
-                    <Label />
-                    <Label>
-                      Crop status :
-                      <AppSwitch
-                        className={"mx-2"}
-                        variant={"pill"}
-                        color={"primary"}
-                        checked={crop.Ready}
-                        onChange={this.onSwitch.bind(this)}
-                      />
-                      {this.state.cropStatus}
-                    </Label>
+                  <Col md="2">
+                    <Button
+                      className="theme-positive-btn"
+                      onClick={() => this.onSubmit()}
+                    >
+                      Submit
+                    </Button>
+                  </Col>
+                  <Col md="1">
+                    <Button className="theme-reset-btn"> Reset</Button>
                   </Col>
                 </FormGroup>
-                {this.state.updateFlag ? (
-                  <FormGroup row>
-                    <Col md="1">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Save
-                      </Button>
-                    </Col>
-                  </FormGroup>
-                ) : (
-                  <FormGroup row>
-                    <Col md="2">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Submit
-                      </Button>
-                    </Col>
-                    <Col md="1">
-                      <Button className="theme-reset-btn"> Reset</Button>
-                    </Col>
-                  </FormGroup>
-                )}
-              </Col>
-              <Col md="6">
-                {/* {this.state.crop.renderURL !== "" ? ( */}
-                <img
-                  src={this.state.crop.renderURL}
-                  style={{ height: 300, width: 350 }}
-                  alt=""
-                />
-                {/* ) : null} */}
-              </Col>
-            </FormGroup>
-          </div>
-        </CardLayout>
-      </div>
+              )}
+            </Col>
+            <Col md="6">
+              {/* {this.state.crop.renderURL !== "" ? ( */}
+              <img
+                src={this.state.crop.renderURL}
+                className="image-display"
+                alt=""
+              />
+              {/* ) : null} */}
+            </Col>
+          </FormGroup>
+        </div>
+      </CardLayout>
     );
   }
 }
@@ -204,7 +202,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    storeCropImage : (image) => dispatch(actions.storeCropImage(image))
+    storeCropImage: image => dispatch(actions.storeCropImage(image))
     ///   getCropsList: () => dispatch(actions.getCropsList()),
     // CropsCultivationSteps: (id) => dispatch(actions.getCropCultivationSteps(id))
   };

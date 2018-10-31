@@ -155,63 +155,53 @@ class DistrictForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="District Form"
-          navigation={true}
-          navigationRoute={this}
-          onClick={() => {
-           this.setState({ showList: true });
-          }}
-        >
-          <FormGroup row />
-          <div style={{ margin: 20 }}>
+      <CardLayout
+        name="District Form"
+        navigation={true}
+        navigationRoute={this}
+        onClick={() => {
+          this.setState({ showList: true });
+        }}
+      >
+        <FormGroup row />
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="10" md="5">
+              <Label>State</Label>
+              <DropdownSelect
+                name="State name"
+                placeholder="Please select state"
+                required={district.StateRequired}
+                options={this.props.statesList}
+                onChange={this.onStateSelect.bind(this)}
+                value={district.State}
+              />
+            </Col>
+            <Col xs="10" md="5">
+              <InputElement
+                type="text"
+                placeholder="Please enter district"
+                name="DistrictName"
+                label="District name"
+                required={district.DistrictNameRequired}
+                value={district.DistrictName}
+                onChange={event => this.onChangeDistrict(event)}
+              />
+            </Col>
+          </FormGroup>
+          {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="10" md="5">
-                <Label>State</Label>
-                <DropdownSelect
-                  name="State name"
-                  placeholder="Please select state"
-                  required={district.StateRequired}
-                  options={this.props.statesList}
-                  onChange={this.onStateSelect.bind(this)}
-                  value={district.State}
-                />
-              </Col>
-              <Col xs="10" md="5">
-                <InputElement
-                  type="text"
-                  placeholder="Please enter district"
-                  name="DistrictName"
-                  label="District name"
-                  required={district.DistrictNameRequired}
-                  value={district.DistrictName}
-                  onChange={event => this.onChangeDistrict(event)}
-                />
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
             </FormGroup>
-
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-                {/* <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={()}
-                >
-                  Reset
-                </Button>
-                </Col> */}
-              </FormGroup>
-            ) : (
-              <FormGroup row>
+          ) : (
+            <FormGroup row>
               <Col md="1">
                 <Button
                   className="theme-positive-btn"
@@ -221,19 +211,18 @@ class DistrictForm extends Component {
                 </Button>
               </Col>
               <Col md="1">
-              <Button
-                className="theme-reset-btn"
-                onClick={this.onReset.bind(this)}
-              >
-                Reset
-              </Button>
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
               </Col>
             </FormGroup>
-            )}
-          </div>
-          <ToastContainer autoClose={2000} />
-        </CardLayout>
-      </div>
+          )}
+        </div>
+        <ToastContainer autoClose={2000} />
+      </CardLayout>
     );
   }
 }

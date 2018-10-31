@@ -31,7 +31,7 @@ class CropSteps extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this} style={{ pointerEvents: "none" }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -40,15 +40,18 @@ class CropSteps extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/CropStepForm/${row.Id}`} >
+      <Link to={`${this.props.match.url}/CropStepForm/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
-  showImage(cell, row){
-      return(
-          <img src={`${AppConfig.serverURL}/${row.MediaURL}`} style={{height: 50,width:50}}/>
-      )
+  showImage(cell, row) {
+    return (
+      <img
+        src={`${AppConfig.serverURL}/${row.MediaURL}`}
+        style={{ height: 50, width: 50 }}
+      />
+    );
   }
   render() {
     const sortingOptions = {
@@ -77,99 +80,85 @@ class CropSteps extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Crop Steps">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 15 }}>      
-              <Link to={`${this.props.match.url}/CropStepForm`} >
-                <Button type="button" className="theme-positive-btn">
-                  <i className="fa fa-plus" />&nbsp; Add crop step
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-              <BootstrapTable
-                ref="table"
-                data={this.props.cropSteps}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Crops List"
+      <CardLayout
+        name="Crop Steps"
+        buttonName="Add crop step"
+        buttonLink={`${this.props.match.url}/CropStepForm`}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.cropSteps}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Crops List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="CropName"
+                headerAlign="left"
+                width="20"
+                csvHeader="Crop Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="CropName"
-                  headerAlign="left"
-                  width="20"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
-                  Crop Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Step_Name"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
-                  Step Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Step_Description"
-                  headerAlign="left"
-                  width="60"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
+                Crop Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Step_Name"
+                headerAlign="left"
+                width="40"
+                csvHeader="Crop Name"
+                dataSort={true}
+              >
+                Step Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Step_Description"
+                headerAlign="left"
+                width="60"
+                csvHeader="Crop Name"
+                dataSort={true}
+              >
                 Step Description
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="FilePath"
-                  headerAlign="left"
-                  width="20"
-                  dataFormat={this.showImage.bind(this)}
-                  csvHeader="FilePath"
-                  dataSort={true}
-                >
-                  Image
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
-      </div>
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="FilePath"
+                headerAlign="left"
+                width="20"
+                dataFormat={this.showImage.bind(this)}
+                csvHeader="FilePath"
+                dataSort={true}
+              >
+                Image
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
+      </CardLayout>
     );
   }
 }

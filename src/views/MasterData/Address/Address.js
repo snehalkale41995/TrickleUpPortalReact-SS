@@ -41,7 +41,7 @@ export default class Address extends Component {
   render() {
     let tabs = tabsList.map((tab, idx) => {
       return (
-        <NavItem key={idx} style={{ border: 2 }}>
+        <NavItem key={idx} className="address-nav">
           <NavLink
             className={classnames({
               active: this.state.activeTab === tab.id
@@ -50,37 +50,33 @@ export default class Address extends Component {
               this.toggle(tab.id);
             }}
           >
-            <div style={{ fontWeight: 599 }}>{tab.name}</div>
+            <div className="address-nav">{tab.name}</div>
           </NavLink>
         </NavItem>
       );
     });
     return (
-      <div className="animated fadeIn">
-        <div style={{ marginLeft: -30, marginRight: -30 }}>
-          <Row className="justify-content-left">
-            <Col md="12">
+          <Row className="address-tabs">
+            <Col>
               <Nav tabs style={{ backgroundColor: "#ED734A" }}>
                 {tabs}
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1" style={{ height: 600 }}>
+                <TabPane tabId="1" className="nav-pane">
                   <StateList {...this.props} />
                 </TabPane>
-                <TabPane tabId="2" style={{ height: 600 }}>
+                <TabPane tabId="2" className="nav-pane">
                   <DistrictList {...this.props} />
                 </TabPane>
-                <TabPane tabId="3" style={{ height: 600 }}>
+                <TabPane tabId="3" className="nav-pane">
                   <GrampanchayatList {...this.props} />
                 </TabPane>
-                <TabPane tabId="4" style={{ height: 600 }}>
+                <TabPane tabId="4" className="nav-pane">
                   <VillageList {...this.props} />
                 </TabPane>
               </TabContent>
             </Col>
           </Row>
-        </div>
-      </div>
     );
   }
 }

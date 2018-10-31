@@ -178,101 +178,91 @@ class GrampanchayatForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Grampanchayat Form"
-          navigation={true}
-          navigationRoute={this}
-          onClick={() => {
-           this.setState({ showList: true });
-          }}
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
-            <FormGroup row>
-              <Col xs="10" md="5">
-                <Label>State</Label>
-                <DropdownSelect
-                  name="States"
-                  placeholder="Select State..."
-                  options={this.props.statesList}
-                  value={grampanchayat.State}
-                  required={grampanchayat.StateRequired}
-                  onChange={this.onStateValueChange.bind(this)}
-                  simpleValue
-                />
-              </Col>
-              <Col md="5">
-                <Label>District</Label>
-                <DropdownSelect
-                  name="District"
-                  placeholder="Select district..."
-                  options={this.state.districtOptions}
-                  value={grampanchayat.District}
-                  required={grampanchayat.DistrictRequired}
-                  onChange={this.onDistrictValueChange.bind(this)}
-                  simpleValue
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="10" md="5">
-                <InputElement
-                  type="text"
-                  label="Grampanchayat"
-                  name="GrampanchayatName"
-                  placeholder="Grampanchayat name"
-                  value={grampanchayat.GrampanchayatName}
-                  required={grampanchayat.GrampanchayatNameRequired}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="5" />
-            </FormGroup>
+      <CardLayout
+        name="Grampanchayat Form"
+        navigation={true}
+        navigationRoute={this}
+        onClick={() => {
+          this.setState({ showList: true });
+        }}
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="10" md="5">
+              <Label>State</Label>
+              <DropdownSelect
+                name="States"
+                placeholder="Select State..."
+                options={this.props.statesList}
+                value={grampanchayat.State}
+                required={grampanchayat.StateRequired}
+                onChange={this.onStateValueChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+            <Col md="5">
+              <Label>District</Label>
+              <DropdownSelect
+                name="District"
+                placeholder="Select district..."
+                options={this.state.districtOptions}
+                value={grampanchayat.District}
+                required={grampanchayat.DistrictRequired}
+                onChange={this.onDistrictValueChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="10" md="5">
+              <InputElement
+                type="text"
+                label="Grampanchayat"
+                name="GrampanchayatName"
+                placeholder="Grampanchayat name"
+                value={grampanchayat.GrampanchayatName}
+                required={grampanchayat.GrampanchayatNameRequired}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+            <Col md="5" />
+          </FormGroup>
 
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-                {/* <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col> */}
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
-          </div>
-        </CardLayout>
+          {this.state.updateFlag ? (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Save
+                </Button>
+              </Col>
+            </FormGroup>
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
+        </div>
         <ToastContainer autoClose={2000} />
-      </div>
+      </CardLayout>
     );
   }
 }

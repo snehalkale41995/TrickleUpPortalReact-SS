@@ -102,23 +102,13 @@ class VillageList extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-        <div style={{marginTop : 30}}>
-        <CardLayout name="Villages">
-        <FormGroup row>
-        <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} > 
-              <Button
-                type="button"
-                className="theme-positive-btn"
-                onClick={() => {
-                  this.setState({ showForm: true });
-                }}
-              >
-                <i className="fa fa-plus" /> &nbsp; Add village
-              </Button>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
+        
+        <CardLayout name="Villages"
+         buttonName="Add village"
+        buttonLink={this}
+        buttonClick={() => {
+          this.setState({ showForm: true });
+        }}>
           <FormGroup row>
             <Col xs="12" >
             <BootstrapTable
@@ -191,15 +181,14 @@ class VillageList extends Component {
             </BootstrapTable>
             </Col>
           </FormGroup>
-        </CardLayout>
-        <ConfirmModal
+          <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
           title="Deactivate"
           message="Are you sure you want to deactivate this village record ?"
         />
-        </div>
+        </CardLayout>
       )
      
   }

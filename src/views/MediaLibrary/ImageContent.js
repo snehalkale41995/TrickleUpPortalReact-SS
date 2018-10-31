@@ -5,26 +5,29 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 
 export default class ImageContent extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      loading : true
-    }
+      loading: true
+    };
   }
-  componentDidMount () {
+  componentDidMount() {
     setTimeout(() => {
       this.setState({
-        loading : false
-      })
-    },2000)
+        loading: false
+      });
+    }, 2000);
   }
   render() {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Image">
-          <FormGroup row>
+      <CardLayout
+        name="Image"
+        buttonName="Add image"
+        buttonLink={`${this.props.match.url}/imageUpload`}
+      >
+        {/* <FormGroup row>
           <Col xs="12" md="11" />
             <Col md="1" style={{marginLeft: -50 ,marginTop: -55}}>
               <Link to={`${this.props.match.url}/imageUpload`}>
@@ -34,10 +37,9 @@ export default class ImageContent extends Component {
               </Link>
               &nbsp;&nbsp;
             </Col>
-          </FormGroup>
-          <Row></Row>
-        </CardLayout>
-      </div>
+          </FormGroup> */}
+        <Row />
+      </CardLayout>
     );
   }
 }

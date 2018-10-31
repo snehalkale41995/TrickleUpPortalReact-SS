@@ -96,12 +96,10 @@ class Login extends Component {
         <AppHeader fixed>
           <LoginHeader />
         </AppHeader>
-        {/*  style={{ backgroundSize: "cover",backgroundImage : `url(${"../../assets/img/backgroundImage.jpg"})`}}*/}
         <div className="app-body" style={{ backgroundColor: "#d3ecec" }}>
           <main className="main">
-            {/* <div className="app flex-row" style={{ margin: 40 }}> */}
             <Container>
-              <div style={{ padding: 40 }}>
+              <div className="login-padding">
                 <Row className="justify-content-center">
                   <Col md="6">
                     <CardGroup>
@@ -178,7 +176,6 @@ class Login extends Component {
                 <ToastContainer autoClose={2000} />
               </div>
             </Container>
-            {/* </div> */}
           </main>
         </div>
         <AppFooter>

@@ -8,13 +8,13 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import _ from 'lodash';
+import _ from "lodash";
 import { AppSwitch } from "@coreui/react";
 class InactiveUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beneficiaryList:[],
+      beneficiaryList: [],
       loading: true,
       modalStatus: false,
       userToDelete: {}
@@ -25,25 +25,27 @@ class InactiveUser extends Component {
     let compRef = this;
     compRef.props.getBeneficiaryList();
     setTimeout(() => {
-     compRef.setBeneficiary()
+      compRef.setBeneficiary();
     }, 2000);
   }
 
-   setBeneficiary(){
-     let compRef = this;
-     let  beneficiaryList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
-     return beneficiary.Active === false && beneficiary.Role === 3;
-       });
-      compRef.setState({
-        loading: false,
-        beneficiaryList : beneficiaryList
-      });
-   }
+  setBeneficiary() {
+    let compRef = this;
+    let beneficiaryList = _.filter(compRef.props.beneficiaryList, function(
+      beneficiary
+    ) {
+      return beneficiary.Active === false && beneficiary.Role === 3;
+    });
+    compRef.setState({
+      loading: false,
+      beneficiaryList: beneficiaryList
+    });
+  }
 
   onDeleteBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-      <i class="fa fa-check-square-o" aria-hidden="true" title="Activate"></i>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
       </Link>
     );
   }
@@ -66,10 +68,10 @@ class InactiveUser extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    user.Active  = true;
+    user.Active = true;
     this.props.deleteBeneficiary(user.Id, user);
     setTimeout(() => {
-     compRef.setBeneficiary()
+      compRef.setBeneficiary();
     }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -107,124 +109,116 @@ class InactiveUser extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Inactive Beneficiary List">
-          <FormGroup row>
-            <Col xs="12" md="12">
-              <BootstrapTable
-                style={{ marginTop: -18 }}
-                ref="table"
-                data={this.state.beneficiaryList}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                exportCSV={true}
-                csvFileName="BeneficiaryList.csv"
-                hover={true}
+      <CardLayout name="Inactive Beneficiary List">
+        <FormGroup row>
+          <Col xs="12" md="12">
+            <BootstrapTable
+              ref="table"
+              data={this.state.beneficiaryList}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              exportCSV={true}
+              csvFileName="BeneficiaryList.csv"
+              hover={true}
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+
+              <TableHeaderColumn
+                dataField="Name"
+                headerAlign="left"
+                width="40"
+                csvHeader="Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-               
-                <TableHeaderColumn
-                  dataField="Name"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Name"
-                  dataSort={true}
-                >
-                  Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="PhoneNumber"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Phone Number"
-                  dataSort={true}
-                >
-                  Phone Number
-                </TableHeaderColumn>
-                 <TableHeaderColumn
-                  dataField="UserId"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Email Id"
-                  dataSort={true}
-                >
-                  Email Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Age"
-                  csvHeader="Age"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="GenderName"
-                  csvHeader="Gender"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="StateName"
-                  csvHeader="State"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="DistrictName"
-                  csvHeader="District"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="GrampanchayatName"
-                  csvHeader="Grampanchayat"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="VillageName"
-                  csvHeader="Village"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="LanguageName"
-                  csvHeader="Language"
-                  export={true}
-                  hidden
-                />
-                {/* <TableHeaderColumn
+                Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="PhoneNumber"
+                headerAlign="left"
+                width="40"
+                csvHeader="Phone Number"
+                dataSort={true}
+              >
+                Phone Number
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="UserId"
+                headerAlign="left"
+                width="40"
+                csvHeader="Email Id"
+                dataSort={true}
+              >
+                Email Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Age"
+                csvHeader="Age"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="GenderName"
+                csvHeader="Gender"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="StateName"
+                csvHeader="State"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="DistrictName"
+                csvHeader="District"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="GrampanchayatName"
+                csvHeader="Grampanchayat"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="VillageName"
+                csvHeader="Village"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="LanguageName"
+                csvHeader="Language"
+                export={true}
+                hidden
+              />
+              {/* <TableHeaderColumn
                   dataField="Aadhar"
                   csvHeader="Aadhar number"
                   export={true}
                   hidden
                 /> */}
-                <TableHeaderColumn
-                  dataField="Active"
-                  csvHeader="Active"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Activate
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
+              <TableHeaderColumn
+                dataField="Active"
+                csvHeader="Active"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteBeneficiary.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Activate
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -232,7 +226,7 @@ class InactiveUser extends Component {
           title="Deactivate"
           message="Are you sure you want to activate this beneficiary ?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }

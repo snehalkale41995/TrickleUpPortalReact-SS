@@ -36,8 +36,8 @@ class GenderList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link  to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete"  />
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i className="fa fa-trash" title="Delete" />
       </Link>
     );
   }
@@ -52,17 +52,17 @@ class GenderList extends Component {
   onConfirmDelete() {
     let gender = { ...this.state.genderToDelete };
     let compRef = this;
-    gender.Active  = false;
+    gender.Active = false;
     this.props.deleteGender(gender.Id, gender);
     // this.setState({ loading: true });
-        setTimeout(() => {
-          let message = "";
-          compRef.props.genderMasterError
-            ? (message = "Something went wrong !")
-            : (message = "Gender deleted successfully");
-        //  compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.genderMasterError);
-        }, 1000);
+    setTimeout(() => {
+      let message = "";
+      compRef.props.genderMasterError
+        ? (message = "Something went wrong !")
+        : (message = "Gender deleted successfully");
+      //  compRef.setState({ loading: false });
+      Toaster.Toaster(message, compRef.props.genderMasterError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -106,76 +106,60 @@ class GenderList extends Component {
       ],
       sizePerPage: 5
     };
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Gender">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 25 }}> 
-             <Link to={`${this.props.match.url}/GenderForm`} > 
-              <Button
-                type="button"
-                className="theme-positive-btn">
-                <i className="fa fa-plus" /> &nbsp; Add Gender
-              </Button>
-               </Link> 
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-               <BootstrapTable
-                ref="table"
-                data={this.props.genders}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Language List"
+      <CardLayout
+        name="Gender"
+        buttonName="Add Gender"
+        buttonLink={`${this.props.match.url}/GenderForm`}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.genders}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Language List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="GenderName"
+                headerAlign="left"
+                width="20"
+                csvHeader="State Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                 <TableHeaderColumn
-                  dataField="GenderName"
-                  headerAlign="left"
-                  width="20"
-                  csvHeader="State Name"
-                  dataSort={true}
-                >
-                  Gender
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable> 
-            </Col>
+                Gender
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
           <ToastContainer autoClose={2000} />
-          </FormGroup>
-        </CardLayout>
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -183,21 +167,21 @@ class GenderList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this gender record ?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-     genders: state.gendersReducer.genders,
-     genderMasterError: state.gendersReducer.genderMasterError,
+    genders: state.gendersReducer.genders,
+    genderMasterError: state.gendersReducer.genderMasterError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getGendersList : () => dispatch(actions.getGendersList()),
-    deleteGender : (id,state) => dispatch(actions.deleteGender(id,state))
+    getGendersList: () => dispatch(actions.getGendersList()),
+    deleteGender: (id, state) => dispatch(actions.deleteGender(id, state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GenderList);

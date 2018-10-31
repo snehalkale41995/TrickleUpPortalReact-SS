@@ -59,46 +59,44 @@ class ImageForm extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Image Upload"
-          navigation={true}
-          navigationRoute="/mediaContent/imageContent"
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
-            <FormGroup row>
-              <Col xs="12" md="6">
-                <InputElement
-                  type="file"
-                  label="Image file"
-                  name="Image file"
-                  accept="image/*"
-                  required={imageRequired}
-                  onChange={event => this.handleUploadFile(event)}
-                />
+      <CardLayout
+        name="Image Upload"
+        navigation={true}
+        navigationRoute="/mediaContent/imageContent"
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="12" md="6">
+              <InputElement
+                type="file"
+                label="Image file"
+                name="Image file"
+                accept="image/*"
+                required={imageRequired}
+                onChange={event => this.handleUploadFile(event)}
+              />
+            </Col>
+            {renderURL ? (
+              <Col md="3" className="image-display">
+                <Label> {imageTitle}</Label>
+                <img src={renderURL} height={300} width={450} />
               </Col>
-              {renderURL ? (
-                <Col md="3">
-                  <Label> {imageTitle}</Label>
-                  <img src={renderURL} height={300} width={450} />
-                </Col>
-              ) : null}
-              <Col md="3" />
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={this.onSubmitMedia.bind(this)}
-                >
-                  Submit
-                </Button>
-              </Col>
-            </FormGroup>
-          </div>
-        </CardLayout>
-      </div>
+            ) : null}
+            <Col md="3" />
+          </FormGroup>
+          <FormGroup row>
+            <Col md="3">
+              <Button
+                className="theme-positive-btn"
+                onClick={this.onSubmitMedia.bind(this)}
+              >
+                Submit
+              </Button>
+            </Col>
+          </FormGroup>
+        </div>
+      </CardLayout>
     );
   }
 }

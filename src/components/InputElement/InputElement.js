@@ -40,12 +40,12 @@ const InputElement = props => (
       ) : null}
     </InputGroup>
     {props.required ? (
-      <div style={{ color: "red", fontSize: "12px" }} className="help-block">
+      <div className="help-block">
         *{props.label} is required
       </div>
     ) : null}
     {props.invalid ? (
-      <div style={{ color: "red", fontSize: "12px" }} className="help-block">
+      <div  className="help-block">
         *{props.label} is invalid
       </div>
     ) : null}

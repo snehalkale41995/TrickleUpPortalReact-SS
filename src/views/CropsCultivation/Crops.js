@@ -31,7 +31,7 @@ class Crops extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }} >
+      <Link to={this} style={{ pointerEvents: "none" }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -40,15 +40,18 @@ class Crops extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/CropForm/${row.Id}`} >
+      <Link to={`${this.props.match.url}/CropForm/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
-  showImage(cell, row){
-      return(
-          <img src={`${AppConfig.serverURL}/${row.FilePath}`} style={{height: 50,width:50}}/>
-      )
+  showImage(cell, row) {
+    return (
+      <img
+        src={`${AppConfig.serverURL}/${row.FilePath}`}
+        style={{ height: 50, width: 50 }}
+      />
+    );
   }
   render() {
     const sortingOptions = {
@@ -77,90 +80,76 @@ class Crops extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Crops">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >      
-              <Link to={`${this.props.match.url}/CropForm`} >
-                <Button type="button" className="theme-positive-btn"  >
-                  <i className="fa fa-plus" />&nbsp; Add crop
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-              <BootstrapTable
-                ref="table"
-                data={this.props.cropsList}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Crops List"
+      <CardLayout
+        name="Crops"
+        buttonName="Add crop"
+        buttonLink={`${this.props.match.url}/CropForm`}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.cropsList}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Crops List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="CropName"
+                headerAlign="left"
+                width="40"
+                csvHeader="Crop Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="CropName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
-                  Crop Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="FilePath"
-                  headerAlign="left"
-                  width="40"
-                  dataFormat={this.showImage.bind(this)}
-                  csvHeader="FilePath"
-                  dataSort={true}
-                >
-                  Image
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Ready"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Active"
-                  dataSort={true}
-                >
-                  Active
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
-      </div>
+                Crop Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="FilePath"
+                headerAlign="left"
+                width="40"
+                dataFormat={this.showImage.bind(this)}
+                csvHeader="FilePath"
+                dataSort={true}
+              >
+                Image
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Ready"
+                headerAlign="left"
+                width="40"
+                csvHeader="Active"
+                dataSort={true}
+              >
+                Active
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
+      </CardLayout>
     );
   }
 }

@@ -36,13 +36,13 @@ class StatesForm extends Component {
     if (this.state.stateToEdit) {
       this.setState(prevState => ({
         currentState: {
-            ...prevState.currentState,
-            StateName:this.state.stateToEdit.StateName,
-            StateCode: this.state.stateToEdit.StateCode,
-            Id : this.state.stateToEdit.Id
+          ...prevState.currentState,
+          StateName: this.state.stateToEdit.StateName,
+          StateCode: this.state.stateToEdit.StateCode,
+          Id: this.state.stateToEdit.Id
         },
         updateFlag: true
-    }))
+      }));
       // this.setState({
       //   updateFlag: true,
       //   currentState: this.state.stateToEdit
@@ -153,86 +153,76 @@ class StatesForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="State Form"
-          navigation={true}
-          navigationRoute={this}
-          onClick={() => {
-           this.setState({ showList: true });
-          }}
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
+      <CardLayout
+        name="State Form"
+        navigation={true}
+        navigationRoute={this}
+        onClick={() => {
+          this.setState({ showList: true });
+        }}
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="8" md="4">
+              <InputElement
+                type="text"
+                label="State name"
+                placeholder="State name"
+                name="StateName"
+                required={currentState.StateNameRequired}
+                value={currentState.StateName}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+            <Col md="4">
+              <InputElement
+                type="text"
+                label="State code"
+                placeholder="State code"
+                name="StateCode"
+                required={currentState.StateCodeRequired}
+                value={currentState.StateCode}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+          </FormGroup>
+
+          {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="8" md="4">
-                <InputElement
-                  type="text"
-                  label="State name"
-                  placeholder="State name"
-                  name="StateName"
-                  required={currentState.StateNameRequired}
-                  value={currentState.StateName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="4">
-                <InputElement
-                  type="text"
-                  label="State code"
-                  placeholder="State code"
-                  name="StateCode"
-                  required={currentState.StateCodeRequired}
-                  value={currentState.StateCode}
-                  onChange={event => this.onChangeHandler(event)}
-                />
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
             </FormGroup>
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
 
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-                {/* <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={() => {this.setState({ showList: true });}}
-                  >
-                    Cancel
-                  </Button>
-                </Col> */}
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
-
-            <ToastContainer autoClose={2000} />
-          </div>
-        </CardLayout>
-      </div>
+          <ToastContainer autoClose={2000} />
+        </div>
+      </CardLayout>
     );
   }
 }

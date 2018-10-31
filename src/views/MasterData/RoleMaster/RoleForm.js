@@ -16,7 +16,7 @@ class RolesForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
-      loggedinUserId : "",
+      loggedinUserId: "",
       currentRole: {
         Id: "",
         RoleName: "",
@@ -28,13 +28,13 @@ class RolesForm extends Component {
         UpdatedOn: "",
         UpdatedBy: "",
         Active: true
-      },
+      }
     };
   }
-  
+
   componentWillMount() {
-   let loggedinUserId = localStorage.getItem("user");
-   this.setState({loggedinUserId:loggedinUserId})
+    let loggedinUserId = localStorage.getItem("user");
+    this.setState({ loggedinUserId: loggedinUserId });
     if (this.props.match.params.id !== undefined) {
       let currentRole = this.props.roleList.find(
         role => role.Id == this.props.match.params.id
@@ -84,7 +84,7 @@ class RolesForm extends Component {
           setTimeout(() => {
             if (!compRef.props.roleMasterError) {
               compRef.onReset();
-              compRef.props.history.push('/master/roles');
+              compRef.props.history.push("/master/roles");
             }
           }, 1000);
         }, 1000);
@@ -110,7 +110,7 @@ class RolesForm extends Component {
           setTimeout(() => {
             if (!compRef.props.roleMasterError) {
               compRef.onReset();
-             compRef.props.history.push('/master/roles');
+              compRef.props.history.push("/master/roles");
             }
           }, 1000);
         }, 1000);
@@ -123,7 +123,7 @@ class RolesForm extends Component {
       return true;
     } else {
       if (!currentRole.RoleName) currentRole.RoleNameRequired = true;
-     // if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
+      // if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
       this.setState({
         currentRole: currentRole
       });
@@ -134,7 +134,7 @@ class RolesForm extends Component {
     let currentRole = {
       Id: "",
       RoleName: "",
-     // RoleId: "",
+      // RoleId: "",
       RoleNameRequired: false,
       RoleIdRequired: false,
       CreatedOn: "",
@@ -149,77 +149,64 @@ class RolesForm extends Component {
   }
   render() {
     const { currentRole } = this.state;
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Role Form"
-          navigation={true}
-          navigationRoute="/master/roles"
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
+      <CardLayout
+        name="Role Form"
+        navigation={true}
+        navigationRoute="/master/roles"
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="8" md="4">
+              <InputElement
+                type="text"
+                label="Role name"
+                placeholder="Role name"
+                name="RoleName"
+                required={currentRole.RoleNameRequired}
+                value={currentRole.RoleName}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+          </FormGroup>
+          {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="8" md="4">
-                {/* <InputElement
-                  type="text"
-                  label="Role Id"
-                  placeholder="Role Id"
-                  name="RoleId"
-                  required={currentRole.RoleIdRequired}
-                  value={currentRole.RoleId}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="4"> */}
-                <InputElement
-                  type="text"
-                  label="Role name"
-                  placeholder="Role name"
-                  name="RoleName"
-                  required={currentRole.RoleNameRequired}
-                  value={currentRole.RoleName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
             </FormGroup>
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}>
-                    Save
-                  </Button>
-                </Col>
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    //style={{ pointerEvents: 'none' }}
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
 
-            <ToastContainer autoClose={2000} />
-          </div>
-        </CardLayout>
-      </div>
+          <ToastContainer autoClose={2000} />
+        </div>
+      </CardLayout>
     );
   }
 }
@@ -227,15 +214,15 @@ class RolesForm extends Component {
 const mapStateToProps = state => {
   return {
     roleMasterError: state.rolesReducer.roleMasterError,
-    roleList : state.rolesReducer.roles
+    roleList: state.rolesReducer.roles
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     createRole: role => dispatch(actions.createRole(role)),
-    updateRole: (id,role) => dispatch(actions.updateRole(id,role)),
-   // getRoleById: (id) => dispatch(actions.getRoleById(id))
+    updateRole: (id, role) => dispatch(actions.updateRole(id, role))
+    // getRoleById: (id) => dispatch(actions.getRoleById(id))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RolesForm);

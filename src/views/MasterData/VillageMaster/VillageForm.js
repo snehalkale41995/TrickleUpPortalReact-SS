@@ -48,16 +48,19 @@ class VillageForm extends Component {
       ) {
         return district.stateId === compRef.state.villageToEdit.State;
       });
-      let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
-        grampanchayat
-      ) {
-        return grampanchayat.districtId === compRef.state.villageToEdit.District;
-      });
+      let grampanchayatOptions = _.filter(
+        this.props.grampanchayatsList,
+        function(grampanchayat) {
+          return (
+            grampanchayat.districtId === compRef.state.villageToEdit.District
+          );
+        }
+      );
       this.setState({
         updateFlag: true,
         village: this.state.villageToEdit,
-        districtOptions : districtOptions,
-        grampanchayatOptions : grampanchayatOptions,
+        districtOptions: districtOptions,
+        grampanchayatOptions: grampanchayatOptions,
         districtDisabled: false,
         grampanchayatDisabled: false
       });
@@ -97,7 +100,7 @@ class VillageForm extends Component {
     ) {
       return grampanchayat.districtId === value;
     });
-    
+
     this.setState({
       village: village,
       grampanchayatOptions: grampanchayatOptions,
@@ -164,7 +167,12 @@ class VillageForm extends Component {
     }
   }
   valid(village) {
-    if (village.VillageName && village.District && village.State && village.Grampanchayat) {
+    if (
+      village.VillageName &&
+      village.District &&
+      village.State &&
+      village.Grampanchayat
+    ) {
       return true;
     } else {
       !village.VillageName ? (village.VillageNameRequired = true) : null;
@@ -205,114 +213,104 @@ class VillageForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Village Form"
-          navigation={true}
-          navigationRoute={this}
-          onClick={() => {
-           this.setState({ showList: true });
-          }}
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
-            <FormGroup row>
-              <Col xs="10" md="5">
-                <Label>State</Label>
-                <DropdownSelect
-                  name="States"
-                  placeholder="Select State..."
-                  options={this.props.statesList}
-                  value={village.State}
-                  required={village.StateRequired}
-                  onChange={this.onStateValueChange.bind(this)}
-                  simpleValue
-                />
-              </Col>
-              <Col md="5">
-                <Label>District</Label>
-                <DropdownSelect
-                  name="District"
-                  placeholder="Select district..."
-                  options={this.state.districtOptions}
-                  value={village.District}
-                  disabled={this.state.districtDisabled}
-                  required={village.DistrictRequired}
-                  onChange={this.onDistrictValueChange.bind(this)}
-                  simpleValue
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col xs="10" md="5">
-                <Label>Grampanchayat</Label>
-                <DropdownSelect
-                  name="Grampanchayat"
-                  placeholder="Select grampanchayat..."
-                  options={this.state.grampanchayatOptions}
-                  value={village.Grampanchayat}
-                  disabled={this.state.grampanchayatDisabled}
-                  required={village.GrampanchayatRequired}
-                  onChange={this.onGrampanchayatValueChange.bind(this)}
-                  simpleValue
-                />
-              </Col>
-              <Col md="5">
-                <InputElement
-                  type="text"
-                  label="Village"
-                  name="VillageName"
-                  placeholder="Please enter village name"
-                  value={village.VillageName}
-                  required={village.VillageNameRequired}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-            </FormGroup>
+      <CardLayout
+        name="Village Form"
+        navigation={true}
+        navigationRoute={this}
+        onClick={() => {
+          this.setState({ showList: true });
+        }}
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="10" md="5">
+              <Label>State</Label>
+              <DropdownSelect
+                name="States"
+                placeholder="Select State..."
+                options={this.props.statesList}
+                value={village.State}
+                required={village.StateRequired}
+                onChange={this.onStateValueChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+            <Col md="5">
+              <Label>District</Label>
+              <DropdownSelect
+                name="District"
+                placeholder="Select district..."
+                options={this.state.districtOptions}
+                value={village.District}
+                disabled={this.state.districtDisabled}
+                required={village.DistrictRequired}
+                onChange={this.onDistrictValueChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="10" md="5">
+              <Label>Grampanchayat</Label>
+              <DropdownSelect
+                name="Grampanchayat"
+                placeholder="Select grampanchayat..."
+                options={this.state.grampanchayatOptions}
+                value={village.Grampanchayat}
+                disabled={this.state.grampanchayatDisabled}
+                required={village.GrampanchayatRequired}
+                onChange={this.onGrampanchayatValueChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+            <Col md="5">
+              <InputElement
+                type="text"
+                label="Village"
+                name="VillageName"
+                placeholder="Please enter village name"
+                value={village.VillageName}
+                required={village.VillageNameRequired}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+          </FormGroup>
 
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-                {/* <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
+          {this.state.updateFlag ? (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Save
                 </Button>
-                </Col> */}
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
-          </div>
-        </CardLayout>
+              </Col>
+            </FormGroup>
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
+        </div>
         <ToastContainer autoClose={2000} />
-      </div>
+      </CardLayout>
     );
   }
 }
@@ -327,8 +325,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createVillage : (village) => dispatch(actions.createVillage(village)),
-    updateVillage : (id, village) => dispatch(actions.updateVillage(id, village))
+    createVillage: village => dispatch(actions.createVillage(village)),
+    updateVillage: (id, village) => dispatch(actions.updateVillage(id, village))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VillageForm);

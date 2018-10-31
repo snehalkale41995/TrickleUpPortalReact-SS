@@ -15,7 +15,7 @@ class LanguagesForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
-       loggedinUserId : "",
+      loggedinUserId: "",
       currentLanguage: {
         Id: "",
         LanguageName: "",
@@ -32,7 +32,7 @@ class LanguagesForm extends Component {
   }
   componentWillMount() {
     let loggedinUserId = localStorage.getItem("user");
-   this.setState({loggedinUserId:loggedinUserId})
+    this.setState({ loggedinUserId: loggedinUserId });
     if (this.props.match.params.id !== undefined) {
       let currentLanguage = this.props.languageList.find(
         language => language.Id == this.props.match.params.id
@@ -82,7 +82,7 @@ class LanguagesForm extends Component {
           setTimeout(() => {
             if (!compRef.props.languageMasterError) {
               compRef.onReset();
-            compRef.props.history.push('/master/languages');
+              compRef.props.history.push("/master/languages");
             }
           }, 1000);
         }, 1000);
@@ -108,7 +108,7 @@ class LanguagesForm extends Component {
           setTimeout(() => {
             if (!compRef.props.languageMasterError) {
               compRef.onReset();
-             compRef.props.history.push('/master/languages');
+              compRef.props.history.push("/master/languages");
             }
           }, 1000);
         }, 1000);
@@ -119,8 +119,10 @@ class LanguagesForm extends Component {
     if (currentLanguage.LanguageName && currentLanguage.LanguageCode) {
       return true;
     } else {
-      if (!currentLanguage.LanguageName) currentLanguage.LanguageNameRequired = true;
-      if (!currentLanguage.LanguageCode) currentLanguage.LanguageCodeRequired = true;
+      if (!currentLanguage.LanguageName)
+        currentLanguage.LanguageNameRequired = true;
+      if (!currentLanguage.LanguageCode)
+        currentLanguage.LanguageCodeRequired = true;
       this.setState({
         currentLanguage: currentLanguage
       });
@@ -146,77 +148,75 @@ class LanguagesForm extends Component {
   }
   render() {
     const { currentLanguage } = this.state;
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout
-          name="Language Form"
-          navigation={true}
-          navigationRoute="/master/languages"
-        >
-          <div style={{ margin: 20 }}>
-            <FormGroup row />
+      <CardLayout
+        name="Language Form"
+        navigation={true}
+        navigationRoute="/master/languages"
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="8" md="4">
+              <InputElement
+                type="text"
+                label="Language name"
+                placeholder="Language name"
+                name="LanguageName"
+                required={currentLanguage.LanguageNameRequired}
+                value={currentLanguage.LanguageName}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+            <Col md="4">
+              <InputElement
+                type="text"
+                label="Language code"
+                placeholder="Language code"
+                name="LanguageCode"
+                required={currentLanguage.LanguageCodeRequired}
+                value={currentLanguage.LanguageCode}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+          </FormGroup>
+
+          {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="8" md="4">
-                <InputElement
-                  type="text"
-                  label="Language name"
-                  placeholder="Language name"
-                  name="LanguageName"
-                  required={currentLanguage.LanguageNameRequired}
-                  value={currentLanguage.LanguageName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
-              </Col>
-              <Col md="4">
-                <InputElement
-                  type="text"
-                  label="Language code"
-                  placeholder="Language code"
-                  name="LanguageCode"
-                  required={currentLanguage.LanguageCodeRequired}
-                  value={currentLanguage.LanguageCode}
-                  onChange={event => this.onChangeHandler(event)}
-                />
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
             </FormGroup>
-
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
-            <ToastContainer autoClose={2000} />
-          </div>
-        </CardLayout>
-      </div>
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Submit
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
+          <ToastContainer autoClose={2000} />
+        </div>
+      </CardLayout>
     );
   }
 }
@@ -224,14 +224,15 @@ class LanguagesForm extends Component {
 const mapStateToProps = state => {
   return {
     languageMasterError: state.languagesReducer.languageMasterError,
-    languageList : state.languagesReducer.languages
+    languageList: state.languagesReducer.languages
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     createLanguage: language => dispatch(actions.createLanguage(language)),
-   updateLanguage: (id,language) => dispatch(actions.updateLanguage(id,language)),
+    updateLanguage: (id, language) =>
+      dispatch(actions.updateLanguage(id, language))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LanguagesForm);

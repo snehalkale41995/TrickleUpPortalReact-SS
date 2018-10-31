@@ -2,7 +2,7 @@ import React from "react";
 import { ScaleLoader } from "react-spinners";
 
 const Loader = props => (
-  <div style={{ marginLeft: 500, marginTop: 251 }} className="animated fadeIn">
+  <div className="animated fadeIn loader-position">
     <ScaleLoader color={"#e1542e"} loading={props.loading} />
   </div>
 );

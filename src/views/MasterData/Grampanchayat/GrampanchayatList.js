@@ -7,7 +7,7 @@ import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
-import Loader from '../../../components/Loader/Loader';
+import Loader from "../../../components/Loader/Loader";
 import GrampanchayatForm from "./GrampanchayatForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
@@ -15,27 +15,27 @@ class GrampanchayatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading : true,
-      showForm : false,
-      grampanchayatToEdit  :{},
-      grampanchayatToDelete : {},
-      modalStatus: false,
+      loading: true,
+      showForm: false,
+      grampanchayatToEdit: {},
+      grampanchayatToDelete: {},
+      modalStatus: false
     };
   }
   componentWillMount() {
     this.props.getGrampanchayatsList();
-    let compRef =this;
+    let compRef = this;
     setTimeout(() => {
       compRef.setState({
-        loading : false
-      })
-    },2000)
+        loading: false
+      });
+    }, 2000);
   }
 
   onDeleteGrampanchayat(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} onClick={() => this.onDelete(row)} >
+      <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -48,7 +48,7 @@ class GrampanchayatList extends Component {
   }
   onConfirmDelete() {
     let grampanchayat = { ...this.state.grampanchayatToDelete };
-    grampanchayat.Active  = false;
+    grampanchayat.Active = false;
     this.props.deleteGrampanchayat(grampanchayat.Id, grampanchayat);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -62,7 +62,7 @@ class GrampanchayatList extends Component {
 
   onEditGrampanchayat(cell, row) {
     return (
-      <Link to={this} onClick={() => this.onEdit(row)} >
+      <Link to={this} onClick={() => this.onEdit(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -98,31 +98,23 @@ class GrampanchayatList extends Component {
       sizePerPage: 5
     };
     return this.state.showForm ? (
-      <GrampanchayatForm {...this.props} edit={this.state.grampanchayatToEdit} />
+      <GrampanchayatForm
+        {...this.props}
+        edit={this.state.grampanchayatToEdit}
+      />
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-        <div style={{marginTop : 30}}>
-        <CardLayout name="Grampanchayats">
+      <CardLayout
+        name="Grampanchayats"
+        buttonName="Add grampanchayat"
+        buttonLink={this}
+        buttonClick={() => {
+          this.setState({ showForm: true });
+        }}
+      >
         <FormGroup row>
-        <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: -20 }} >              {/* <Link to={`${this.props.match.url}/stateForm`}> */}
-              <Button
-                type="button"
-                className="theme-positive-btn"
-                
-                onClick={() => {
-                  this.setState({ showForm: true });
-                }}
-              >
-                <i className="fa fa-plus" /> &nbsp; Add grampanchayat
-              </Button>
-              {/* </Link> */}
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" >
+          <Col xs="12">
             <BootstrapTable
               ref="table"
               data={this.props.grampanchayats}
@@ -141,7 +133,7 @@ class GrampanchayatList extends Component {
                 width="40"
                 dataSort={true}
               >
-              Grampanchayat
+                Grampanchayat
               </TableHeaderColumn>
               <TableHeaderColumn
                 dataField="DistrictName"
@@ -149,7 +141,7 @@ class GrampanchayatList extends Component {
                 width="40"
                 dataSort={true}
               >
-                District 
+                District
               </TableHeaderColumn>
               <TableHeaderColumn
                 dataField="StateName"
@@ -160,27 +152,26 @@ class GrampanchayatList extends Component {
                 State
               </TableHeaderColumn>
               <TableHeaderColumn
-              dataField="edit"
-              dataFormat={this.onEditGrampanchayat.bind(this)}
-              headerAlign="left"
-              width="20"
-              export={false}
+                dataField="edit"
+                dataFormat={this.onEditGrampanchayat.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
               >
                 Edit
               </TableHeaderColumn>
               <TableHeaderColumn
-              dataField="delete"
-              dataFormat={this.onDeleteGrampanchayat.bind(this)}
-              headerAlign="left"
-              width="20"
-              export={false}
+                dataField="delete"
+                dataFormat={this.onDeleteGrampanchayat.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
               >
                 Delete
               </TableHeaderColumn>
             </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
+          </Col>
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -188,23 +179,23 @@ class GrampanchayatList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this grampanchayat record ?"
         />
-        </div>
-      )
-     
+      </CardLayout>
+    );
   }
 }
- const mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-      grampanchayats : state.grampanchayatReducer.grampanchayats
+    grampanchayats: state.grampanchayatReducer.grampanchayats
   };
 };
 
- const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {
     getStatesList: () => dispatch(actions.getStatesList()),
     getDistrictsList: () => dispatch(actions.getDistrictsList()),
-    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList()),
-    deleteGrampanchayat : (id,grampanchayat) => dispatch(actions.deleteGrampanchayat(id, grampanchayat))
+    getGrampanchayatsList: () => dispatch(actions.getGrampanchayatsList()),
+    deleteGrampanchayat: (id, grampanchayat) =>
+      dispatch(actions.deleteGrampanchayat(id, grampanchayat))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrampanchayatList);

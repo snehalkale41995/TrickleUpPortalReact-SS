@@ -26,9 +26,9 @@ class RegistrationForm extends Component {
         PhoneNumber: "",
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
-        UserId : "",
-        UserIdRequired : false,
-        UserIdInvalid : false,
+        UserId: "",
+        UserIdRequired: false,
+        UserIdInvalid: false,
         Age: "",
         AgeRequired: false,
         AgeInvalid: false,
@@ -70,31 +70,30 @@ class RegistrationForm extends Component {
     };
   }
 
-   componentWillMount() {
-   setTimeout(() => {
-      this.setState({ loading: false });
-    }, 2000);
+  componentWillMount() {
     if (this.props.match.params.id !== undefined) {
       let currentUser = this.props.beneficiaryList.find(
         user => user.Id == this.props.match.params.id
       );
       if (currentUser) {
         this.setState({
-            user: currentUser,
-            updateFlag: true
+          user: currentUser,
+          updateFlag: true,
+          loading: false
         });
       }
-      } else {
+    } else {
       this.setState({
         districtDisabled: true,
         grampanchayatDisabled: true,
-        villageDisabled: true
+        villageDisabled: true,
+        loading: false
       });
     }
   }
 
   // componentWillMount() {
-   
+
   //   if (this.props.match.params.id !== undefined) {
   //     let id = this.props.match.params.id;
   //     this.props.getBeneficiaryById(id);
@@ -252,7 +251,7 @@ class RegistrationForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/beneficiary/beneficiaryList");
+              // compRef.props.history.push("/beneficiary/beneficiaryList");
             }
           }, 1000);
         }, 1000);
@@ -342,7 +341,7 @@ class RegistrationForm extends Component {
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
-      !user.Name ? (user.NameRequired = true) : null;
+    !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
@@ -351,7 +350,7 @@ class RegistrationForm extends Component {
     !user.UserId
       ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
-      user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
+    user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
     !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
     !user.Gender ? this.setState({ genderRequired: true }) : null;
     !user.State ? this.setState({ stateRequired: true }) : null;
@@ -375,18 +374,18 @@ class RegistrationForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
-       UserIdRequired: false,
-      UserIdInvalid : false,
+      UserIdRequired: false,
+      UserIdInvalid: false,
       Age: "", //no
       AgeRequired: false,
-      AgeInvalid :false,
+      AgeInvalid: false,
       Gender: "", //id
       State: "", //id
       District: "", //id
       Village: "", //id
       Grampanchayat: "", //id
       Aadhaar: "",
-      AadhaarInvalid :false,
+      AadhaarInvalid: false,
       Role: "",
       Language: ""
     };
@@ -408,12 +407,12 @@ class RegistrationForm extends Component {
     ) : (
       <div style={{ marginTop: 30 }}>
         <CardLayout
-          name="User Form"
+          name="Beneficiary Form"
           navigation={true}
           navigationRoute="/beneficiary/beneficiaryList"
         >
           <FormGroup row />
-          <div style={{ margin: 20 }}>
+          <div className="div-padding">
             <FormGroup row>
               <Col xs="12" md="5">
                 <InputElement
@@ -440,8 +439,8 @@ class RegistrationForm extends Component {
                 />
               </Col>
             </FormGroup>
-              <FormGroup row>
-             <Col xs="12" md="5">
+            <FormGroup row>
+              <Col xs="12" md="5">
                 <InputElement
                   type="text"
                   label="Email"
@@ -453,7 +452,7 @@ class RegistrationForm extends Component {
                   onChange={event => this.onChangeInput(event)}
                 />
               </Col>
-               <Col md="5">
+              <Col md="5">
                 <InputElement
                   type="number"
                   label="Age"
@@ -480,7 +479,7 @@ class RegistrationForm extends Component {
                   onChange={this.onGenderSelection.bind(this)}
                 />
               </Col>
-              <Col  md="5">
+              <Col md="5">
                 <Label>State</Label>
                 <DropdownSelect
                   name="State"
@@ -505,7 +504,7 @@ class RegistrationForm extends Component {
                   onChange={this.onDistrictSelection.bind(this)}
                 />
               </Col>
-               <Col  md="5">
+              <Col md="5">
                 <Label>Grampanchayat</Label>
                 <DropdownSelect
                   name="Grampanchayat"
@@ -519,7 +518,6 @@ class RegistrationForm extends Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-             
               <Col xs="12" md="5">
                 <Label>Village</Label>
                 <DropdownSelect
@@ -532,7 +530,7 @@ class RegistrationForm extends Component {
                   onChange={this.onVillageSelection.bind(this)}
                 />
               </Col>
-               <Col md="5">
+              <Col md="5">
                 <InputElement
                   type="text"
                   label="Aadhaar number"
@@ -634,7 +632,7 @@ const mapStateToProps = state => {
     languagesList: state.languagesReducer.languagesList,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
     currentBeneficiary: state.beneficiaryReducer.currentBeneficiary,
-    beneficiaryList : state.beneficiaryReducer.beneficiaryList
+    beneficiaryList: state.beneficiaryReducer.beneficiaryList
   };
 };
 

@@ -144,13 +144,13 @@ class GenderForm extends Component {
     return  this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
+     
         <CardLayout
           name="Gender Form"
           navigation={true}
           navigationRoute="/master/genders"
         >
-          <div style={{ margin: 20 }}>
+          <div className="div-padding">
             <FormGroup row />
             <FormGroup row>
               <Col xs="8" md="4">
@@ -200,7 +200,7 @@ class GenderForm extends Component {
             <ToastContainer autoClose={2000} />
           </div>
         </CardLayout>
-      </div>
+      
     );
   }
 }

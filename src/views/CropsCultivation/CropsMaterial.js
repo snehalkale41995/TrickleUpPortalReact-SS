@@ -29,7 +29,7 @@ class CropsMaterial extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: 'none' }}>
+      <Link to={this} style={{ pointerEvents: "none" }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -37,7 +37,7 @@ class CropsMaterial extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/CropsMaterialForm/${row.Id}`} >
+      <Link to={`${this.props.match.url}/CropsMaterialForm/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -70,90 +70,76 @@ class CropsMaterial extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Crop Materials">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: -5 }} >      
-              <Link to={`${this.props.match.url}/CropsMaterialForm`}  style={{ pointerEvents: 'none' }}>
-                <Button type="button" className="theme-positive-btn">
-                  <i className="fa fa-plus" />&nbsp; Add crop material
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-              <BootstrapTable
-                ref="table"
-                data={this.props.cropStepsMaterial}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Crops List"
+      <CardLayout
+        name="Crop Materials"
+        buttonName="Add crop material"
+        buttonLink={`${this.props.match.url}/CropsMaterialForm`}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.cropStepsMaterial}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Crops List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Material_Name"
+                headerAlign="left"
+                width="30"
+                csvHeader="Material_Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Material_Name"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Material_Name"
-                  dataSort={true}
-                >
-                  Material Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Step_Name"
-                  headerAlign="left"
-                  width="70"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
-                  Step Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Quantity"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Crop Name"
-                  dataSort={true}
-                >
+                Material Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Step_Name"
+                headerAlign="left"
+                width="70"
+                csvHeader="Crop Name"
+                dataSort={true}
+              >
+                Step Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Quantity"
+                headerAlign="left"
+                width="30"
+                csvHeader="Crop Name"
+                dataSort={true}
+              >
                 Quantity
-                </TableHeaderColumn>
-                
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
-      </div>
+              </TableHeaderColumn>
+
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
+      </CardLayout>
     );
   }
 }

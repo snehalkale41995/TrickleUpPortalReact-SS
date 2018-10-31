@@ -36,8 +36,8 @@ class RolesList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}  onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete"  />
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i className="fa fa-trash" title="Delete" />
       </Link>
     );
   }
@@ -52,17 +52,17 @@ class RolesList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let role = { ...this.state.roleToDelete };
-    role.Active  = false;
+    role.Active = false;
     this.props.deleteRole(role.Id, role);
-      //this.setState({ loading: true });
-        setTimeout(() => {
-          let message = "";
-          compRef.props.roleMasterError
-            ? (message = "Something went wrong !")
-            : (message = "Role deleted successfully");
-          //compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.roleMasterError);
-        }, 1000);
+    //this.setState({ loading: true });
+    setTimeout(() => {
+      let message = "";
+      compRef.props.roleMasterError
+        ? (message = "Something went wrong !")
+        : (message = "Role deleted successfully");
+      //compRef.setState({ loading: false });
+      Toaster.Toaster(message, compRef.props.roleMasterError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -82,7 +82,7 @@ class RolesList extends Component {
       </Link>
     );
   }
-  
+
   render() {
     const sortingOptions = {
       defaultSortName: "RoleName",
@@ -107,12 +107,15 @@ class RolesList extends Component {
       ],
       sizePerPage: 5
     };
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Roles">
-          <FormGroup row>
+      <CardLayout
+        name="Roles"
+        buttonName="Add Role"
+        buttonLink={`${this.props.match.url}/RoleForm`}
+      >
+        {/* <FormGroup row>
           <Col xs="12" md="10" />
           <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
              <Link to={`${this.props.match.url}/RoleForm`}  > 
@@ -124,28 +127,23 @@ class RolesList extends Component {
                </Link> 
               &nbsp;&nbsp;
             </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-              <BootstrapTable
-                ref="table"
-                data={this.props.Roles}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Roles List"
-              >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                 {/* <TableHeaderColumn
+          </FormGroup> */}
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.Roles}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Roles List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              {/* <TableHeaderColumn
                   dataField="RoleId"
                   headerAlign="left"
                   width="30"
@@ -154,38 +152,37 @@ class RolesList extends Component {
                 >
                   Role Id
                 </TableHeaderColumn> */}
-                <TableHeaderColumn
-                  dataField="RoleName"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Role Name"
-                  dataSort={true}
-                >
-                  Role Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-             <ToastContainer autoClose={2000} />
-          </FormGroup>
-        </CardLayout>
+              <TableHeaderColumn
+                dataField="RoleName"
+                headerAlign="left"
+                width="30"
+                csvHeader="Role Name"
+                dataSort={true}
+              >
+                Role Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+          <ToastContainer autoClose={2000} />
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -193,21 +190,21 @@ class RolesList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this role record ?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-     Roles: state.rolesReducer.roles,
-     roleMasterError: state.rolesReducer.roleMasterError,
+    Roles: state.rolesReducer.roles,
+    roleMasterError: state.rolesReducer.roleMasterError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getRolesList: () => dispatch(actions.getRolesList()),
-    deleteRole : (id,state) => dispatch(actions.deleteRole(id,state))
+    deleteRole: (id, state) => dispatch(actions.deleteRole(id, state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RolesList);

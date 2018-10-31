@@ -16,30 +16,30 @@ class ChangePassword extends Component {
     this.state = {
       loading: true,
       userCredential: {
-        UserId:"",
-	      OldPassword:"",
-        NewPassword:"",
-        ConfirmPassword:"",    
+        UserId: "",
+        OldPassword: "",
+        NewPassword: "",
+        ConfirmPassword: "",
         OldPasswordRequired: false,
         NewPasswordRequired: false,
         ConfirmPasswordRequired: false,
-        InvalidPassword : false
+        InvalidPassword: false
       },
-      showNewPassword : false,
-      showConfirmPassword : false,
-      newPasswordType : "password",
-      confirmPasswordType : "password"
+      showNewPassword: false,
+      showConfirmPassword: false,
+      newPasswordType: "password",
+      confirmPasswordType: "password"
     };
   }
 
   componentWillMount() {
-    let  userCredential  = this.state.userCredential;
+    let userCredential = this.state.userCredential;
     setTimeout(() => {
-      this.setState({ loading: false })
+      this.setState({ loading: false });
     }, 2000);
     let userId = localStorage.getItem("user");
-    userCredential.UserId = userId
-    this.setState({userCredential : userCredential})
+    userCredential.UserId = userId;
+    this.setState({ userCredential: userCredential });
   }
 
   onChangeInput(event) {
@@ -51,29 +51,33 @@ class ChangePassword extends Component {
       userCredential: userCredential
     });
   }
- 
+
   onSubmit() {
     let userCredential = { ...this.state.userCredential };
     let compRef = this;
     if (this.validUser(userCredential)) {
-     let  user = _.pick(userCredential, [
+      let user = _.pick(userCredential, [
         "UserId",
         "OldPassword",
-        "NewPassword",
-     ]);
+        "NewPassword"
+      ]);
       this.props.changePassword(user);
       setTimeout(() => {
         let changePasswordError = compRef.props.changePasswordError;
         let changePasswordErrorMsg = compRef.props.changePasswordErrorMsg;
-        compRef.Toaster(changePasswordError, "Password Change", changePasswordErrorMsg);
+        compRef.Toaster(
+          changePasswordError,
+          "Password Change",
+          changePasswordErrorMsg
+        );
       }, 1000);
-    } 
+    }
   }
 
-    Toaster(changePasswordError, actionName, changePasswordErrorMsg) {
+  Toaster(changePasswordError, actionName, changePasswordErrorMsg) {
     let compRef = this;
     if (!changePasswordError) {
-        compRef.onReset();
+      compRef.onReset();
       toast.success(actionName + " Successfully...", {
         position: toast.POSITION.BOTTOM_RIGHT
       });
@@ -85,14 +89,28 @@ class ChangePassword extends Component {
   }
 
   validUser(userCredential) {
-    let validPassword = userCredential.NewPassword === userCredential.ConfirmPassword;
-    if (userCredential.OldPassword && userCredential.NewPassword && userCredential.ConfirmPassword && validPassword) {
+    let validPassword =
+      userCredential.NewPassword === userCredential.ConfirmPassword;
+    if (
+      userCredential.OldPassword &&
+      userCredential.NewPassword &&
+      userCredential.ConfirmPassword &&
+      validPassword
+    ) {
       return true;
     } else {
-      !userCredential.OldPassword ? userCredential.OldPasswordRequired = true : null;
-      !userCredential.NewPassword ? userCredential.NewPasswordRequired = true : null;
-       userCredential.ConfirmPassword && !validPassword ? userCredential.InvalidPassword = true : null;
-      !userCredential.ConfirmPassword ? userCredential.ConfirmPasswordRequired = true : null;
+      !userCredential.OldPassword
+        ? (userCredential.OldPasswordRequired = true)
+        : null;
+      !userCredential.NewPassword
+        ? (userCredential.NewPasswordRequired = true)
+        : null;
+      userCredential.ConfirmPassword && !validPassword
+        ? (userCredential.InvalidPassword = true)
+        : null;
+      !userCredential.ConfirmPassword
+        ? (userCredential.ConfirmPasswordRequired = true)
+        : null;
       this.setState({
         userCredential: userCredential
       });
@@ -102,15 +120,15 @@ class ChangePassword extends Component {
 
   onReset() {
     let userCredential = {
-       UserId:"",
-	    OldPassword:"",
-        NewPassword:"",
-        ConfirmPassword:"",    
-        OldPasswordRequired: false,
-        NewPasswordRequired: false,
-        ConfirmPasswordRequired: false,
-        InvalidPassword : false
-    }
+      UserId: "",
+      OldPassword: "",
+      NewPassword: "",
+      ConfirmPassword: "",
+      OldPasswordRequired: false,
+      NewPasswordRequired: false,
+      ConfirmPasswordRequired: false,
+      InvalidPassword: false
+    };
     this.setState({
       userCredential: userCredential
     });
@@ -121,78 +139,88 @@ class ChangePassword extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-        <div style={{ marginTop: 30 }}>
-          <CardLayout
-            name="Change Password"
-          >
-            <FormGroup row />
-            <div style={{ margin: 20 }}>
-              <FormGroup row>
-                <Col xs="12" md="5">
-                  <InputElement
-                    type="text"
-                    label="Old Password"
-                    name="OldPassword"
-                    maxLength={10}
-                    placeholder="Old Password"
-                    value={userCredential.OldPassword}
-                    required={userCredential.OldPasswordRequired}
-                    onChange={event => this.onChangeInput(event)}
-                  />
-                </Col>
-                <Col md="5">
-                  <InputElement
-                    type={this.state.newPasswordType}
-                    label="New Password"
-                    name="NewPassword"
-                    isPassword = {true}
-                    showPassword = {this.state.showNewPassword}
-                    onEyeToggle ={() => {this.setState({
-                        showNewPassword : !this.state.showNewPassword,
-                        newPasswordType : this.state.newPasswordType === "password" ? "input" : "password"
-                    })}}
-                    maxLength={10}
-                    placeholder="New Password"
-                    value={userCredential.NewPassword}
-                    required={userCredential.NewPasswordRequired}
-                    onChange={event => this.onChangeInput(event)}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col xs="12" md="5">
-                  <InputElement
-                    type={this.state.confirmPasswordType}
-                    label="Confirm Password"
-                    name="ConfirmPassword"
-                    placeholder="Confirm Password"
-                    isPassword = {true}
-                    showPassword = {this.state.showConfirmPassword}
-                    onEyeToggle ={() => {this.setState({
-                        showConfirmPassword : !this.state.showConfirmPassword,
-                        confirmPasswordType : this.state.confirmPasswordType === "password" ? "input" : "password"
-                    })}}
-                    value={userCredential.ConfirmPassword}
-                    required={userCredential.ConfirmPasswordRequired}
-                    onChange={event => this.onChangeInput(event)}
-                  />
+      <CardLayout name="Change Password">
+        <FormGroup row />
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <InputElement
+                type="text"
+                label="Old Password"
+                name="OldPassword"
+                maxLength={10}
+                placeholder="Old Password"
+                value={userCredential.OldPassword}
+                required={userCredential.OldPasswordRequired}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+            <Col md="5">
+              <InputElement
+                type={this.state.newPasswordType}
+                label="New Password"
+                name="NewPassword"
+                isPassword={true}
+                showPassword={this.state.showNewPassword}
+                onEyeToggle={() => {
+                  this.setState({
+                    showNewPassword: !this.state.showNewPassword,
+                    newPasswordType:
+                      this.state.newPasswordType === "password"
+                        ? "input"
+                        : "password"
+                  });
+                }}
+                maxLength={10}
+                placeholder="New Password"
+                value={userCredential.NewPassword}
+                required={userCredential.NewPasswordRequired}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+              <InputElement
+                type={this.state.confirmPasswordType}
+                label="Confirm Password"
+                name="ConfirmPassword"
+                placeholder="Confirm Password"
+                isPassword={true}
+                showPassword={this.state.showConfirmPassword}
+                onEyeToggle={() => {
+                  this.setState({
+                    showConfirmPassword: !this.state.showConfirmPassword,
+                    confirmPasswordType:
+                      this.state.confirmPasswordType === "password"
+                        ? "input"
+                        : "password"
+                  });
+                }}
+                value={userCredential.ConfirmPassword}
+                required={userCredential.ConfirmPasswordRequired}
+                onChange={event => this.onChangeInput(event)}
+              />
               {userCredential.InvalidPassword ? (
-              <div style={{ color: "red", fontSize: "12px", marginTop : -12 }} className="help-block">
-                *New Password and Confirm Password do not Match
-                 </div>
+                <div
+                  style={{ color: "red", fontSize: "12px", marginTop: -12 }}
+                  className="help-block"
+                >
+                  *New Password and Confirm Password do not Match
+                </div>
               ) : null}
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col xs="3" md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Save
-                </Button>
-                </Col>
-                {/* <Col md="1">
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="3" md="1">
+              <Button
+                className="theme-positive-btn"
+                onClick={this.onSubmit.bind(this)}
+              >
+                Save
+              </Button>
+            </Col>
+            {/* <Col md="1">
                   <Button
                     className="theme-reset-btn"
                     onClick={this.onReset.bind(this)}
@@ -200,12 +228,11 @@ class ChangePassword extends Component {
                     Reset
                 </Button>
                 </Col> */}
-              </FormGroup>
-               <ToastContainer autoClose={2000} />
-            </div>
-          </CardLayout>
+          </FormGroup>
+          <ToastContainer autoClose={2000} />
         </div>
-      );
+      </CardLayout>
+    );
   }
 }
 
@@ -217,10 +244,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    changePassword: userCredential => dispatch(actions.changePassword(userCredential))
+    changePassword: userCredential =>
+      dispatch(actions.changePassword(userCredential))
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangePassword);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

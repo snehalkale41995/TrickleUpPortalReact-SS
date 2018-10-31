@@ -8,37 +8,39 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import _ from 'lodash';
+import _ from "lodash";
 
 class OperationalUserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      operationalUserList : [],
+      operationalUserList: [],
       loading: true,
       modalStatus: false,
       userToDelete: {}
     };
   }
 
- componentDidMount() {
+  componentDidMount() {
     let compRef = this;
     compRef.props.getBeneficiaryList();
     setTimeout(() => {
-     compRef.setOperationalUser()
+      compRef.setOperationalUser();
     }, 2000);
   }
 
-  setOperationalUser(){
-     let compRef = this;
-     let  operationalUserList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
-     return beneficiary.Active === true && beneficiary.Role === 2;
-       });
-      compRef.setState({
-        loading: false,
-        operationalUserList : operationalUserList
-      });
-   }
+  setOperationalUser() {
+    let compRef = this;
+    let operationalUserList = _.filter(compRef.props.beneficiaryList, function(
+      beneficiary
+    ) {
+      return beneficiary.Active === true && beneficiary.Role === 2;
+    });
+    compRef.setState({
+      loading: false,
+      operationalUserList: operationalUserList
+    });
+  }
 
   onDeleteBeneficiary(cell, row) {
     return (
@@ -67,10 +69,10 @@ class OperationalUserList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    user.Active  = false;
+    user.Active = false;
     this.props.deleteBeneficiary(user.Id, user);
-     setTimeout(() => {
-     compRef.setOperationalUser()
+    setTimeout(() => {
+      compRef.setOperationalUser();
     }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -82,7 +84,7 @@ class OperationalUserList extends Component {
       modalStatus: !this.state.modalStatus
     });
   }
-  
+
   render() {
     const sortingOptions = {
       defaultSortName: "Name",
@@ -110,146 +112,129 @@ class OperationalUserList extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Operational User">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
-             <Link to={`${this.props.match.url}/operationalUser`}  > 
-              <Button
-                type="button"
-                className="theme-positive-btn">
-                <i className="fa fa-plus" /> &nbsp; Add User
-              </Button>
-               </Link> 
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="12">
-              <BootstrapTable
-                style={{ marginTop: -18 }}
-                ref="table"
-                data={this.state.operationalUserList}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                exportCSV={true}
-                csvFileName="OperationalUserList.csv"
-                hover={true}
+      <CardLayout
+        name="Operational User"
+        buttonName="Add User"
+        buttonLink={`${this.props.match.url}/operationalUser`}
+      >
+        <FormGroup row>
+          <Col xs="12" md="12">
+            <BootstrapTable
+              ref="table"
+              data={this.state.operationalUserList}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              exportCSV={true}
+              csvFileName="OperationalUserList.csv"
+              hover={true}
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+
+              <TableHeaderColumn
+                dataField="Name"
+                headerAlign="left"
+                width="40"
+                csvHeader="Name"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-               
-                <TableHeaderColumn
-                  dataField="Name"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Name"
-                  dataSort={true}
-                >
-                  Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="PhoneNumber"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Phone Number"
-                  dataSort={true}
-                >
-                  Phone Number
-                </TableHeaderColumn>
-                 <TableHeaderColumn
-                  dataField="UserId"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Email Id"
-                  dataSort={true}
-                >
-                  Email Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="Age"
-                  csvHeader="Age"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="GenderName"
-                  csvHeader="Gender"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="StateName"
-                  csvHeader="State"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="DistrictName"
-                  csvHeader="District"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="GrampanchayatName"
-                  csvHeader="Grampanchayat"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="VillageName"
-                  csvHeader="Village"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="LanguageName"
-                  csvHeader="Language"
-                  export={true}
-                  hidden
-                />
-                {/* <TableHeaderColumn
+                Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="PhoneNumber"
+                headerAlign="left"
+                width="40"
+                csvHeader="Phone Number"
+                dataSort={true}
+              >
+                Phone Number
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="UserId"
+                headerAlign="left"
+                width="40"
+                csvHeader="Email Id"
+                dataSort={true}
+              >
+                Email Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Age"
+                csvHeader="Age"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="GenderName"
+                csvHeader="Gender"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="StateName"
+                csvHeader="State"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="DistrictName"
+                csvHeader="District"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="GrampanchayatName"
+                csvHeader="Grampanchayat"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="VillageName"
+                csvHeader="Village"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="LanguageName"
+                csvHeader="Language"
+                export={true}
+                hidden
+              />
+              {/* <TableHeaderColumn
                   dataField="Aadhar"
                   csvHeader="Aadhar number"
                   export={true}
                   hidden
                 /> */}
-                <TableHeaderColumn
-                  dataField="Active"
-                  csvHeader="Active"
-                  export={true}
-                  hidden
-                />
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Deactivate
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
+              <TableHeaderColumn
+                dataField="Active"
+                csvHeader="Active"
+                export={true}
+                hidden
+              />
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditBeneficiary.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteBeneficiary.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Deactivate
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -257,7 +242,7 @@ class OperationalUserList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this user?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }
@@ -274,4 +259,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.deleteBeneficiary(id, beneficiary))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(OperationalUserList);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  OperationalUserList
+);

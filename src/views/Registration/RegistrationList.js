@@ -8,12 +8,12 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import _ from 'lodash'
+import _ from "lodash";
 class RegistrationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beneficiaryList:[],
+      beneficiaryList: [],
       loading: true,
       modalStatus: false,
       userToDelete: {}
@@ -24,20 +24,22 @@ class RegistrationList extends Component {
     let compRef = this;
     compRef.props.getBeneficiaryList();
     setTimeout(() => {
-     compRef.setBeneficiary()
+      compRef.setBeneficiary();
     }, 2000);
   }
 
-   setBeneficiary(){
-     let compRef = this;
-     let  beneficiaryList =  _.filter(compRef.props.beneficiaryList, function(beneficiary) {
-     return beneficiary.Active === true && beneficiary.Role === 3;
-       });
-      compRef.setState({
-        loading: false,
-        beneficiaryList : beneficiaryList
-      });
-   }
+  setBeneficiary() {
+    let compRef = this;
+    let beneficiaryList = _.filter(compRef.props.beneficiaryList, function(
+      beneficiary
+    ) {
+      return beneficiary.Active === true && beneficiary.Role === 3;
+    });
+    compRef.setState({
+      loading: false,
+      beneficiaryList: beneficiaryList
+    });
+  }
 
   onDeleteBeneficiary(cell, row) {
     return (
@@ -65,10 +67,10 @@ class RegistrationList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    user.Active  = false;
+    user.Active = false;
     this.props.deleteBeneficiary(user.Id, user);
     setTimeout(() => {
-     compRef.setBeneficiary()
+      compRef.setBeneficiary();
     }, 2000);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -107,23 +109,14 @@ class RegistrationList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Beneficiary List">
-          <FormGroup row>
-            <Col xs="12" md="10" />
-            <Col md="2" style={{ marginTop: -55,marginLeft :-42 }}>
-              <Link to={`${this.props.match.url}/registration`}>
-                <Button type="button" className="theme-positive-btn" style={{marginLeft : 50}}>
-                  <i className="fa fa-plus" />
-                  &nbsp; Add Beneficiary
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
+        <CardLayout
+          name="Beneficiary List"
+          buttonName="Add beneficiary"
+          buttonLink={`${this.props.match.url}/registration`}
+        >
           <FormGroup row>
             <Col xs="12" md="12">
               <BootstrapTable
-                style={{ marginTop: -18 }}
                 ref="table"
                 data={this.state.beneficiaryList}
                 pagination={true}
@@ -141,7 +134,7 @@ class RegistrationList extends Component {
                 >
                   Id
                 </TableHeaderColumn>
-               
+
                 <TableHeaderColumn
                   dataField="Name"
                   headerAlign="left"
@@ -160,7 +153,7 @@ class RegistrationList extends Component {
                 >
                   Phone Number
                 </TableHeaderColumn>
-                 <TableHeaderColumn
+                <TableHeaderColumn
                   dataField="UserId"
                   headerAlign="left"
                   width="40"

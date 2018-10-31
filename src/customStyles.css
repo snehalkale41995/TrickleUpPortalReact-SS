@@ -9944,3 +9944,44 @@ html body .app.flex-row.align-items-center {
   padding: 3px;
   margin-left:  -10px
 }
+.login-padding {
+  padding : 40px
+}
+.help-block{
+  color: #E00000;
+  font-size: 12px;
+  width: 400px;
+}
+.div-padding{
+  padding-left :25px;
+  padding-right :25px;
+  padding-bottom: 25px;
+}
+.image-display{
+  height: 300px;
+  width: 350;
+}
+.card-marginTop{
+  margin-top:  30px;
+}
+.back-arrow-icon{
+  font-size: 30px;
+}
+.card-row-padding{
+  padding: 20px;
+}
+.address-nav{
+  border: 2px;
+  font-weight: 600;
+}
+.nav-pane{
+  height: 600px;
+}
+.address-tabs{
+  margin-left: -45px;
+margin-right: -45px;
+}
+.loader-position{
+  margin-left: 500px;
+  margin-top: 250px;
+}

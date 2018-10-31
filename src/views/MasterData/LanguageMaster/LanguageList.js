@@ -36,8 +36,8 @@ class LanguageList extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this}  onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete"  />
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i className="fa fa-trash" title="Delete" />
       </Link>
     );
   }
@@ -52,17 +52,17 @@ class LanguageList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let language = { ...this.state.stateToDelete };
-    language.Active  = false;
+    language.Active = false;
     this.props.deleteLanguage(language.Id, language);
     this.setState({ loading: true });
-        setTimeout(() => {
-          let message = "";
-          compRef.props.languageMasterError
-            ? (message = "Something went wrong !")
-            : (message = "Language deleted successfully");
-          compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.languageMasterError);
-        }, 1000);
+    setTimeout(() => {
+      let message = "";
+      compRef.props.languageMasterError
+        ? (message = "Something went wrong !")
+        : (message = "Language deleted successfully");
+      compRef.setState({ loading: false });
+      Toaster.Toaster(message, compRef.props.languageMasterError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -106,85 +106,69 @@ class LanguageList extends Component {
       ],
       sizePerPage: 5
     };
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Languages">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 10 }}> 
-             <Link to={`${this.props.match.url}/LanguageForm`} > 
-              <Button
-                type="button"
-                className="theme-positive-btn">
-                <i className="fa fa-plus" /> &nbsp; Add Language
-              </Button>
-               </Link> 
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-               <BootstrapTable
-                ref="table"
-                data={this.props.languages}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="Language List"
+      <CardLayout
+        name="Languages"
+        buttonName="Add language"
+        buttonLink={`${this.props.match.url}/LanguageForm`}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.languages}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="Language List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="LanguageCode"
+                headerAlign="left"
+                width="30"
+                csvHeader="Language Code"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                 <TableHeaderColumn
-                  dataField="LanguageCode"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Language Code"
-                  dataSort={true}
-                >
-                  Language Code
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="LanguageName"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Language Name"
-                  dataSort={true}
-                >
-                  Language Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable> 
-            </Col>
-            <ToastContainer autoClose={2000} />
-          </FormGroup>
-        </CardLayout>
+                Language Code
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="LanguageName"
+                headerAlign="left"
+                width="30"
+                csvHeader="Language Name"
+                dataSort={true}
+              >
+                Language Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+          <ToastContainer autoClose={2000} />
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -192,21 +176,22 @@ class LanguageList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this language record ?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
     languages: state.languagesReducer.languages,
-    languageMasterError: state.languagesReducer.languageMasterError,
+    languageMasterError: state.languagesReducer.languageMasterError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getLanguageList: () => dispatch(actions.getLanguageList()),
-    deleteLanguage : (id,language) => dispatch(actions.deleteLanguage(id,language))
+    deleteLanguage: (id, language) =>
+      dispatch(actions.deleteLanguage(id, language))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LanguageList);

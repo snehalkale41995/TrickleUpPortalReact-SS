@@ -44,7 +44,7 @@ class StatesList extends Component {
     let componentRef = this;
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete"  />
+        <i className="fa fa-trash" title="Delete" />
       </Link>
     );
   }
@@ -56,7 +56,7 @@ class StatesList extends Component {
   }
   onConfirmDelete() {
     let state = { ...this.state.stateToDelete };
-    state.Active  = false;
+    state.Active = false;
     this.props.deleteState(state.Id, state);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -110,84 +110,68 @@ class StatesList extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="States">
-          <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }} >              {/* <Link to={`${this.props.match.url}/stateForm`}> */}
-              <Button
-                type="button"
-                className="theme-positive-btn"
-                onClick={() => {
-                  this.setState({ showForm: true });
-                }}
+      <CardLayout
+        name="States"
+        buttonName="Add state"
+        buttonLink={this}
+        buttonClick={() => {
+          this.setState({ showForm: true });
+        }}
+      >
+        <FormGroup row>
+          <Col xs="12">
+            <BootstrapTable
+              ref="table"
+              data={this.props.states}
+              pagination={true}
+              search={true}
+              options={sortingOptions}
+              //exportCSV={true}
+              hover={true}
+              csvFileName="States List"
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="StateName"
+                headerAlign="left"
+                width="60"
+                csvHeader="State Name"
+                dataSort={true}
               >
-                <i className="fa fa-plus" /> &nbsp; Add state
-              </Button>
-              {/* </Link> */}
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12">
-              <BootstrapTable
-                ref="table"
-                data={this.props.states}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="States List"
+                State Name
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="StateCode"
+                headerAlign="left"
+                width="40"
+                csvHeader="Code"
+                dataSort={true}
               >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateName"
-                  headerAlign="left"
-                  width="60"
-                  csvHeader="State Name"
-                  dataSort={true}
-                >
-                  State Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateCode"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Code"
-                  dataSort={true}
-                >
-                  Code
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteState.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Delete
-                </TableHeaderColumn>
-              </BootstrapTable>
-            </Col>
-          </FormGroup>
-        </CardLayout>
+                Code
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Delete
+              </TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
@@ -195,7 +179,7 @@ class StatesList extends Component {
           title="Deactivate"
           message="Are you sure you want to deactivate this state record ?"
         />
-      </div>
+      </CardLayout>
     );
   }
 }
@@ -209,7 +193,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getStatesList: () => dispatch(actions.getStatesList()),
-    deleteState : (id,state) => dispatch(actions.deleteState(id,state))
+    deleteState: (id, state) => dispatch(actions.deleteState(id, state))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(StatesList);

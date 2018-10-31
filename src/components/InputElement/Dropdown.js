@@ -18,7 +18,7 @@ const DropdownSelect = props => (
       clearable
     />
     {props.required ? (
-      <div style={{ color: "red", fontSize: "12px" }} className="help-block">
+      <div className="help-block">
         *{props.name} is required
       </div>
     ) : null}

@@ -11,7 +11,6 @@ import Loader from "../../../components/Loader/Loader";
 import DistrictForm from "./DistrictForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-
 class DistrictsList extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +56,7 @@ class DistrictsList extends Component {
   }
   onConfirmDelete() {
     let district = { ...this.state.districtToDelete };
-    district.Active  = false;
+    district.Active = false;
     this.props.deleteDistrict(district.Id, district);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -71,10 +70,7 @@ class DistrictsList extends Component {
 
   onEditDistrict(cell, row) {
     return (
-      <Link
-        to={this}
-        onClick={() => this.editDistrict(row)}
-      >
+      <Link to={this} onClick={() => this.editDistrict(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
@@ -115,22 +111,14 @@ class DistrictsList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <div style={{ marginTop: 30 }}>
-        <CardLayout name="Districts">
-          <FormGroup row>
-            <Col xs="12" md="10" />
-            <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}>
-              <Button
-                type="button"
-                className="theme-positive-btn"
-                onClick={() => {
-                  this.setState({ showForm: true });
-                }}
-              >
-                <i className="fa fa-plus" />&nbsp; Add district
-              </Button>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup>
+        <CardLayout
+          name="Districts"
+          buttonName="Add district"
+          buttonLink={this}
+          buttonClick={() => {
+            this.setState({ showForm: true });
+          }}
+        >
           <FormGroup row>
             <Col xs="12">
               <BootstrapTable
@@ -212,7 +200,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getDistrictsList: () => dispatch(actions.getDistrictsList()),
-    deleteDistrict : (id, district) => dispatch(actions.deleteDistrict(id, district))
+    deleteDistrict: (id, district) =>
+      dispatch(actions.deleteDistrict(id, district))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DistrictsList);
