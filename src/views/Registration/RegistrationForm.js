@@ -70,22 +70,21 @@ class RegistrationForm extends Component {
     };
   }
 
-  componentWillMount() {
-    setTimeout(() => {
+   componentWillMount() {
+   setTimeout(() => {
       this.setState({ loading: false });
     }, 2000);
     if (this.props.match.params.id !== undefined) {
-      let id = this.props.match.params.id;
-      this.props.getBeneficiaryById(id);
-      setTimeout(() => {
-        if (this.props.currentBeneficiary) {
-          this.setState({
-            user: this.props.currentBeneficiary,
+      let currentUser = this.props.beneficiaryList.find(
+        user => user.Id == this.props.match.params.id
+      );
+      if (currentUser) {
+        this.setState({
+            user: currentUser,
             updateFlag: true
-          });
-        }
-      }, 1000);
-    } else {
+        });
+      }
+      } else {
       this.setState({
         districtDisabled: true,
         grampanchayatDisabled: true,
@@ -93,6 +92,28 @@ class RegistrationForm extends Component {
       });
     }
   }
+
+  // componentWillMount() {
+   
+  //   if (this.props.match.params.id !== undefined) {
+  //     let id = this.props.match.params.id;
+  //     this.props.getBeneficiaryById(id);
+  //     setTimeout(() => {
+  //       if (this.props.currentBeneficiary) {
+  //         this.setState({
+  //           user: this.props.currentBeneficiary,
+  //           updateFlag: true
+  //         });
+  //       }
+  //     }, 1000);
+  //   } else {
+  //     this.setState({
+  //       districtDisabled: true,
+  //       grampanchayatDisabled: true,
+  //       villageDisabled: true
+  //     });
+  //   }
+  // }
   onChangeInput(event) {
     let user = { ...this.state.user };
     user[event.target.name] = event.target.value;
@@ -612,7 +633,8 @@ const mapStateToProps = state => {
     gendersList: state.gendersReducer.gendersList,
     languagesList: state.languagesReducer.languagesList,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
-    currentBeneficiary: state.beneficiaryReducer.currentBeneficiary
+    currentBeneficiary: state.beneficiaryReducer.currentBeneficiary,
+    beneficiaryList : state.beneficiaryReducer.beneficiaryList
   };
 };
 
