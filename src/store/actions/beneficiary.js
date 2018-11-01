@@ -3,10 +3,12 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeBeneficiaryList = (beneficiaryList) => {
+export const storeBeneficiaryList = (beneficiaryList, operationalUsers, inactiveOperationalUsers) => {
   return {
     type: actionTypes.GET_BENEFICIARY_LIST,
-    beneficiaryList : beneficiaryList
+    beneficiaryList : beneficiaryList,
+    operationalUsers : operationalUsers,
+    inactiveOperationalUsers : inactiveOperationalUsers
   };
 };
 export const storeCurrentBeneficiary = (currentBeneficiary) => {
@@ -49,30 +51,19 @@ export const ValidateBulkDataSuccess = () => {
 
 export const getBeneficiaryList = () => {
 let beneficiaryList = [];
+let operationalUsers = [], inactiveOperationalUsers = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
       .then(response => {
-            beneficiaryList = response.data.data;
-            dispatch(storeBeneficiaryList(beneficiaryList));
-      })
-      .catch(error => {
-        dispatch(logBeneficiaryError(error));
-      });
-  };
-};
-
-export const getOperationalUserList = () => {
-let beneficiaryList = [];
-  return dispatch => {
-    axios
-      .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
-      .then(response => {
-            beneficiaryList = response.data.data;
-            beneficiaryList =  _.filter(beneficiaryList, function(beneficiary) {
-             return beneficiary.Active === true && beneficiary.Role === 2 ;
-            });
-            dispatch(storeBeneficiaryList(beneficiaryList));
+      beneficiaryList = response.data.data;
+      operationalUsers =  _.filter(response.data.data, function(beneficiary) {
+      return beneficiary.Active === true && beneficiary.Role === 2 });
+      
+      inactiveOperationalUsers =  _.filter(response.data.data, function(beneficiary) {
+       return beneficiary.Active === false && beneficiary.Role === 2 });
+      
+       dispatch(storeBeneficiaryList(beneficiaryList, operationalUsers, inactiveOperationalUsers));
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));

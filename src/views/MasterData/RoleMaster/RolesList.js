@@ -151,7 +151,7 @@ class RolesList extends Component {
                 name="tableStatus"
                 value = {this.state.tableStatus}
                 options={constants.tableStatus}
-               onChange={this.onTablestatusChange.bind(this)}
+                onChange={this.onTablestatusChange.bind(this)}
               />
             </Col>
         </FormGroup>
