@@ -110,7 +110,7 @@ export const createBeneficiary = (beneficiary) => {
         dispatch(postUserCredentials(userCredentials));
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.error));
       });
   };
 }

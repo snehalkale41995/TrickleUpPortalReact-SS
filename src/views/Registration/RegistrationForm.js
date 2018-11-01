@@ -247,7 +247,7 @@ class RegistrationForm extends Component {
             ? (message = "Something went wrong !")
             : (message = `User updated successfully`);
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.beneficiaryError);
+          Toaster.Toaster(compRef.props.beneficiaryError, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -294,7 +294,7 @@ class RegistrationForm extends Component {
             ? (message = "Something went wrong !")
             : (message = "User created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.beneficiaryError);
+          Toaster.Toaster( compRef.props.beneficiaryError, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
