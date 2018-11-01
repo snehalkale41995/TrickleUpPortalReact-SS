@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import StateForm from "./StateForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
+import * as constants from "../../../constants/StatusConstants";
 class StatesList extends Component {
   constructor(props) {
     super(props);
