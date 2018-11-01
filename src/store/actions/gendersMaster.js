@@ -3,30 +3,35 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeGendersList = (genders ,gendersList) => {
+export const storeGendersList = (genders ,gendersList, inactiveGenders) => {
   return {
     type: actionTypes.GET_GENDERS,
     gendersList: gendersList,
-    genders : genders
+    genders : genders,
+    inactiveGenders : inactiveGenders
   };
 };
 
 export const getGendersList = () => {
   let gendersList = [];
   let genders = [];
+  let inactiveGenders = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Genders/GetGenders`)
       .then(response => {
-         genders =  _.filter(response.data.data.Genders, function(gender) {
+        genders =  _.filter(response.data.data.Genders, function(gender) {
              return gender.Active === true ;
+              });
+        inactiveGenders =  _.filter(response.data.data.Genders, function(gender) {
+             return gender.Active === false ;
               });
         response.data.data.Genders.forEach(gender => {
           if (gender.GenderName !== null && gender.Active) {
             gendersList.push({ label: gender.GenderName, value: gender.Id });
           }
         });
-        dispatch(storeGendersList(genders,gendersList));
+        dispatch(storeGendersList(genders,gendersList, inactiveGenders));
       })
       .catch(error => {});
   };

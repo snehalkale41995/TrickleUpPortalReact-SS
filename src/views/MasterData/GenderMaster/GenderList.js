@@ -12,6 +12,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
+import * as constants from "../../../constants/StatusConstants";
 class GenderList extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,8 @@ class GenderList extends Component {
       modalFlag: false,
       loading: true,
       modalStatus: false,
-      genderToDelete: {}
+      genderToDelete: {},
+      tableStatus : true
     };
   }
 
@@ -35,11 +37,28 @@ class GenderList extends Component {
 
   onDeleteState(cell, row) {
     let componentRef = this;
-    return (
+    if(this.state.tableStatus){
+      return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete" />
+        <i className="fa fa-trash" title="Dactivate" />
       </Link>
     );
+    }
+   else{
+       return (
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+   }
+  }
+
+    onTablestatusChange(value) {
+    if(value!=null){
+       this.setState({
+      tableStatus: value
+    }); 
+  }
   }
 
   onDelete(row) {
@@ -52,14 +71,21 @@ class GenderList extends Component {
   onConfirmDelete() {
     let gender = { ...this.state.genderToDelete };
     let compRef = this;
+    if(this.state.tableStatus){
     gender.Active = false;
     this.props.deleteGender(gender.Id, gender);
+    }
+    else{
+    gender.Active = true;
+    this.props.deleteGender(gender.Id, gender);
+    }
     // this.setState({ loading: true });
+     let displayMessage = compRef.state.tableStatus ? "Gender deactivated successfully": "Gender activated successfully"
     setTimeout(() => {
       let message = "";
       compRef.props.genderMasterError
         ? (message = "Something went wrong !")
-        : (message = "Gender deleted successfully");
+        : (message = displayMessage);
       //  compRef.setState({ loading: false });
       Toaster.Toaster(message, compRef.props.genderMasterError);
     }, 1000);
@@ -101,7 +127,8 @@ class GenderList extends Component {
         },
         {
           text: "All",
-          value: this.props.genders.length
+          value: 
+          this.state.tableStatus ? this.props.genders.length : this.props.inactiveGenders.length
         }
       ],
       sizePerPage: 5
@@ -114,11 +141,21 @@ class GenderList extends Component {
         buttonName="Add Gender"
         buttonLink={`${this.props.match.url}/GenderForm`}
       >
+      <FormGroup row>
+            <Col xs="12" md="4">
+              <DropdownSelect
+                name="tableStatus"
+                value = {this.state.tableStatus}
+                options={constants.tableStatus}
+               onChange={this.onTablestatusChange.bind(this)}
+              />
+            </Col>
+        </FormGroup>
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.props.genders}
+              data={this.state.tableStatus ? this.props.genders : this.props.inactiveGenders}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -164,8 +201,9 @@ class GenderList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this gender record ?"
+          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={this.state.tableStatus ? "Are you sure you want to deactivate this gender record ?" : 
+                  "Are you sure you want to activate this gender record ?"}
         />
       </CardLayout>
     );
@@ -174,6 +212,7 @@ class GenderList extends Component {
 const mapStateToProps = state => {
   return {
     genders: state.gendersReducer.genders,
+    inactiveGenders : state.gendersReducer.inactiveGenders,
     genderMasterError: state.gendersReducer.genderMasterError
   };
 };

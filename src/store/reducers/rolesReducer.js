@@ -7,7 +7,8 @@ const initialState = {
     languagesList : [],
     genders :[],
     languages : [],
-    roleMasterError : null
+    roleMasterError : null,
+    inactiveRoles : []
 };
 
 const rolesReducer = (state = initialState, action) => {
@@ -17,6 +18,7 @@ const rolesReducer = (state = initialState, action) => {
         ...state,
         rolesList : action.rolesList,
         roles : action.roles,
+        inactiveRoles : action.inactiveRoles,
         roleMasterError : null
       };
       case actionTypes.GET_GENDERS:

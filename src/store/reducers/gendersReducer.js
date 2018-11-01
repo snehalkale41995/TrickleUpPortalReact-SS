@@ -4,7 +4,8 @@ const initialState = {
     gendersList : [],
     languagesList : [],
     genders :[],
-    genderMasterError : null
+    genderMasterError : null,
+    inactiveGenders : []
 };
 
 const gendersReducer = (state = initialState, action) => {
@@ -14,7 +15,8 @@ const gendersReducer = (state = initialState, action) => {
         ...state,
         gendersList : action.gendersList,
         genders : action.genders,
-        genderMasterError : null
+        genderMasterError : null,
+        inactiveGenders : action.inactiveGenders
       };
        case actionTypes.CREATE_GENDER_SUCCESS:
       return {

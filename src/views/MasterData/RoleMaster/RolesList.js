@@ -12,6 +12,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
+import * as constants from "../../../constants/StatusConstants";
+
+
 class RolesList extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +22,8 @@ class RolesList extends Component {
       modalFlag: false,
       loading: true,
       modalStatus: false,
-      roleToDelete: {}
+      roleToDelete: {},
+      tableStatus : true
     };
   }
 
@@ -35,11 +39,28 @@ class RolesList extends Component {
 
   onDeleteState(cell, row) {
     let componentRef = this;
-    return (
+    if(this.state.tableStatus){
+      return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete" />
+        <i className="fa fa-trash" title="Dactivate" />
       </Link>
     );
+    }
+   else{
+       return (
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+   }
+  }
+
+  onTablestatusChange(value) {
+    if(value!=null){
+       this.setState({
+      tableStatus: value
+    }); 
+  }
   }
 
   onDelete(row) {
@@ -49,17 +70,25 @@ class RolesList extends Component {
     this.onModalToggle();
   }
 
+ 
   onConfirmDelete() {
     let compRef = this;
     let role = { ...this.state.roleToDelete };
-    role.Active = false;
-    this.props.deleteRole(role.Id, role);
+    if(this.state.tableStatus){
+     role.Active = false;
+     this.props.deleteRole(role.Id, role);
+    }
+    else{
+     role.Active = true;
+     this.props.deleteRole(role.Id, role);
+    }
     //this.setState({ loading: true });
     setTimeout(() => {
       let message = "";
+      let displayMessage = compRef.state.tableStatus ? "Role deactivated successfully": "Role activated successfully"
       compRef.props.roleMasterError
         ? (message = "Something went wrong !")
-        : (message = "Role deleted successfully");
+        : (message = displayMessage);
       //compRef.setState({ loading: false });
       Toaster.Toaster(message, compRef.props.roleMasterError);
     }, 1000);
@@ -102,7 +131,7 @@ class RolesList extends Component {
         },
         {
           text: "All",
-          value: this.props.Roles.length
+          value: this.state.tableStatus ? this.props.Roles.length : this.props.inactiveRoles.length
         }
       ],
       sizePerPage: 5
@@ -115,24 +144,22 @@ class RolesList extends Component {
         buttonName="Add Role"
         buttonLink={`${this.props.match.url}/RoleForm`}
       >
-        {/* <FormGroup row>
-          <Col xs="12" md="10" />
-          <Col md="1" style={{ marginTop: -55, marginLeft: 45 }}> 
-             <Link to={`${this.props.match.url}/RoleForm`}  > 
-              <Button
-                type="button"
-                className="theme-positive-btn">
-                <i className="fa fa-plus" /> &nbsp; Add Role
-              </Button>
-               </Link> 
-              &nbsp;&nbsp;
+      <br/>
+       <FormGroup row>
+            <Col xs="12" md="4">
+              <DropdownSelect
+                name="tableStatus"
+                value = {this.state.tableStatus}
+                options={constants.tableStatus}
+               onChange={this.onTablestatusChange.bind(this)}
+              />
             </Col>
-          </FormGroup> */}
+        </FormGroup>
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.props.Roles}
+              data={this.state.tableStatus ? this.props.Roles : this.props.inactiveRoles}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -143,15 +170,6 @@ class RolesList extends Component {
               <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
                 Id
               </TableHeaderColumn>
-              {/* <TableHeaderColumn
-                  dataField="RoleId"
-                  headerAlign="left"
-                  width="30"
-                  csvHeader="Role Id"
-                  dataSort={true}
-                >
-                  Role Id
-                </TableHeaderColumn> */}
               <TableHeaderColumn
                 dataField="RoleName"
                 headerAlign="left"
@@ -161,6 +179,8 @@ class RolesList extends Component {
               >
                 Role Name
               </TableHeaderColumn>
+              {
+              this.state.tableStatus ?     
               <TableHeaderColumn
                 dataField="edit"
                 dataFormat={this.onEditState.bind(this)}
@@ -169,8 +189,10 @@ class RolesList extends Component {
                 export={false}
               >
                 Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
+              </TableHeaderColumn>  : null
+              }
+             {
+              this.state.tableStatus ?  <TableHeaderColumn
                 dataField="delete"
                 dataFormat={this.onDeleteState.bind(this)}
                 headerAlign="left"
@@ -178,7 +200,16 @@ class RolesList extends Component {
                 export={false}
               >
               Deactivate
+              </TableHeaderColumn> :  <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Activate
               </TableHeaderColumn>
+            }
             </BootstrapTable>
           </Col>
           <ToastContainer autoClose={2000} />
@@ -187,8 +218,9 @@ class RolesList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this role record ?"
+          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={this.state.tableStatus ? "Are you sure you want to deactivate this role record ?" : 
+                  "Are you sure you want to activate this role record ?"}
         />
       </CardLayout>
     );
@@ -197,7 +229,8 @@ class RolesList extends Component {
 const mapStateToProps = state => {
   return {
     Roles: state.rolesReducer.roles,
-    roleMasterError: state.rolesReducer.roleMasterError
+    roleMasterError: state.rolesReducer.roleMasterError,
+    inactiveRoles : state.rolesReducer.inactiveRoles
   };
 };
 

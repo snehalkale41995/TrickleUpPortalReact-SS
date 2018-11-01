@@ -51,7 +51,8 @@ export {
     getRolesList,
     createRole,
     updateRole,
-    deleteRole
+    deleteRole,
+    acivateRole
 } from './rolesMaster.js';
 
 export {
