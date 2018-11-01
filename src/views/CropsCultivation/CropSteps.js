@@ -153,7 +153,7 @@ class CropSteps extends Component {
                 width="20"
                 export={false}
               >
-                Delete
+              Deactivate
               </TableHeaderColumn>
             </BootstrapTable>
           </Col>
