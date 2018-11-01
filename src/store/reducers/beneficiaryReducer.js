@@ -4,7 +4,9 @@ const initialState = {
   beneficiaryList: [],
   beneficiaryError: null,
   currentBeneficiary: null,
-  bulkUploadHistory: []
+  bulkUploadHistory: [],
+  bulkUserData : [],
+  bulkUserError : false
 };
 
 const beneficiaryReducer = (state = initialState, action) => {
@@ -34,6 +36,17 @@ const beneficiaryReducer = (state = initialState, action) => {
       return {
         ...state,
         beneficiaryError: null
+      };
+      case actionTypes.VALIDATE_BULKDATA_SUCCESS:
+      return {
+        ...state,
+        bulkUserError : false
+      };
+       case actionTypes.VALIDATE_BULKDATA_ERROR:
+      return {
+        ...state,
+        bulkUserData: action.bulkUserData,
+        bulkUserError : true
       };
     default:
       return state;

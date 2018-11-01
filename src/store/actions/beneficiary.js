@@ -27,9 +27,24 @@ export const logBeneficiaryError = (error) => {
     error : error
   };
 }
+
 export const clearBeneficiaryError = () => {
   return {
-    type: actionTypes.CLEAR_BENEFICIARY_ERROR,
+    type: actionTypes.CLEAR_BENEFICIARY_ERROR
+  };
+}
+
+export const ValidateBulkDataError = (bulkUserData) => {
+  console.log("in ValidateBulkDataError response", bulkUserData);
+  return {
+    type: actionTypes.VALIDATE_BULKDATA_ERROR,
+    bulkUserData : bulkUserData
+  };
+}
+
+export const ValidateBulkDataSuccess = () => {
+  return {
+    type: actionTypes.VALIDATE_BULKDATA_SUCCESS
   };
 }
 
@@ -65,8 +80,6 @@ let beneficiaryList = [];
       });
   };
 };
-
-
 
 export const getBeneficiaryById = (id) => {
   let currentBeneficiary = {};
@@ -158,8 +171,11 @@ export const bulkValidateBeneficiary = (beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/ValidateUploadUser`, beneficiary)
       .then(response => {
-        console.log("response", response.data.data.userList);
-       // dispatch(storeBulkBeneficiary(response.data.data.userList))
+      
+        if(!response.data.success)
+         dispatch(ValidateBulkDataError(response.data.data.userList))
+        else
+         dispatch(ValidateBulkDataSuccess())
       })
       .catch(error => {
       //  dispatch(logBeneficiaryError(error));
