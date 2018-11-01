@@ -33,10 +33,9 @@ const csvData = [
     "Role",
     "Language",
     "FCMToken",
-    "CreatedBy",
-    "CreatedOn",
-    "Active",
-    "ErrorMessage"
+    // "CreatedBy",
+    // "CreatedOn",
+    // "Active"
     //"BulkUploadId"
   ]
 ];
@@ -48,9 +47,9 @@ class BulkRegistration extends Component {
       showDataTable: false,
       CSVdata: [],
       showTableHeaderFormat: false,
-      csvFileRequired : false,
-      uploadFlag : false,
-      bulkUserError : false
+      csvFileRequired: false,
+      uploadFlag: false,
+      bulkUserError: false
     };
   }
   componentWillMount() {
@@ -61,88 +60,81 @@ class BulkRegistration extends Component {
     this.setState({
       showDataTable: true,
       CSVdata: data,
-      csvFileRequired : false,
-      bulkUserError : false
+      csvFileRequired: false,
+      bulkUserError: false
     });
   };
-  
+
   onReset() {
     this.setState({
       showDataTable: false,
       CSVdata: [],
-      csvFileRequired : false,
-      bulkUserError : false
+      csvFileRequired: false,
+      bulkUserError: false
     });
   }
 
-  onValidate(){
+  onValidate() {
     let beneficiaries = [...this.state.CSVdata];
     let compRef = this;
-    let csvFileRequired = false;
-    if(beneficiaries.length ==0){
-      csvFileRequired = true;
-      this.setState({csvFileRequired : true})
+    if (beneficiaries.length !== 0) {
+      this.setState({ loading: true });
+      this.props.bulkValidateBeneficiary(beneficiaries);
+      setTimeout(() => {
+        let validationError = this.props.bulkUserError;
+        let CSVdata = compRef.props.bulkUserData;
+        validationError
+          ? this.setState({
+              loading: false,
+              CSVdata: CSVdata,
+              bulkUserError: true
+            })
+          : this.setState({
+              loading: false,
+              uploadFlag: true,
+              bulkUserError: false
+            });
+      }, 1000);
+    } else {
+      this.setState({ csvFileRequired: true });
     }
-   if(!csvFileRequired){
-    this.props.bulkValidateBeneficiary(beneficiaries);
-     setTimeout(() => {
-     compRef.setBeneficiaryData()
-    }, 2000);
-   }
   }
-
-   setBeneficiaryData(){
-     let compRef = this;
-     let  CSVdata = compRef.props.bulkUserData;
-     let bulkUserError = compRef.props.bulkUserError;
-    if(compRef.props.bulkUserError){
-        compRef.setState({
-        loading: false,
-        CSVdata : CSVdata,
-        bulkUserError : true
-      });
-    }
-    else{
-       compRef.setState({
-        loading: false,
-        uploadFlag : true,
-        bulkUserError : false
-       })
-    }
-   }
 
   onSubmit() {
     let beneficiaries = [...this.state.CSVdata];
     let csvFileRequired = false;
-    if(beneficiaries.length ==0){
+    if (beneficiaries.length == 0) {
       csvFileRequired = true;
-      this.setState({csvFileRequired : true})
+      this.setState({ csvFileRequired: true });
     }
     let compRef = this;
-    if(!csvFileRequired){
-       let guid = uuid.v1(new Date());
-    beneficiaries.forEach(beneficiary => {
-      beneficiary.BulkUploadId = guid;
-    });
-    this.props.bulkUploadBeneficiary(beneficiaries);
-    this.setState({ loading: true });
-    setTimeout(() => {
-      let message = "";
-      compRef.setState({ loading: false });
-      compRef.props.beneficiaryError
-        ? (message = "Something went wrong !")
-        : (message = "Users uploaded successfully");
-
-      Toaster.Toaster(message, compRef.props.beneficiaryError);
+    if (!csvFileRequired) {
+      let guid = uuid.v1(new Date());
+      let currentUser = localStorage.getItem("user");
+      beneficiaries.forEach(beneficiary => {
+        beneficiary.BulkUploadId = guid;
+        beneficiary.CreatedOn = new Date();
+        beneficiary.Createdby = currentUser;
+        beneficiary.Active = true;
+      });
+      this.props.bulkUploadBeneficiary(beneficiaries);
+      this.setState({ loading: true });
       setTimeout(() => {
-        if (!compRef.props.beneficiaryError) {
-          compRef.onReset();
-          compRef.props.history.push("/beneficiary/beneficiaryList");
-        }
-      }, 1000);
-    }, 2000);
+        let message = "";
+        compRef.setState({ loading: false });
+        compRef.props.beneficiaryError
+          ? (message = "Something went wrong !")
+          : (message = "Users uploaded successfully");
+
+        Toaster.Toaster(message, compRef.props.beneficiaryError);
+        setTimeout(() => {
+          if (!compRef.props.beneficiaryError) {
+            compRef.onReset();
+            compRef.props.history.push("/beneficiary/beneficiaryList");
+          }
+        }, 1000);
+      }, 2000);
     }
-   
   }
   onShowTableFormat() {
     let showTableHeaderFormat = this.state.showTableHeaderFormat;
@@ -151,10 +143,28 @@ class BulkRegistration extends Component {
     });
   }
   render() {
- 
-  let trStyle = (row, rowIndex) => {
-    return { backgroundColor: '#F07B7B' };
-  }
+    let trStyle = (row, rowIndex) => {
+      return { backgroundColor: "#F07B7B" };
+    };
+    const historySortOptions = {
+      defaultSortName: "CreatedOn",
+      defaultSortOrder: "desc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.state.CSVdata.length
+        }
+      ],
+      sizePerPage: 5
+    };
     const sortingOptions = {
       defaultSortName: "Name",
       defaultSortOrder: "asc",
@@ -194,10 +204,9 @@ class BulkRegistration extends Component {
       "Role",
       "Language",
       "FCMToken",
-      "CreatedBy",
-      "CreatedOn",
-      "Active",
-      "ErrorMessage"
+      // "CreatedBy",
+      // "CreatedOn",
+      // "Active"
     ];
     const tableFormat = keys.map(key => {
       return <td className="csv-table-border">{key}</td>;
@@ -206,231 +215,191 @@ class BulkRegistration extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
-        <CardLayout name="Bulk upload beneficiary">
-          <div style={{ margin: 20 }}>
-            <FormGroup row>
-              <Col xs="12"> 
-                <FormGroup row style={{ marginLeft: 10 }}>
-                  <Col xs="12" md="6">
-                    <CsvParse
-                      keys={keys}
-                      onDataUploaded={this.handleData}
-                      //onError={this.handleError}
-                      render={onChange => (
-                        <InputElement
-                          label="Upload file"
-                          type="file"
-                          accept=".csv, .tsv"
-                          onChange={onChange}
-                        />
-                      )}
-                    />
-                  </Col>
-                   
-                  <Col md="6">
-                    {/* <FormGroup row style={{ marginLeft: 10 }}> */}
-                    <FormGroup row>
-                      <Label />
-                      <h6>Format required for CSV : </h6> &nbsp; &nbsp;
-                      <div style={{ fontSize: 14, margin: -3 }}>
-                        <CSVLink filename="_users.csv" data={csvData}>
-                          Download
-                        </CSVLink>
-                      </div>
-                      {/* </FormGroup>
-                      <FormGroup row> */}
-                      <div style={{ fontSize: 14, margin: -3 , marginLeft : 5}}>
-                        Or &nbsp;
-                        <Link
-                          to={this}
-                          onClick={this.onShowTableFormat.bind(this)}
-                        >
-                          View
-                        </Link>
-                        &nbsp; CSV header format
-                      </div>
-                      </FormGroup>
-                    {/* </FormGroup> */}
-                  </Col>
-                </FormGroup>
-            <FormGroup style={{ marginLeft: 25, marginTop: -25 }}>
-             {this.state.csvFileRequired ? (
-             <div style={{ color: "red", fontSize: "12px"}} className="help-block">
-             *please select File
-           </div>
-             ) : null}
-          </FormGroup>
-                {/* <FormGroup row >
-                  <Label />
-                  <h6>Format required for CSV : </h6> &nbsp; &nbsp;
-                  <div style={{ fontSize: 14, margin: -3 }}>
+      <CardLayout name="Bulk upload beneficiary">
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="12">
+              <FormGroup row>
+                <Col xs="12" md="6">
+                  <CsvParse
+                    keys={keys}
+                    onDataUploaded={this.handleData}
+                    //onError={this.handleError}
+                    render={onChange => (
+                      <InputElement
+                        label="CSV file"
+                        type="file"
+                        accept=".csv, .tsv"
+                        onChange={onChange}
+                        required={this.state.csvFileRequired}
+                      />
+                    )}
+                  />
+                </Col>
+                <Col md="6">
+                  <FormGroup row>
+                    <Label>Format required for CSV : &nbsp; &nbsp;</Label>
                     <CSVLink filename="_users.csv" data={csvData}>
                       Download
                     </CSVLink>
-                  </div>
-                  <div style={{ fontSize: 14, margin: -3 }}>
-                    Or &nbsp;
+                    &nbsp; Or &nbsp;
                     <Link to={this} onClick={this.onShowTableFormat.bind(this)}>
                       View
                     </Link>
                     &nbsp; CSV header format
-                  </div>
-                </FormGroup> */}
-                <FormGroup row>
-                  {this.state.showTableHeaderFormat ? (
-                    <Col xs="12" md="12">
-                      {/* <h6>Format required for CSV : </h6> */}
-                      <table className="csv-table-border">
-                        <tr className="csv-table-border">{tableFormat}</tr>
-                      </table>
-                      <div
-                        style={{ color: "red", fontSize: "12px", width: 400 }}
-                        className="help-block"
-                      >
-                        *Please note : Sequence of headers should be exactly
-                        same.
-                      </div>
-                    </Col>
-                  ) : null}
-                </FormGroup>
+                  </FormGroup>
                 </Col>
-                </FormGroup>
-     
-                <FormGroup row style={{ marginLeft: 10 }}>
-                 {!this.state.uploadFlag ? 
-                   <Col  md="1">
-                    <Button
-                      className="theme-positive-btn"
-                      onClick={this.onValidate.bind(this)}
-                    >
-                      Validate
-                    </Button>
-                  </Col> : null }
-                  {this.state.uploadFlag ? 
-                  <Col  md="1">
-                    <Button
-                      className="theme-positive-btn"
-                      onClick={this.onSubmit.bind(this)}
-                    >
-                      Upload
-                    </Button>
-                  </Col> : null}
-                  
-                  <Col md="1">
-                    <Button
-                      className="theme-reset-btn"
-                      onClick={this.onReset.bind(this)}
-                    >
-                      Reset
-                    </Button>
+              </FormGroup>
+              <FormGroup row>
+                {this.state.showTableHeaderFormat ? (
+                  <Col xs="12" md="10">
+                    <table className="csv-table-border">
+                      <tr className="csv-table-border">{tableFormat}</tr>
+                    </table>
+                    <div className="help-block">
+                      *Please note : Sequence of headers should be exactly same.
+                    </div>
                   </Col>
-                </FormGroup>
-              {/* </Col> */}
-            {/* </FormGroup> */}
-           
-            {this.state.showDataTable ? (
-              <div style={{ marginTop: 20 ,padding : 20 }}>
-                <h5>Your uploaded file : </h5>
-                <BootstrapTable
-                  ref="table"
-                  data={this.state.CSVdata}
-                  pagination={true}
-                  
-                  //search={true}
-                  options={sortingOptions}
-                  hover={true}
+                ) : null}
+              </FormGroup>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            {this.state.uploadFlag ? (
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
                 >
-                  <TableHeaderColumn
-                    dataField="UserName"
-                    headerAlign="left"
-                    isKey
-                  >
-                    Email Id
-                  </TableHeaderColumn>
-                  <TableHeaderColumn
-                    dataField="Name"
-                    headerAlign="left"
-                    dataSort={true}
-                  >
-                    Name
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="PhoneNumber" headerAlign="left">
-                    Phone Number
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="Age" headerAlign="left"  hidden>
-                    Age
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="Gender" headerAlign="left"  hidden>
-                    Gender
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="State" headerAlign="left"  hidden>
-                    State
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="District" headerAlign="left"  hidden>
-                    District
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="Village" headerAlign="left"  hidden>
-                    Village
-                  </TableHeaderColumn>
-                  <TableHeaderColumn
-                    dataField="Grampanchayat"
-                    headerAlign="left"
-                    hidden
-                  >
-                    Grampanchayat
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="Aadhaar" headerAlign="left"  hidden>
-                    Aadhar Number
-                  </TableHeaderColumn>
-                   {this.state.bulkUserError ? 
-                  <TableHeaderColumn tdStyle={ trStyle } dataField="ErrorMessage" headerAlign="left">
-                    ErrorMessage
-                  </TableHeaderColumn> : null
-                   }
-                </BootstrapTable>
-                <hr />
-              </div>
-            ) : null}
-            
-            <div style={{ padding : 20}}>
-              <h5>Bulk upload history : </h5>
+                  Upload
+                </Button>
+              </Col>
+            ) : (
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onValidate.bind(this)}
+                >
+                  Validate
+                </Button>
+              </Col>
+            )}
+
+            <Col md="1">
+              <Button
+                className="theme-reset-btn"
+                onClick={this.onReset.bind(this)}
+              >
+                Reset
+              </Button>
+            </Col>
+          </FormGroup>
+          {this.state.showDataTable ? (
+            <div>
+              <h5>Your uploaded file : </h5>
               <BootstrapTable
                 ref="table"
-                data={this.props.bulkUploadHistory}
-                //pagination={true}
+                data={this.state.CSVdata}
+                pagination={true}
                 //search={true}
                 options={sortingOptions}
                 hover={true}
               >
                 <TableHeaderColumn
-                  dataField="Id"
+                  dataField="UserId"
                   headerAlign="left"
                   isKey
                   hidden
                 >
                   Id
                 </TableHeaderColumn>
-
-                <TableHeaderColumn dataField="BulkUploadId" headerAlign="left">
-                  Bulk upload id
+                <TableHeaderColumn
+                  dataField="UserName"
+                  headerAlign="left"
+                  dataSort={true}
+                  width={20}
+                >
+                  UserName
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="Name"
                   headerAlign="left"
                   dataSort={true}
+                  width={20}
                 >
-                  Created By
+                  Name
                 </TableHeaderColumn>
-                <TableHeaderColumn dataField="CreatedOn" headerAlign="left">
-                  Created On
+                <TableHeaderColumn  width={20} dataField="PhoneNumber" headerAlign="left">
+                  Phone Number
                 </TableHeaderColumn>
+                <TableHeaderColumn  width={12} dataField="Age" headerAlign="left">
+                  Age
+                </TableHeaderColumn>
+                {/* <TableHeaderColumn dataField="Gender" headerAlign="left">
+                  Gender
+                </TableHeaderColumn> */}
+                <TableHeaderColumn  width={15} dataField="State" headerAlign="left">
+                  State
+                </TableHeaderColumn>
+                <TableHeaderColumn width={15} dataField="District" headerAlign="left">
+                  District
+                </TableHeaderColumn>
+                <TableHeaderColumn width={15} dataField="Village" headerAlign="left">
+                  Village
+                </TableHeaderColumn>
+                <TableHeaderColumn width={20} dataField="Grampanchayat" headerAlign="left">
+                  Grampanchayat
+                </TableHeaderColumn>
+                {/* <TableHeaderColumn dataField="Aadhaar" headerAlign="left">
+                  Aadhar Number
+                </TableHeaderColumn> */}
+                {this.state.bulkUserError ? (
+                  <TableHeaderColumn
+                    tdStyle={trStyle}
+                    dataField="ErrorMessage"
+                    headerAlign="left"
+                    width={70}
+                  >
+                    ErrorMessage
+                  </TableHeaderColumn>
+                ) : null}
               </BootstrapTable>
+              <hr />
             </div>
+          ) : null}
+
+          <div>
+            <h5>Bulk upload history : </h5>
+            <BootstrapTable
+              ref="table"
+              data={this.props.bulkUploadHistory}
+              pagination={true}
+              //search={true}
+              options={historySortOptions}
+              hover={true}
+            >
+              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+                Id
+              </TableHeaderColumn>
+
+              <TableHeaderColumn dataField="BulkUploadId" headerAlign="left">
+                Bulk upload id
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="Name"
+                headerAlign="left"
+                dataSort={true}
+              >
+                Created By
+              </TableHeaderColumn>
+              <TableHeaderColumn dataField="CreatedOn" headerAlign="left">
+                Created On
+              </TableHeaderColumn>
+            </BootstrapTable>
           </div>
-          <ToastContainer autoClose={2000} />
-        </CardLayout>
-      </div>
+        </div>
+        <ToastContainer autoClose={2000} />
+      </CardLayout>
     );
   }
 }
@@ -438,8 +407,8 @@ const mapStateToProps = state => {
   return {
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
     bulkUploadHistory: state.beneficiaryReducer.bulkUploadHistory,
-    bulkUserData : state.beneficiaryReducer.bulkUserData,
-    bulkUserError : state.beneficiaryReducer.bulkUserError
+    bulkUserData: state.beneficiaryReducer.bulkUserData,
+    bulkUserError: state.beneficiaryReducer.bulkUserError
   };
 };
 
@@ -449,7 +418,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.bulkUploadBeneficiary(beneficiaries)),
     getBulkUploadHistory: () => dispatch(actions.getBulkUploadHistory()),
     bulkValidateBeneficiary: beneficiaries =>
-      dispatch(actions.bulkValidateBeneficiary(beneficiaries)),
+      dispatch(actions.bulkValidateBeneficiary(beneficiaries))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BulkRegistration);

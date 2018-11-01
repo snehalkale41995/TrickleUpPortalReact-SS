@@ -35,7 +35,6 @@ export const clearBeneficiaryError = () => {
 }
 
 export const ValidateBulkDataError = (bulkUserData) => {
-  console.log("in ValidateBulkDataError response", bulkUserData);
   return {
     type: actionTypes.VALIDATE_BULKDATA_ERROR,
     bulkUserData : bulkUserData
@@ -121,7 +120,7 @@ export const postUserCredentials = (user) => {
     axios
     .post(`${AppConfig.serverURL}/api/UserCredentials/PostUserCredential`, user)
     .then(response => {
-          console.log("Reposnoe userCredentials", response);
+          //console.log("Reposnoe userCredentials", response);
     })
     .catch(error => {
       dispatch(logBeneficiaryError(error));

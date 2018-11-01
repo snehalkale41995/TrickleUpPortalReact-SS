@@ -251,7 +251,7 @@ class RegistrationForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              // compRef.props.history.push("/beneficiary/beneficiaryList");
+               compRef.props.history.push("/beneficiary/beneficiaryList");
             }
           }, 1000);
         }, 1000);
