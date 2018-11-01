@@ -144,7 +144,7 @@ class BulkRegistration extends Component {
   }
   render() {
     let trStyle = (row, rowIndex) => {
-      return { backgroundColor: "#F07B7B" };
+      return { color: "#E00000" };
     };
     const historySortOptions = {
       defaultSortName: "CreatedOn",
