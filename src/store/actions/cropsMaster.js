@@ -30,7 +30,7 @@ export const getCropsList = () => {
   let cropsList = [];
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/Crops/GetCrops`)
+      .get(`${AppConfig.serverURL}/api/Crops/GetCrops?langCode=26`)
       .then(response => {
         cropsList = response.data.data.Crops;
         dispatch(storeCropsList(cropsList));

@@ -3,11 +3,12 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeDistrictsList = (districtList, districts) => {
+export const storeDistrictsList = (districtList, districts,inactiveDistrict) => {
   return {
     type: actionTypes.GET_DISTRICT_LIST,
     districtList: districtList,
-    districts: districts
+    districts: districts,
+    inactiveDistrict:inactiveDistrict
   };
 };
 export const districtMasterError = error => {
@@ -19,6 +20,7 @@ export const districtMasterError = error => {
 export const getDistrictsList = () => {
   let districtList = [];
   let districts = [];
+  let inactiveDistrict = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Districts/GetDistricts`)
@@ -27,6 +29,11 @@ export const getDistrictsList = () => {
           district
         ) {
           return district.Active === true;
+        });
+        inactiveDistrict =  _.filter(response.data.data.Districts, function(
+          district
+        ) {
+          return district.Active === false;
         });
         Districts.forEach(district => {
           if (district.DistrictName !== null) {
@@ -38,7 +45,7 @@ export const getDistrictsList = () => {
             districts.push(district);
           }
         });
-        dispatch(storeDistrictsList(districtList, districts));
+        dispatch(storeDistrictsList(districtList, districts,inactiveDistrict));
       })
       .catch(error => {
         dispatch(districtMasterError(error));

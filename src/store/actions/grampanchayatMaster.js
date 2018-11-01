@@ -3,11 +3,12 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeGrampanchayatList = (grampanchayatList, grampanchayats) => {
+export const storeGrampanchayatList = (grampanchayatList, grampanchayats,inActiveGrampanchayat) => {
   return {
     type: actionTypes.GET_GRAMPANCHAYAT_LIST,
     grampanchayatsList: grampanchayatList,
-    grampanchayats: grampanchayats
+    grampanchayats: grampanchayats,
+    inActiveGrampanchayat: inActiveGrampanchayat
   };
 };
 export const grampanchayatMasterError = error => {
@@ -20,6 +21,7 @@ export const grampanchayatMasterError = error => {
 export const getGrampanchayatsList = () => {
   let grampanchayatList = [];
   let grampanchayats = [];
+  let inActiveGrampanchayat = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Grampanchayats/GetGrampanchayats`)
@@ -28,6 +30,12 @@ export const getGrampanchayatsList = () => {
           response.data.data.Grampanchayatdata,
           function(grampanchayat) {
             return grampanchayat.Active === true;
+          }
+        );
+        inActiveGrampanchayat =  _.filter(
+          response.data.data.Grampanchayatdata,
+          function(grampanchayat) {
+            return grampanchayat.Active === false;
           }
         );
         Grampanchayat.forEach(grampanchayat => {
@@ -41,7 +49,7 @@ export const getGrampanchayatsList = () => {
             grampanchayats.push(grampanchayat);
           }
         });
-        dispatch(storeGrampanchayatList(grampanchayatList, grampanchayats));
+        dispatch(storeGrampanchayatList(grampanchayatList, grampanchayats,inActiveGrampanchayat));
       })
       .catch(error => {
         dispatch(grampanchayatMasterError(error));

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -21,7 +21,7 @@ class GenderList extends Component {
       loading: true,
       modalStatus: false,
       genderToDelete: {},
-      tableStatus : true
+      tableStatus: true
     };
   }
 
@@ -37,28 +37,27 @@ class GenderList extends Component {
 
   onDeleteState(cell, row) {
     let componentRef = this;
-    if(this.state.tableStatus){
+    if (this.state.tableStatus) {
       return (
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Dactivate" />
-      </Link>
-    );
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i className="fa fa-trash" title="Dactivate" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+        </Link>
+      );
     }
-   else{
-       return (
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
-      </Link>
-    );
-   }
   }
 
-    onTablestatusChange(value) {
-    if(value!=null){
-       this.setState({
-      tableStatus: value
-    }); 
-  }
+  onTablestatusChange(value) {
+    if (value != null) {
+      this.setState({
+        tableStatus: value
+      });
+    }
   }
 
   onDelete(row) {
@@ -71,16 +70,17 @@ class GenderList extends Component {
   onConfirmDelete() {
     let gender = { ...this.state.genderToDelete };
     let compRef = this;
-    if(this.state.tableStatus){
-    gender.Active = false;
-    this.props.deleteGender(gender.Id, gender);
-    }
-    else{
-    gender.Active = true;
-    this.props.deleteGender(gender.Id, gender);
+    if (this.state.tableStatus) {
+      gender.Active = false;
+      this.props.deleteGender(gender.Id, gender);
+    } else {
+      gender.Active = true;
+      this.props.deleteGender(gender.Id, gender);
     }
     // this.setState({ loading: true });
-     let displayMessage = compRef.state.tableStatus ? "Gender deactivated successfully": "Gender activated successfully"
+    let displayMessage = compRef.state.tableStatus
+      ? "Gender deactivated successfully"
+      : "Gender activated successfully";
     setTimeout(() => {
       let message = "";
       compRef.props.genderMasterError
@@ -127,8 +127,9 @@ class GenderList extends Component {
         },
         {
           text: "All",
-          value: 
-          this.state.tableStatus ? this.props.genders.length : this.props.inactiveGenders.length
+          value: this.state.tableStatus
+            ? this.props.genders.length
+            : this.props.inactiveGenders.length
         }
       ],
       sizePerPage: 5
@@ -141,21 +142,27 @@ class GenderList extends Component {
         buttonName="Add Gender"
         buttonLink={`${this.props.match.url}/GenderForm`}
       >
-      <FormGroup row>
-            <Col xs="12" md="4">
-              <DropdownSelect
-                name="tableStatus"
-                value = {this.state.tableStatus}
-                options={constants.tableStatus}
-               onChange={this.onTablestatusChange.bind(this)}
-              />
-            </Col>
-        </FormGroup>
+        <Row className="address-drop-margin">
+          <Col xs="12" md="10" />
+          <Col md="2">
+            <DropdownSelect
+              label="Status"
+              options={constants.tableStatus}
+              value={this.state.tableStatus}
+              onChange={this.onTablestatusChange.bind(this)}
+              simpleValue
+            />
+          </Col>
+        </Row>
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.state.tableStatus ? this.props.genders : this.props.inactiveGenders}
+              data={
+                this.state.tableStatus
+                  ? this.props.genders
+                  : this.props.inactiveGenders
+              }
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -191,7 +198,7 @@ class GenderList extends Component {
                 width="20"
                 export={false}
               >
-              Deactivate
+                Deactivate
               </TableHeaderColumn>
             </BootstrapTable>
           </Col>
@@ -201,9 +208,12 @@ class GenderList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
-          message={this.state.tableStatus ? "Are you sure you want to deactivate this gender record ?" : 
-                  "Are you sure you want to activate this gender record ?"}
+          title={this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this gender record ?"
+              : "Are you sure you want to activate this gender record ?"
+          }
         />
       </CardLayout>
     );
@@ -212,7 +222,7 @@ class GenderList extends Component {
 const mapStateToProps = state => {
   return {
     genders: state.gendersReducer.genders,
-    inactiveGenders : state.gendersReducer.inactiveGenders,
+    inactiveGenders: state.gendersReducer.inactiveGenders,
     genderMasterError: state.gendersReducer.genderMasterError
   };
 };

@@ -25,7 +25,10 @@ const CardLayout = props => (
                 {props.buttonName ? (
                   <Col md="2">
                     <Link to={props.buttonLink} onClick={props.buttonClick}>
-                      <Button type="button" className="theme-positive-btn">
+                      <Button
+                        type="button"
+                        className="theme-positive-btn card-btn"
+                      >
                         <i className="fa fa-plus" />&nbsp; {props.buttonName}
                       </Button>
                     </Link>

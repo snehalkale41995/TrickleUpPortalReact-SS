@@ -42,7 +42,7 @@ class InactiveUser extends Component {
     });
   }
 
-  onDeleteBeneficiary(cell, row) {
+  onActivateBeneficiary(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
@@ -209,7 +209,7 @@ class InactiveUser extends Component {
               />
               <TableHeaderColumn
                 dataField="delete"
-                dataFormat={this.onDeleteBeneficiary.bind(this)}
+                dataFormat={this.onActivateBeneficiary.bind(this)}
                 headerAlign="left"
                 width="20"
                 export={false}
@@ -223,7 +223,7 @@ class InactiveUser extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
+          title="Activate"
           message="Are you sure you want to activate this beneficiary ?"
         />
       </CardLayout>

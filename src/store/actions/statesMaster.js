@@ -3,11 +3,12 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeStatesList = (stateList, states) => {
+export const storeStatesList = (stateList, states, inactiveStates) => {
   return {
     type: actionTypes.GET_STATES_LIST,
     stateList: stateList,
-    states: states
+    states: states,
+    inactiveStates: inactiveStates
   };
 };
 export const stateMasterError = (error) => {
@@ -20,6 +21,7 @@ export const stateMasterError = (error) => {
 export const getStatesList = () => {
   let stateList = [];
   let states = [];
+  let inactiveStates =[];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/States/GetStates`)
@@ -27,13 +29,16 @@ export const getStatesList = () => {
         let StateData = _.filter( response.data.data.States, function(state) {
           return state.Active === true ;
       });
+      inactiveStates = _.filter( response.data.data.States, function(state) {
+        return state.Active === false ;
+    });
       StateData.forEach(state => {
           if (state.StateName !== null) {
             stateList.push({ label: state.StateName, value: state.Id });
             states.push(state);
           }
         });
-        dispatch(storeStatesList(stateList, states));
+        dispatch(storeStatesList(stateList, states,inactiveStates));
       })
       .catch(error => {
         dispatch(stateMasterError(error));

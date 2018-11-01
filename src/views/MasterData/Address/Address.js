@@ -56,27 +56,27 @@ export default class Address extends Component {
       );
     });
     return (
-          <Row className="address-tabs">
-            <Col>
-              <Nav tabs style={{ backgroundColor: "#ED734A" }}>
-                {tabs}
-              </Nav>
-              <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1" className="nav-pane">
-                  <StateList {...this.props} />
-                </TabPane>
-                <TabPane tabId="2" className="nav-pane">
-                  <DistrictList {...this.props} />
-                </TabPane>
-                <TabPane tabId="3" className="nav-pane">
-                  <GrampanchayatList {...this.props} />
-                </TabPane>
-                <TabPane tabId="4" className="nav-pane">
-                  <VillageList {...this.props} />
-                </TabPane>
-              </TabContent>
-            </Col>
-          </Row>
+      <Row className="address-tabs">
+        <Col>
+          <Nav tabs style={{ backgroundColor: "#ED734A" }}>
+            {tabs}
+          </Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId="1" className="nav-pane">
+              <StateList {...this.props} />
+            </TabPane>
+            <TabPane tabId="2" className="nav-pane">
+              <DistrictList {...this.props} />
+            </TabPane>
+            <TabPane tabId="3" className="nav-pane">
+              <GrampanchayatList {...this.props} />
+            </TabPane>
+            <TabPane tabId="4" className="nav-pane">
+              <VillageList {...this.props} />
+            </TabPane>
+          </TabContent>
+        </Col>
+      </Row>
     );
   }
 }

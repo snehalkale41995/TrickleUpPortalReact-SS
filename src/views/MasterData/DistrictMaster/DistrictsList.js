@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import DistrictForm from "./DistrictForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import * as constants from "../../../constants/StatusConstants";
 
 class DistrictsList extends Component {
   constructor(props) {
@@ -21,7 +22,8 @@ class DistrictsList extends Component {
       loading: true,
       showForm: false,
       modalStatus: false,
-      districtToDelete: {}
+      districtToDelete: {},
+      tableStatus: true
     };
   }
   componentWillMount() {
@@ -46,7 +48,6 @@ class DistrictsList extends Component {
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
   onDelete(row) {
     this.setState({
@@ -56,7 +57,7 @@ class DistrictsList extends Component {
   }
   onConfirmDelete() {
     let district = { ...this.state.districtToDelete };
-    district.Active = false;
+    this.state.tableStatus ?  district.Active = false :  district.Active = true;
     this.props.deleteDistrict(district.Id, district);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -81,6 +82,20 @@ class DistrictsList extends Component {
       showForm: true
     });
   }
+  onStatusChange(value) {
+    if (value !== null) {
+      this.setState({ tableStatus: value });
+    } else {
+      this.setState({ tableStatus: true });
+    }
+  }
+  onActivateDistrict(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+  }
   render() {
     const sortingOptions = {
       defaultSortName: "DistrictName",
@@ -100,7 +115,7 @@ class DistrictsList extends Component {
         },
         {
           text: "All",
-          value: this.props.districts.length
+          value: this.state.tableStatus ? this.props.districts.length : this.props.inactiveDistrict.length
         }
       ],
       sizePerPage: 5
@@ -110,7 +125,7 @@ class DistrictsList extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <div style={{ marginTop: 30 }}>
+      <div className="address-tabs-margin">
         <CardLayout
           name="Districts"
           buttonName="Add district"
@@ -119,11 +134,23 @@ class DistrictsList extends Component {
             this.setState({ showForm: true });
           }}
         >
+          <Row className="address-drop-margin">
+            <Col xs="12" md="10" />
+            <Col md="2">
+              <DropdownSelect
+                label="Status"
+                options={constants.tableStatus}
+                value={this.state.tableStatus}
+                onChange={this.onStatusChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+          </Row>
           <FormGroup row>
             <Col xs="12">
               <BootstrapTable
                 ref="table"
-                data={this.props.districts}
+                data={this.state.tableStatus ? this.props.districts : this.props.inactiveDistrict}
                 pagination={true}
                 search={true}
                 options={sortingOptions}
@@ -157,16 +184,19 @@ class DistrictsList extends Component {
                 >
                   State Name
                 </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditDistrict.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-                <TableHeaderColumn
+                {this.state.tableStatus ? (
+                  <TableHeaderColumn
+                    dataField="edit"
+                    dataFormat={this.onEditDistrict.bind(this)}
+                    headerAlign="left"
+                    width="20"
+                    export={false}
+                  >
+                    Edit
+                  </TableHeaderColumn>
+                ) : null}
+                {
+                  this.state.tableStatus ?  <TableHeaderColumn
                   dataField="delete"
                   dataFormat={this.onDeleteDistrict.bind(this)}
                   headerAlign="left"
@@ -174,7 +204,17 @@ class DistrictsList extends Component {
                   export={false}
                 >
                   Deactivate
+                </TableHeaderColumn> :  <TableHeaderColumn
+                  dataField="delete"
+                  dataFormat={this.onActivateDistrict.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Activate
                 </TableHeaderColumn>
+                }
+               
               </BootstrapTable>
             </Col>
           </FormGroup>
@@ -183,8 +223,12 @@ class DistrictsList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this district record ?"
+          title={this.state.tableStatus ? "Deactivate" : "Activate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this district record ?"
+              : "Are you sure you want to activate this district record ?"
+          }
         />
       </div>
     );
@@ -193,7 +237,8 @@ class DistrictsList extends Component {
 const mapStateToProps = state => {
   return {
     districtsList: state.districtReducer.districtsList,
-    districts: state.districtReducer.districts
+    districts: state.districtReducer.districts,
+    inactiveDistrict : state.districtReducer.inactiveDistrict
   };
 };
 

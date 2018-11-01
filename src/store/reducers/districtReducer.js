@@ -3,7 +3,8 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   districtsList: [],
   districts: [],
-  districtMasterError: null
+  districtMasterError: null,
+  inactiveDistrict: []
 };
 
 const districtReducer = (state = initialState, action) => {
@@ -13,7 +14,8 @@ const districtReducer = (state = initialState, action) => {
         ...state,
         districtsList: action.districtList,
         districts: action.districts,
-        districtMasterError: null
+        districtMasterError: null,
+        inactiveDistrict :action.inactiveDistrict
       };
     case actionTypes.LOG_DISTRICT_ERROR:
       return {

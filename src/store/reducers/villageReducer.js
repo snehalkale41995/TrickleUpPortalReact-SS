@@ -3,6 +3,7 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   villagesList: [],
   villages: [],
+  inActiveVillages: [],
   villageMasterError: null
 };
 
@@ -14,6 +15,7 @@ const villageReducer = (state = initialState, action) => {
         villagesList: action.villagesList,
         villages: action.villages,
         villageMasterError: null,
+        inActiveVillages : action.inActiveVillages
       };
     case actionTypes.LOG_VILLAGE_ERROR:
       return {

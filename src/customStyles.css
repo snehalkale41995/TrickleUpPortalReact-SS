@@ -9977,6 +9977,20 @@ html body .app.flex-row.align-items-center {
 margin-right: -45px;
 }
 .loader-position{
-  margin-left: 500px;
-  margin-top: 250px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.card-btn {
+  margin-top: 1px;
+  margin-right: 0px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.address-tabs-margin {
+  margin-top: -30px;
+}
+.address-drop-margin{
+  margin-top: -20px;
 }

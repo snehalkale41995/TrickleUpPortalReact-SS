@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -21,7 +21,7 @@ class LanguageList extends Component {
       loading: true,
       modalStatus: false,
       stateToDelete: {},
-      tableStatus : true
+      tableStatus: true
     };
   }
 
@@ -37,28 +37,27 @@ class LanguageList extends Component {
 
   onDeleteState(cell, row) {
     let componentRef = this;
-    if(this.state.tableStatus){
+    if (this.state.tableStatus) {
       return (
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Dactivate" />
-      </Link>
-    );
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i className="fa fa-trash" title="Dactivate" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+        </Link>
+      );
     }
-   else{
-       return (
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
-      </Link>
-    );
-   }
   }
 
   onTablestatusChange(value) {
-    if(value!=null){
-       this.setState({
-      tableStatus: value
-    }); 
-  }
+    if (value != null) {
+      this.setState({
+        tableStatus: value
+      });
+    }
   }
 
   onDelete(row) {
@@ -71,22 +70,23 @@ class LanguageList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let language = { ...this.state.stateToDelete };
-     if(this.state.tableStatus){
-     language.Active = false;
+    if (this.state.tableStatus) {
+      language.Active = false;
       this.props.deleteLanguage(language.Id, language);
-    }
-    else{
+    } else {
       language.Active = true;
       this.props.deleteLanguage(language.Id, language);
     }
-   // this.setState({ loading: true });
+    // this.setState({ loading: true });
     setTimeout(() => {
       let message = "";
-      let displayMessage = compRef.state.tableStatus ? "Language deactivated successfully": "Language activated successfully"
+      let displayMessage = compRef.state.tableStatus
+        ? "Language deactivated successfully"
+        : "Language activated successfully";
       compRef.props.languageMasterError
         ? (message = "Something went wrong !")
         : (message = displayMessage);
-     // compRef.setState({ loading: false });
+      // compRef.setState({ loading: false });
       Toaster.Toaster(message, compRef.props.languageMasterError);
     }, 1000);
     this.setState({
@@ -127,7 +127,9 @@ class LanguageList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus ? this.props.languages.length : this.props.inactiveLanguages.length 
+          value: this.state.tableStatus
+            ? this.props.languages.length
+            : this.props.inactiveLanguages.length
         }
       ],
       sizePerPage: 5
@@ -140,22 +142,27 @@ class LanguageList extends Component {
         buttonName="Add language"
         buttonLink={`${this.props.match.url}/LanguageForm`}
       >
-        <br/>
-       <FormGroup row>
-            <Col xs="12" md="4">
-              <DropdownSelect
-                name="tableStatus"
-                value = {this.state.tableStatus}
-                options={constants.tableStatus}
-               onChange={this.onTablestatusChange.bind(this)}
-              />
-            </Col>
-        </FormGroup>
+        <Row className="address-drop-margin">
+          <Col xs="12" md="10" />
+          <Col md="2">
+            <DropdownSelect
+              label="Status"
+              options={constants.tableStatus}
+              value={this.state.tableStatus}
+              onChange={this.onTablestatusChange.bind(this)}
+              simpleValue
+            />
+          </Col>
+        </Row>
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.state.tableStatus ? this.props.languages : this.props.inactiveLanguages }
+              data={
+                this.state.tableStatus
+                  ? this.props.languages
+                  : this.props.inactiveLanguages
+              }
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -184,48 +191,52 @@ class LanguageList extends Component {
               >
                 Language Name
               </TableHeaderColumn>
-                 {
-              this.state.tableStatus ?     
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>  : null
-              }
-             {
-              this.state.tableStatus ?  <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-              Deactivate
-              </TableHeaderColumn> :  <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Activate
-              </TableHeaderColumn>
-            }
+              {this.state.tableStatus ? (
+                <TableHeaderColumn
+                  dataField="edit"
+                  dataFormat={this.onEditState.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Edit
+                </TableHeaderColumn>
+              ) : null}
+              {this.state.tableStatus ? (
+                <TableHeaderColumn
+                  dataField="delete"
+                  dataFormat={this.onDeleteState.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Deactivate
+                </TableHeaderColumn>
+              ) : (
+                <TableHeaderColumn
+                  dataField="delete"
+                  dataFormat={this.onDeleteState.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Activate
+                </TableHeaderColumn>
+              )}
             </BootstrapTable>
           </Col>
           <ToastContainer autoClose={2000} />
         </FormGroup>
-          <ConfirmModal
+        <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
-          message={this.state.tableStatus ? "Are you sure you want to deactivate this language record ?" : 
-                  "Are you sure you want to activate this language record ?"}
+          title={this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this language record ?"
+              : "Are you sure you want to activate this language record ?"
+          }
         />
       </CardLayout>
     );

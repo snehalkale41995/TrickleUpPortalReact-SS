@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import GrampanchayatForm from "./GrampanchayatForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import * as constants from "../../../constants/StatusConstants";
 
 class GrampanchayatList extends Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class GrampanchayatList extends Component {
       showForm: false,
       grampanchayatToEdit: {},
       grampanchayatToDelete: {},
-      modalStatus: false
+      modalStatus: false,
+      tableStatus: true
     };
   }
   componentWillMount() {
@@ -48,7 +50,9 @@ class GrampanchayatList extends Component {
   }
   onConfirmDelete() {
     let grampanchayat = { ...this.state.grampanchayatToDelete };
-    grampanchayat.Active = false;
+    this.state.tableStatus
+      ? (grampanchayat.Active = false)
+      : (grampanchayat.Active = true);
     this.props.deleteGrampanchayat(grampanchayat.Id, grampanchayat);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -73,6 +77,20 @@ class GrampanchayatList extends Component {
       showForm: true
     });
   }
+  onStatusChange(value) {
+    if (value !== null) {
+      this.setState({ tableStatus: value });
+    } else {
+      this.setState({ tableStatus: true });
+    }
+  }
+  onActivateGrampanchayat(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+  }
   render() {
     const sortingOptions = {
       defaultSortName: "GrampanchayatName",
@@ -92,7 +110,9 @@ class GrampanchayatList extends Component {
         },
         {
           text: "All",
-          value: this.props.grampanchayats.length
+          value: this.state.tableStatus
+            ? this.props.grampanchayats.length
+            : this.props.inActiveGrampanchayat.length
         }
       ],
       sizePerPage: 5
@@ -105,87 +125,129 @@ class GrampanchayatList extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout
-        name="Grampanchayats"
-        buttonName="Add grampanchayat"
-        buttonLink={this}
-        buttonClick={() => {
-          this.setState({ showForm: true });
-        }}
-      >
-        <FormGroup row>
-          <Col xs="12">
-            <BootstrapTable
-              ref="table"
-              data={this.props.grampanchayats}
-              pagination={true}
-              search={true}
-              options={sortingOptions}
-              hover={true}
-              csvFileName="grampanchayatList.csv"
-            >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
-                Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="GrampanchayatName"
-                headerAlign="left"
-                width="40"
-                dataSort={true}
+      <div className="address-tabs-margin">
+        <CardLayout
+          name="Grampanchayats"
+          buttonName="Add grampanchayat"
+          buttonLink={this}
+          buttonClick={() => {
+            this.setState({ showForm: true });
+          }}
+        >
+          <Row className="address-drop-margin">
+            <Col xs="12" md="10" />
+            <Col md="2">
+              <DropdownSelect
+                label="Status"
+                options={constants.tableStatus}
+                value={this.state.tableStatus}
+                onChange={this.onStatusChange.bind(this)}
+                simpleValue
+              />
+            </Col>
+          </Row>
+          <FormGroup row>
+            <Col xs="12">
+              <BootstrapTable
+                ref="table"
+                data={
+                  this.state.tableStatus
+                    ? this.props.grampanchayats
+                    : this.props.inActiveGrampanchayat
+                }
+                pagination={true}
+                search={true}
+                options={sortingOptions}
+                hover={true}
+                csvFileName="grampanchayatList.csv"
               >
-                Grampanchayat
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="DistrictName"
-                headerAlign="left"
-                width="40"
-                dataSort={true}
-              >
-                District
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="StateName"
-                headerAlign="left"
-                width="40"
-                dataSort={true}
-              >
-                State
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditGrampanchayat.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteGrampanchayat.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-              Deactivate
-              </TableHeaderColumn>
-            </BootstrapTable>
-          </Col>
-        </FormGroup>
-        <ConfirmModal
-          isOpen={this.state.modalStatus}
-          onModalToggle={this.onModalToggle.bind(this)}
-          onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this grampanchayat record ?"
-        />
-      </CardLayout>
+                <TableHeaderColumn
+                  dataField="Id"
+                  headerAlign="left"
+                  isKey
+                  hidden
+                >
+                  Id
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="GrampanchayatName"
+                  headerAlign="left"
+                  width="40"
+                  dataSort={true}
+                >
+                  Grampanchayat
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="DistrictName"
+                  headerAlign="left"
+                  width="40"
+                  dataSort={true}
+                >
+                  District
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="StateName"
+                  headerAlign="left"
+                  width="40"
+                  dataSort={true}
+                >
+                  State
+                </TableHeaderColumn>
+                {this.state.tableStatus ? (
+                  <TableHeaderColumn
+                    dataField="edit"
+                    dataFormat={this.onEditGrampanchayat.bind(this)}
+                    headerAlign="left"
+                    width="20"
+                    export={false}
+                  >
+                    Edit
+                  </TableHeaderColumn>
+                ) : null}
+                {this.state.tableStatus ? (
+                  <TableHeaderColumn
+                    dataField="delete"
+                    dataFormat={this.onDeleteGrampanchayat.bind(this)}
+                    headerAlign="left"
+                    width="20"
+                    export={false}
+                  >
+                    Deactivate
+                  </TableHeaderColumn>
+                ) : (
+                  <TableHeaderColumn
+                    dataField="delete"
+                    dataFormat={this.onActivateGrampanchayat.bind(this)}
+                    headerAlign="left"
+                    width="20"
+                    export={false}
+                  >
+                    Activate
+                  </TableHeaderColumn>
+                )}
+              </BootstrapTable>
+            </Col>
+          </FormGroup>
+          <ConfirmModal
+            isOpen={this.state.modalStatus}
+            onModalToggle={this.onModalToggle.bind(this)}
+            onConfirmDelete={this.onConfirmDelete.bind(this)}
+            title={this.state.tableStatus ? "Deactivate" : "Activate"}
+            message={
+              this.state.tableStatus
+                ? "Are you sure you want to deactivate this grampanchayat record ?"
+                : "Are you sure you want to activate this grampanchayat record ?"
+            }
+          />
+        </CardLayout>
+      </div>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    grampanchayats: state.grampanchayatReducer.grampanchayats
+    grampanchayats: state.grampanchayatReducer.grampanchayats,
+    inActiveGrampanchayat: state.grampanchayatReducer.inActiveGrampanchayat
   };
 };
 
