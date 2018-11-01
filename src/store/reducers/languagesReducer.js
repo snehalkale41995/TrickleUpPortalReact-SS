@@ -3,7 +3,8 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
     languagesList : [],
     languages : [],
-    languageMasterError : null
+    languageMasterError : null,
+    inactiveLanguages : []
 };
 
 const languagesReducer = (state = initialState, action) => {
@@ -13,7 +14,8 @@ const languagesReducer = (state = initialState, action) => {
         ...state,
         languagesList : action.languagesList,
         languages : action.languages,
-        languageMasterError : null
+        languageMasterError : null,
+        inactiveLanguages : action.inactiveLanguages
       };
        case actionTypes.CREATE_LANGUAGE_SUCCESS:
       return {

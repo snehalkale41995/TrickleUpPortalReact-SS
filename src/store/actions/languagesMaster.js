@@ -3,17 +3,19 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from 'lodash';
 
-export const storeLanguagesList = (languages, languagesList) => {
+export const storeLanguagesList = (languages, languagesList, inactiveLanguages) => {
   return {
     type: actionTypes.GET_LANGUAGES,
     languagesList: languagesList,
-    languages : languages
+    languages : languages,
+    inactiveLanguages : inactiveLanguages
   };
 }
 
 export const getLanguageList = () => {
   let languageList = [];
   let languages = [];
+  let inactiveLanguages = []
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Languages/GetLanguages`)
@@ -21,12 +23,15 @@ export const getLanguageList = () => {
         languages =  _.filter(response.data.data.Languages, function(language) {
             return language.Active === true ;
           });
+         inactiveLanguages =  _.filter(response.data.data.Languages, function(language) {
+            return language.Active === false ;
+          });
         response.data.data.Languages.forEach(language => {
           if (language.LanguageName !== null && language.Active) {
             languageList.push({ label: language.LanguageName, value: language.Id });
           }
         });
-        dispatch(storeLanguagesList(languages, languageList));
+        dispatch(storeLanguagesList(languages, languageList, inactiveLanguages));
       })
       .catch(error => {});
   };

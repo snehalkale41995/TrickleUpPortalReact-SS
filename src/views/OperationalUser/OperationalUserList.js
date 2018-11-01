@@ -9,47 +9,59 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import _ from "lodash";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
+import DropdownSelect from "../../components/InputElement/Dropdown";
+import * as constants from "../../constants/StatusConstants";
 class OperationalUserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      operationalUserList: [],
       loading: true,
       modalStatus: false,
-      userToDelete: {}
+      userToDelete: {},
+      tableStatus : true
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.props.getBeneficiaryList();
     let compRef = this;
-    compRef.props.getBeneficiaryList();
     setTimeout(() => {
-      compRef.setOperationalUser();
+      compRef.setState({
+        loading: false
+      });
     }, 2000);
   }
 
-  setOperationalUser() {
-    let compRef = this;
-    let operationalUserList = _.filter(compRef.props.beneficiaryList, function(
-      beneficiary
-    ) {
-      return beneficiary.Active === true && beneficiary.Role === 2;
-    });
-    compRef.setState({
-      loading: false,
-      operationalUserList: operationalUserList
-    });
-  }
-
   onDeleteBeneficiary(cell, row) {
-    return (
+   let componentRef = this;
+    if(this.state.tableStatus){
+      return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Deactivate" />
+        <i className="fa fa-trash" title="Dactivate" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
+    }
+   else{
+       return (
+         
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+   }
   }
+ 
+    onTablestatusChange(value) {
+    if(value!=null){
+       this.setState({
+      tableStatus: value
+    }); 
+    }
+    }
+
 
   onDelete(row) {
     this.setState({
@@ -69,11 +81,23 @@ class OperationalUserList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    user.Active = false;
+    if(this.state.tableStatus){
+     user.Active = false;
     this.props.deleteBeneficiary(user.Id, user);
-    setTimeout(() => {
-      compRef.setOperationalUser();
-    }, 2000);
+    }
+    else{
+    user.Active = true;
+    this.props.deleteBeneficiary(user.Id, user);
+    }
+   setTimeout(() => {
+      let message = "";
+      let displayMessage = compRef.state.tableStatus ? "User deactivated successfully": "User activated successfully"
+      compRef.props.beneficiaryError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      //compRef.setState({ loading: false });
+      Toaster.Toaster(message, compRef.props.beneficiaryError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -104,7 +128,7 @@ class OperationalUserList extends Component {
         },
         {
           text: "All",
-          value: this.state.operationalUserList.length
+          value: this.state.tableStatus ? this.props.operationalUsers.length : this.props.inactiveOperationalUsers.length
         }
       ],
       sizePerPage: 5
@@ -117,11 +141,22 @@ class OperationalUserList extends Component {
         buttonName="Add User"
         buttonLink={`${this.props.match.url}/operationalUser`}
       >
+      <br/>
+       <FormGroup row>
+            <Col xs="12" md="4">
+              <DropdownSelect
+                name="tableStatus"
+                value = {this.state.tableStatus}
+                options={constants.tableStatus}
+                onChange={this.onTablestatusChange.bind(this)}
+              />
+            </Col>
+        </FormGroup>
         <FormGroup row>
           <Col xs="12" md="12">
             <BootstrapTable
               ref="table"
-              data={this.state.operationalUserList}
+              data={this.state.tableStatus ? this.props.operationalUsers : this.props.inactiveOperationalUsers}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -132,7 +167,6 @@ class OperationalUserList extends Component {
               <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
                 Id
               </TableHeaderColumn>
-
               <TableHeaderColumn
                 dataField="Name"
                 headerAlign="left"
@@ -202,18 +236,8 @@ class OperationalUserList extends Component {
                 export={true}
                 hidden
               />
-              {/* <TableHeaderColumn
-                  dataField="Aadhar"
-                  csvHeader="Aadhar number"
-                  export={true}
-                  hidden
-                /> */}
-              <TableHeaderColumn
-                dataField="Active"
-                csvHeader="Active"
-                export={true}
-                hidden
-              />
+            {
+              this.state.tableStatus ?     
               <TableHeaderColumn
                 dataField="edit"
                 dataFormat={this.onEditBeneficiary.bind(this)}
@@ -222,25 +246,38 @@ class OperationalUserList extends Component {
                 export={false}
               >
                 Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
+              </TableHeaderColumn>  : null
+              }
+             {
+              this.state.tableStatus ?  <TableHeaderColumn
                 dataField="delete"
                 dataFormat={this.onDeleteBeneficiary.bind(this)}
                 headerAlign="left"
                 width="20"
                 export={false}
               >
-                Deactivate
+               Deactivate
+              </TableHeaderColumn> :  <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteBeneficiary.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Activate
               </TableHeaderColumn>
+            }
             </BootstrapTable>
           </Col>
+           <ToastContainer autoClose={2000} />
         </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this user?"
+          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={this.state.tableStatus ? "Are you sure you want to deactivate this user record ?" : 
+                  "Are you sure you want to activate this user record ?"}
         />
       </CardLayout>
     );
@@ -248,7 +285,10 @@ class OperationalUserList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    beneficiaryList: state.beneficiaryReducer.beneficiaryList
+    beneficiaryList: state.beneficiaryReducer.beneficiaryList,
+    operationalUsers : state.beneficiaryReducer.operationalUsers,
+    inactiveOperationalUsers : state.beneficiaryReducer.inactiveOperationalUsers,
+    beneficiaryError : state.beneficiaryReducer.beneficiaryError
   };
 };
 

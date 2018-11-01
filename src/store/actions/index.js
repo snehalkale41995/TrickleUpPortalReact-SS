@@ -35,7 +35,6 @@ export {
     deleteBeneficiary,
     bulkUploadBeneficiary,
     getBulkUploadHistory,
-    getOperationalUserList,
     bulkValidateBeneficiary
 } from './beneficiary.js'
 
@@ -51,7 +50,8 @@ export {
     getRolesList,
     createRole,
     updateRole,
-    deleteRole
+    deleteRole,
+    acivateRole
 } from './rolesMaster.js';
 
 export {

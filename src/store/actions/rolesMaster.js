@@ -2,11 +2,12 @@ import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from 'lodash'
-export const storeRolesList = (rolesList, roles) => {
+export const storeRolesList = (rolesList, roles, inactiveRoles) => {
   return {
     type: actionTypes.GET_ROLES,
     rolesList: rolesList,
-    roles: roles
+    roles: roles,
+    inactiveRoles : inactiveRoles
   };
 };
 export const storeGendersList = (genders, gendersList) => {
@@ -27,6 +28,7 @@ export const storeLanguagesList = (languages, languagesList) => {
 export const getRolesList = () => {
   let rolesList = [];
   let roles = [];
+  let inactiveRoles = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Roles/GetRoles`)
@@ -34,12 +36,15 @@ export const getRolesList = () => {
        roles =  _.filter(response.data.data.Roles, function(role) {
              return role.Active === true ;
               });
+       inactiveRoles =  _.filter(response.data.data.Roles, function(role) {
+             return role.Active === false ;
+              });
         response.data.data.Roles.forEach(role => {
           if (role.RoleName !== null && role.Active === true) {
             rolesList.push({ label: role.RoleName, value: role.Id });
           }
         });
-        dispatch(storeRolesList(rolesList, roles));
+        dispatch(storeRolesList(rolesList, roles, inactiveRoles));
       })
       .catch(error => {});
   };

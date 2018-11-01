@@ -6,7 +6,9 @@ const initialState = {
   currentBeneficiary: null,
   bulkUploadHistory: [],
   bulkUserData : [],
-  bulkUserError : false
+  bulkUserError : false,
+  operationalUsers : [],
+  inactiveOperationalUsers : []
 };
 
 const beneficiaryReducer = (state = initialState, action) => {
@@ -15,6 +17,8 @@ const beneficiaryReducer = (state = initialState, action) => {
       return {
         ...state,
         beneficiaryList: action.beneficiaryList,
+        operationalUsers : action.operationalUsers,
+        inactiveOperationalUsers : action.inactiveOperationalUsers,
         beneficiaryError: null
       };
     case actionTypes.LOG_BENEFICIARY_ERROR:
