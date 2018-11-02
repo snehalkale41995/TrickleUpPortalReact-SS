@@ -158,6 +158,7 @@ class GenderForm extends Component {
                   type="text"
                   label="Gender name"
                   placeholder="Gender name"
+                  maxLength = {255}
                   name="GenderName"
                   required={currentGender.GenderNameRequired}
                   value={currentGender.GenderName}

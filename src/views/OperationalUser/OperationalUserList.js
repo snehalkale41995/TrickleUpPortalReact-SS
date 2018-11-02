@@ -46,7 +46,7 @@ class OperationalUserList extends Component {
     }
    else{
        return (
-         
+
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
       </Link>
@@ -275,7 +275,7 @@ class OperationalUserList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
+          title= {this.state.tableStatus ? "Deactivate" : "Activate"}
           message={this.state.tableStatus ? "Are you sure you want to deactivate this user record ?" : 
                   "Are you sure you want to activate this user record ?"}
         />

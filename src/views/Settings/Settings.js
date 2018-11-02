@@ -66,7 +66,7 @@ class Settings extends Component {
       grampanchayatRequired: false,
       villageRequired: false,
       roleRequired: false,
-      languageRequired: false
+      languageRequired: false,
     };
   }
 
@@ -100,6 +100,14 @@ class Settings extends Component {
       });
     };
     reader.readAsDataURL(file);
+  }
+
+   // Method for set only Numeric
+  setInputToNumeric(e) {
+    const re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
   }
 
   onChangeInput(event) {
@@ -168,6 +176,8 @@ class Settings extends Component {
     });
   }
   onSubmit() {
+    let userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    let roleId = userDetails.role;
     let user = { ...this.state.user };
     let compRef = this;
     this.showValidations(user);
@@ -199,13 +209,14 @@ class Settings extends Component {
       ]);
       user.UpdatedBy = 1;
       user.UpdatedOn = new Date();
+      user.Role = roleId;
       this.props.updateBeneficiary(user.Id, user);
       this.setState({ loading: true });
       setTimeout(() => {
         let message = "";
         compRef.props.beneficiaryError
           ? (message = "Something went wrong !")
-          : (message = "Beneficiary updated successfully");
+          : (message = "User updated successfully");
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.beneficiaryError);
       }, 1000);
@@ -224,7 +235,6 @@ class Settings extends Component {
       user.District &&
       user.Village &&
       user.Grampanchayat &&
-      user.Role &&
       user.Language
     ) {
       return true;
@@ -246,7 +256,7 @@ class Settings extends Component {
     !user.District ? this.setState({ districtRequired: true }) : null;
     !user.Village ? this.setState({ villageRequired: true }) : null;
     !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
-    !user.Role ? this.setState({ roleRequired: true }) : null;
+   // !user.Role ? this.setState({ roleRequired: true }) : null;
     !user.Language ? this.setState({ languageRequired: true }) : null;
     this.setState({
       user: user
@@ -313,6 +323,7 @@ class Settings extends Component {
                 label="Name"
                 name="Name"
                 placeholder="Please enter name "
+                maxLength = {255} 
                 value={user.Name}
                 required={user.NameRequired}
                 onChange={event => this.onChangeInput(event)}
@@ -327,6 +338,7 @@ class Settings extends Component {
                 placeholder="Please enter phone number "
                 value={user.PhoneNumber}
                 required={user.PhoneNumberRequired}
+                onKeyPress={e => this.setInputToNumeric(e)}
                 invalid={user.PhoneNumberInvalid}
                 onChange={event => this.onChangeInput(event)}
               />
@@ -335,12 +347,13 @@ class Settings extends Component {
           <FormGroup row>
             <Col xs="12" md="5">
               <InputElement
-                type="number"
+                type="text"
                 label="Age"
                 name="Age"
-                maxLength={3}
-                placeholder="Please enter age "
+                maxLength={2}
+                placeholder="Please enter age"
                 value={user.Age}
+                onKeyPress={e => this.setInputToNumeric(e)}
                 required={user.AgeRequired}
                 onChange={event => this.onChangeInput(event)}
               />
@@ -417,45 +430,10 @@ class Settings extends Component {
                 onChange={event => this.onChangeInput(event)}
               />
             </Col>
-            <Col md="5">
-              <Label>Role</Label>
-              <DropdownSelect
-                name="Role"
-                placeholder="Select role "
-                options={this.props.rolesList}
-                value={user.Role}
-                required={this.state.roleRequired}
-                onChange={this.onRoleSelection.bind(this)}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="5">
-              <Label>Language</Label>
-              <DropdownSelect
-                name="Language"
-                placeholder="Select language "
-                options={this.props.languagesList}
-                value={user.Language}
-                required={this.state.languageRequired}
-                onChange={this.onLanguageSelection.bind(this)}
-              />
-            </Col>
-            {user.ImagePath ? (
-              <div>
+              {user.ImagePath ? (
                 <FormGroup row>
                   <Col xs="6" md="4">
                     <Label>Profile Picture : </Label>
-                    {/* <InputElement
-                  type="file"
-                  label="Profile Image"
-                 // name="Age"
-                 // maxLength={3}
-                 // placeholder="Please enter age "
-                 // value={user.Age}
-                 // required={user.AgeRequired}
-                 onChange={(e)=>this._handleImageChange(e)}
-                /> */}
                   </Col>
                   <Col md="2">
                     <div
@@ -468,10 +446,33 @@ class Settings extends Component {
                     >
                       {$imagePreview}
                     </div>
-                  </Col>{" "}
+                  </Col>
                 </FormGroup>
-              </div>
             ) : null}
+            {/* <Col md="5">
+              <Label>Role</Label>
+              <DropdownSelect
+                name="Role"
+                placeholder="Select role "
+                options={this.props.rolesList}
+                value={user.Role}
+                required={this.state.roleRequired}
+                onChange={this.onRoleSelection.bind(this)}
+              />
+            </Col> */}
+          </FormGroup>
+          <FormGroup row>
+              <Col xs="12" md="5">
+              <Label>Language</Label>
+              <DropdownSelect
+                name="Language"
+                placeholder="Select language "
+                options={this.props.languagesList}
+                value={user.Language}
+                required={this.state.languageRequired}
+                onChange={this.onLanguageSelection.bind(this)}
+              />
+            </Col>
           </FormGroup>
           <FormGroup row>
             <Col md="1">
