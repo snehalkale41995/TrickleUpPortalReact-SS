@@ -165,6 +165,7 @@ class RolesForm extends Component {
                 type="text"
                 label="Role name"
                 placeholder="Role name"
+                maxLength = {255} 
                 name="RoleName"
                 required={currentRole.RoleNameRequired}
                 value={currentRole.RoleName}

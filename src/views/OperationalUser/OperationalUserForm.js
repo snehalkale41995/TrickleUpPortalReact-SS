@@ -574,7 +574,7 @@ class OperationalUserForm extends Component {
                 <Button
                   className="theme-reset-btn"
                   onClick={() => {
-                    this.props.history.push("/beneficiary/beneficiaryList");
+                    this.props.history.push("/operationalUser");
                   }}
                 >
                   Cancel

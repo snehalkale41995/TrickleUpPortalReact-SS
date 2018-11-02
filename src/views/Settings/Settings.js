@@ -313,6 +313,7 @@ class Settings extends Component {
                 label="Name"
                 name="Name"
                 placeholder="Please enter name "
+                maxLength = {255} 
                 value={user.Name}
                 required={user.NameRequired}
                 onChange={event => this.onChangeInput(event)}
@@ -335,11 +336,11 @@ class Settings extends Component {
           <FormGroup row>
             <Col xs="12" md="5">
               <InputElement
-                type="number"
+                type="text"
                 label="Age"
                 name="Age"
-                maxLength={3}
-                placeholder="Please enter age "
+                maxLength={2}
+                placeholder="Please enter age"
                 value={user.Age}
                 required={user.AgeRequired}
                 onChange={event => this.onChangeInput(event)}
