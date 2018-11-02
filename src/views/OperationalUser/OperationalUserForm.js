@@ -325,19 +325,56 @@ class OperationalUserForm extends Component {
     }
   }
   showValidations(user) {
+    // let validUserId;
+    // let validPhone =
+    //   /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
+    // if (user.UserId) {
+    //   validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    // }
+    // !user.Name ? (user.NameRequired = true) : null;
+    // user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
+    // !user.PhoneNumber
+    //   ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
+    //   : null;
+    // user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
+    // !user.UserId
+    //   ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
+    //   : null;
+    // user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
+    // !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
+    // !user.Gender ? this.setState({ genderRequired: true }) : null;
+    // !user.State ? this.setState({ stateRequired: true }) : null;
+    // !user.District ? this.setState({ districtRequired: true }) : null;
+    // !user.Village ? this.setState({ villageRequired: true }) : null;
+    // !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
+    // !user.Role ? this.setState({ roleRequired: true }) : null;
+    // user.Aadhaar && user.Aadhaar.length !== 12
+    //   ? (user.AadhaarInvalid = true)
+    //   : null;
+    // !user.Language ? this.setState({ languageRequired: true }) : null;
+    // this.setState({
+    //   user: user
+    // });
     let validUserId;
     let validPhone =
-      /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
+      /^\d+$/.test(user.PhoneNumber.trim()) &&
+      user.PhoneNumber.trim().length === 10;
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
-    !user.Name ? (user.NameRequired = true) : null;
-    user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
-    !user.PhoneNumber
+    !user.Name || user.Name.trim().length === 0
+      ? (user.NameRequired = true)
+      : null;
+    user.PhoneNumber.trim() && !validPhone && user.PhoneNumber.trim().length > 0
+      ? (user.PhoneNumberInvalid = true)
+      : null;
+    !user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
-    user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
-    !user.UserId
+    user.UserId && user.UserId.trim().length === 0 && !validUserId
+      ? (user.UserIdInvalid = true)
+      : null;
+    !user.UserId || user.UserId.trim().length === 0
       ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
     user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
@@ -348,7 +385,7 @@ class OperationalUserForm extends Component {
     !user.Village ? this.setState({ villageRequired: true }) : null;
     !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
     !user.Role ? this.setState({ roleRequired: true }) : null;
-    user.Aadhaar && user.Aadhaar.length !== 12
+    user.Aadhaar && user.Aadhaar.trim().length !== 12
       ? (user.AadhaarInvalid = true)
       : null;
     !user.Language ? this.setState({ languageRequired: true }) : null;
@@ -396,7 +433,7 @@ class OperationalUserForm extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
-        name="User Form"
+        name="Operational User Form"
         navigation={true}
         navigationRoute="/operationalUser"
       >
@@ -529,6 +566,7 @@ class OperationalUserForm extends Component {
                 maxLength={12}
                 placeholder="Please enter aadhaar number "
                 value={user.Aadhaar}
+                onKeyPress={e => this.setInputToNumeric(e)}
                 invalid={user.AadhaarInvalid}
                 onChange={event => this.onChangeInput(event)}
               />

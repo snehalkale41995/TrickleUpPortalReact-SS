@@ -91,28 +91,6 @@ class RegistrationForm extends Component {
       });
     }
   }
-
-  // componentWillMount() {
-
-  //   if (this.props.match.params.id !== undefined) {
-  //     let id = this.props.match.params.id;
-  //     this.props.getBeneficiaryById(id);
-  //     setTimeout(() => {
-  //       if (this.props.currentBeneficiary) {
-  //         this.setState({
-  //           user: this.props.currentBeneficiary,
-  //           updateFlag: true
-  //         });
-  //       }
-  //     }, 1000);
-  //   } else {
-  //     this.setState({
-  //       districtDisabled: true,
-  //       grampanchayatDisabled: true,
-  //       villageDisabled: true
-  //     });
-  //   }
-  // }
   onChangeInput(event) {
     let user = { ...this.state.user };
     user[event.target.name] = event.target.value;
@@ -247,11 +225,14 @@ class RegistrationForm extends Component {
             ? (message = compRef.props.beneficiaryError)
             : (message = `User updated successfully`);
           compRef.setState({ loading: false });
-          Toaster.Toaster(message, compRef.props.beneficiaryError);
+          Toaster.Toaster(
+            compRef.props.beneficiaryError,
+            compRef.props.beneficiaryError
+          );
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-               compRef.props.history.push("/beneficiary/beneficiaryList");
+              compRef.props.history.push("/beneficiary/beneficiaryList");
             }
           }, 1000);
         }, 1000);
@@ -294,7 +275,10 @@ class RegistrationForm extends Component {
             ? (message = compRef.props.beneficiaryError)
             : (message = "User created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster( message, compRef.props.beneficiaryError);
+          Toaster.Toaster(
+            compRef.props.beneficiaryError,
+            compRef.props.beneficiaryError
+          );
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -316,14 +300,13 @@ class RegistrationForm extends Component {
       user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
     }
     if (
-      user.Name &&
+      user.Name.trim().length > 0 &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
       user.Age &&
       user.Age > 0 &&
       user.Gender &&
-      user.UserId &&
-      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
+      user.UserId.trim().length > 0 &&
       user.State &&
       user.District &&
       user.Village &&
@@ -339,17 +322,24 @@ class RegistrationForm extends Component {
   showValidations(user) {
     let validUserId;
     let validPhone =
-      /^\d+$/.test(user.PhoneNumber.trim()) && user.PhoneNumber.trim().length === 10;
+      /^\d+$/.test(user.PhoneNumber.trim()) &&
+      user.PhoneNumber.trim().length === 10;
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
-    !user.Name ? (user.NameRequired = true) : null;
-    user.PhoneNumber.trim() && !validPhone  && user.PhoneNumber.trim().length > 0 ? (user.PhoneNumberInvalid = true) : null;
+    !user.Name || user.Name.trim().length === 0
+      ? (user.NameRequired = true)
+      : null;
+    user.PhoneNumber.trim() && !validPhone && user.PhoneNumber.trim().length > 0
+      ? (user.PhoneNumberInvalid = true)
+      : null;
     !user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
-    user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
-    !user.UserId
+    user.UserId && user.UserId.trim().length === 0 && !validUserId
+      ? (user.UserIdInvalid = true)
+      : null;
+    !user.UserId || user.UserId.trim().length === 0
       ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
     user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
@@ -360,7 +350,7 @@ class RegistrationForm extends Component {
     !user.Village ? this.setState({ villageRequired: true }) : null;
     !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
     !user.Role ? this.setState({ roleRequired: true }) : null;
-    user.Aadhaar && user.Aadhaar.length !== 12
+    user.Aadhaar && user.Aadhaar.trim().length !== 12
       ? (user.AadhaarInvalid = true)
       : null;
     !user.Language ? this.setState({ languageRequired: true }) : null;
@@ -427,7 +417,7 @@ class RegistrationForm extends Component {
                 <InputElement
                   type="text"
                   label="Name"
-                  name="Name" 
+                  name="Name"
                   maxLength={255}
                   placeholder="Please enter name "
                   value={user.Name}
@@ -550,6 +540,7 @@ class RegistrationForm extends Component {
                   maxLength={12}
                   placeholder="Please enter aadhaar number "
                   value={user.Aadhaar}
+                  onKeyPress={e => this.setInputToNumeric(e)}
                   invalid={user.AadhaarInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />

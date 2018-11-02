@@ -3,8 +3,10 @@ import { Button, Col, Row, FormGroup } from "reactstrap";
 import CardLayout from "../../components/Cards/CardLayout";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
-
-export default class ImageContent extends Component {
+import * as actions from "../../store/actions";
+import { connect } from "react-redux";
+import ImageCards from "../../components/Cards/ImageCards";
+class ImageContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,6 +14,7 @@ export default class ImageContent extends Component {
     };
   }
   componentDidMount() {
+    this.props.getImageFiles();
     setTimeout(() => {
       this.setState({
         loading: false
@@ -19,28 +22,40 @@ export default class ImageContent extends Component {
     }, 2000);
   }
   render() {
+    let imageCards = this.props.imageFiles.map((media, idx) => {
+      return (
+        <Col xs="12" md="4" key={idx}>
+          <ImageCards
+            imageName={media.ImageName}
+            id={idx}
+            source={media.FilePath}
+          />
+        </Col>
+      );
+    });
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
-        name="Image"
+        name="Images"
         buttonName="Add image"
         //buttonLink={`${this.props.match.url}/imageUpload`}
         buttonLink={this}
       >
-        {/* <FormGroup row>
-          <Col xs="12" md="11" />
-            <Col md="1" style={{marginLeft: -50 ,marginTop: -55}}>
-              <Link to={`${this.props.match.url}/imageUpload`}>
-                <Button type="button" className="theme-positive-btn">
-                  <i className="fa fa-plus" />&nbsp; Add Image
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup> */}
-        <Row />
+      <Row>{imageCards}</Row>
       </CardLayout>
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    imageFiles: state.mediaReducer.imageFiles
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    getImageFiles: () => dispatch(actions.getImageFiles())
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ImageContent);
+

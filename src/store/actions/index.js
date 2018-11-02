@@ -24,8 +24,11 @@ export {
     deleteVillage
 } from './villagesMaster.js';
 export {
-    postMediaContent
-} from './mediaLibrary.js'
+    postMediaContent,
+    getAudioFiles,
+    getVideoFiles,
+    getImageFiles
+} from './mediaContent.js'
 
 export {
     getBeneficiaryList,

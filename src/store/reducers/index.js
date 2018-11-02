@@ -10,6 +10,7 @@ import villageReducer from './villageReducer';
 import grampanchayatReducer from './grampanchayatReducer';
 import languagesReducer from './languagesReducer';
 import gendersReducer from './gendersReducer';
+import mediaReducer from "./mediaReducer";
 
 const rootReducer = combineReducers({
     dashboard: dashboardReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     villageReducer :villageReducer,
     grampanchayatReducer: grampanchayatReducer,
     languagesReducer : languagesReducer,
-    gendersReducer : gendersReducer
+    gendersReducer : gendersReducer,
+    mediaReducer : mediaReducer
 });
 
 export default rootReducer;

@@ -9405,7 +9405,7 @@ button.bg-tumblr:focus {
   background-color: #22364a !important; }
 
 .bg-xing {
-  background-color: #026466 !important; }
+  background-color: #016366 !important; }
 
 a.bg-xing:hover, a.bg-xing:focus,
 button.bg-xing:hover,
@@ -9993,4 +9993,7 @@ margin-right: -45px;
 }
 .address-drop-margin{
   margin-top: -20px;
+}
+.fixed-height{
+  height: 200px !important;
 }

@@ -6,7 +6,9 @@ import Loader from "../../components/Loader/Loader";
 import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import AudioCards from "../../components/Cards/AudioCards";
-export default class AudioContent extends Component {
+import * as actions from "../../store/actions";
+import { connect } from "react-redux";
+class AudioContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,45 +17,49 @@ export default class AudioContent extends Component {
     };
   }
   componentDidMount() {
+    this.props.getAudioFiles();
     setTimeout(() => {
       this.setState({ loading: false });
     }, 1000);
   }
 
   render() {
+    let audioCards = this.props.audioFiles.map((media, idx) => {
+      return (
+        <Col xs="12" md="4" key={idx}>
+          <AudioCards
+            audioName={media.FileName}
+            autoPlay={false}
+            mute={true}
+            id={idx}
+            source={media.FilePath}
+          />
+        </Col>
+      );
+    });
+
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
-        name="Audio"
+        name="Audios"
         buttonName="Add audio"
         //buttonLink={`${this.props.match.url}/audioUpload`}
         buttonLink={this}
       >
-        {/* <FormGroup row>
-            <Col xs="12" md="11" />
-            <Col md="1" style={{ marginLeft: -50, marginTop: -55 }}>
-              <Link to={`${this.props.match.url}/audioUpload`}>
-                <Button type="button" className="theme-positive-btn">
-                  <i className="fa fa-plus" />&nbsp; Add audio
-                </Button>
-              </Link>
-              &nbsp;&nbsp;
-            </Col>
-          </FormGroup> */}
-        {/* <Row>
-            <Col xs="12" md="4">
-              <AudioCards
-                category="Snehal"
-                subCategory="Patil"
-                autoPlay={false}
-                mute={true}
-                id={0}
-                source={this.state.renderURL}
-              />
-            </Col>
-          </Row> */}
+        <Row>{audioCards}</Row>
       </CardLayout>
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    audioFiles: state.mediaReducer.audioFiles
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    getAudioFiles: () => dispatch(actions.getAudioFiles())
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AudioContent);

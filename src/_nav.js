@@ -33,20 +33,20 @@ export default {
       icon: "fa fa-folder-open",
       children: [
         {
-          name: "Audio",
+          name: "Audios",
           url: "/mediaContent/audioContent",
           icon: "fa fa-volume-up"
         },
-        // {
-        //   name: "Video",
-        //   url: "/mediaContent/videoContent",
-        //   icon: "fa fa-video-camera"
-        // },
-        // {
-        //   name: "Image",
-        //   url: "/mediaContent/imageContent",
-        //   icon: "fa fa-picture-o"
-        // }
+        {
+          name: "Videos",
+          url: "/mediaContent/videoContent",
+          icon: "fa fa-video-camera"
+        },
+        {
+          name: "Images",
+          url: "/mediaContent/imageContent",
+          icon: "fa fa-picture-o"
+        }
       ]
     },
     {
