@@ -93,6 +93,15 @@ class OperationalUserForm extends Component {
       });
     }
   }
+
+  // Method for set only Numeric
+  setInputToNumeric(e) {
+    const re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
   onChangeInput(event) {
     let user = { ...this.state.user };
     user[event.target.name] = event.target.value;
@@ -414,6 +423,7 @@ class OperationalUserForm extends Component {
                 value={user.PhoneNumber}
                 required={user.PhoneNumberRequired}
                 invalid={user.PhoneNumberInvalid}
+                onKeyPress={e => this.setInputToNumeric(e)}
                 onChange={event => this.onChangeInput(event)}
               />
             </Col>
@@ -433,14 +443,15 @@ class OperationalUserForm extends Component {
             </Col>
             <Col md="5">
               <InputElement
-                type="number"
+                type="text"
                 label="Age"
                 name="Age"
-                maxLength={3}
+                maxLength={2}
                 placeholder="Please enter age "
                 value={user.Age}
                 required={user.AgeRequired}
                 invalid={user.AgeInvalid}
+                onKeyPress={e => this.setInputToNumeric(e)}
                 onChange={event => this.onChangeInput(event)}
               />
             </Col>
