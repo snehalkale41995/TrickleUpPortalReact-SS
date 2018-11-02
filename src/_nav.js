@@ -37,16 +37,16 @@ export default {
           url: "/mediaContent/audioContent",
           icon: "fa fa-volume-up"
         },
-        {
-          name: "Video",
-          url: "/mediaContent/videoContent",
-          icon: "fa fa-video-camera"
-        },
-        {
-          name: "Image",
-          url: "/mediaContent/imageContent",
-          icon: "fa fa-picture-o"
-        }
+        // {
+        //   name: "Video",
+        //   url: "/mediaContent/videoContent",
+        //   icon: "fa fa-video-camera"
+        // },
+        // {
+        //   name: "Image",
+        //   url: "/mediaContent/imageContent",
+        //   icon: "fa fa-picture-o"
+        // }
       ]
     },
     {

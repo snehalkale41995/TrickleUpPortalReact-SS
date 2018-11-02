@@ -32,7 +32,7 @@ const csvData = [
     "IMEI2",
     "Role",
     "Language",
-    "FCMToken",
+    "FCMToken"
     // "CreatedBy",
     // "CreatedOn",
     // "Active"
@@ -203,7 +203,7 @@ class BulkRegistration extends Component {
       "IMEI2",
       "Role",
       "Language",
-      "FCMToken",
+      "FCMToken"
       // "CreatedBy",
       // "CreatedOn",
       // "Active"
@@ -329,25 +329,54 @@ class BulkRegistration extends Component {
                 >
                   Name
                 </TableHeaderColumn>
-                <TableHeaderColumn  width={20} dataField="PhoneNumber" headerAlign="left">
+                <TableHeaderColumn
+                  width={20}
+                  dataField="PhoneNumber"
+                  headerAlign="left"
+                  dataSort={true}
+                >
                   Phone Number
                 </TableHeaderColumn>
-                <TableHeaderColumn  width={12} dataField="Age" headerAlign="left">
+                <TableHeaderColumn
+                  width={12}
+                  dataField="Age"
+                  headerAlign="left"
+                >
                   Age
                 </TableHeaderColumn>
                 {/* <TableHeaderColumn dataField="Gender" headerAlign="left">
                   Gender
                 </TableHeaderColumn> */}
-                <TableHeaderColumn  width={15} dataField="State" headerAlign="left">
+                <TableHeaderColumn
+                  width={15}
+                  dataField="State"
+                  headerAlign="left"
+                  dataSort={true}
+                >
                   State
                 </TableHeaderColumn>
-                <TableHeaderColumn width={15} dataField="District" headerAlign="left">
+                <TableHeaderColumn
+                  width={15}
+                  dataField="District"
+                  headerAlign="left"
+                  dataSort={true}
+                >
                   District
                 </TableHeaderColumn>
-                <TableHeaderColumn width={15} dataField="Village" headerAlign="left">
+                <TableHeaderColumn
+                  width={15}
+                  dataField="Village"
+                  headerAlign="left"
+                  dataSort={true}
+                >
                   Village
                 </TableHeaderColumn>
-                <TableHeaderColumn width={20} dataField="Grampanchayat" headerAlign="left">
+                <TableHeaderColumn
+                  width={20}
+                  dataField="Grampanchayat"
+                  headerAlign="left"
+                  dataSort={true}
+                >
                   Grampanchayat
                 </TableHeaderColumn>
                 {/* <TableHeaderColumn dataField="Aadhaar" headerAlign="left">
@@ -392,7 +421,11 @@ class BulkRegistration extends Component {
               >
                 Created By
               </TableHeaderColumn>
-              <TableHeaderColumn dataField="CreatedOn" headerAlign="left">
+              <TableHeaderColumn
+                dataField="CreatedOn"
+                headerAlign="left"
+                dataSort={true}
+              >
                 Created On
               </TableHeaderColumn>
             </BootstrapTable>

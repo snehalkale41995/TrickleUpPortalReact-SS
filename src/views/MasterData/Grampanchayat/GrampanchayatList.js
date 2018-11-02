@@ -128,7 +128,7 @@ class GrampanchayatList extends Component {
       <div className="address-tabs-margin">
         <CardLayout
           name="Grampanchayats"
-          buttonName="Add grampanchayat"
+          buttonName="Add Grampanchayat"
           buttonLink={this}
           buttonClick={() => {
             this.setState({ showForm: true });

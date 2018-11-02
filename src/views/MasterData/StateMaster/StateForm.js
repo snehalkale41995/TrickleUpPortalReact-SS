@@ -169,6 +169,7 @@ class StatesForm extends Component {
                 type="text"
                 label="State name"
                 placeholder="State name"
+                maxLength={255}
                 name="StateName"
                 required={currentState.StateNameRequired}
                 value={currentState.StateName}
@@ -180,6 +181,7 @@ class StatesForm extends Component {
                 type="text"
                 label="State code"
                 placeholder="State code"
+                maxLength={2}
                 name="StateCode"
                 required={currentState.StateCodeRequired}
                 value={currentState.StateCode}
@@ -206,7 +208,7 @@ class StatesForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmitState.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
               <Col md="1">

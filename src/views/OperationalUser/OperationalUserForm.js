@@ -565,7 +565,7 @@ class OperationalUserForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
             )}

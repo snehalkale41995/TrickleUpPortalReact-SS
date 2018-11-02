@@ -25,7 +25,8 @@ export default class VideoContent extends Component {
       <CardLayout
         name="Video"
         buttonName="Add video"
-        buttonLink={`${this.props.match.url}/videoUpload`}
+        //buttonLink={`${this.props.match.url}/videoUpload`}
+        buttonLink={this}
       >
         <Row />
       </CardLayout>

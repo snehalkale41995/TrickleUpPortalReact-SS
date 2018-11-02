@@ -23,7 +23,7 @@ const MasterModal = props => {
           </Col>
           <Col md="6">
             <Button color="success" onClick={props.confirmFunction}>
-              Submit
+              Create
             </Button>
             &nbsp;
             <Button color="danger" onClick={props.toggleFunction}>

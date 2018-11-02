@@ -119,7 +119,7 @@ class VillageList extends Component {
       <div className="address-tabs-margin">
         <CardLayout
           name="Villages"
-          buttonName="Add village"
+          buttonName="Add Village"
           buttonLink={this}
           buttonClick={() => {
             this.setState({ showForm: true });

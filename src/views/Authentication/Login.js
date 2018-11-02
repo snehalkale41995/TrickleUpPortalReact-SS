@@ -35,9 +35,8 @@ class Login extends Component {
 
   onSubmit = () => {
     let compRef = this;
-    const { userName, password } = { ...this.state.user };
     let user = this.state.user;
-    if (userName && password) {
+    if (user.userName && user.password) {
       this.props.loginUser(user);
       setTimeout(() => {
         localStorage.clear();
@@ -48,10 +47,8 @@ class Login extends Component {
         compRef.Toaster(loginError, "Login", loginErrorMsg);
       }, 1000);
     } else {
-      this.setState({
-        userNameRequired: true,
-        passwordRequired: true
-      });
+      !user.userName ? this.setState({userNameRequired : true}) : null;
+      !user.password ? this.setState({passwordRequired : true}) : null;
     }
   };
 
@@ -156,7 +153,7 @@ class Login extends Component {
                                 className="theme-positive-btn"
                                 onClick={this.onSubmit}
                               >
-                                Submit
+                                Login
                               </Button>
                             </Col>
                             {this.state.inCorrect ? (

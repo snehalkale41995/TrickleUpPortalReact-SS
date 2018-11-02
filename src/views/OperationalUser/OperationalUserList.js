@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ class OperationalUserList extends Component {
       loading: true,
       modalStatus: false,
       userToDelete: {},
-      tableStatus : true
+      tableStatus: true
     };
   }
 
@@ -36,32 +36,29 @@ class OperationalUserList extends Component {
   }
 
   onDeleteBeneficiary(cell, row) {
-   let componentRef = this;
-    if(this.state.tableStatus){
+    let componentRef = this;
+    if (this.state.tableStatus) {
       return (
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Dactivate" />
-      </Link>
-    );
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i className="fa fa-trash" title="Dactivate" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+        </Link>
+      );
     }
-   else{
-       return (
-         
-      <Link to={this} onClick={() => this.onDelete(row)}>
-        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
-      </Link>
-    );
-   }
   }
- 
-    onTablestatusChange(value) {
-    if(value!=null){
-       this.setState({
-      tableStatus: value
-    }); 
-    }
-    }
 
+  onTablestatusChange(value) {
+    if (value != null) {
+      this.setState({
+        tableStatus: value
+      });
+    }
+  }
 
   onDelete(row) {
     this.setState({
@@ -81,17 +78,18 @@ class OperationalUserList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    if(this.state.tableStatus){
-     user.Active = false;
-    this.props.deleteBeneficiary(user.Id, user);
+    if (this.state.tableStatus) {
+      user.Active = false;
+      this.props.deleteBeneficiary(user.Id, user);
+    } else {
+      user.Active = true;
+      this.props.deleteBeneficiary(user.Id, user);
     }
-    else{
-    user.Active = true;
-    this.props.deleteBeneficiary(user.Id, user);
-    }
-   setTimeout(() => {
+    setTimeout(() => {
       let message = "";
-      let displayMessage = compRef.state.tableStatus ? "User deactivated successfully": "User activated successfully"
+      let displayMessage = compRef.state.tableStatus
+        ? "User deactivated successfully"
+        : "User activated successfully";
       compRef.props.beneficiaryError
         ? (message = "Something went wrong !")
         : (message = displayMessage);
@@ -128,7 +126,9 @@ class OperationalUserList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus ? this.props.operationalUsers.length : this.props.inactiveOperationalUsers.length
+          value: this.state.tableStatus
+            ? this.props.operationalUsers.length
+            : this.props.inactiveOperationalUsers.length
         }
       ],
       sizePerPage: 5
@@ -141,22 +141,27 @@ class OperationalUserList extends Component {
         buttonName="Add User"
         buttonLink={`${this.props.match.url}/operationalUser`}
       >
-      <br/>
-       <FormGroup row>
-            <Col xs="12" md="4">
-              <DropdownSelect
-                name="tableStatus"
-                value = {this.state.tableStatus}
-                options={constants.tableStatus}
-                onChange={this.onTablestatusChange.bind(this)}
-              />
-            </Col>
-        </FormGroup>
+        <Row className="address-drop-margin">
+          <Col xs="12" md="10" />
+          <Col md="2">
+            <DropdownSelect
+              label="Status"
+              options={constants.tableStatus}
+              value={this.state.tableStatus}
+              onChange={this.onTablestatusChange.bind(this)}
+              simpleValue
+            />
+          </Col>
+        </Row>
         <FormGroup row>
           <Col xs="12" md="12">
             <BootstrapTable
               ref="table"
-              data={this.state.tableStatus ? this.props.operationalUsers : this.props.inactiveOperationalUsers}
+              data={
+                this.state.tableStatus
+                  ? this.props.operationalUsers
+                  : this.props.inactiveOperationalUsers
+              }
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -236,48 +241,52 @@ class OperationalUserList extends Component {
                 export={true}
                 hidden
               />
-            {
-              this.state.tableStatus ?     
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditBeneficiary.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>  : null
-              }
-             {
-              this.state.tableStatus ?  <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteBeneficiary.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-               Deactivate
-              </TableHeaderColumn> :  <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteBeneficiary.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Activate
-              </TableHeaderColumn>
-            }
+              {this.state.tableStatus ? (
+                <TableHeaderColumn
+                  dataField="edit"
+                  dataFormat={this.onEditBeneficiary.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Edit
+                </TableHeaderColumn>
+              ) : null}
+              {this.state.tableStatus ? (
+                <TableHeaderColumn
+                  dataField="delete"
+                  dataFormat={this.onDeleteBeneficiary.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Deactivate
+                </TableHeaderColumn>
+              ) : (
+                <TableHeaderColumn
+                  dataField="delete"
+                  dataFormat={this.onDeleteBeneficiary.bind(this)}
+                  headerAlign="left"
+                  width="20"
+                  export={false}
+                >
+                  Activate
+                </TableHeaderColumn>
+              )}
             </BootstrapTable>
           </Col>
-           <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={2000} />
         </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title= {this.state.tableStatus ? "Deactivate" : "Acivate"}
-          message={this.state.tableStatus ? "Are you sure you want to deactivate this user record ?" : 
-                  "Are you sure you want to activate this user record ?"}
+          title={this.state.tableStatus ? "Deactivate" : "Acivate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this user record ?"
+              : "Are you sure you want to activate this user record ?"
+          }
         />
       </CardLayout>
     );
@@ -286,9 +295,9 @@ class OperationalUserList extends Component {
 const mapStateToProps = state => {
   return {
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
-    operationalUsers : state.beneficiaryReducer.operationalUsers,
-    inactiveOperationalUsers : state.beneficiaryReducer.inactiveOperationalUsers,
-    beneficiaryError : state.beneficiaryReducer.beneficiaryError
+    operationalUsers: state.beneficiaryReducer.operationalUsers,
+    inactiveOperationalUsers: state.beneficiaryReducer.inactiveOperationalUsers,
+    beneficiaryError: state.beneficiaryReducer.beneficiaryError
   };
 };
 

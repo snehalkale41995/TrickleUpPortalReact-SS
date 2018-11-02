@@ -79,6 +79,7 @@ class VillageForm extends Component {
     village.State = value;
     village.StateRequired = false;
     village.District = "";
+    village.Grampanchayat = "";
     let districtOptions = _.filter(this.props.districtsList, function(
       district
     ) {
@@ -87,7 +88,8 @@ class VillageForm extends Component {
     this.setState({
       village: village,
       districtOptions: districtOptions,
-      districtDisabled: false
+      districtDisabled: false,
+      grampanchayatOptions: []
     });
   }
   onDistrictValueChange(value) {
@@ -269,6 +271,7 @@ class VillageForm extends Component {
                 type="text"
                 label="Village"
                 name="VillageName"
+                maxLength={255}
                 placeholder="Please enter village name"
                 value={village.VillageName}
                 required={village.VillageNameRequired}
@@ -295,7 +298,7 @@ class VillageForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
               <Col md="1">

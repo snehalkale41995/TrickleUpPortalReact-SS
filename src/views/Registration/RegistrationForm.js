@@ -311,6 +311,7 @@ class RegistrationForm extends Component {
   validData() {
     let user = { ...this.state.user };
     let InvalidAdhaar = false;
+    user.PhoneNumber = user.PhoneNumber.trim();
     if (user.Aadhaar) {
       user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
     }
@@ -337,13 +338,13 @@ class RegistrationForm extends Component {
   showValidations(user) {
     let validUserId;
     let validPhone =
-      /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
+      /^\d+$/.test(user.PhoneNumber.trim()) && user.PhoneNumber.trim().length === 10;
     if (user.UserId) {
       validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
     }
     !user.Name ? (user.NameRequired = true) : null;
-    user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
-    !user.PhoneNumber
+    user.PhoneNumber.trim() && !validPhone  && user.PhoneNumber.trim().length > 0 ? (user.PhoneNumberInvalid = true) : null;
+    !user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
       : null;
     user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
@@ -418,7 +419,8 @@ class RegistrationForm extends Component {
                 <InputElement
                   type="text"
                   label="Name"
-                  name="Name"
+                  name="Name" 
+                  maxLength={255}
                   placeholder="Please enter name "
                   value={user.Name}
                   required={user.NameRequired}
@@ -587,7 +589,7 @@ class RegistrationForm extends Component {
                     className="theme-positive-btn"
                     onClick={this.onSubmit.bind(this)}
                   >
-                    Submit
+                    Create
                   </Button>
                 </Col>
               )}

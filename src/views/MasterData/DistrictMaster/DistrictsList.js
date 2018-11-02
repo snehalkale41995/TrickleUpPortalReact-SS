@@ -128,7 +128,7 @@ class DistrictsList extends Component {
       <div className="address-tabs-margin">
         <CardLayout
           name="Districts"
-          buttonName="Add district"
+          buttonName="Add District"
           buttonLink={this}
           buttonClick={() => {
             this.setState({ showForm: true });

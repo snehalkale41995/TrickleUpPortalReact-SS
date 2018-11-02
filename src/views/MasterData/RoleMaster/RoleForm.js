@@ -190,7 +190,7 @@ class RolesForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmitState.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
               <Col md="1">

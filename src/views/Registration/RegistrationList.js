@@ -121,7 +121,7 @@ class RegistrationList extends Component {
               pagination={true}
               search={true}
               options={sortingOptions}
-              exportCSV={true}
+              exportCSV={this.state.beneficiaryList.length > 0 ? true : false} 
               csvFileName="BeneficiaryList.csv"
               hover={true}
             >

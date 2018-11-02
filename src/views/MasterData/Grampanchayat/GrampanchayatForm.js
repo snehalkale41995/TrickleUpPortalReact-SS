@@ -32,7 +32,8 @@ class GrampanchayatForm extends Component {
       showList: false,
       grampanchayatToEdit: this.props.edit,
       updateFlag: false,
-      districtOptions: this.props.districtsList
+      districtOptions: this.props.districtsList,
+      districtDisabled : true
     };
   }
   componentDidMount() {
@@ -46,7 +47,8 @@ class GrampanchayatForm extends Component {
       this.setState({
         updateFlag: true,
         districtOptions: districtOptions,
-        grampanchayat: this.state.grampanchayatToEdit
+        grampanchayat: this.state.grampanchayatToEdit,
+        districtDisabled : false
       });
     }
   }
@@ -61,7 +63,7 @@ class GrampanchayatForm extends Component {
   onStateValueChange(value) {
     let grampanchayat = { ...this.state.grampanchayat };
     grampanchayat.State = value;
-    //grampanchayat.District = "";
+    grampanchayat.District = "";
     grampanchayat.StateRequired = false;
     let districtOptions = _.filter(this.props.districtsList, function(
       district
@@ -70,7 +72,8 @@ class GrampanchayatForm extends Component {
     });
     this.setState({
       grampanchayat: grampanchayat,
-      districtOptions: districtOptions
+      districtOptions: districtOptions,
+      districtDisabled : false
     });
   }
   onDistrictValueChange(value) {
@@ -209,6 +212,7 @@ class GrampanchayatForm extends Component {
                 options={this.state.districtOptions}
                 value={grampanchayat.District}
                 required={grampanchayat.DistrictRequired}
+                disabled={this.state.districtDisabled}
                 onChange={this.onDistrictValueChange.bind(this)}
                 simpleValue
               />
@@ -220,6 +224,7 @@ class GrampanchayatForm extends Component {
                 type="text"
                 label="Grampanchayat"
                 name="GrampanchayatName"
+                maxLength={255}
                 placeholder="Grampanchayat name"
                 value={grampanchayat.GrampanchayatName}
                 required={grampanchayat.GrampanchayatNameRequired}
@@ -247,7 +252,7 @@ class GrampanchayatForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
               <Col md="1">

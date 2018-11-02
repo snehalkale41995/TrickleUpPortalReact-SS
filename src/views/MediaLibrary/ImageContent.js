@@ -25,7 +25,8 @@ export default class ImageContent extends Component {
       <CardLayout
         name="Image"
         buttonName="Add image"
-        buttonLink={`${this.props.match.url}/imageUpload`}
+        //buttonLink={`${this.props.match.url}/imageUpload`}
+        buttonLink={this}
       >
         {/* <FormGroup row>
           <Col xs="12" md="11" />

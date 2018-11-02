@@ -27,7 +27,8 @@ export default class AudioContent extends Component {
       <CardLayout
         name="Audio"
         buttonName="Add audio"
-        buttonLink={`${this.props.match.url}/audioUpload`}
+        //buttonLink={`${this.props.match.url}/audioUpload`}
+        buttonLink={this}
       >
         {/* <FormGroup row>
             <Col xs="12" md="11" />

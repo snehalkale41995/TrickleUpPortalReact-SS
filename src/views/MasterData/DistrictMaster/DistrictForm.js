@@ -183,6 +183,7 @@ class DistrictForm extends Component {
                 placeholder="Please enter district"
                 name="DistrictName"
                 label="District name"
+                maxLength={255}
                 required={district.DistrictNameRequired}
                 value={district.DistrictName}
                 onChange={event => this.onChangeDistrict(event)}
@@ -207,7 +208,7 @@ class DistrictForm extends Component {
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
                 >
-                  Submit
+                  Create
                 </Button>
               </Col>
               <Col md="1">

@@ -362,7 +362,7 @@ class CropSteps extends Component {
                 className="theme-positive-btn"
                 onClick={() => this.onSubmitCropData()}
               >
-                Submit
+                Create
               </Button>
             </Col>
             <Col md="1">

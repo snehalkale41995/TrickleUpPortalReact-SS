@@ -91,7 +91,7 @@ class ImageForm extends Component {
                 className="theme-positive-btn"
                 onClick={this.onSubmitMedia.bind(this)}
               >
-                Submit
+                Create
               </Button>
             </Col>
           </FormGroup>
