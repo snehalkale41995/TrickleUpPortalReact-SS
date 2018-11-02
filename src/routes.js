@@ -131,8 +131,8 @@ const routes = [
     component: ApplicationContacts
   },
   { path: "/master/crops", name: "Crops Data", component: CropsData },
-  { path: "/settings", name: "Settings", component: Settings },
-  { path: "/ChangePassword", name: "ChangePassword", component: ChangePassword },
+  { path: "/settings/Myprofile", name: "Settings", component: Settings },
+  { path: "/settings/ChangePassword", name: "ChangePassword", component: ChangePassword },
   { path: "/beneficiary/inactiveUser", name: "InactiveUser", component: InactiveUser },
   { path: "/operationalUser", name: "OperationalUser", component: OperationalUser },
   { path: "/operationalUser/operationalUserList", name: "OperationalUserList", component: OperationalUser },
