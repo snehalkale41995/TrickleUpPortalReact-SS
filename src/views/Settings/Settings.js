@@ -12,16 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
 
-const grampanchayatList = [
-  { label: "gram1", value: "1" },
-  { label: "gram1", value: "2" },
-  { label: "gram1", value: "3" }
-];
-const villageList = [
-  { label: "village1", value: "1" },
-  { label: "village1", value: "2" },
-  { label: "village1", value: "3" }
-];
 class Settings extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +26,9 @@ class Settings extends Component {
         PhoneNumber: "", //no
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
+        UserId: "",
+        UserIdRequired: false,
+        UserIdInvalid: false,
         Age: "", //no
         AgeRequired: false,
         Gender: "", //id //no
@@ -67,6 +60,12 @@ class Settings extends Component {
       villageRequired: false,
       roleRequired: false,
       languageRequired: false,
+      districtOptions: this.props.districtsList,
+      grampanchayatOptions: this.props.grampanchayatsList,
+      villageOptions: this.props.villagesList,
+      districtDisabled: false,
+      grampanchayatDisabled: false,
+      villageDisabled: false
     };
   }
 
@@ -130,17 +129,36 @@ class Settings extends Component {
   onStateSelection(value) {
     let user = { ...this.state.user };
     user.State = value;
+    user.District = "";
+    user.Grampanchayat = "";
+    user.Village = "";
+    let districtOptions = _.filter(this.props.districtsList, function(
+      district
+    ) {
+      return district.stateId === value;
+    });
     this.setState({
       user: user,
-      stateRequired: false
+      stateRequired: false,
+      districtOptions: districtOptions,
+      grampanchayatOptions: [],
+      villageOptions: [],
+      districtDisabled: false
     });
   }
   onDistrictSelection(value) {
     let user = { ...this.state.user };
     user.District = value;
+    let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
+      grampanchayat
+    ) {
+      return grampanchayat.districtId === value;
+    });
     this.setState({
       user: user,
-      districtRequired: false
+      districtRequired: false,
+      grampanchayatOptions: grampanchayatOptions,
+      grampanchayatDisabled: false
     });
   }
   onVillageSelection(value) {
@@ -154,9 +172,14 @@ class Settings extends Component {
   onGrampanchayatSelection(value) {
     let user = { ...this.state.user };
     user.Grampanchayat = value;
+    let villageOptions = _.filter(this.props.villagesList, function(village) {
+      return village.grampanchayatId === value;
+    });
     this.setState({
       user: user,
-      grampanchayatRequired: false
+      grampanchayatRequired: false,
+      villageOptions: villageOptions,
+      villageDisabled: false
     });
   }
   onRoleSelection(value) {
@@ -215,7 +238,7 @@ class Settings extends Component {
       setTimeout(() => {
         let message = "";
         compRef.props.beneficiaryError
-          ? (message = "Something went wrong !")
+          ? (message = compRef.props.beneficiaryError)
           : (message = "User updated successfully");
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.beneficiaryError);
@@ -229,7 +252,9 @@ class Settings extends Component {
       user.Name &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
+      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.Age &&
+      user.UserId &&
       user.Gender &&
       user.State &&
       user.District &&
@@ -243,12 +268,20 @@ class Settings extends Component {
     }
   }
   showValidations(user) {
+    let validUserId;
     !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && user.PhoneNumber.length !== 10
       ? (user.PhoneNumberInvalid = true)
       : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
+      : null;
+     if (user.UserId) {
+      validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    }
+     user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
+    !user.UserId
+      ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
     !user.Age ? (user.AgeRequired = true) : null;
     !user.Gender ? this.setState({ genderRequired: true }) : null;
@@ -270,6 +303,9 @@ class Settings extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
+      UserIdRequired: false,
+      UserIdInvalid: false,
+      UserId : "",
       Age: "", //no
       AgeRequired: false,
       Gender: "", //id
@@ -346,7 +382,20 @@ class Settings extends Component {
           </FormGroup>
           <FormGroup row>
             <Col xs="12" md="5">
-              <InputElement
+             <InputElement
+                  type="text"
+                  label="Email"
+                  name="UserId"
+                  placeholder="Please enter Email"
+                  value={user.UserId}
+                  required={user.UserIdRequired}
+                  invalid={user.UserIdInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
+              
+            </Col>
+            <Col  md="5">
+            <InputElement
                 type="text"
                 label="Age"
                 name="Age"
@@ -357,9 +406,11 @@ class Settings extends Component {
                 required={user.AgeRequired}
                 onChange={event => this.onChangeInput(event)}
               />
-            </Col>
-            <Col md="5">
-              <Label>Gender</Label>
+          </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+             <Label>Gender</Label>
               <DropdownSelect
                 id="1"
                 name="Gender"
@@ -368,12 +419,11 @@ class Settings extends Component {
                 value={user.Gender}
                 required={this.state.genderRequired}
                 onChange={this.onGenderSelection.bind(this)}
-              />
+              /> 
+             
             </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="5">
-              <Label>State</Label>
+            <Col md="5">
+             <Label>State</Label>
               <DropdownSelect
                 name="State"
                 placeholder="Select state"
@@ -383,54 +433,74 @@ class Settings extends Component {
                 onChange={this.onStateSelection.bind(this)}
               />
             </Col>
-            <Col md="5">
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
               <Label>District</Label>
               <DropdownSelect
                 name="District"
                 placeholder="Select district "
-                options={this.props.districtsList}
+                options={this.state.districtOptions}
                 value={user.District}
+                disabled={this.state.districtDisabled}
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
               />
+             
             </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="5">
-              <Label>Grampanchayat</Label>
+            <Col md="5">
+             <Label>Grampanchayat</Label>
               <DropdownSelect
                 name="Grampanchayat"
                 placeholder="Select grampanchayat "
                 value={user.Grampanchayat}
-                options={grampanchayatList}
+                disabled={this.state.grampanchayatDisabled}
+                options={this.state.grampanchayatOptions}
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
               />
+            
             </Col>
-            <Col md="5">
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
               <Label>Village</Label>
               <DropdownSelect
                 name="Village"
                 placeholder="Select village "
                 value={user.Village}
-                options={villageList}
+                options={this.state.villageOptions}
+                disabled={this.state.villageDisabled}
                 required={this.state.villageRequired}
                 onChange={this.onVillageSelection.bind(this)}
               />
             </Col>
+           <Col md="5">
+                <InputElement
+                  type="text"
+                  label="Aadhaar number"
+                  name="Aadhaar"
+                  maxLength={12}
+                  placeholder="Please enter aadhaar number "
+                  value={user.Aadhaar}
+                  invalid={user.AadhaarInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
+              </Col>
           </FormGroup>
           <FormGroup row>
-            <Col xs="12" md="5">
-              <InputElement
-                type="text"
-                label="Aadhaar number"
-                name="Aadhaar"
-                placeholder="Please enter aadhaar number "
-                value={user.Aadhaar}
-                onChange={event => this.onChangeInput(event)}
+              <Col xs="12" md="5">
+              <Label>Language</Label>
+              <DropdownSelect
+                name="Language"
+                placeholder="Select language "
+                options={this.props.languagesList}
+                value={user.Language}
+                required={this.state.languageRequired}
+                onChange={this.onLanguageSelection.bind(this)}
               />
             </Col>
-              {user.ImagePath ? (
+            {user.ImagePath ? (
                 <FormGroup row>
                   <Col xs="6" md="4">
                     <Label>Profile Picture : </Label>
@@ -449,30 +519,6 @@ class Settings extends Component {
                   </Col>
                 </FormGroup>
             ) : null}
-            {/* <Col md="5">
-              <Label>Role</Label>
-              <DropdownSelect
-                name="Role"
-                placeholder="Select role "
-                options={this.props.rolesList}
-                value={user.Role}
-                required={this.state.roleRequired}
-                onChange={this.onRoleSelection.bind(this)}
-              />
-            </Col> */}
-          </FormGroup>
-          <FormGroup row>
-              <Col xs="12" md="5">
-              <Label>Language</Label>
-              <DropdownSelect
-                name="Language"
-                placeholder="Select language "
-                options={this.props.languagesList}
-                value={user.Language}
-                required={this.state.languageRequired}
-                onChange={this.onLanguageSelection.bind(this)}
-              />
-            </Col>
           </FormGroup>
           <FormGroup row>
             <Col md="1">
@@ -503,6 +549,8 @@ const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
     districtsList: state.districtReducer.districtsList,
+    grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
+    villagesList: state.villageReducer.villagesList,
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.gendersReducer.gendersList,

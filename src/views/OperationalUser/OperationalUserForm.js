@@ -233,7 +233,7 @@ class OperationalUserForm extends Component {
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
-            ? (message = "Something went wrong !")
+            ? (message = compRef.props.beneficiaryError)
             : (message = `User updated successfully`);
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
@@ -280,7 +280,7 @@ class OperationalUserForm extends Component {
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
-            ? (message = "Something went wrong !")
+            ? (message = compRef.props.beneficiaryError)
             : (message = "User created successfully");
           compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.beneficiaryError);
@@ -309,6 +309,7 @@ class OperationalUserForm extends Component {
       user.PhoneNumber.length === 10 &&
       user.Age &&
       user.Age > 0 &&
+      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.Gender &&
       user.UserId &&
       user.State &&
