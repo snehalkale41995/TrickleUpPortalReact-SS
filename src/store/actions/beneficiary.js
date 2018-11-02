@@ -99,6 +99,7 @@ export const createBeneficiary = (beneficiary) => {
           PhoneNumber : beneficiary.PhoneNumber
         };
         dispatch(postUserCredentials(userCredentials));
+        dispatch(clearBeneficiaryError())
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error.response.data.error));
@@ -114,7 +115,7 @@ export const postUserCredentials = (user) => {
           //console.log("Reposnoe userCredentials", response);
     })
     .catch(error => {
-      dispatch(logBeneficiaryError(error));
+      dispatch(logBeneficiaryError(error.response.data.error));
     });
   }
 }
@@ -123,9 +124,10 @@ export const updateBeneficiary = (id, beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PutUser?id=${id}`, beneficiary)
       .then(response => {
+         dispatch(clearBeneficiaryError())
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.error));
       });
   };
 }

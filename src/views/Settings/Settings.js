@@ -36,6 +36,9 @@ class Settings extends Component {
         PhoneNumber: "", //no
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
+        UserId: "",
+        UserIdRequired: false,
+        UserIdInvalid: false,
         Age: "", //no
         AgeRequired: false,
         Gender: "", //id //no
@@ -215,7 +218,7 @@ class Settings extends Component {
       setTimeout(() => {
         let message = "";
         compRef.props.beneficiaryError
-          ? (message = "Something went wrong !")
+          ? (message = compRef.props.beneficiaryError)
           : (message = "User updated successfully");
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.beneficiaryError);
@@ -229,7 +232,9 @@ class Settings extends Component {
       user.Name &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
+      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.Age &&
+      user.UserId &&
       user.Gender &&
       user.State &&
       user.District &&
@@ -243,12 +248,20 @@ class Settings extends Component {
     }
   }
   showValidations(user) {
+    let validUserId;
     !user.Name ? (user.NameRequired = true) : null;
     user.PhoneNumber && user.PhoneNumber.length !== 10
       ? (user.PhoneNumberInvalid = true)
       : null;
     !user.PhoneNumber
       ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
+      : null;
+     if (user.UserId) {
+      validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    }
+     user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
+    !user.UserId
+      ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
       : null;
     !user.Age ? (user.AgeRequired = true) : null;
     !user.Gender ? this.setState({ genderRequired: true }) : null;
@@ -270,6 +283,9 @@ class Settings extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
+      UserIdRequired: false,
+      UserIdInvalid: false,
+      UserId : "",
       Age: "", //no
       AgeRequired: false,
       Gender: "", //id
@@ -346,7 +362,20 @@ class Settings extends Component {
           </FormGroup>
           <FormGroup row>
             <Col xs="12" md="5">
-              <InputElement
+             <InputElement
+                  type="text"
+                  label="Email"
+                  name="UserId"
+                  placeholder="Please enter Email"
+                  value={user.UserId}
+                  required={user.UserIdRequired}
+                  invalid={user.UserIdInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
+              
+            </Col>
+            <Col  md="5">
+            <InputElement
                 type="text"
                 label="Age"
                 name="Age"
@@ -357,9 +386,11 @@ class Settings extends Component {
                 required={user.AgeRequired}
                 onChange={event => this.onChangeInput(event)}
               />
-            </Col>
-            <Col md="5">
-              <Label>Gender</Label>
+          </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
+             <Label>Gender</Label>
               <DropdownSelect
                 id="1"
                 name="Gender"
@@ -368,12 +399,11 @@ class Settings extends Component {
                 value={user.Gender}
                 required={this.state.genderRequired}
                 onChange={this.onGenderSelection.bind(this)}
-              />
+              /> 
+             
             </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="5">
-              <Label>State</Label>
+            <Col md="5">
+             <Label>State</Label>
               <DropdownSelect
                 name="State"
                 placeholder="Select state"
@@ -382,8 +412,11 @@ class Settings extends Component {
                 required={this.state.stateRequired}
                 onChange={this.onStateSelection.bind(this)}
               />
+            
             </Col>
-            <Col md="5">
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
               <Label>District</Label>
               <DropdownSelect
                 name="District"
@@ -393,11 +426,10 @@ class Settings extends Component {
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
               />
+             
             </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="12" md="5">
-              <Label>Grampanchayat</Label>
+            <Col md="5">
+             <Label>Grampanchayat</Label>
               <DropdownSelect
                 name="Grampanchayat"
                 placeholder="Select grampanchayat "
@@ -406,8 +438,11 @@ class Settings extends Component {
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
               />
+            
             </Col>
-            <Col md="5">
+          </FormGroup>
+          <FormGroup row>
+            <Col xs="12" md="5">
               <Label>Village</Label>
               <DropdownSelect
                 name="Village"
@@ -418,19 +453,32 @@ class Settings extends Component {
                 onChange={this.onVillageSelection.bind(this)}
               />
             </Col>
+           <Col md="5">
+                <InputElement
+                  type="text"
+                  label="Aadhaar number"
+                  name="Aadhaar"
+                  maxLength={12}
+                  placeholder="Please enter aadhaar number "
+                  value={user.Aadhaar}
+                  invalid={user.AadhaarInvalid}
+                  onChange={event => this.onChangeInput(event)}
+                />
+              </Col>
           </FormGroup>
           <FormGroup row>
-            <Col xs="12" md="5">
-              <InputElement
-                type="text"
-                label="Aadhaar number"
-                name="Aadhaar"
-                placeholder="Please enter aadhaar number "
-                value={user.Aadhaar}
-                onChange={event => this.onChangeInput(event)}
+              <Col xs="12" md="5">
+              <Label>Language</Label>
+              <DropdownSelect
+                name="Language"
+                placeholder="Select language "
+                options={this.props.languagesList}
+                value={user.Language}
+                required={this.state.languageRequired}
+                onChange={this.onLanguageSelection.bind(this)}
               />
             </Col>
-              {user.ImagePath ? (
+            {user.ImagePath ? (
                 <FormGroup row>
                   <Col xs="6" md="4">
                     <Label>Profile Picture : </Label>
@@ -449,30 +497,6 @@ class Settings extends Component {
                   </Col>
                 </FormGroup>
             ) : null}
-            {/* <Col md="5">
-              <Label>Role</Label>
-              <DropdownSelect
-                name="Role"
-                placeholder="Select role "
-                options={this.props.rolesList}
-                value={user.Role}
-                required={this.state.roleRequired}
-                onChange={this.onRoleSelection.bind(this)}
-              />
-            </Col> */}
-          </FormGroup>
-          <FormGroup row>
-              <Col xs="12" md="5">
-              <Label>Language</Label>
-              <DropdownSelect
-                name="Language"
-                placeholder="Select language "
-                options={this.props.languagesList}
-                value={user.Language}
-                required={this.state.languageRequired}
-                onChange={this.onLanguageSelection.bind(this)}
-              />
-            </Col>
           </FormGroup>
           <FormGroup row>
             <Col md="1">

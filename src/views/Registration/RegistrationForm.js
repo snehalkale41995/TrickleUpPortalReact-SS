@@ -244,10 +244,10 @@ class RegistrationForm extends Component {
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
-            ? (message = "Something went wrong !")
+            ? (message = compRef.props.beneficiaryError)
             : (message = `User updated successfully`);
           compRef.setState({ loading: false });
-          Toaster.Toaster(compRef.props.beneficiaryError, compRef.props.beneficiaryError);
+          Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -291,10 +291,10 @@ class RegistrationForm extends Component {
         setTimeout(() => {
           let message = "";
           compRef.props.beneficiaryError
-            ? (message = "Something went wrong !")
+            ? (message = compRef.props.beneficiaryError)
             : (message = "User created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster( compRef.props.beneficiaryError, compRef.props.beneficiaryError);
+          Toaster.Toaster( message, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -323,6 +323,7 @@ class RegistrationForm extends Component {
       user.Age > 0 &&
       user.Gender &&
       user.UserId &&
+      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.State &&
       user.District &&
       user.Village &&
