@@ -12,16 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
 
-const grampanchayatList = [
-  { label: "gram1", value: "1" },
-  { label: "gram1", value: "2" },
-  { label: "gram1", value: "3" }
-];
-const villageList = [
-  { label: "village1", value: "1" },
-  { label: "village1", value: "2" },
-  { label: "village1", value: "3" }
-];
 class Settings extends Component {
   constructor(props) {
     super(props);
@@ -70,6 +60,12 @@ class Settings extends Component {
       villageRequired: false,
       roleRequired: false,
       languageRequired: false,
+      districtOptions: this.props.districtsList,
+      grampanchayatOptions: this.props.grampanchayatsList,
+      villageOptions: this.props.villagesList,
+      districtDisabled: false,
+      grampanchayatDisabled: false,
+      villageDisabled: false
     };
   }
 
@@ -133,17 +129,36 @@ class Settings extends Component {
   onStateSelection(value) {
     let user = { ...this.state.user };
     user.State = value;
+    user.District = "";
+    user.Grampanchayat = "";
+    user.Village = "";
+    let districtOptions = _.filter(this.props.districtsList, function(
+      district
+    ) {
+      return district.stateId === value;
+    });
     this.setState({
       user: user,
-      stateRequired: false
+      stateRequired: false,
+      districtOptions: districtOptions,
+      grampanchayatOptions: [],
+      villageOptions: [],
+      districtDisabled: false
     });
   }
   onDistrictSelection(value) {
     let user = { ...this.state.user };
     user.District = value;
+    let grampanchayatOptions = _.filter(this.props.grampanchayatsList, function(
+      grampanchayat
+    ) {
+      return grampanchayat.districtId === value;
+    });
     this.setState({
       user: user,
-      districtRequired: false
+      districtRequired: false,
+      grampanchayatOptions: grampanchayatOptions,
+      grampanchayatDisabled: false
     });
   }
   onVillageSelection(value) {
@@ -157,9 +172,14 @@ class Settings extends Component {
   onGrampanchayatSelection(value) {
     let user = { ...this.state.user };
     user.Grampanchayat = value;
+    let villageOptions = _.filter(this.props.villagesList, function(village) {
+      return village.grampanchayatId === value;
+    });
     this.setState({
       user: user,
-      grampanchayatRequired: false
+      grampanchayatRequired: false,
+      villageOptions: villageOptions,
+      villageDisabled: false
     });
   }
   onRoleSelection(value) {
@@ -412,7 +432,6 @@ class Settings extends Component {
                 required={this.state.stateRequired}
                 onChange={this.onStateSelection.bind(this)}
               />
-            
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -421,8 +440,9 @@ class Settings extends Component {
               <DropdownSelect
                 name="District"
                 placeholder="Select district "
-                options={this.props.districtsList}
+                options={this.state.districtOptions}
                 value={user.District}
+                disabled={this.state.districtDisabled}
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
               />
@@ -434,7 +454,8 @@ class Settings extends Component {
                 name="Grampanchayat"
                 placeholder="Select grampanchayat "
                 value={user.Grampanchayat}
-                options={grampanchayatList}
+                disabled={this.state.grampanchayatDisabled}
+                options={this.state.grampanchayatOptions}
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
               />
@@ -448,7 +469,8 @@ class Settings extends Component {
                 name="Village"
                 placeholder="Select village "
                 value={user.Village}
-                options={villageList}
+                options={this.state.villageOptions}
+                disabled={this.state.villageDisabled}
                 required={this.state.villageRequired}
                 onChange={this.onVillageSelection.bind(this)}
               />
@@ -527,6 +549,8 @@ const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
     districtsList: state.districtReducer.districtsList,
+    grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
+    villagesList: state.villageReducer.villagesList,
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.gendersReducer.gendersList,
