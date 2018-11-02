@@ -23,6 +23,7 @@ const InputElement = props => (
         maxLength={props.maxLength}
         accept={props.accept}
         disabled={props.disabled}
+        onKeyPress={props.onKeyPress}
       />
       {props.isPassword ? (
         <InputGroupAddon

@@ -224,7 +224,7 @@ class RolesList extends Component {
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title={this.state.tableStatus ? "Deactivate" : "Acivate"}
+          title={this.state.tableStatus ? "Deactivate" : "Activate"}
           message={
             this.state.tableStatus
               ? "Are you sure you want to deactivate this role record ?"

@@ -105,12 +105,12 @@ export default {
       children: [
         {
           name: "My Profile",
-          url: "/settings",
+          url: "/settings/Myprofile",
           icon: "fa fa-user"
         },
         {
           name: "Change Password",
-          url: "/ChangePassword",
+          url: "/settings/ChangePassword",
           icon: "fa fa-cog"
         }
       ]

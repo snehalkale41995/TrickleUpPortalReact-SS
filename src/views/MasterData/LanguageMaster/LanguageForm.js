@@ -164,6 +164,7 @@ class LanguagesForm extends Component {
                 type="text"
                 label="Language name"
                 placeholder="Language name"
+                maxLength = {255}
                 name="LanguageName"
                 required={currentLanguage.LanguageNameRequired}
                 value={currentLanguage.LanguageName}
@@ -175,6 +176,7 @@ class LanguagesForm extends Component {
                 type="text"
                 label="Language code"
                 placeholder="Language code"
+                 maxLength = {255}
                 name="LanguageCode"
                 required={currentLanguage.LanguageCodeRequired}
                 value={currentLanguage.LanguageCode}

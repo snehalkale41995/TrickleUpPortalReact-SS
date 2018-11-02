@@ -367,6 +367,13 @@ class RegistrationForm extends Component {
       user: user
     });
   }
+  // Method for set only Numeric
+  setInputToNumeric(e) {
+    const re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
   onReset() {
     let userObj = {
       ...this.state.user,
@@ -436,6 +443,7 @@ class RegistrationForm extends Component {
                   placeholder="Please enter phone number"
                   value={user.PhoneNumber}
                   required={user.PhoneNumberRequired}
+                  onKeyPress={e => this.setInputToNumeric(e)}
                   invalid={user.PhoneNumberInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
@@ -456,13 +464,14 @@ class RegistrationForm extends Component {
               </Col>
               <Col md="5">
                 <InputElement
-                  type="number"
+                  type="text"
                   label="Age"
                   name="Age"
                   maxLength={3}
                   placeholder="Please enter age "
                   value={user.Age}
                   required={user.AgeRequired}
+                  onKeyPress={e => this.setInputToNumeric(e)}
                   invalid={user.AgeInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
