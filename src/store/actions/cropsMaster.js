@@ -26,6 +26,12 @@ export const storeCropStepMaterials = cropStepsMaterial => {
     cropStepsMaterial: cropStepsMaterial
   };
 };
+export const storeCurrentCropAudioAllocation = audioAllocation => {
+  return {
+    type: actionTypes.STORE_CROP_AUDIO_ALLOCATION,
+    audioAllocation: audioAllocation
+  };
+}
 export const getCropsList = () => {
   let cropsList = [];
   return dispatch => {
@@ -79,10 +85,26 @@ export const storeCropImage = Files => {
     axios
       .post(`${AppConfig.serverURL}/api/FileUpload/PostVideos`, Files)
       .then(response => {
-        console.log("Post Image Resopnse", response);
+        //console.log("Post Image Resopnse", response);
       })
       .catch(error => {
-        console.log("Post Image error", error);
+       // console.log("Post Image error", error);
+      });
+  };
+};
+export const getCropAudioAllocation = id => {
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/Crop_AudioAllocation/Get_CropAudioAllocation?CropId=${id}`)
+      .then(response => {
+          let audioAllocation = response.data.data.AudioAllocation;
+          audioAllocation.forEach((audio) => {
+            audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
+          })
+          dispatch(storeCurrentCropAudioAllocation(audioAllocation));
+      })
+      .catch(error => {
+        console.log("getCropAudioAllocation werrr", error);
       });
   };
 };

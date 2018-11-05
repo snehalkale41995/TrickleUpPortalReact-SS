@@ -4,7 +4,8 @@ const initialState = {
   cropsList: [],
   currentCropData: {},
   cropSteps: [],
-  cropStepsMaterial: []
+  cropStepsMaterial: [],
+  currentCropAudioAllocation: []
 };
 
 const cropsReducer = (state = initialState, action) => {
@@ -24,10 +25,15 @@ const cropsReducer = (state = initialState, action) => {
         ...state,
         cropSteps: action.cropSteps
       };
-      case actionTypes.GET_CROPS_STEPS_MATERIAL:
+    case actionTypes.GET_CROPS_STEPS_MATERIAL:
       return {
         ...state,
         cropStepsMaterial: action.cropStepsMaterial
+      };
+    case actionTypes.STORE_CROP_AUDIO_ALLOCATION:
+      return {
+        ...state,
+        currentCropAudioAllocation: action.audioAllocation
       };
     default:
       return state;

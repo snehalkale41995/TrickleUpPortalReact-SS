@@ -9,7 +9,10 @@ import { AppSwitch } from "@coreui/react";
 import AppConfig from "../../constants/AppConfig";
 import CropSteps from "./CropSteps";
 import Loader from "../../components/Loader/Loader";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import _ from "lodash";
+import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 
 //const cropData = require('./crop.json');
 class CropForm extends Component {
@@ -27,6 +30,7 @@ class CropForm extends Component {
         Cultivation_Steps: [],
         renderURL: ""
       },
+      audioAllocation: [],
       loading: true
     };
   }
@@ -35,15 +39,19 @@ class CropForm extends Component {
     if (this.props.match.params.id !== undefined) {
       if (this.props.cropsList.length !== 0) {
         let id = this.props.match.params.id;
+        this.props.getCropAudioAllocation(id);
         let currentCrop = _.find(this.props.cropsList, function(crop) {
           return crop.Id == id;
         });
         currentCrop.renderURL = `${AppConfig.serverURL}/${currentCrop.FilePath}`;
-        this.setState({
-          updateFlag: true,
-          crop: currentCrop,
-          loading: false
-        });
+        setTimeout(() => {
+          this.setState({
+            updateFlag: true,
+            crop: currentCrop,
+            loading: false,
+            audioAllocation: this.props.currentCropAudioAllocation
+          });
+        }, 1000);
       }
     } else {
       this.setState({
@@ -91,6 +99,9 @@ class CropForm extends Component {
           cropStatus: "Inactive"
         });
   }
+  playAudio(cell, row) {
+    return <AudioPlayer autoPlay={false} source={row.FilePath} />;
+  }
   onSubmit() {
     let crop = { ...this.state.crop };
     let imagedata = crop.FilePath;
@@ -99,111 +110,212 @@ class CropForm extends Component {
   }
   render() {
     let crop = { ...this.state.crop };
+    const sortingOptions = {
+      defaultSortName: "FieldType",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.currentCropAudioAllocation.length
+        }
+      ],
+      sizePerPage: 5
+    };
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout
-        name="Crop Form"
-        navigation={true}
-        navigationRoute="/cropCultivations/crops"
-      >
-        <div className="div-padding">
-          <FormGroup row>
-            <Col xs="12" md="6">
-              <FormGroup row>
-                <Col xs="10" md="8">
-                  <InputElement
-                    type="text"
-                    name="CropName"
-                    label="Crop name "
-                    placeholder="Crop name"
-                    value={crop.CropName}
-                    required={crop.CropNameRequired}
-                    onChange={event => this.onChangeName(event)}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col xs="10" md="8">
-                  <InputElement
-                    type="file"
-                    accept="image/*"
-                    name="Crop Image"
-                    label="Crop Image"
-                    required={crop.CropImageRequired}
-                    onChange={event => this.onImageChange(event)}
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col xs="10" md="8">
-                  <Label />
-                  <Label>
-                    Crop status :
-                    <AppSwitch
-                      className={"mx-2"}
-                      variant={"pill"}
-                      color={"primary"}
-                      checked={crop.Ready}
-                      onChange={this.onSwitch.bind(this)}
+      <div>
+        <CardLayout
+          name="Crop Form"
+          navigation={true}
+          navigationRoute="/cropCultivations/crops"
+        >
+          <div className="div-padding">
+            <FormGroup row>
+              <Col xs="12" md="6">
+                <FormGroup row>
+                  <Col xs="10" md="8">
+                    <InputElement
+                      type="text"
+                      name="CropName"
+                      label="Crop name "
+                      placeholder="Crop name"
+                      value={crop.CropName}
+                      required={crop.CropNameRequired}
+                      onChange={event => this.onChangeName(event)}
                     />
-                    {this.state.cropStatus}
-                  </Label>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col xs="10" md="8">
+                    <InputElement
+                      type="file"
+                      accept="image/*"
+                      name="Crop Image"
+                      label="Crop Image"
+                      required={crop.CropImageRequired}
+                      onChange={event => this.onImageChange(event)}
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col xs="10" md="8">
+                    <Label />
+                    <Label>
+                      Crop status :
+                      <AppSwitch
+                        className={"mx-2"}
+                        variant={"pill"}
+                        color={"primary"}
+                        checked={crop.Ready}
+                        onChange={this.onSwitch.bind(this)}
+                      />
+                      {this.state.cropStatus}
+                    </Label>
+                  </Col>
+                </FormGroup>
+                
+              </Col>
+              <Col md="6">
+                {/* {this.state.crop.renderURL !== "" ? ( */}
+                <img
+                  src={this.state.crop.renderURL}
+                  className="image-display"
+                  alt=""
+                />
+                {/* ) : null} */}
+              </Col>
+            </FormGroup>
+          </div>
+          <div style={{ marginTop: -70 }}>
+            <CardLayout subName="Audio Allocation" buttonName = "Add Audio" buttonLink={this}>
+              <FormGroup row>
+                <Col xs="12" style={{marginTop : -10}}>
+                  <BootstrapTable
+                    ref="table"
+                    data={this.props.currentCropAudioAllocation}
+                    pagination={true}
+                    search={true}
+                    options={sortingOptions}
+                    hover={true}
+                  >
+                    <TableHeaderColumn
+                      dataField="Id"
+                      headerAlign="left"
+                      isKey
+                      hidden
+                    >
+                      Id
+                    </TableHeaderColumn>
+                    <TableHeaderColumn
+                      dataField="FieldType"
+                      headerAlign="left"
+                      width="15"
+                      dataSort={true}
+                    >
+                      Field Type
+                    </TableHeaderColumn>
+                    <TableHeaderColumn
+                      dataField="LanguageName"
+                      headerAlign="left"
+                      width="30"
+                      dataSort={true}
+                    >
+                      Language
+                    </TableHeaderColumn>
+                    <TableHeaderColumn
+                      dataField="FileName"
+                      headerAlign="left"
+                      width="30"
+                      dataSort={true}
+                    >
+                      File Name
+                    </TableHeaderColumn>
+                    <TableHeaderColumn
+                      dataField="Audio"
+                      headerAlign="left"
+                      width="60"
+                      dataFormat={this.playAudio.bind(this)}
+                    >
+                      Audio
+                    </TableHeaderColumn>
+                    {/* <TableHeaderColumn
+                dataField="edit"
+                dataFormat={this.onEditState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Edit
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="delete"
+                dataFormat={this.onDeleteState.bind(this)}
+                headerAlign="left"
+                width="20"
+                export={false}
+              >
+                Deactivate
+              </TableHeaderColumn> */}
+                  </BootstrapTable>
                 </Col>
               </FormGroup>
-              {this.state.updateFlag ? (
-                <FormGroup row>
-                  <Col md="1">
-                    <Button
-                      className="theme-positive-btn"
-                      onClick={() => this.onSubmit()}
-                    >
-                      Save
-                    </Button>
-                  </Col>
-                </FormGroup>
-              ) : (
-                <FormGroup row>
-                  <Col md="2">
-                    <Button
-                      className="theme-positive-btn"
-                      onClick={() => this.onSubmit()}
-                    >
-                      Create
-                    </Button>
-                  </Col>
-                  <Col md="1">
-                    <Button className="theme-reset-btn"> Reset</Button>
-                  </Col>
-                </FormGroup>
-              )}
-            </Col>
-            <Col md="6">
-              {/* {this.state.crop.renderURL !== "" ? ( */}
-              <img
-                src={this.state.crop.renderURL}
-                className="image-display"
-                alt=""
-              />
-              {/* ) : null} */}
-            </Col>
-          </FormGroup>
-        </div>
-      </CardLayout>
+            </CardLayout>
+          </div>
+          {this.state.updateFlag ? (
+                  <FormGroup row>
+                    <Col md="1">
+                      <Button
+                        className="theme-positive-btn"
+                        onClick={() => this.onSubmit()}
+                      >
+                        Save
+                      </Button>
+                    </Col>
+                  </FormGroup>
+                ) : (
+                  <FormGroup row>
+                    <Col md="2">
+                      <Button
+                        className="theme-positive-btn"
+                        onClick={() => this.onSubmit()}
+                      >
+                        Create
+                      </Button>
+                    </Col>
+                    <Col md="1">
+                      <Button className="theme-reset-btn"> Reset</Button>
+                    </Col>
+                  </FormGroup>
+                )}
+        </CardLayout>
+      </div>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    cropsList: state.cropsReducer.cropsList
-    // currentCropData: state.cropsReducer.currentCropData
+    cropsList: state.cropsReducer.cropsList,
+    currentCropAudioAllocation: state.cropsReducer.currentCropAudioAllocation
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    storeCropImage: image => dispatch(actions.storeCropImage(image))
-    ///   getCropsList: () => dispatch(actions.getCropsList()),
+    storeCropImage: image => dispatch(actions.storeCropImage(image)),
+    getCropAudioAllocation: id => dispatch(actions.getCropAudioAllocation(id))
     // CropsCultivationSteps: (id) => dispatch(actions.getCropCultivationSteps(id))
   };
 };

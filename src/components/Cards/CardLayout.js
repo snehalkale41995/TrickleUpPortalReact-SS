@@ -19,7 +19,12 @@ const CardLayout = props => (
                   </Link>
                 ) : null}
                 <Col xs="12" md="6">
-                  <h1>{props.name}</h1>
+              {
+                props.name ? 
+                <h1>{props.name}</h1> : 
+                <h3>{props.subName}</h3>
+              }
+                  
                 </Col>
                 <Col md="4" />
                 {props.buttonName ? (

@@ -6,8 +6,7 @@ const AudioPlayer = props => (
       muted={props.muted}
       src={props.source}
       title={props.title}
-      download={false}
-      controls={["PlayPause", "Seek", "Time", "Volume","NoDownload"]}
+      controls={["PlayPause", "Seek", "Time", "Volume"]}
       autoPlay={props.autoPlay}
     />
   </div>

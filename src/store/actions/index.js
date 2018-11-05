@@ -46,7 +46,8 @@ export {
     getCropCultivationSteps,
     getCropSteps,
     getCropStepsMaterial,
-    storeCropImage
+    storeCropImage,
+    getCropAudioAllocation
 } from './cropsMaster.js';
 
 export {
