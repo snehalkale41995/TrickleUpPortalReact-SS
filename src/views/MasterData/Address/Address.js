@@ -62,16 +62,16 @@ export default class Address extends Component {
             {tabs}
           </Nav>
           <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1" className="nav-pane">
+            <TabPane tabId="1">
               <StateList {...this.props} />
             </TabPane>
-            <TabPane tabId="2" className="nav-pane">
+            <TabPane tabId="2">
               <DistrictList {...this.props} />
             </TabPane>
-            <TabPane tabId="3" className="nav-pane">
+            <TabPane tabId="3">
               <GrampanchayatList {...this.props} />
             </TabPane>
-            <TabPane tabId="4" className="nav-pane">
+            <TabPane tabId="4">
               <VillageList {...this.props} />
             </TabPane>
           </TabContent>

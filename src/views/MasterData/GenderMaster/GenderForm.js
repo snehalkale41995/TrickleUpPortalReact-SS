@@ -15,7 +15,7 @@ class GenderForm extends Component {
     this.state = {
       loading: false,
       updateFlag: false,
-      loggedinUserId : "",
+      loggedinUserId: "",
       currentGender: {
         Id: "",
         GenderName: "",
@@ -28,11 +28,11 @@ class GenderForm extends Component {
       }
     };
   }
-  
+
   componentWillMount() {
-   let loggedinUserId = localStorage.getItem("user");
-   this.setState({loggedinUserId:loggedinUserId})
-   this.setState({loggedinUserId:loggedinUserId})
+    let loggedinUserId = localStorage.getItem("user");
+    this.setState({ loggedinUserId: loggedinUserId });
+    this.setState({ loggedinUserId: loggedinUserId });
     if (this.props.match.params.id !== undefined) {
       let currentGender = this.props.genderList.find(
         gender => gender.Id == this.props.match.params.id
@@ -81,7 +81,7 @@ class GenderForm extends Component {
           setTimeout(() => {
             if (!compRef.props.genderMasterError) {
               compRef.onReset();
-              compRef.props.history.push('/master/genders');
+              compRef.props.history.push("/master/genders");
             }
           }, 1000);
         }, 1000);
@@ -106,7 +106,7 @@ class GenderForm extends Component {
           setTimeout(() => {
             if (!compRef.props.genderMasterError) {
               compRef.onReset();
-               compRef.props.history.push('/master/genders');
+              compRef.props.history.push("/master/genders");
             }
           }, 1000);
         }, 1000);
@@ -114,10 +114,14 @@ class GenderForm extends Component {
     }
   }
   valid(currentGender) {
-    if (currentGender.GenderName) {
+    if (currentGender.GenderName.trim().length > 0) {
       return true;
     } else {
-      if (!currentGender.GenderName) currentGender.GenderNameRequired = true;
+      if (
+        !currentGender.GenderName ||
+        currentGender.GenderName.trim().length === 0
+      )
+        currentGender.GenderNameRequired = true;
       this.setState({
         currentGender: currentGender
       });
@@ -141,67 +145,65 @@ class GenderForm extends Component {
   }
   render() {
     const { currentGender } = this.state;
-    return  this.state.loading ? (
+    return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-     
-        <CardLayout
-          name="Gender Form"
-          navigation={true}
-          navigationRoute="/master/genders"
-        >
-          <div className="div-padding">
-            <FormGroup row />
+      <CardLayout
+        name="Gender Form"
+        navigation={true}
+        navigationRoute="/master/genders"
+      >
+        <div className="div-padding">
+          <FormGroup row />
+          <FormGroup row>
+            <Col xs="8" md="4">
+              <InputElement
+                type="text"
+                label="Gender name"
+                placeholder="Gender name"
+                maxLength={255}
+                name="GenderName"
+                required={currentGender.GenderNameRequired}
+                value={currentGender.GenderName}
+                onChange={event => this.onChangeHandler(event)}
+              />
+            </Col>
+          </FormGroup>
+
+          {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="8" md="4">
-                <InputElement
-                  type="text"
-                  label="Gender name"
-                  placeholder="Gender name"
-                  maxLength = {255}
-                  name="GenderName"
-                  required={currentGender.GenderNameRequired}
-                  value={currentGender.GenderName}
-                  onChange={event => this.onChangeHandler(event)}
-                />
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Save
+                </Button>
               </Col>
             </FormGroup>
-
-            {this.state.updateFlag ? (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Save
-                  </Button>
-                </Col>
-              </FormGroup>
-            ) : (
-              <FormGroup row>
-                <Col md="1">
-                  <Button
-                    className="theme-positive-btn"
-                    onClick={this.onSubmitState.bind(this)}
-                  >
-                    Create
-                  </Button>
-                </Col>
-                <Col md="1">
-                  <Button
-                    className="theme-reset-btn"
-                    onClick={this.onReset.bind(this)}
-                  >
-                    Reset
-                  </Button>
-                </Col>
-              </FormGroup>
-            )}
-            <ToastContainer autoClose={2000} />
-          </div>
-        </CardLayout>
-      
+          ) : (
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmitState.bind(this)}
+                >
+                  Create
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
+          <ToastContainer autoClose={2000} />
+        </div>
+      </CardLayout>
     );
   }
 }
@@ -209,15 +211,14 @@ class GenderForm extends Component {
 const mapStateToProps = state => {
   return {
     genderMasterError: state.rolesReducer.genderMasterError,
-    genderList : state.gendersReducer.genders
+    genderList: state.gendersReducer.genders
   };
 };
-
 
 const mapDispatchToProps = dispatch => {
   return {
     createGender: gender => dispatch(actions.createGender(gender)),
-    updateGender: (id,gender) => dispatch(actions.updateGender(id,gender)),
+    updateGender: (id, gender) => dispatch(actions.updateGender(id, gender))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GenderForm);

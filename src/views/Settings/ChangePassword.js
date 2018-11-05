@@ -92,23 +92,26 @@ class ChangePassword extends Component {
     let validPassword =
       userCredential.NewPassword === userCredential.ConfirmPassword;
     if (
-      userCredential.OldPassword &&
-      userCredential.NewPassword &&
-      userCredential.ConfirmPassword &&
+      userCredential.OldPassword.trim().length > 0 &&
+      userCredential.NewPassword.trim().length > 0 &&
+      userCredential.ConfirmPassword.trim().length > 0 &&
       validPassword
     ) {
       return true;
     } else {
-      !userCredential.OldPassword
+      !userCredential.OldPassword ||
+      userCredential.OldPassword.trim().length === 0
         ? (userCredential.OldPasswordRequired = true)
         : null;
-      !userCredential.NewPassword
+      !userCredential.NewPassword ||
+      userCredential.NewPassword.trim().length === 0
         ? (userCredential.NewPasswordRequired = true)
         : null;
       userCredential.ConfirmPassword && !validPassword
         ? (userCredential.InvalidPassword = true)
         : null;
-      !userCredential.ConfirmPassword
+      !userCredential.ConfirmPassword ||
+      userCredential.ConfirmPassword.trim().length === 0
         ? (userCredential.ConfirmPasswordRequired = true)
         : null;
       this.setState({

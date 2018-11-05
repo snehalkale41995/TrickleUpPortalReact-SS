@@ -118,11 +118,16 @@ class StatesForm extends Component {
     }
   }
   valid(currentState) {
-    if (currentState.StateName && currentState.StateCode) {
+    if (
+      currentState.StateName.trim().length > 0 &&
+      currentState.StateCode.trim().length > 0
+    ) {
       return true;
     } else {
-      if (!currentState.StateName) currentState.StateNameRequired = true;
-      if (!currentState.StateCode) currentState.StateCodeRequired = true;
+      if (!currentState.StateName || currentState.StateName.trim().length === 0)
+        currentState.StateNameRequired = true;
+      if (!currentState.StateCode || currentState.StateCode.trim().length === 0)
+        currentState.StateCodeRequired = true;
       this.setState({
         currentState: currentState
       });

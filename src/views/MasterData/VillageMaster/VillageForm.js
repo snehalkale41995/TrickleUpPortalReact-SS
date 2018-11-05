@@ -170,14 +170,16 @@ class VillageForm extends Component {
   }
   valid(village) {
     if (
-      village.VillageName &&
+      village.VillageName.trim().length > 0 &&
       village.District &&
       village.State &&
       village.Grampanchayat
     ) {
       return true;
     } else {
-      !village.VillageName ? (village.VillageNameRequired = true) : null;
+      !village.VillageName || village.VillageName.trim().length === 0
+        ? (village.VillageNameRequired = true)
+        : null;
       !village.District ? (village.DistrictRequired = true) : null;
       !village.State ? (village.StateRequired = true) : null;
       !village.Grampanchayat ? (village.GrampanchayatRequired = true) : null;

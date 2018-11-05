@@ -121,10 +121,11 @@ class DistrictForm extends Component {
     }
   }
   valid(district) {
-    if (district.DistrictName && district.State) {
+    if (district.DistrictName.trim().length > 0 && district.State) {
       return true;
     } else {
-      if (!district.DistrictName) district.DistrictNameRequired = true;
+      if (!district.DistrictName || district.DistrictName.trim().length === 0)
+        district.DistrictNameRequired = true;
       if (!district.State) district.StateRequired = true;
       this.setState({
         district: district

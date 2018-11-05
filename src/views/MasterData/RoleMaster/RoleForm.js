@@ -119,10 +119,11 @@ class RolesForm extends Component {
   }
 
   valid(currentRole) {
-    if (currentRole.RoleName) {
+    if (currentRole.RoleName.trim().length > 0) {
       return true;
     } else {
-      if (!currentRole.RoleName) currentRole.RoleNameRequired = true;
+      if (!currentRole.RoleName || currentRole.RoleName.trim().length === 0)
+        currentRole.RoleNameRequired = true;
       // if (!currentRole.RoleId) currentRole.RoleIdRequired = true;
       this.setState({
         currentRole: currentRole
@@ -165,7 +166,7 @@ class RolesForm extends Component {
                 type="text"
                 label="Role name"
                 placeholder="Role name"
-                maxLength = {255} 
+                maxLength={255}
                 name="RoleName"
                 required={currentRole.RoleNameRequired}
                 value={currentRole.RoleName}

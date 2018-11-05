@@ -13,6 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveGenderTable from "./ActiveGenderTable";
+import InActiveGenderTable from "./InActiveGenderTable";
 class GenderList extends Component {
   constructor(props) {
     super(props);
@@ -109,9 +111,10 @@ class GenderList extends Component {
   }
 
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "GenderName",
       defaultSortOrder: "asc",
+      noDataText: 'No records found for active gender' ,
       sizePerPageList: [
         {
           text: "5",
@@ -127,9 +130,31 @@ class GenderList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.genders.length
-            : this.props.inactiveGenders.length
+          value: this.props.genders.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "GenderName",
+      defaultSortOrder: "asc",
+      noDataText: 'No records found for inactive gender' ,
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inactiveGenders.length
         }
       ],
       sizePerPage: 5
@@ -156,7 +181,22 @@ class GenderList extends Component {
         </Row>
         <FormGroup row>
           <Col xs="12">
-            <BootstrapTable
+            {this.state.tableStatus ? (
+              <ActiveGenderTable
+                genders={this.props.genders}
+                sortingOptions={sortingOptionsActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            ) : (
+              <InActiveGenderTable
+                genders={this.props.inactiveGenders}
+                sortingOptions={sortingOptionsInActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            )}
+            {/* <BootstrapTable
               ref="table"
               data={
                 this.state.tableStatus
@@ -200,7 +240,7 @@ class GenderList extends Component {
               >
                 Deactivate
               </TableHeaderColumn>
-            </BootstrapTable>
+            </BootstrapTable> */}
           </Col>
           <ToastContainer autoClose={2000} />
         </FormGroup>

@@ -36,7 +36,7 @@ class Login extends Component {
   onSubmit = () => {
     let compRef = this;
     let user = this.state.user;
-    if (user.userName && user.password) {
+    if (user.userName.trim().length > 0 && user.password.trim().length > 0) {
       this.props.loginUser(user);
       setTimeout(() => {
         localStorage.clear();
@@ -47,8 +47,8 @@ class Login extends Component {
         compRef.Toaster(loginError, "Login", loginErrorMsg);
       }, 1000);
     } else {
-      !user.userName ? this.setState({userNameRequired : true}) : null;
-      !user.password ? this.setState({passwordRequired : true}) : null;
+      !user.userName || user.userName.trim().length === 0 ? this.setState({userNameRequired : true}) : null;
+      !user.password || user.password.trim().length === 0 ? this.setState({passwordRequired : true}) : null;
     }
   };
 

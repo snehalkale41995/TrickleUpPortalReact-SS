@@ -13,6 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveRoleTable from "./ActiveRoleTable";
+import InActiveRoleTable from "./InActiveRoleTable";
 
 class RolesList extends Component {
   constructor(props) {
@@ -111,8 +113,9 @@ class RolesList extends Component {
   }
 
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "RoleName",
+      noDataText: "No records found for active role",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -129,9 +132,31 @@ class RolesList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.Roles.length
-            : this.props.inactiveRoles.length
+          value: this.props.Roles.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "RoleName",
+      noDataText: "No records found for inactive role",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inactiveRoles.length
         }
       ],
       sizePerPage: 5
@@ -158,7 +183,22 @@ class RolesList extends Component {
         </Row>
         <FormGroup row>
           <Col xs="12">
-            <BootstrapTable
+            {this.state.tableStatus ? (
+              <ActiveRoleTable
+                Roles={this.props.Roles}
+                sortingOptions={sortingOptionsActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            ) : (
+              <InActiveRoleTable
+                Roles={this.props.inactiveRoles}
+                sortingOptions={sortingOptionsInActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            )}
+            {/* <BootstrapTable
               ref="table"
               data={
                 this.state.tableStatus
@@ -167,7 +207,7 @@ class RolesList extends Component {
               }
               pagination={true}
               search={true}
-              options={sortingOptions}
+              options={sortingOptionsActive}
               //exportCSV={true}
               hover={true}
               csvFileName="Roles List"
@@ -216,7 +256,7 @@ class RolesList extends Component {
                   Activate
                 </TableHeaderColumn>
               )}
-            </BootstrapTable>
+            </BootstrapTable> */}
           </Col>
           <ToastContainer autoClose={2000} />
         </FormGroup>

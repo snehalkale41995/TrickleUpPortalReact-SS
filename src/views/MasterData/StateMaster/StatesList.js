@@ -11,6 +11,8 @@ import Loader from "../../../components/Loader/Loader";
 import StateForm from "./StateForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveStateTable from "./ActiveStateTable";
+import InActiveStateTable from "./InActiveStateTable";
 class StatesList extends Component {
   constructor(props) {
     super(props);
@@ -98,8 +100,9 @@ class StatesList extends Component {
     );
   }
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "StateName",
+      noDataText: "No records found for active state",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -116,15 +119,34 @@ class StatesList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.states.length
-            : this.props.inactiveStates.length
+          value: this.props.states.length
         }
       ],
       sizePerPage: 5
     };
-    let trStyle = () => {
-      return { color: "#E00000" };
+    const sortingOptionsInActive = {
+      defaultSortName: "StateName",
+      noDataText: "No records found for inactive state",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inactiveStates.length
+        }
+      ],
+      sizePerPage: 5
     };
     return this.state.showForm ? (
       <StateForm {...this.props} edit={this.state.editState} />
@@ -154,7 +176,21 @@ class StatesList extends Component {
           </Row>
           <FormGroup row>
             <Col xs="12">
-              <BootstrapTable
+              {this.state.tableStatus ? (
+                <ActiveStateTable
+                  states={this.props.states}
+                  sortingOptions={sortingOptionsActive}
+                  onEditState={this.onEditState.bind(this)}
+                  onDeleteState={this.onDeleteState.bind(this)}
+                />
+              ) : (
+                <InActiveStateTable
+                  states={this.props.inactiveStates}
+                  sortingOptions={sortingOptionsInActive}
+                  onActivateState={this.onActivateState.bind(this)}
+                />
+              )}
+              {/* <BootstrapTable
                 ref="table"
                 data={
                   this.state.tableStatus
@@ -226,7 +262,7 @@ class StatesList extends Component {
                     Activate
                   </TableHeaderColumn>
                 )}
-              </BootstrapTable>
+              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal

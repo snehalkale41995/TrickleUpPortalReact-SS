@@ -11,6 +11,8 @@ import Loader from "../../../components/Loader/Loader";
 import GrampanchayatForm from "./GrampanchayatForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveGrampanchayatTable from "./ActiveGrampanchayatTable";
+import InActiveGrampanchayatTable from "./InActiveGrampanchayatTable";
 
 class GrampanchayatList extends Component {
   constructor(props) {
@@ -92,8 +94,9 @@ class GrampanchayatList extends Component {
     );
   }
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "GrampanchayatName",
+      noDataText: 'No records found for active grampanchayat' ,
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -110,9 +113,31 @@ class GrampanchayatList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.grampanchayats.length
-            : this.props.inActiveGrampanchayat.length
+          value: this.props.grampanchayats.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "GrampanchayatName",
+      noDataText: 'No records found for inactive grampanchayat' ,
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inActiveGrampanchayat.length
         }
       ],
       sizePerPage: 5
@@ -148,7 +173,23 @@ class GrampanchayatList extends Component {
           </Row>
           <FormGroup row>
             <Col xs="12">
-              <BootstrapTable
+              {this.state.tableStatus ? (
+                <ActiveGrampanchayatTable
+                  grampanchayats={this.props.grampanchayats}
+                  sortingOptions={sortingOptionsActive}
+                  onEditGrampanchayat={this.onEditGrampanchayat.bind(this)}
+                  onDeleteGrampanchayat={this.onDeleteGrampanchayat.bind(this)}
+                />
+              ) : (
+                <InActiveGrampanchayatTable
+                  grampanchayats={this.props.inActiveGrampanchayat}
+                  sortingOptions={sortingOptionsInActive}
+                  onActivateGrampanchayat={this.onActivateGrampanchayat.bind(
+                    this
+                  )}
+                />
+              )}
+              {/* <BootstrapTable
                 ref="table"
                 data={
                   this.state.tableStatus
@@ -225,7 +266,7 @@ class GrampanchayatList extends Component {
                     Activate
                   </TableHeaderColumn>
                 )}
-              </BootstrapTable>
+              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal

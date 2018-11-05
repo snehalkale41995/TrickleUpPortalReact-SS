@@ -13,6 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveLanguageTable from "./ActiveLanguageTable";
+import InActiveLanguageTable from "./InActiveLanguageTable";
 class LanguageList extends Component {
   constructor(props) {
     super(props);
@@ -109,8 +111,9 @@ class LanguageList extends Component {
   }
 
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "LanguageName",
+      noDataText: 'No records found for active language' ,
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -127,9 +130,31 @@ class LanguageList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.languages.length
-            : this.props.inactiveLanguages.length
+          value: this.props.languages.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "LanguageName",
+      noDataText: 'No records found for inactive language' ,
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inactiveLanguages.length
         }
       ],
       sizePerPage: 5
@@ -156,7 +181,22 @@ class LanguageList extends Component {
         </Row>
         <FormGroup row>
           <Col xs="12">
-            <BootstrapTable
+            {this.state.tableStatus ? (
+              <ActiveLanguageTable
+                languages={this.props.languages}
+                sortingOptions={sortingOptionsActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            ) : (
+              <InActiveLanguageTable
+                languages={this.props.inactiveLanguages}
+                sortingOptions={sortingOptionsInActive}
+                onEditState={this.onEditState.bind(this)}
+                onDeleteState={this.onDeleteState.bind(this)}
+              />
+            )}
+            {/* <BootstrapTable
               ref="table"
               data={
                 this.state.tableStatus
@@ -223,7 +263,7 @@ class LanguageList extends Component {
                   Activate
                 </TableHeaderColumn>
               )}
-            </BootstrapTable>
+            </BootstrapTable> */}
           </Col>
           <ToastContainer autoClose={2000} />
         </FormGroup>

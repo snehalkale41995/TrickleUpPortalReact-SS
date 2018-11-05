@@ -296,22 +296,25 @@ class OperationalUserForm extends Component {
       this.showValidations(user);
     }
   }
-
   validData() {
     let user = { ...this.state.user };
     let InvalidAdhaar = false;
+    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let validEmail = emailTest.test(String(user.UserId).toLowerCase());
+    user.PhoneNumber = user.PhoneNumber.trim();
     if (user.Aadhaar) {
       user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
     }
     if (
-      user.Name &&
+      user.Name.trim().length > 0 &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
       user.Age &&
       user.Age > 0 &&
-      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.Gender &&
+      validEmail &&
       user.UserId &&
+      user.UserId.trim().length > 0 &&
       user.State &&
       user.District &&
       user.Village &&
@@ -325,74 +328,50 @@ class OperationalUserForm extends Component {
     }
   }
   showValidations(user) {
-    // let validUserId;
-    // let validPhone =
-    //   /^\d+$/.test(user.PhoneNumber) && user.PhoneNumber.length === 10;
-    // if (user.UserId) {
-    //   validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-    // }
-    // !user.Name ? (user.NameRequired = true) : null;
-    // user.PhoneNumber && !validPhone ? (user.PhoneNumberInvalid = true) : null;
-    // !user.PhoneNumber
-    //   ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
-    //   : null;
-    // user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
-    // !user.UserId
-    //   ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
-    //   : null;
-    // user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
-    // !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
-    // !user.Gender ? this.setState({ genderRequired: true }) : null;
-    // !user.State ? this.setState({ stateRequired: true }) : null;
-    // !user.District ? this.setState({ districtRequired: true }) : null;
-    // !user.Village ? this.setState({ villageRequired: true }) : null;
-    // !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
-    // !user.Role ? this.setState({ roleRequired: true }) : null;
-    // user.Aadhaar && user.Aadhaar.length !== 12
-    //   ? (user.AadhaarInvalid = true)
-    //   : null;
-    // !user.Language ? this.setState({ languageRequired: true }) : null;
-    // this.setState({
-    //   user: user
-    // });
-    let validUserId;
     let validPhone =
       /^\d+$/.test(user.PhoneNumber.trim()) &&
       user.PhoneNumber.trim().length === 10;
-    if (user.UserId) {
-      validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let validEmail = emailTest.test(String(user.UserId).toLowerCase());
+    if (user.UserId && !validEmail) {
+      user.UserIdInvalid = true;
     }
-    !user.Name || user.Name.trim().length === 0
-      ? (user.NameRequired = true)
-      : null;
-    user.PhoneNumber.trim() && !validPhone && user.PhoneNumber.trim().length > 0
-      ? (user.PhoneNumberInvalid = true)
-      : null;
-    !user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0
-      ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
-      : null;
-    user.UserId && user.UserId.trim().length === 0 && !validUserId
-      ? (user.UserIdInvalid = true)
-      : null;
-    !user.UserId || user.UserId.trim().length === 0
-      ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
-      : null;
-    user.Age && user.Age < 0 ? (user.AgeInvalid = true) : null;
-    !user.Age ? ((user.AgeRequired = true), (user.AgeInvalid = false)) : null;
-    !user.Gender ? this.setState({ genderRequired: true }) : null;
-    !user.State ? this.setState({ stateRequired: true }) : null;
-    !user.District ? this.setState({ districtRequired: true }) : null;
-    !user.Village ? this.setState({ villageRequired: true }) : null;
-    !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
-    !user.Role ? this.setState({ roleRequired: true }) : null;
-    user.Aadhaar && user.Aadhaar.trim().length !== 12
-      ? (user.AadhaarInvalid = true)
-      : null;
-    !user.Language ? this.setState({ languageRequired: true }) : null;
+    if (!user.Name || user.Name.trim().length === 0) user.NameRequired = true;
+    if (
+      user.PhoneNumber.trim() &&
+      !validPhone &&
+      user.PhoneNumber.trim().length > 0
+    )
+      user.PhoneNumberInvalid = true;
+
+    if (!user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0) {
+      user.PhoneNumberRequired = true;
+      user.PhoneNumberInvalid = false;
+    }
+    if (!user.UserId || user.UserId.trim().length === 0) {
+      user.UserIdRequired = true;
+      user.UserIdInvalid = false;
+    }
+
+    if (user.Age && user.Age < 0) user.AgeInvalid = true;
+    if (!user.Age) {
+      user.AgeRequired = true;
+      user.AgeInvalid = false;
+    }
+    if (!user.Gender) this.setState({ genderRequired: true });
+    if (!user.State) this.setState({ stateRequired: true });
+    if (!user.District) this.setState({ districtRequired: true });
+    if (!user.Village) this.setState({ villageRequired: true });
+    if (!user.Grampanchayat) this.setState({ grampanchayatRequired: true });
+    if (!user.Role) this.setState({ roleRequired: true });
+    if (user.Aadhaar && user.Aadhaar.trim().length !== 12)
+      user.AadhaarInvalid = true;
+    if (!user.Language) this.setState({ languageRequired: true });
     this.setState({
       user: user
     });
   }
+
   onReset() {
     let userObj = {
       ...this.state.user,

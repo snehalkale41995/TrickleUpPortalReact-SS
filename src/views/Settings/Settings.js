@@ -101,7 +101,7 @@ class Settings extends Component {
     reader.readAsDataURL(file);
   }
 
-   // Method for set only Numeric
+  // Method for set only Numeric
   setInputToNumeric(e) {
     const re = /[0-9]+/g;
     if (!re.test(e.key)) {
@@ -203,7 +203,7 @@ class Settings extends Component {
     let roleId = userDetails.role;
     let user = { ...this.state.user };
     let compRef = this;
-    this.showValidations(user);
+    //this.showValidations(user);
     if (this.validData()) {
       user = _.pick(user, [
         "Id",
@@ -243,24 +243,35 @@ class Settings extends Component {
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.beneficiaryError);
       }, 1000);
+    } else {
+      this.showValidations(user);
     }
   }
-
   validData() {
     let user = { ...this.state.user };
+    let InvalidAdhaar = false;
+    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let validEmail = emailTest.test(String(user.UserId).toLowerCase());
+    user.PhoneNumber = user.PhoneNumber.trim();
+    if (user.Aadhaar) {
+      user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
+    }
     if (
-      user.Name &&
+      user.Name.trim().length > 0 &&
       user.PhoneNumber &&
       user.PhoneNumber.length === 10 &&
-      user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) &&
       user.Age &&
-      user.UserId &&
+      user.Age > 0 &&
       user.Gender &&
+      validEmail &&
+      user.UserId &&
+      user.UserId.trim().length > 0 &&
       user.State &&
       user.District &&
       user.Village &&
       user.Grampanchayat &&
-      user.Language
+      user.Language &&
+      !InvalidAdhaar
     ) {
       return true;
     } else {
@@ -268,33 +279,50 @@ class Settings extends Component {
     }
   }
   showValidations(user) {
-    let validUserId;
-    !user.Name ? (user.NameRequired = true) : null;
-    user.PhoneNumber && user.PhoneNumber.length !== 10
-      ? (user.PhoneNumberInvalid = true)
-      : null;
-    !user.PhoneNumber
-      ? ((user.PhoneNumberRequired = true), (user.PhoneNumberInvalid = false))
-      : null;
-     if (user.UserId) {
-      validUserId = user.UserId.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    let validPhone =
+      /^\d+$/.test(user.PhoneNumber.trim()) &&
+      user.PhoneNumber.trim().length === 10;
+    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let validEmail = emailTest.test(String(user.UserId).toLowerCase());
+    if (user.UserId && !validEmail) {
+      user.UserIdInvalid = true;
     }
-     user.UserId && !validUserId ? (user.UserIdInvalid = true) : null;
-    !user.UserId
-      ? ((user.UserIdRequired = true), (user.UserIdInvalid = false))
-      : null;
-    !user.Age ? (user.AgeRequired = true) : null;
-    !user.Gender ? this.setState({ genderRequired: true }) : null;
-    !user.State ? this.setState({ stateRequired: true }) : null;
-    !user.District ? this.setState({ districtRequired: true }) : null;
-    !user.Village ? this.setState({ villageRequired: true }) : null;
-    !user.Grampanchayat ? this.setState({ grampanchayatRequired: true }) : null;
-   // !user.Role ? this.setState({ roleRequired: true }) : null;
-    !user.Language ? this.setState({ languageRequired: true }) : null;
+    if (!user.Name || user.Name.trim().length === 0) user.NameRequired = true;
+    if (
+      user.PhoneNumber.trim() &&
+      !validPhone &&
+      user.PhoneNumber.trim().length > 0
+    )
+      user.PhoneNumberInvalid = true;
+
+    if (!user.PhoneNumber.trim() || user.PhoneNumber.trim().length === 0) {
+      user.PhoneNumberRequired = true;
+      user.PhoneNumberInvalid = false;
+    }
+    if (!user.UserId || user.UserId.trim().length === 0) {
+      user.UserIdRequired = true;
+      user.UserIdInvalid = false;
+    }
+
+    if (user.Age && user.Age < 0) user.AgeInvalid = true;
+    if (!user.Age) {
+      user.AgeRequired = true;
+      user.AgeInvalid = false;
+    }
+    if (!user.Gender) this.setState({ genderRequired: true });
+    if (!user.State) this.setState({ stateRequired: true });
+    if (!user.District) this.setState({ districtRequired: true });
+    if (!user.Village) this.setState({ villageRequired: true });
+    if (!user.Grampanchayat) this.setState({ grampanchayatRequired: true });
+    if (!user.Role) this.setState({ roleRequired: true });
+    if (user.Aadhaar && user.Aadhaar.trim().length !== 12)
+      user.AadhaarInvalid = true;
+    if (!user.Language) this.setState({ languageRequired: true });
     this.setState({
       user: user
     });
   }
+
   onReset() {
     let userObj = {
       ...this.state.user,
@@ -305,7 +333,7 @@ class Settings extends Component {
       PhoneNumberInvalid: false,
       UserIdRequired: false,
       UserIdInvalid: false,
-      UserId : "",
+      UserId: "",
       Age: "", //no
       AgeRequired: false,
       Gender: "", //id
@@ -359,7 +387,7 @@ class Settings extends Component {
                 label="Name"
                 name="Name"
                 placeholder="Please enter name "
-                maxLength = {255} 
+                maxLength={255}
                 value={user.Name}
                 required={user.NameRequired}
                 onChange={event => this.onChangeInput(event)}
@@ -382,20 +410,19 @@ class Settings extends Component {
           </FormGroup>
           <FormGroup row>
             <Col xs="12" md="5">
-             <InputElement
-                  type="text"
-                  label="Email"
-                  name="UserId"
-                  placeholder="Please enter Email"
-                  value={user.UserId}
-                  required={user.UserIdRequired}
-                  invalid={user.UserIdInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
-              
+              <InputElement
+                type="text"
+                label="Email"
+                name="UserId"
+                placeholder="Please enter Email"
+                value={user.UserId}
+                required={user.UserIdRequired}
+                invalid={user.UserIdInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
             </Col>
-            <Col  md="5">
-            <InputElement
+            <Col md="5">
+              <InputElement
                 type="text"
                 label="Age"
                 name="Age"
@@ -406,11 +433,11 @@ class Settings extends Component {
                 required={user.AgeRequired}
                 onChange={event => this.onChangeInput(event)}
               />
-          </Col>
+            </Col>
           </FormGroup>
           <FormGroup row>
             <Col xs="12" md="5">
-             <Label>Gender</Label>
+              <Label>Gender</Label>
               <DropdownSelect
                 id="1"
                 name="Gender"
@@ -419,11 +446,10 @@ class Settings extends Component {
                 value={user.Gender}
                 required={this.state.genderRequired}
                 onChange={this.onGenderSelection.bind(this)}
-              /> 
-             
+              />
             </Col>
             <Col md="5">
-             <Label>State</Label>
+              <Label>State</Label>
               <DropdownSelect
                 name="State"
                 placeholder="Select state"
@@ -446,10 +472,9 @@ class Settings extends Component {
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
               />
-             
             </Col>
             <Col md="5">
-             <Label>Grampanchayat</Label>
+              <Label>Grampanchayat</Label>
               <DropdownSelect
                 name="Grampanchayat"
                 placeholder="Select grampanchayat "
@@ -459,7 +484,6 @@ class Settings extends Component {
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
               />
-            
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -475,21 +499,21 @@ class Settings extends Component {
                 onChange={this.onVillageSelection.bind(this)}
               />
             </Col>
-           <Col md="5">
-                <InputElement
-                  type="text"
-                  label="Aadhaar number"
-                  name="Aadhaar"
-                  maxLength={12}
-                  placeholder="Please enter aadhaar number "
-                  value={user.Aadhaar}
-                  invalid={user.AadhaarInvalid}
-                  onChange={event => this.onChangeInput(event)}
-                />
-              </Col>
+            <Col md="5">
+              <InputElement
+                type="text"
+                label="Aadhaar number"
+                name="Aadhaar"
+                maxLength={12}
+                placeholder="Please enter aadhaar number "
+                value={user.Aadhaar}
+                invalid={user.AadhaarInvalid}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </Col>
           </FormGroup>
           <FormGroup row>
-              <Col xs="12" md="5">
+            <Col xs="12" md="5">
               <Label>Language</Label>
               <DropdownSelect
                 name="Language"
@@ -501,23 +525,23 @@ class Settings extends Component {
               />
             </Col>
             {user.ImagePath ? (
-                <FormGroup row>
-                  <Col xs="6" md="4">
-                    <Label>Profile Picture : </Label>
-                  </Col>
-                  <Col md="2">
-                    <div
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                        border: 0,
-                        img: { width: "100px", height: "100px" }
-                      }}
-                    >
-                      {$imagePreview}
-                    </div>
-                  </Col>
-                </FormGroup>
+              <FormGroup row>
+                <Col xs="6" md="4">
+                  <Label>Profile Picture : </Label>
+                </Col>
+                <Col md="2">
+                  <div
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      border: 0,
+                      img: { width: "100px", height: "100px" }
+                    }}
+                  >
+                    {$imagePreview}
+                  </div>
+                </Col>
+              </FormGroup>
             ) : null}
           </FormGroup>
           <FormGroup row>

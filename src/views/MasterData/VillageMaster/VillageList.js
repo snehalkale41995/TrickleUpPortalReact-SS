@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button ,Row} from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -11,6 +11,8 @@ import Loader from "../../../components/Loader/Loader";
 import VillageForm from "./VillageForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveVillageTable from "./ActiveVillageTable";
+import InActiveVillageTable from "./InActiveVillageTable";
 class VillageList extends Component {
   constructor(props) {
     super(props);
@@ -88,8 +90,9 @@ class VillageList extends Component {
     );
   }
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "VillageName",
+      noDataText: "No records found for active village",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -106,7 +109,31 @@ class VillageList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus ? this.props.villages.length : this.props.inActiveVillages.length
+          value: this.props.villages.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "VillageName",
+      noDataText: "No records found for inactive village",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inActiveVillages.length
         }
       ],
       sizePerPage: 5
@@ -139,7 +166,21 @@ class VillageList extends Component {
           </Row>
           <FormGroup row>
             <Col xs="12">
-              <BootstrapTable
+              {this.state.tableStatus ? (
+                <ActiveVillageTable
+                  villages={this.props.villages}
+                  sortingOptions={sortingOptionsActive}
+                  onEditVillage={this.onEditVillage.bind(this)}
+                  onDeleteVillage={this.onDeleteVillage.bind(this)}
+                />
+              ) : (
+                <InActiveVillageTable
+                  villages={this.props.inActiveVillages}
+                  sortingOptions={sortingOptionsInActive}
+                  onActivateVillage={this.onActivateVillage.bind(this)}
+                />
+              )}
+              {/* <BootstrapTable
                 ref="table"
                 data={this.state.tableStatus ? this.props.villages : this.props.inActiveVillages}
                 pagination={true}
@@ -225,7 +266,7 @@ class VillageList extends Component {
                     Activate
                   </TableHeaderColumn>
                 )}
-              </BootstrapTable>
+              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal
@@ -247,7 +288,7 @@ class VillageList extends Component {
 const mapStateToProps = state => {
   return {
     villages: state.villageReducer.villages,
-    inActiveVillages : state.villageReducer.inActiveVillages
+    inActiveVillages: state.villageReducer.inActiveVillages
   };
 };
 

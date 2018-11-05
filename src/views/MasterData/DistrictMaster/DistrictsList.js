@@ -11,6 +11,8 @@ import Loader from "../../../components/Loader/Loader";
 import DistrictForm from "./DistrictForm";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
+import ActiveDistrictTable from "./ActiveDistrictTable";
+import InActiveDistrictTable from "./InActiveDistrictTable";
 
 class DistrictsList extends Component {
   constructor(props) {
@@ -57,7 +59,9 @@ class DistrictsList extends Component {
   }
   onConfirmDelete() {
     let district = { ...this.state.districtToDelete };
-    this.state.tableStatus ?  district.Active = false :  district.Active = true;
+    this.state.tableStatus
+      ? (district.Active = false)
+      : (district.Active = true);
     this.props.deleteDistrict(district.Id, district);
     this.setState({
       modalStatus: !this.state.modalStatus
@@ -97,8 +101,9 @@ class DistrictsList extends Component {
     );
   }
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "DistrictName",
+      noDataText: 'No records found for active district' ,
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -115,7 +120,31 @@ class DistrictsList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus ? this.props.districts.length : this.props.inactiveDistrict.length
+          value: this.props.districts.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "DistrictName",
+      noDataText: 'No records found for inactive district' ,
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inactiveDistrict.length
         }
       ],
       sizePerPage: 5
@@ -148,7 +177,22 @@ class DistrictsList extends Component {
           </Row>
           <FormGroup row>
             <Col xs="12">
-              <BootstrapTable
+              {this.state.tableStatus ? (
+                <ActiveDistrictTable
+                  districts={this.props.districts}
+                  sortingOptions={sortingOptionsActive}
+                  onEditDistrict={this.onEditDistrict.bind(this)}
+                  onDeleteDistrict={this.onDeleteDistrict.bind(this)}
+                />
+              ) : (
+                <InActiveDistrictTable
+                  districts={this.props.inactiveDistrict}
+                  sortingOptions={sortingOptionsInActive}
+                  onActivateDistrict={this.onActivateDistrict.bind(this)}
+                />
+              )}
+
+              {/* <BootstrapTable
                 ref="table"
                 data={this.state.tableStatus ? this.props.districts : this.props.inactiveDistrict}
                 pagination={true}
@@ -215,7 +259,7 @@ class DistrictsList extends Component {
                 </TableHeaderColumn>
                 }
                
-              </BootstrapTable>
+              </BootstrapTable> */}
             </Col>
           </FormGroup>
         </CardLayout>
@@ -238,7 +282,7 @@ const mapStateToProps = state => {
   return {
     districtsList: state.districtReducer.districtsList,
     districts: state.districtReducer.districts,
-    inactiveDistrict : state.districtReducer.inactiveDistrict
+    inactiveDistrict: state.districtReducer.inactiveDistrict
   };
 };
 

@@ -116,12 +116,21 @@ class LanguagesForm extends Component {
     }
   }
   valid(currentLanguage) {
-    if (currentLanguage.LanguageName && currentLanguage.LanguageCode) {
+    if (
+      currentLanguage.LanguageName.trim().length > 0 &&
+      currentLanguage.LanguageCode.trim().length > 0
+    ) {
       return true;
     } else {
-      if (!currentLanguage.LanguageName)
+      if (
+        !currentLanguage.LanguageName ||
+        currentLanguage.LanguageName.trim().length === 0
+      )
         currentLanguage.LanguageNameRequired = true;
-      if (!currentLanguage.LanguageCode)
+      if (
+        !currentLanguage.LanguageCode ||
+        currentLanguage.LanguageCode.trim().length === 0
+      )
         currentLanguage.LanguageCodeRequired = true;
       this.setState({
         currentLanguage: currentLanguage
@@ -164,7 +173,7 @@ class LanguagesForm extends Component {
                 type="text"
                 label="Language name"
                 placeholder="Language name"
-                maxLength = {255}
+                maxLength={255}
                 name="LanguageName"
                 required={currentLanguage.LanguageNameRequired}
                 value={currentLanguage.LanguageName}
@@ -176,7 +185,7 @@ class LanguagesForm extends Component {
                 type="text"
                 label="Language code"
                 placeholder="Language code"
-                 maxLength = {255}
+                maxLength={255}
                 name="LanguageCode"
                 required={currentLanguage.LanguageCodeRequired}
                 value={currentLanguage.LanguageCode}

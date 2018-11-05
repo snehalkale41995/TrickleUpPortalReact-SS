@@ -33,7 +33,7 @@ class GrampanchayatForm extends Component {
       grampanchayatToEdit: this.props.edit,
       updateFlag: false,
       districtOptions: this.props.districtsList,
-      districtDisabled : true
+      districtDisabled: true
     };
   }
   componentDidMount() {
@@ -48,7 +48,7 @@ class GrampanchayatForm extends Component {
         updateFlag: true,
         districtOptions: districtOptions,
         grampanchayat: this.state.grampanchayatToEdit,
-        districtDisabled : false
+        districtDisabled: false
       });
     }
   }
@@ -73,7 +73,7 @@ class GrampanchayatForm extends Component {
     this.setState({
       grampanchayat: grampanchayat,
       districtOptions: districtOptions,
-      districtDisabled : false
+      districtDisabled: false
     });
   }
   onDistrictValueChange(value) {
@@ -139,12 +139,14 @@ class GrampanchayatForm extends Component {
   valid(grampanchayat) {
     if (
       grampanchayat.GrampanchayatName &&
+      grampanchayat.GrampanchayatName.trim().length > 0 &&
       grampanchayat.District &&
       grampanchayat.State
     ) {
       return true;
     } else {
-      !grampanchayat.GrampanchayatName
+      !grampanchayat.GrampanchayatName ||
+      grampanchayat.GrampanchayatName.trim().length === 0
         ? (grampanchayat.GrampanchayatNameRequired = true)
         : null;
       !grampanchayat.District ? (grampanchayat.DistrictRequired = true) : null;
