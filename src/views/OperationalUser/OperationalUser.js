@@ -9,7 +9,7 @@ export default class OperationalUser extends Component {
       <div>
         <Route
           exact
-          path={this.props.match.path}
+          path={`${this.props.match.path}`}
           component={OperationalUserList}
         />
         <Route

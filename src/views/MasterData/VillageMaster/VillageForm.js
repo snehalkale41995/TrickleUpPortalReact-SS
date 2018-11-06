@@ -8,7 +8,7 @@ import InputElement from "../../../components/InputElement/InputElement";
 import VillageList from "./VillageList";
 import _ from "lodash";
 import Loader from "../../../components/Loader/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 
@@ -177,12 +177,11 @@ class VillageForm extends Component {
     ) {
       return true;
     } else {
-      !village.VillageName || village.VillageName.trim().length === 0
-        ? (village.VillageNameRequired = true)
-        : null;
-      !village.District ? (village.DistrictRequired = true) : null;
-      !village.State ? (village.StateRequired = true) : null;
-      !village.Grampanchayat ? (village.GrampanchayatRequired = true) : null;
+      if (!village.VillageName || village.VillageName.trim().length === 0)
+        village.VillageNameRequired = true;
+      if (!village.District) village.DistrictRequired = true;
+      if (!village.State) village.StateRequired = true;
+      if (!village.Grampanchayat) village.GrampanchayatRequired = true;
       this.setState({
         village: village
       });

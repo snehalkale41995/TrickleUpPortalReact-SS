@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
@@ -72,8 +72,8 @@ class RegistrationForm extends Component {
 
   componentWillMount() {
     if (this.props.match.params.id !== undefined) {
-      let currentUser = this.props.beneficiaryList.find(
-        user => user.Id == this.props.match.params.id
+      let currentUser = this.props.activeBeneficiaryList.find(
+        user => user.Id === parseInt(this.props.match.params.id)
       );
       if (currentUser) {
         this.setState({
@@ -225,10 +225,7 @@ class RegistrationForm extends Component {
             ? (message = compRef.props.beneficiaryError)
             : (message = `User updated successfully`);
           compRef.setState({ loading: false });
-          Toaster.Toaster(
-            compRef.props.beneficiaryError,
-            compRef.props.beneficiaryError
-          );
+          Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -275,10 +272,7 @@ class RegistrationForm extends Component {
             ? (message = compRef.props.beneficiaryError)
             : (message = "User created successfully");
           compRef.setState({ loading: false });
-          Toaster.Toaster(
-            compRef.props.beneficiaryError,
-            compRef.props.beneficiaryError
-          );
+          Toaster.Toaster(message, compRef.props.beneficiaryError);
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
@@ -349,7 +343,7 @@ class RegistrationForm extends Component {
       user.UserIdInvalid = false;
     }
 
-    if (user.Age && user.Age < 0) user.AgeInvalid = true;
+    if (user.Age && user.Age <= 0) user.AgeInvalid = true;
     if (!user.Age) {
       user.AgeRequired = true;
       user.AgeInvalid = false;
@@ -639,13 +633,13 @@ const mapStateToProps = state => {
     districtsList: state.districtReducer.districtsList,
     grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
     villagesList: state.villageReducer.villagesList,
-    //beneficiaryList: state.beneficiaryReducer.beneficiaryList,
+    activeBeneficiaryList: state.beneficiaryReducer.activeBeneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.gendersReducer.gendersList,
     languagesList: state.languagesReducer.languagesList,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError,
-    currentBeneficiary: state.beneficiaryReducer.currentBeneficiary,
-    beneficiaryList: state.beneficiaryReducer.beneficiaryList
+    currentBeneficiary: state.beneficiaryReducer.currentBeneficiary
+    //beneficiaryList: state.beneficiaryReducer.beneficiaryList
   };
 };
 

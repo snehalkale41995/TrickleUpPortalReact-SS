@@ -2,18 +2,22 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Row } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import _ from "lodash";
+import DropdownSelect from "../../components/InputElement/Dropdown";
+import ActiveBeneficiaryTable from "./ActiveBeneficiaryTable";
+import InActiveBeneficiaryTable from "./InActiveBeneficiaryTable";
+import * as constants from "../../constants/StatusConstants";
 class RegistrationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beneficiaryList: [],
+      tableStatus: true,
       loading: true,
       modalStatus: false,
       userToDelete: {}
@@ -30,14 +34,9 @@ class RegistrationList extends Component {
 
   setBeneficiary() {
     let compRef = this;
-    let beneficiaryList = _.filter(compRef.props.beneficiaryList, function(
-      beneficiary
-    ) {
-      return beneficiary.Active === true && beneficiary.Role === 3;
-    });
     compRef.setState({
-      loading: false,
-      beneficiaryList: beneficiaryList
+      loading: false
+      //beneficiaryList: beneficiaryList
     });
   }
 
@@ -67,7 +66,7 @@ class RegistrationList extends Component {
   onConfirmDelete() {
     let compRef = this;
     let user = { ...this.state.userToDelete };
-    user.Active = false;
+    this.state.tableStatus ? (user.Active = false) : (user.Active = true);
     this.props.deleteBeneficiary(user.Id, user);
     setTimeout(() => {
       compRef.setBeneficiary();
@@ -81,8 +80,23 @@ class RegistrationList extends Component {
       modalStatus: !this.state.modalStatus
     });
   }
+  onTablestatusChange(value) {
+    if (value != null) {
+      this.setState({
+        tableStatus: value
+      });
+    }
+  }
+  onActivateBeneficiary(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.onDelete(row)}>
+        <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+      </Link>
+    );
+  }
+
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "Name",
       defaultSortOrder: "asc",
       sizePerPageList: [
@@ -100,7 +114,30 @@ class RegistrationList extends Component {
         },
         {
           text: "All",
-          value: this.state.beneficiaryList.length
+          value: this.props.activeBeneficiaryList.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "Name",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inActiveBeneficiaryList.length
         }
       ],
       sizePerPage: 5
@@ -113,130 +150,46 @@ class RegistrationList extends Component {
         buttonName="Add beneficiary"
         buttonLink={`${this.props.match.url}/registration`}
       >
+        <Row className="address-drop-margin">
+          <Col xs="12" md="10" />
+          <Col md="2">
+            <DropdownSelect
+              label="Status"
+              options={constants.tableStatus}
+              value={this.state.tableStatus}
+              onChange={this.onTablestatusChange.bind(this)}
+              simpleValue
+            />
+          </Col>
+        </Row>
         <FormGroup row>
           <Col xs="12" md="12">
-            <BootstrapTable
-              ref="table"
-              data={this.state.beneficiaryList}
-              pagination={true}
-              search={true}
-              options={sortingOptions}
-              exportCSV={this.state.beneficiaryList.length > 0 ? true : false} 
-              csvFileName="BeneficiaryList.csv"
-              hover={true}
-            >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
-                Id
-              </TableHeaderColumn>
-
-              <TableHeaderColumn
-                dataField="Name"
-                headerAlign="left"
-                width="40"
-                csvHeader="Name"
-                dataSort={true}
-              >
-                Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="PhoneNumber"
-                headerAlign="left"
-                width="40"
-                csvHeader="Phone Number"
-                dataSort={true}
-              >
-                Phone Number
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="UserId"
-                headerAlign="left"
-                width="40"
-                csvHeader="Email Id"
-                dataSort={true}
-              >
-                Email Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Age"
-                csvHeader="Age"
-                export={true}
-                hidden
+            {this.state.tableStatus ? (
+              <ActiveBeneficiaryTable
+                beneficiaryList={this.props.activeBeneficiaryList}
+                sortingOptions={sortingOptionsActive}
+                onEditBeneficiary={this.onEditBeneficiary.bind(this)}
+                onDeleteBeneficiary={this.onDeleteBeneficiary.bind(this)}
               />
-              <TableHeaderColumn
-                dataField="GenderName"
-                csvHeader="Gender"
-                export={true}
-                hidden
+            ) : (
+              <InActiveBeneficiaryTable
+                beneficiaryList={this.props.inActiveBeneficiaryList}
+                sortingOptions={sortingOptionsInActive}
+                onActivateBeneficiary={this.onActivateBeneficiary.bind(this)}
               />
-              <TableHeaderColumn
-                dataField="StateName"
-                csvHeader="State"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="DistrictName"
-                csvHeader="District"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="GrampanchayatName"
-                csvHeader="Grampanchayat"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="VillageName"
-                csvHeader="Village"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="LanguageName"
-                csvHeader="Language"
-                export={true}
-                hidden
-              />
-              {/* <TableHeaderColumn
-                  dataField="Aadhar"
-                  csvHeader="Aadhar number"
-                  export={true}
-                  hidden
-                /> */}
-              <TableHeaderColumn
-                dataField="Active"
-                csvHeader="Active"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditBeneficiary.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteBeneficiary.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Deactivate
-              </TableHeaderColumn>
-            </BootstrapTable>
+            )}
           </Col>
         </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}
           onModalToggle={this.onModalToggle.bind(this)}
           onConfirmDelete={this.onConfirmDelete.bind(this)}
-          title="Deactivate"
-          message="Are you sure you want to deactivate this beneficiary ?"
+          title={this.state.tableStatus ? "Deactivate" : "Activate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this beneficiary record ?"
+              : "Are you sure you want to activate this beneficiary record ?"
+          }
         />
       </CardLayout>
     );
@@ -244,7 +197,8 @@ class RegistrationList extends Component {
 }
 const mapStateToProps = state => {
   return {
-    beneficiaryList: state.beneficiaryReducer.beneficiaryList
+    activeBeneficiaryList: state.beneficiaryReducer.activeBeneficiaryList,
+    inActiveBeneficiaryList: state.beneficiaryReducer.inActiveBeneficiaryList
   };
 };
 

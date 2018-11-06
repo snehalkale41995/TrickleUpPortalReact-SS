@@ -13,7 +13,7 @@ import StateList from "../StateMaster/StatesList";
 import DistrictList from "../DistrictMaster/DistrictsList";
 import VillageList from "../VillageMaster/VillageList";
 import GrampanchayatList from "../Grampanchayat/GrampanchayatList";
-
+import Loader from "../../../components/Loader/Loader";
 const tabsList = [
   { id: "1", name: "States" },
   { id: "2", name: "Districts" },
@@ -27,10 +27,17 @@ export default class Address extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: "1"
+      activeTab: "1",
+      loading : true
     };
   }
-
+componentDidMount (){
+  setTimeout(() => {
+    this.setState({
+      loading : false
+    })
+  }, 2000)
+}
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -55,7 +62,9 @@ export default class Address extends Component {
         </NavItem>
       );
     });
-    return (
+    return this.state.loading ? (
+      <Loader loading={this.state.loading} />
+    ) : (
       <Row className="address-tabs">
         <Col>
           <Nav tabs style={{ backgroundColor: "#ED734A" }}>

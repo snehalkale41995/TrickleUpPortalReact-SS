@@ -20,11 +20,11 @@ export default {
           url: "/beneficiary/bulkUploadBeneficiary",
           icon: "fa fa-upload"
         },
-        {
-          name: "Inactive Beneficiary List",
-          url: "/beneficiary/inactiveUser",
-          icon: "fa fa-users"
-        }
+        // {
+        //   name: "Inactive Beneficiary List",
+        //   url: "/beneficiary/inactiveUser",
+        //   icon: "fa fa-users"
+        // }
       ]
     },
     {
@@ -104,6 +104,11 @@ export default {
       icon: "fa fa-cog",
       children: [
         {
+          name: "Operational Users",
+          url: "/settings/operationalUser",
+          icon: "fa fa-users"
+        },
+        {
           name: "My Profile",
           url: "/settings/Myprofile",
           icon: "fa fa-user"
@@ -112,14 +117,11 @@ export default {
           name: "Change Password",
           url: "/settings/ChangePassword",
           icon: "fa fa-cog"
-        }
+        },
+        
       ]
     },
-     {
-      name: "Operational User",
-      url: "/operationalUser",
-      icon: "fa fa-users"
-    }
+     
   ]
 };
 

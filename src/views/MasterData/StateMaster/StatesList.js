@@ -20,7 +20,7 @@ class StatesList extends Component {
       selectedState: "",
       modalFlag: false,
       stateToEdit: {},
-      loading: true,
+      loading: false,
       showForm: false,
       modalStatus: false,
       stateToDelete: {},
@@ -30,11 +30,11 @@ class StatesList extends Component {
   componentWillMount() {
     this.props.getStatesList();
     let compRef = this;
-    setTimeout(() => {
-      compRef.setState({
-        loading: false
-      });
-    }, 2000);
+    // setTimeout(() => {
+    //   compRef.setState({
+    //     loading: false
+    //   });
+    // }, 2000);
   }
 
   onStateValueChange(value) {

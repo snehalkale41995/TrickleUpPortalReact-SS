@@ -62,7 +62,8 @@ class Login extends Component {
       localStorage.setItem("userDetails", loggedInUserDetails);
       setTimeout(() => {
         localStorage.clear();
-      }, 3600000);
+        window.location.reload();
+      }, 1800000 );
       toast.success(actionName + " Successfull...", {
         position: toast.POSITION.BOTTOM_RIGHT
       });

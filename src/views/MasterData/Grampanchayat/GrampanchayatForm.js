@@ -7,7 +7,7 @@ import DropdownSelect from "../../../components/InputElement/Dropdown";
 import InputElement from "../../../components/InputElement/InputElement";
 import GrampanchayatList from "./GrampanchayatList";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import Loader from "../../../components/Loader/Loader";
@@ -145,12 +145,14 @@ class GrampanchayatForm extends Component {
     ) {
       return true;
     } else {
-      !grampanchayat.GrampanchayatName ||
-      grampanchayat.GrampanchayatName.trim().length === 0
-        ? (grampanchayat.GrampanchayatNameRequired = true)
-        : null;
-      !grampanchayat.District ? (grampanchayat.DistrictRequired = true) : null;
-      !grampanchayat.State ? (grampanchayat.StateRequired = true) : null;
+      if (
+        !grampanchayat.GrampanchayatName ||
+        grampanchayat.GrampanchayatName.trim().length === 0
+      )
+        grampanchayat.GrampanchayatNameRequired = true;
+
+      if (!grampanchayat.District) grampanchayat.DistrictRequired = true;
+      if (!grampanchayat.State) grampanchayat.StateRequired = true;
 
       this.setState({
         grampanchayat: grampanchayat

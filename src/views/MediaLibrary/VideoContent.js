@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Button, Col, Row, FormGroup } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import CardLayout from "../../components/Cards/CardLayout";
-import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import * as actions from "../../store/actions";
 import { connect } from "react-redux";

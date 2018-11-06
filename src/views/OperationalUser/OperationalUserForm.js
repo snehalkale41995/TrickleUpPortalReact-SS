@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
@@ -240,7 +240,7 @@ class OperationalUserForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/operationalUser");
+              compRef.props.history.push("/settings/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -287,7 +287,7 @@ class OperationalUserForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/operationalUser");
+              compRef.props.history.push("/settings/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -303,7 +303,7 @@ class OperationalUserForm extends Component {
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     user.PhoneNumber = user.PhoneNumber.trim();
     if (user.Aadhaar) {
-      user.Aadhaar.length !== 12 ? (InvalidAdhaar = true) : null;
+      if (user.Aadhaar.length !== 12) InvalidAdhaar = true;
     }
     if (
       user.Name.trim().length > 0 &&
@@ -353,7 +353,7 @@ class OperationalUserForm extends Component {
       user.UserIdInvalid = false;
     }
 
-    if (user.Age && user.Age < 0) user.AgeInvalid = true;
+    if (user.Age && user.Age <= 0) user.AgeInvalid = true;
     if (!user.Age) {
       user.AgeRequired = true;
       user.AgeInvalid = false;
@@ -414,7 +414,7 @@ class OperationalUserForm extends Component {
       <CardLayout
         name="Operational User Form"
         navigation={true}
-        navigationRoute="/operationalUser"
+        navigationRoute="/settings/operationalUser"
       >
         <FormGroup row />
         <div className="div-padding">

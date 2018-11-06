@@ -14,6 +14,8 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import DropdownSelect from "../../components/InputElement/Dropdown";
 import * as constants from "../../constants/StatusConstants";
+import ActiveOperationalUserTable from "./ActiveOperationalUserTable";
+import InActiveOperationalUserTable from "./InActiveOperationalUserTable";
 class OperationalUserList extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +110,7 @@ class OperationalUserList extends Component {
   }
 
   render() {
-    const sortingOptions = {
+    const sortingOptionsActive = {
       defaultSortName: "Name",
       defaultSortOrder: "asc",
       sizePerPageList: [
@@ -126,9 +128,30 @@ class OperationalUserList extends Component {
         },
         {
           text: "All",
-          value: this.state.tableStatus
-            ? this.props.operationalUsers.length
-            : this.props.inactiveOperationalUsers.length
+          value: this.props.activeOperationalUsers.length
+        }
+      ],
+      sizePerPage: 5
+    };
+    const sortingOptionsInActive = {
+      defaultSortName: "Name",
+      defaultSortOrder: "asc",
+      sizePerPageList: [
+        {
+          text: "5",
+          value: 5
+        },
+        {
+          text: "10",
+          value: 10
+        },
+        {
+          text: "20",
+          value: 20
+        },
+        {
+          text: "All",
+          value: this.props.inActiveOperationalUsers.length
         }
       ],
       sizePerPage: 5
@@ -137,7 +160,7 @@ class OperationalUserList extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
-        name="Operational User"
+        name="Operational Users"
         buttonName="Add User"
         buttonLink={`${this.props.match.url}/operationalUser`}
       >
@@ -155,125 +178,20 @@ class OperationalUserList extends Component {
         </Row>
         <FormGroup row>
           <Col xs="12" md="12">
-            <BootstrapTable
-              ref="table"
-              data={
-                this.state.tableStatus
-                  ? this.props.operationalUsers
-                  : this.props.inactiveOperationalUsers
-              }
-              pagination={true}
-              search={true}
-              options={sortingOptions}
-              exportCSV={true}
-              csvFileName="OperationalUserList.csv"
-              hover={true}
-            >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
-                Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Name"
-                headerAlign="left"
-                width="40"
-                csvHeader="Name"
-                dataSort={true}
-              >
-                Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="PhoneNumber"
-                headerAlign="left"
-                width="40"
-                csvHeader="Phone Number"
-                dataSort={true}
-              >
-                Phone Number
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="UserId"
-                headerAlign="left"
-                width="40"
-                csvHeader="Email Id"
-                dataSort={true}
-              >
-                Email Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Age"
-                csvHeader="Age"
-                export={true}
-                hidden
+            {this.state.tableStatus ? (
+              <ActiveOperationalUserTable
+                operationalUsers={this.props.activeOperationalUsers}
+                sortingOptions={sortingOptionsActive}
+                onEditBeneficiary={this.onEditBeneficiary.bind(this)}
+                onDeleteBeneficiary={this.onDeleteBeneficiary.bind(this)}
               />
-              <TableHeaderColumn
-                dataField="GenderName"
-                csvHeader="Gender"
-                export={true}
-                hidden
+            ) : (
+              <InActiveOperationalUserTable
+                operationalUsers={this.props.inActiveOperationalUsers}
+                sortingOptions={sortingOptionsInActive}
+                onDeleteBeneficiary={this.onDeleteBeneficiary.bind(this)}
               />
-              <TableHeaderColumn
-                dataField="StateName"
-                csvHeader="State"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="DistrictName"
-                csvHeader="District"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="GrampanchayatName"
-                csvHeader="Grampanchayat"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="VillageName"
-                csvHeader="Village"
-                export={true}
-                hidden
-              />
-              <TableHeaderColumn
-                dataField="LanguageName"
-                csvHeader="Language"
-                export={true}
-                hidden
-              />
-              {this.state.tableStatus ? (
-                <TableHeaderColumn
-                  dataField="edit"
-                  dataFormat={this.onEditBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Edit
-                </TableHeaderColumn>
-              ) : null}
-              {this.state.tableStatus ? (
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Deactivate
-                </TableHeaderColumn>
-              ) : (
-                <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteBeneficiary.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Activate
-                </TableHeaderColumn>
-              )}
-            </BootstrapTable>
+            )}
           </Col>
           <ToastContainer autoClose={2000} />
         </FormGroup>
@@ -295,8 +213,8 @@ class OperationalUserList extends Component {
 const mapStateToProps = state => {
   return {
     beneficiaryList: state.beneficiaryReducer.beneficiaryList,
-    operationalUsers: state.beneficiaryReducer.operationalUsers,
-    inactiveOperationalUsers: state.beneficiaryReducer.inactiveOperationalUsers,
+    activeOperationalUsers: state.beneficiaryReducer.activeOperationalUsers,
+    inActiveOperationalUsers: state.beneficiaryReducer.inActiveOperationalUsers,
     beneficiaryError: state.beneficiaryReducer.beneficiaryError
   };
 };

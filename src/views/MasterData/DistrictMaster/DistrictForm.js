@@ -6,7 +6,7 @@ import { FormGroup, Col, Button, Label } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import InputElement from "../../../components/InputElement/InputElement";
 import DistrictsList from "./DistrictsList";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import _ from "lodash";

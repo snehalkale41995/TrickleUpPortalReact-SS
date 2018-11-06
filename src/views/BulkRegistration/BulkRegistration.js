@@ -11,8 +11,7 @@ import uuid from "uuid";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import Loader from "../../components/Loader/Loader";
-import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 
@@ -103,7 +102,7 @@ class BulkRegistration extends Component {
   onSubmit() {
     let beneficiaries = [...this.state.CSVdata];
     let csvFileRequired = false;
-    if (beneficiaries.length == 0) {
+    if (beneficiaries.length === 0) {
       csvFileRequired = true;
       this.setState({ csvFileRequired: true });
     }

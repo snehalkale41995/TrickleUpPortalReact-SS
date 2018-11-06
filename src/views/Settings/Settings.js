@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AppConfig from "../../constants/AppConfig";
@@ -26,7 +26,6 @@ class Settings extends Component {
         PhoneNumber: "", //no
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
-        UserId: "",
         UserIdRequired: false,
         UserIdInvalid: false,
         Age: "", //no
@@ -304,7 +303,7 @@ class Settings extends Component {
       user.UserIdInvalid = false;
     }
 
-    if (user.Age && user.Age < 0) user.AgeInvalid = true;
+    if (user.Age && user.Age <= 0) user.AgeInvalid = true;
     if (!user.Age) {
       user.AgeRequired = true;
       user.AgeInvalid = false;
@@ -575,7 +574,7 @@ const mapStateToProps = state => {
     districtsList: state.districtReducer.districtsList,
     grampanchayatsList: state.grampanchayatReducer.grampanchayatsList,
     villagesList: state.villageReducer.villagesList,
-    beneficiaryList: state.beneficiaryReducer.beneficiaryList,
+    activeBeneficiaryList: state.beneficiaryReducer.activeBeneficiaryList,
     rolesList: state.rolesReducer.rolesList,
     gendersList: state.gendersReducer.gendersList,
     languagesList: state.languagesReducer.languagesList,

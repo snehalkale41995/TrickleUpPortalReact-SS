@@ -47,7 +47,7 @@ export const getCropsList = () => {
 export const getCropSteps = () => {
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/Cultivation_Steps/GetCultivation_Steps`)
+      .get(`${AppConfig.serverURL}/api/Cultivation_Steps/GetCultivation_StepsLan?langCode=26`)
       .then(response => {
         let cropSteps = response.data.data.Cultivation_Steps;
         dispatch(storeCropSteps(cropSteps));
@@ -61,7 +61,7 @@ export const getCropStepsMaterial = () => {
   return dispatch => {
     axios
       .get(
-        `${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material`
+        `${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material?langCode=26`
       )
       .then(response => {
         dispatch(storeCropStepMaterials(response.data.data.CropSteps_Material));

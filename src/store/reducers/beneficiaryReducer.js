@@ -1,14 +1,18 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  beneficiaryList: [],
+  activeBeneficiaryList: [],
+  inActiveBeneficiaryList: [],
+  activeOperationalUsers: [],
+  inActiveOperationalUsers: [],
+  // beneficiaryList: [],
   beneficiaryError: null,
   currentBeneficiary: null,
   bulkUploadHistory: [],
-  bulkUserData : [],
-  bulkUserError : false,
-  operationalUsers : [],
-  inactiveOperationalUsers : []
+  bulkUserData: [],
+  bulkUserError: false
+  //operationalUsers : [],
+  //inactiveOperationalUsers : []
 };
 
 const beneficiaryReducer = (state = initialState, action) => {
@@ -16,9 +20,10 @@ const beneficiaryReducer = (state = initialState, action) => {
     case actionTypes.GET_BENEFICIARY_LIST:
       return {
         ...state,
-        beneficiaryList: action.beneficiaryList,
-        operationalUsers : action.operationalUsers,
-        inactiveOperationalUsers : action.inactiveOperationalUsers,
+        activeBeneficiaryList: action.activeBeneficiaryList,
+        inActiveBeneficiaryList: action.inActiveBeneficiaryList,
+        activeOperationalUsers: action.activeOperationalUsers,
+        inActiveOperationalUsers: action.inActiveOperationalUsers,
         beneficiaryError: null
       };
     case actionTypes.LOG_BENEFICIARY_ERROR:
@@ -36,21 +41,21 @@ const beneficiaryReducer = (state = initialState, action) => {
         ...state,
         bulkUploadHistory: action.bulkUploadHistory
       };
-      case actionTypes.CLEAR_BENEFICIARY_ERROR:
+    case actionTypes.CLEAR_BENEFICIARY_ERROR:
       return {
         ...state,
         beneficiaryError: null
       };
-      case actionTypes.VALIDATE_BULKDATA_SUCCESS:
+    case actionTypes.VALIDATE_BULKDATA_SUCCESS:
       return {
         ...state,
-        bulkUserError : false
+        bulkUserError: false
       };
-       case actionTypes.VALIDATE_BULKDATA_ERROR:
+    case actionTypes.VALIDATE_BULKDATA_ERROR:
       return {
         ...state,
         bulkUserData: action.bulkUserData,
-        bulkUserError : true
+        bulkUserError: true
       };
     default:
       return state;
