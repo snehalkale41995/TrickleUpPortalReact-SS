@@ -73,7 +73,9 @@ class CropsMaterial extends Component {
       <CardLayout
         name="Crop Materials"
         buttonName="Add crop material"
-        buttonLink={`${this.props.match.url}/CropsMaterialForm`}
+        buttonLink={this}
+        active = "none"
+        //buttonLink={`${this.props.match.url}/CropsMaterialForm`}
       >
         <FormGroup row>
           <Col xs="12">

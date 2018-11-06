@@ -45,9 +45,9 @@ class Main extends Component {
     let user = localStorage.getItem("user");
     let userDetails = JSON.parse(localStorage.getItem("userDetails"));
     if(userDetails){
-      if(userDetails.role!=undefined && userDetails.role===2){
+      if(userDetails.role !== undefined && userDetails.role === 2){
        navArray =  _.filter(navigation.items, function(item) {
-       return item.url != '/operationalUser'
+       return item.url !== '/operationalUser'
        });
        navigationMenu = { items : navArray}
     }

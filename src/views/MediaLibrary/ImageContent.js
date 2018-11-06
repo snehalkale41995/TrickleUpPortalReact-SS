@@ -40,6 +40,7 @@ class ImageContent extends Component {
         buttonName="Add image"
         //buttonLink={`${this.props.match.url}/imageUpload`}
         buttonLink={this}
+        active = "none"
       >
       <Row>{imageCards}</Row>
       </CardLayout>

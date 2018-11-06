@@ -14,7 +14,7 @@ const VideoCards = props => (
             category={props.category}
             subCategory={props.subCategory}
             autoPlay={false}
-            mute={true}
+            mute={false}
             source={props.source}
           />
         </FormGroup>

@@ -153,6 +153,7 @@ class CropForm extends Component {
                       label="Crop name "
                       placeholder="Crop name"
                       value={crop.CropName}
+                      disabled={true}
                       required={crop.CropNameRequired}
                       onChange={event => this.onChangeName(event)}
                     />
@@ -165,6 +166,7 @@ class CropForm extends Component {
                       accept="image/*"
                       name="Crop Image"
                       label="Crop Image"
+                      disabled={true}
                       required={crop.CropImageRequired}
                       onChange={event => this.onImageChange(event)}
                     />
@@ -180,78 +182,86 @@ class CropForm extends Component {
                         variant={"pill"}
                         color={"primary"}
                         checked={crop.Ready}
+                        disabled={true}
                         onChange={this.onSwitch.bind(this)}
                       />
                       {this.state.cropStatus}
                     </Label>
                   </Col>
                 </FormGroup>
-                
               </Col>
               <Col md="6">
                 {/* {this.state.crop.renderURL !== "" ? ( */}
                 <img
                   src={this.state.crop.renderURL}
                   className="image-display"
+                  height={300}
+                  width={350}
                   alt=""
                 />
                 {/* ) : null} */}
               </Col>
             </FormGroup>
           </div>
-          <div style={{ marginTop: -70 }}>
-            <CardLayout subName="Audio Allocation" buttonName = "Add Audio" buttonLink={this}>
-              <FormGroup row>
-                <Col xs="12" style={{marginTop : -10}}>
-                  <BootstrapTable
-                    ref="table"
-                    data={this.props.currentCropAudioAllocation}
-                    pagination={true}
-                    search={true}
-                    options={sortingOptions}
-                    hover={true}
-                  >
-                    <TableHeaderColumn
-                      dataField="Id"
-                      headerAlign="left"
-                      isKey
-                      hidden
+          {this.props.currentCropAudioAllocation.length > 0 ? (
+            <div style={{ marginTop: -50 }}>
+              <CardLayout
+                subName="Audio Allocation"
+                buttonName="Add Audio"
+                buttonLink={this}
+                active="none"
+              >
+                <FormGroup row>
+                  <Col xs="12" style={{ marginTop: -10 }}>
+                    <BootstrapTable
+                      ref="table"
+                      data={this.props.currentCropAudioAllocation}
+                      pagination={true}
+                      search={true}
+                      options={sortingOptions}
+                      hover={true}
                     >
-                      Id
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="FieldType"
-                      headerAlign="left"
-                      width="15"
-                      dataSort={true}
-                    >
-                      Field Type
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="LanguageName"
-                      headerAlign="left"
-                      width="30"
-                      dataSort={true}
-                    >
-                      Language
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="FileName"
-                      headerAlign="left"
-                      width="30"
-                      dataSort={true}
-                    >
-                      File Name
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="Audio"
-                      headerAlign="left"
-                      width="60"
-                      dataFormat={this.playAudio.bind(this)}
-                    >
-                      Audio
-                    </TableHeaderColumn>
-                    {/* <TableHeaderColumn
+                      <TableHeaderColumn
+                        dataField="Id"
+                        headerAlign="left"
+                        isKey
+                        hidden
+                      >
+                        Id
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="FieldType"
+                        headerAlign="left"
+                        width="15"
+                        dataSort={true}
+                      >
+                        Field Type
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="LanguageName"
+                        headerAlign="left"
+                        width="30"
+                        dataSort={true}
+                      >
+                        Language
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="FileName"
+                        headerAlign="left"
+                        width="30"
+                        dataSort={true}
+                      >
+                        File Name
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="Audio"
+                        headerAlign="left"
+                        width="60"
+                        dataFormat={this.playAudio.bind(this)}
+                      >
+                        Audio
+                      </TableHeaderColumn>
+                      {/* <TableHeaderColumn
                 dataField="edit"
                 dataFormat={this.onEditState.bind(this)}
                 headerAlign="left"
@@ -269,37 +279,47 @@ class CropForm extends Component {
               >
                 Deactivate
               </TableHeaderColumn> */}
-                  </BootstrapTable>
-                </Col>
-              </FormGroup>
-            </CardLayout>
-          </div>
+                    </BootstrapTable>
+                  </Col>
+                </FormGroup>
+              </CardLayout>
+            </div>
+          ) : null}
+
           {this.state.updateFlag ? (
-                  <FormGroup row>
-                    <Col md="1">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Save
-                      </Button>
-                    </Col>
-                  </FormGroup>
-                ) : (
-                  <FormGroup row>
-                    <Col md="2">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Create
-                      </Button>
-                    </Col>
-                    <Col md="1">
-                      <Button className="theme-reset-btn"> Reset</Button>
-                    </Col>
-                  </FormGroup>
-                )}
+            <FormGroup row>
+              <Col md="1">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={() => this.onSubmit()}
+                  style={{ pointerEvents: "none" }}
+                >
+                  Save
+                </Button>
+              </Col>
+            </FormGroup>
+          ) : (
+            <FormGroup row>
+              <Col md="2">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={() => this.onSubmit()}
+                  style={{ pointerEvents: "none" }}
+                >
+                  Create
+                </Button>
+              </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  style={{ pointerEvents: "none" }}
+                >
+                  {" "}
+                  Reset
+                </Button>
+              </Col>
+            </FormGroup>
+          )}
         </CardLayout>
       </div>
     );

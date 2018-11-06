@@ -45,6 +45,7 @@ class AudioContent extends Component {
         buttonName="Add audio"
         //buttonLink={`${this.props.match.url}/audioUpload`}
         buttonLink={this}
+        active = "none"
       >
         <Row>{audioCards}</Row>
       </CardLayout>

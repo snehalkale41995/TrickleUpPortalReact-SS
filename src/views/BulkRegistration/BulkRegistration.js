@@ -154,12 +154,16 @@ class BulkRegistration extends Component {
           value: 5
         },
         {
+          text: "10",
+          value: 10
+        },
+        {
           text: "20",
           value: 20
         },
         {
           text: "All",
-          value: this.state.CSVdata.length
+          value: this.props.bulkUploadHistory.length
         }
       ],
       sizePerPage: 5

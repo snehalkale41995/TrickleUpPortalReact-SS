@@ -240,7 +240,7 @@ class OperationalUserForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/settings/operationalUser");
+              compRef.props.history.push("/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -287,7 +287,7 @@ class OperationalUserForm extends Component {
           setTimeout(() => {
             if (!compRef.props.beneficiaryError) {
               compRef.onReset();
-              compRef.props.history.push("/settings/operationalUser");
+              compRef.props.history.push("/operationalUser");
             }
           }, 1000);
         }, 1000);
@@ -299,7 +299,7 @@ class OperationalUserForm extends Component {
   validData() {
     let user = { ...this.state.user };
     let InvalidAdhaar = false;
-    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     user.PhoneNumber = user.PhoneNumber.trim();
     if (user.Aadhaar) {
@@ -331,7 +331,7 @@ class OperationalUserForm extends Component {
     let validPhone =
       /^\d+$/.test(user.PhoneNumber.trim()) &&
       user.PhoneNumber.trim().length === 10;
-    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailTest =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     if (user.UserId && !validEmail) {
       user.UserIdInvalid = true;
@@ -414,7 +414,7 @@ class OperationalUserForm extends Component {
       <CardLayout
         name="Operational User Form"
         navigation={true}
-        navigationRoute="/settings/operationalUser"
+        navigationRoute="/operationalUser"
       >
         <FormGroup row />
         <div className="div-padding">

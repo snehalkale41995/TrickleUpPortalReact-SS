@@ -134,7 +134,7 @@ const routes = [
   { path: "/settings/Myprofile", name: "Settings", component: Settings },
   { path: "/settings/ChangePassword", name: "ChangePassword", component: ChangePassword },
   { path: "/beneficiary/inactiveUser", name: "InactiveUser", component: InactiveUser },
-  { path: "/settings/operationalUser", name: "OperationalUser", component: OperationalUser },
+  { path: "/operationalUser", name: "OperationalUser", component: OperationalUser },
   { path: "/operationalUser/operationalUserList", name: "OperationalUserList", component: OperationalUser },
 ];
 

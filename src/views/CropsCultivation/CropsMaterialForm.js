@@ -81,7 +81,7 @@ class CropStepsForm extends Component {
                   type="text"
                   name="Material_Name"
                   label="Material Name"
-                  //disabled ={this.state.cropNameDisabled}
+                  disabled={true}
                   placeholder="Material Name"
                   value={cropMaterial.Material_Name}
                   required={cropMaterial.Material_NameRequired}
@@ -93,7 +93,7 @@ class CropStepsForm extends Component {
                   type="text"
                   name="Step_Name"
                   label="Step Name"
-                  //disabled ={this.state.cropNameDisabled}
+                  disabled={true}
                   placeholder="Step Name"
                   value={cropMaterial.Step_Name}
                   required={cropMaterial.Step_NameRequired}
@@ -107,7 +107,7 @@ class CropStepsForm extends Component {
                   type="text"
                   name="Material_Transaction"
                   label="Material Transaction"
-                  //disabled ={this.state.cropNameDisabled}
+                  disabled={true}
                   placeholder="Material_Transaction"
                   value={cropMaterial.Material_Transaction}
                   required={cropMaterial.Material_TransactionRequired}
@@ -119,7 +119,7 @@ class CropStepsForm extends Component {
                   type="text"
                   name="Quantity"
                   label="Quantity"
-                  //disabled ={this.state.cropNameDisabled}
+                  disabled={true}
                   placeholder="Quantity"
                   value={cropMaterial.Quantity}
                   required={cropMaterial.QuantityRequired}
@@ -133,7 +133,7 @@ class CropStepsForm extends Component {
                   type="text"
                   name="Per_Decimal_Price"
                   label="Per Decimal Price"
-                  //disabled ={this.state.cropNameDisabled}
+                  disabled={true}
                   placeholder="Per_Decimal_Price"
                   value={cropMaterial.Per_Decimal_Price}
                   required={cropMaterial.Per_Decimal_PriceRequired}
@@ -147,6 +147,7 @@ class CropStepsForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={() => this.onSubmit()}
+                    style={{ pointerEvents: "none" }}
                   >
                     Save
                   </Button>
@@ -158,12 +159,13 @@ class CropStepsForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={() => this.onSubmit()}
+                    style={{ pointerEvents: "none" }}
                   >
                     Create
                   </Button>
                 </Col>
                 <Col md="1">
-                  <Button className="theme-reset-btn"> Reset</Button>
+                  <Button className="theme-reset-btn" style={{ pointerEvents: "none" }}> Reset</Button>
                 </Col>
               </FormGroup>
             )}

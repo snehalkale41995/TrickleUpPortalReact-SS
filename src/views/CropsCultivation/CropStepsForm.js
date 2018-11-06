@@ -17,7 +17,7 @@ class CropStepsForm extends Component {
     super(props);
     this.state = {
       updateFlag: false,
-      cropNameDisabled : false,
+      cropNameDisabled: false,
       cropStep: {
         CropName: "",
         MediaURL: "",
@@ -38,12 +38,12 @@ class CropStepsForm extends Component {
         let currentCropStep = _.find(this.props.cropSteps, function(cropStep) {
           return cropStep.Id == id;
         });
-       currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
+        currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
         this.setState({
           updateFlag: true,
           cropStep: currentCropStep,
           loading: false,
-          cropNameDisabled :true
+          cropNameDisabled: true
         });
       }
     } else {
@@ -102,107 +102,118 @@ class CropStepsForm extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-        <CardLayout
-          name="Crop Step Form"
-          navigation={true}
-          navigationRoute="/cropCultivations/CropSteps"
-        >
-          <div className="div-padding">
-            <FormGroup row>
-              <Col xs="12" md="6">
-                <FormGroup row>
-                  <Col xs="10" md="8">
-                    <InputElement
-                      type="text"
-                      name="CropName"
-                      label="Crop name "
-                      disabled ={this.state.cropNameDisabled}
-                      placeholder="Crop name"
-                      value={cropStep.CropName}
-                      required={cropStep.CropNameRequired}
-                      onChange={event => this.onChangeName(event)}
-                    />
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col xs="10" md="8">
+      <CardLayout
+        name="Crop Step Form"
+        navigation={true}
+        navigationRoute="/cropCultivations/CropSteps"
+      >
+        <div className="div-padding">
+          <FormGroup row>
+            <Col xs="12" md="6">
+              <FormGroup row>
+                <Col xs="10" md="8">
                   <InputElement
-                      type="text"
-                      name="Step_Name"
-                      label="Step Name"
-                      placeholder="Step Name"
-                      value={cropStep.Step_Name}
-                      required={cropStep.Step_NameRequired}
-                      onChange={event => this.onChangeName(event)}
-                    />
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col xs="10" md="8">
+                    type="text"
+                    name="CropName"
+                    label="Crop name "
+                    disabled={true}
+                    placeholder="Crop name"
+                    value={cropStep.CropName}
+                    required={cropStep.CropNameRequired}
+                    onChange={event => this.onChangeName(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="10" md="8">
                   <InputElement
-                      type="textarea"
-                      name="Step_Description"
-                      label="Step Description"
-                      placeholder="Step_Description"
-                      value={cropStep.Step_Description}
-                      //required={cropStep.CropNameRequired}
-                      onChange={event => this.onChangeName(event)}
-                    />
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col xs="10" md="8">
+                    type="text"
+                    name="Step_Name"
+                    label="Step Name"
+                    placeholder="Step Name"
+                    value={cropStep.Step_Name}
+                    disabled={true}
+                    required={cropStep.Step_NameRequired}
+                    onChange={event => this.onChangeName(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="10" md="8">
                   <InputElement
-                      type="file"
-                      name="MediaURL"
-                      label="Upload media"
-                      //placeholder="MediaURL"
-                      //value={cropStep.Step_Description}
-                      //required={cropStep.CropNameRequired}
-                      onChange={event => this.onImageChange(event)}
-                    />
+                    type="textarea"
+                    name="Step_Description"
+                    label="Step Description"
+                    placeholder="Step_Description"
+                    value={cropStep.Step_Description}
+                    disabled={true}
+                    //required={cropStep.CropNameRequired}
+                    onChange={event => this.onChangeName(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="10" md="8">
+                  <InputElement
+                    type="file"
+                    name="MediaURL"
+                    label="Upload media"
+                    disabled={true}
+                    //placeholder="MediaURL"
+                    //value={cropStep.Step_Description}
+                    //required={cropStep.CropNameRequired}
+                    onChange={event => this.onImageChange(event)}
+                  />
+                </Col>
+              </FormGroup>
+              {this.state.updateFlag ? (
+                <FormGroup row>
+                  <Col md="1">
+                    <Button
+                      className="theme-positive-btn"
+                      onClick={() => this.onSubmit()}
+                      style={{ pointerEvents: "none" }}
+                    >
+                      Save
+                    </Button>
                   </Col>
                 </FormGroup>
-                {this.state.updateFlag ? (
-                  <FormGroup row>
-                    <Col md="1">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Save
-                      </Button>
-                    </Col>
-                  </FormGroup>
-                ) : (
-                  <FormGroup row>
-                    <Col md="2">
-                      <Button
-                        className="theme-positive-btn"
-                        onClick={() => this.onSubmit()}
-                      >
-                        Create
-                      </Button>
-                    </Col>
-                    <Col md="1">
-                      <Button className="theme-reset-btn"> Reset</Button>
-                    </Col>
-                  </FormGroup>
-                )}
-              </Col>
-              <Col md="6">
-                {/* {this.state.cropStep.renderURL !== "" ? ( */}
-                <img
-                  src={this.state.cropStep.renderURL}
-                  style={{ height: 300, width: 350 }}
-                  alt=""
-                />
-                {/* ) : null} */}
-              </Col>
-            </FormGroup>
-          </div>
-        </CardLayout>
-     
+              ) : (
+                <FormGroup row>
+                  <Col md="2">
+                    <Button
+                      className="theme-positive-btn"
+                      onClick={() => this.onSubmit()}
+                      style={{ pointerEvents: "none" }}
+                    >
+                      Create
+                    </Button>
+                  </Col>
+                  <Col md="1">
+                    <Button
+                      className="theme-reset-btn"
+                      style={{ pointerEvents: "none" }}
+                    >
+                      {" "}
+                      Reset
+                    </Button>
+                  </Col>
+                </FormGroup>
+              )}
+            </Col>
+            <Col md="6">
+              {/* {this.state.cropStep.renderURL !== "" ? ( */}
+              <img
+                src={this.state.cropStep.renderURL}
+                height ={300}
+                width ={350}
+                alt=""
+              />
+              {/* ) : null} */}
+            </Col>
+          </FormGroup>
+        </div>
+      </CardLayout>
     );
   }
 }

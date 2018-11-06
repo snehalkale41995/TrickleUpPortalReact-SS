@@ -99,6 +99,7 @@ class RegistrationList extends Component {
     const sortingOptionsActive = {
       defaultSortName: "Name",
       defaultSortOrder: "asc",
+      noDataText: 'No records found for active beneficiaries' ,
       sizePerPageList: [
         {
           text: "5",
@@ -122,6 +123,7 @@ class RegistrationList extends Component {
     const sortingOptionsInActive = {
       defaultSortName: "Name",
       defaultSortOrder: "asc",
+      noDataText: 'No records found for inactive beneficiaries' ,
       sizePerPageList: [
         {
           text: "5",

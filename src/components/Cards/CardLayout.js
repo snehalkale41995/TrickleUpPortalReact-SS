@@ -33,6 +33,7 @@ const CardLayout = props => (
                       <Button
                         type="button"
                         className="theme-positive-btn card-btn"
+                        style={{ pointerEvents: props.active }}
                       >
                         <i className="fa fa-plus" />&nbsp; {props.buttonName}
                       </Button>

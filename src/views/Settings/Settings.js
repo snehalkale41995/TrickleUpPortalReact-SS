@@ -249,7 +249,7 @@ class Settings extends Component {
   validData() {
     let user = { ...this.state.user };
     let InvalidAdhaar = false;
-    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     user.PhoneNumber = user.PhoneNumber.trim();
     if (user.Aadhaar) {
@@ -281,7 +281,7 @@ class Settings extends Component {
     let validPhone =
       /^\d+$/.test(user.PhoneNumber.trim()) &&
       user.PhoneNumber.trim().length === 10;
-    var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     if (user.UserId && !validEmail) {
       user.UserIdInvalid = true;
