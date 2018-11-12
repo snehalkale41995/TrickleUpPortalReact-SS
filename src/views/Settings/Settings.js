@@ -23,6 +23,7 @@ class Settings extends Component {
         UserId: null,
         Name: "",
         NameRequired: false,
+        AgeInvalid: false, 
         PhoneNumber: "", //no
         PhoneNumberRequired: false,
         PhoneNumberInvalid: false,
@@ -100,7 +101,7 @@ class Settings extends Component {
     reader.readAsDataURL(file);
   }
 
-  // Method for set only Numeric
+   // Method for set only Numeric
   setInputToNumeric(e) {
     const re = /[0-9]+/g;
     if (!re.test(e.key)) {
@@ -117,6 +118,19 @@ class Settings extends Component {
       user: user
     });
   }
+  
+  // Method for age validation
+  setAgeToNumeric(e) {
+    let user = { ...this.state.user };
+    let re; 
+    if(user.Age.length==0)
+    re = /[1-9]+/g;
+    else re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
   onGenderSelection(value) {
     let user = { ...this.state.user };
     user.Gender = value;
@@ -125,6 +139,7 @@ class Settings extends Component {
       genderRequired: false
     });
   }
+
   onStateSelection(value) {
     let user = { ...this.state.user };
     user.State = value;
@@ -335,6 +350,7 @@ class Settings extends Component {
       UserId: "",
       Age: "", //no
       AgeRequired: false,
+      AgeInvalid: false,
       Gender: "", //id
       State: "", //id
       District: "", //id
@@ -428,8 +444,9 @@ class Settings extends Component {
                 maxLength={2}
                 placeholder="Please enter age"
                 value={user.Age}
-                onKeyPress={e => this.setInputToNumeric(e)}
+                onKeyPress={e => this.setAgeToNumeric(e)}
                 required={user.AgeRequired}
+                invalid={user.AgeInvalid}
                 onChange={event => this.onChangeInput(event)}
               />
             </Col>

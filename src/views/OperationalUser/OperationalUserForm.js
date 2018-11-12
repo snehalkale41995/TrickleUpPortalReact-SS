@@ -102,6 +102,18 @@ class OperationalUserForm extends Component {
     }
   }
 
+  // Method for age validation
+  setAgeToNumeric(e) {
+    let user = { ...this.state.user };
+    let re; 
+    if(user.Age.length==0)
+    re = /[1-9]+/g;
+    else re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
   onChangeInput(event) {
     let user = { ...this.state.user };
     user[event.target.name] = event.target.value;
@@ -468,7 +480,7 @@ class OperationalUserForm extends Component {
                 value={user.Age}
                 required={user.AgeRequired}
                 invalid={user.AgeInvalid}
-                onKeyPress={e => this.setInputToNumeric(e)}
+                onKeyPress={e => this.setAgeToNumeric(e)}
                 onChange={event => this.onChangeInput(event)}
               />
             </Col>

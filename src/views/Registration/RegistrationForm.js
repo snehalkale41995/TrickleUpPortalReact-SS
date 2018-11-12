@@ -369,6 +369,18 @@ class RegistrationForm extends Component {
       e.preventDefault();
     }
   }
+
+  // Method for age validation
+  setAgeToNumeric(e) {
+    let user = { ...this.state.user };
+    let re; 
+    if(user.Age.length==0)
+    re = /[1-9]+/g;
+    else re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
   onReset() {
     let userObj = {
       ...this.state.user,
@@ -462,11 +474,11 @@ class RegistrationForm extends Component {
                   type="text"
                   label="Age"
                   name="Age"
-                  maxLength={3}
-                  placeholder="Please enter age "
+                  maxLength={2}
+                  placeholder="Please enter age"
                   value={user.Age}
                   required={user.AgeRequired}
-                  onKeyPress={e => this.setInputToNumeric(e)}
+                  onKeyPress={e => this.setAgeToNumeric(e)}
                   invalid={user.AgeInvalid}
                   onChange={event => this.onChangeInput(event)}
                 />
