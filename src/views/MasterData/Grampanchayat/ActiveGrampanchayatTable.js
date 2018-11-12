@@ -22,7 +22,7 @@ class ActiveGrampanchayatTable extends Component {
           width="40"
           dataSort={true}
         >
-          Grampanchayat
+          Grampanchayat Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="DistrictName"
@@ -30,7 +30,7 @@ class ActiveGrampanchayatTable extends Component {
           width="40"
           dataSort={true}
         >
-          District
+          District Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="StateName"
@@ -38,7 +38,7 @@ class ActiveGrampanchayatTable extends Component {
           width="40"
           dataSort={true}
         >
-          State
+          State Name
         </TableHeaderColumn>
 
         <TableHeaderColumn

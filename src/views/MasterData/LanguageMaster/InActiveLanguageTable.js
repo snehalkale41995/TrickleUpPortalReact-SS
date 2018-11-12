@@ -16,14 +16,6 @@ class InActiveLanguageTable extends Component {
           Id
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="LanguageCode"
-          headerAlign="left"
-          width="30"
-          dataSort={true}
-        >
-          Language Code
-        </TableHeaderColumn>
-        <TableHeaderColumn
           dataField="LanguageName"
           headerAlign="left"
           width="30"
@@ -31,6 +23,15 @@ class InActiveLanguageTable extends Component {
         >
           Language Name
         </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="LanguageCode"
+          headerAlign="left"
+          width="30"
+          dataSort={true}
+        >
+          Language Code
+        </TableHeaderColumn>
+       
         <TableHeaderColumn
           dataField="delete"
           dataFormat={this.props.onDeleteState}

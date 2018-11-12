@@ -32,7 +32,7 @@ class InActiveStateTable extends Component {
           csvHeader="Code"
           dataSort={true}
         >
-          Code
+          State Code
         </TableHeaderColumn>
 
         <TableHeaderColumn

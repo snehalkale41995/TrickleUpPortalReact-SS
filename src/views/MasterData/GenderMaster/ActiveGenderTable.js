@@ -22,7 +22,7 @@ class ActiveGenderTable extends Component {
           csvHeader="State Name"
           dataSort={true}
         >
-          Gender
+          Gender Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="edit"
