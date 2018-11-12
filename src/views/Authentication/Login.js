@@ -60,10 +60,10 @@ class Login extends Component {
       );
       localStorage.setItem("user", compRef.props.loggedInUserId);
       localStorage.setItem("userDetails", loggedInUserDetails);
-      setTimeout(() => {
-        localStorage.clear();
-        window.location.reload();
-      }, 1800000 );
+      // setTimeout(() => {
+      //   localStorage.clear();
+      //   window.location.reload();
+      // }, 1800000 );
       toast.success(actionName + " Successfull...", {
         position: toast.POSITION.BOTTOM_RIGHT
       });

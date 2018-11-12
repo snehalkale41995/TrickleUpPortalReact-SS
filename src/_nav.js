@@ -99,6 +99,11 @@ export default {
       ]
     },
     {
+      name: "Feedback Responses",
+      url: "/feedbackResponses",
+      icon: "fa fa-commenting"
+    },
+    {
       name: "Operational Users",
       url: "/operationalUser",
       icon: "fa fa-users"

@@ -60,11 +60,10 @@ const GenderMaster = Loadable({
   loading: Loading
 });
 
-
-// const Grampanchayat = Loadable({
-//   loader: () => import("./views/MasterData/Grampanchayat.js"),
-//   loading: Loading
-// });
+const FeedbackResponse = Loadable({
+  loader: () => import("./views/Feedback/FeedbackResponse.js"),
+  loading: Loading
+});
 const CropsCultivations = Loadable({
   loader: () => import("./views/CropsCultivation/CropsCultivation.js"),
   loading: Loading
@@ -100,31 +99,35 @@ const OperationalUser = Loadable({
 const routes = [
   { path: "/", exact: true, name: "Dashboard", component: Main },
   { path: "/dashboard", component: Dashboard },
-  {path: "/beneficiary", exact: true,name: "Beneficiary", component: Registration },
-  { path: "/beneficiary/beneficiaryList", name: "Registration", component: Registration },
-  { path: "/beneficiary/bulkUploadBeneficiary", name: "", component: BulkRegistration },
+  {
+    path: "/beneficiary",
+    exact: true,
+    name: "Beneficiary",
+    component: Registration
+  },
+  {
+    path: "/beneficiary/beneficiaryList",
+    name: "Registration",
+    component: Registration
+  },
+  {
+    path: "/beneficiary/bulkUploadBeneficiary",
+    name: "",
+    component: BulkRegistration
+  },
   { path: "/mediaContent", name: "Media Content", component: MediaContent },
   { path: "/master", exact: true, component: AddressMaster },
   { path: "/master/roles", name: "Roles", component: RolesMaster },
   { path: "/master/address", name: "Address", component: AddressMaster },
-   { path: "/master/languages", name: "Languages", component: LanguageMaster },
- { path: "/master/genders", name: "Genders", component: GenderMaster },
-   
-  // { path: "/master/states", name: "States List", component: StatesMaster },
-  { path: "/cropCultivations", name: "States List", component: CropsCultivations },
-  
-  // { path: "/states/stateForm", name: "States Form" },
-  // {
-  //   path: "/master/districts",
-  //   name: "District Data",
-  //   component: DistrictMaster
-  // },
-  // { path: "/master/villages", name: "Village Data", component: Villages },
-  // {
-  //   path: "/master/grampanchayat",
-  //   name: "Grampanchayat Data",
-  //   component: Grampanchayat
-  // },
+  { path: "/master/languages", name: "Languages", component: LanguageMaster },
+  { path: "/master/genders", name: "Genders", component: GenderMaster },
+
+  {
+    path: "/cropCultivations",
+    name: "States List",
+    component: CropsCultivations
+  },
+
   {
     path: "/master/contacts",
     name: "Contacts",
@@ -132,10 +135,31 @@ const routes = [
   },
   { path: "/master/crops", name: "Crops Data", component: CropsData },
   { path: "/settings/Myprofile", name: "Settings", component: Settings },
-  { path: "/settings/ChangePassword", name: "ChangePassword", component: ChangePassword },
-  { path: "/beneficiary/inactiveUser", name: "InactiveUser", component: InactiveUser },
-  { path: "/operationalUser", name: "OperationalUser", component: OperationalUser },
-  { path: "/operationalUser/operationalUserList", name: "OperationalUserList", component: OperationalUser },
+  {
+    path: "/settings/ChangePassword",
+    name: "ChangePassword",
+    component: ChangePassword
+  },
+  {
+    path: "/beneficiary/inactiveUser",
+    name: "InactiveUser",
+    component: InactiveUser
+  },
+  {
+    path: "/feedbackResponses",
+    name: "FeedbackResponse",
+    component: FeedbackResponse
+  },
+  {
+    path: "/operationalUser",
+    name: "OperationalUser",
+    component: OperationalUser
+  },
+  {
+    path: "/operationalUser/operationalUserList",
+    name: "OperationalUserList",
+    component: OperationalUser
+  }
 ];
 
 export default routes;

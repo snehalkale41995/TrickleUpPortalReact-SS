@@ -32,10 +32,6 @@ const csvData = [
     "Role",
     "Language",
     "FCMToken"
-    // "CreatedBy",
-    // "CreatedOn",
-    // "Active"
-    //"BulkUploadId"
   ]
 ];
 class BulkRegistration extends Component {
@@ -48,28 +44,45 @@ class BulkRegistration extends Component {
       showTableHeaderFormat: false,
       csvFileRequired: false,
       uploadFlag: false,
-      bulkUserError: false
+      bulkUserError: false,
+      fileName: "",
+      clearCSV: false,
+      csvFileInvalid: false
     };
   }
   componentWillMount() {
     this.props.getBulkUploadHistory();
   }
 
-  handleData = data => {
-    this.setState({
-      showDataTable: true,
-      CSVdata: data,
-      csvFileRequired: false,
-      bulkUserError: false
-    });
+  handleData = (data, file) => {
+    if(data.length !== 0) {
+      this.setState({
+        csvFileInvalid: false,
+        clearCSV: false,
+        showDataTable: true,
+        CSVdata: data,
+        csvFileRequired: false,
+        bulkUserError: false
+      });
+    }else{
+      this.setState({
+        clearCSV: true,
+        CSVdata: data,
+        csvFileInvalid: true,
+      });
+    }
+   
   };
-
   onReset() {
     this.setState({
+      clearCSV: true,
       showDataTable: false,
       CSVdata: [],
       csvFileRequired: false,
-      bulkUserError: false
+      bulkUserError: false,
+      fileName: "",
+      uploadFlag: false,
+      csvFileInvalid: false
     });
   }
 
@@ -95,7 +108,13 @@ class BulkRegistration extends Component {
             });
       }, 1000);
     } else {
-      this.setState({ csvFileRequired: true });
+      if (beneficiaries.length === 0 && this.state.clearCSV) {
+          this.setState({
+            csvFileInvalid : true
+          })
+      } else {
+        this.setState({ csvFileRequired: true });
+      }
     }
   }
 
@@ -207,9 +226,6 @@ class BulkRegistration extends Component {
       "Role",
       "Language",
       "FCMToken"
-      // "CreatedBy",
-      // "CreatedOn",
-      // "Active"
     ];
     const tableFormat = keys.map(key => {
       return <td className="csv-table-border">{key}</td>;
@@ -227,14 +243,18 @@ class BulkRegistration extends Component {
                   <CsvParse
                     keys={keys}
                     onDataUploaded={this.handleData}
+                    value={this.state.fileName}
                     //onError={this.handleError}
                     render={onChange => (
                       <InputElement
+                        id="fileValue"
                         label="CSV file"
                         type="file"
-                        accept=".csv, .tsv"
+                        accept=".csv"
+                        value={this.state.clearCSV ? this.state.fileName : null}
                         onChange={onChange}
                         required={this.state.csvFileRequired}
+                        invalid={this.state.csvFileInvalid}
                       />
                     )}
                   />
@@ -242,7 +262,7 @@ class BulkRegistration extends Component {
                 <Col md="6">
                   <FormGroup row>
                     <Label>Format required for CSV : &nbsp; &nbsp;</Label>
-                    <CSVLink filename="_users.csv" data={csvData}>
+                    <CSVLink filename="_beneficiaryList.csv" data={csvData}>
                       Download
                     </CSVLink>
                     &nbsp; Or &nbsp;

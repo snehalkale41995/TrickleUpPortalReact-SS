@@ -29,7 +29,7 @@ class CropsMaterial extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: "none" }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50  }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -46,6 +46,7 @@ class CropsMaterial extends Component {
   render() {
     const sortingOptions = {
       defaultSortName: "Material_Name",
+      noDataText: "No records found for crop step materials",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {

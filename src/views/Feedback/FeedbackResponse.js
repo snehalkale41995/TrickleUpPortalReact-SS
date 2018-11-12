@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import AppConfig from "../../constants/AppConfig";
 
-class Crops extends Component {
+class FeedbackResponse extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +18,7 @@ class Crops extends Component {
     };
   }
   componentWillMount() {
-    this.props.getCropsList();
+   // this.props.getCropsList();
     // this.props.getDistrictsList();
     let compRef = this;
     setTimeout(() => {
@@ -40,23 +40,23 @@ class Crops extends Component {
 
   onEditState(cell, row) {
     return (
-      <Link to={`${this.props.match.url}/CropForm/${row.Id}`}>
+      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50 }}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
-  showImage(cell, row) {
-    return (
-      <img
-        src={`${AppConfig.serverURL}/${row.FilePath}`}
-        style={{ height: 50, width: 50 }}
-      />
-    );
-  }
+  // showImage(cell, row) {
+  //   return (
+  //     <img
+  //       src={`${AppConfig.serverURL}/${row.FilePath}`}
+  //       style={{ height: 50, width: 50 }}
+  //     />
+  //   );
+  // }
   render() {
     const sortingOptions = {
-      defaultSortName: "CropName",
-      noDataText: "No records found for crops",
+      //defaultSortName: "CropName",
+      noDataText: "No records found for feedback response",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -73,7 +73,7 @@ class Crops extends Component {
         },
         {
           text: "All",
-          value: this.props.cropsList.length
+          //value: this.props.cropsList.length
         }
       ],
       sizePerPage: 5
@@ -82,56 +82,52 @@ class Crops extends Component {
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
-        name="Crops"
-        buttonName="Add crop"
-        buttonLink={this}
-        active = "none"
-        //buttonLink={`${this.props.match.url}/CropForm`}
+        name="Feedback Response"
       >
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.props.cropsList}
+             // data={this.props.cropsList}
               pagination={true}
               search={true}
               options={sortingOptions}
               //exportCSV={true}
               hover={true}
-              csvFileName="Crops List"
+              //csvFileName="Crops List"
             >
               <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="CropName"
+               // dataField="CropName"
                 headerAlign="left"
                 width="40"
                 csvHeader="Crop Name"
                 dataSort={true}
               >
-                Crop Name
+                Feedback Provider Name
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="FilePath"
+               // dataField="FilePath"
                 headerAlign="left"
                 width="40"
-                dataFormat={this.showImage.bind(this)}
+                //dataFormat={this.showImage.bind(this)}
                 csvHeader="FilePath"
                 dataSort={true}
               >
-                Image
+                Rating
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="Ready"
+              //  dataField="Ready"
                 headerAlign="left"
                 width="40"
                 csvHeader="Active"
                 dataSort={true}
               >
-                Active
+                Comments
               </TableHeaderColumn>
-              <TableHeaderColumn
+              {/* <TableHeaderColumn
                 dataField="edit"
                 dataFormat={this.onEditState.bind(this)}
                 headerAlign="left"
@@ -148,7 +144,7 @@ class Crops extends Component {
                 export={false}
               >
                 Deactivate
-              </TableHeaderColumn>
+              </TableHeaderColumn> */}
             </BootstrapTable>
           </Col>
         </FormGroup>
@@ -158,13 +154,13 @@ class Crops extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cropsList: state.cropsReducer.cropsList
+    //cropsList: state.cropsReducer.cropsList
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCropsList: () => dispatch(actions.getCropsList())
+    //getCropsList: () => dispatch(actions.getCropsList())
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Crops);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackResponse);

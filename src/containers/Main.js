@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import { connect } from "react-redux";
 import * as actions from "../store/actions";
-import _ from 'lodash'
+import _ from "lodash";
 import {
   AppAside,
   AppBreadcrumb,
@@ -26,7 +26,7 @@ import Login from "../views/Authentication/Login";
 
 let routeStack;
 class Main extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this.props.getStatesList();
     this.props.getDistrictsList();
     this.props.getBeneficiaryList();
@@ -41,17 +41,19 @@ class Main extends Component {
   }
 
   render() {
-    let navArray = [], navigationMenu = navigation;
+    let navArray = [],
+      navigationMenu = navigation;
     let user = localStorage.getItem("user");
     let userDetails = JSON.parse(localStorage.getItem("userDetails"));
-    if(userDetails){
-      if(userDetails.role !== undefined && userDetails.role === 2){
-       navArray =  _.filter(navigation.items, function(item) {
-       return item.url !== '/operationalUser'
-       });
-       navigationMenu = { items : navArray}
-    }
-    else navigationMenu = navigation
+    if (userDetails) {
+      if (userDetails.role !== undefined && userDetails.role !== 1) {
+        navArray = _.filter(navigation.items, function(item) {
+          return (
+            item.url !== "/operationalUser" && item.url !== "/feedbackResponses"
+          );
+        });
+        navigationMenu = { items: navArray };
+      } else navigationMenu = navigation;
     }
     if (user) {
       routeStack = (
@@ -59,7 +61,7 @@ class Main extends Component {
           <AppHeader fixed>
             <DefaultHeader {...this.props} />
           </AppHeader>
-          <div className="app-body" >
+          <div className="app-body">
             <AppSidebar fixed display="lg">
               <AppSidebarHeader />
               <AppSidebarForm />
@@ -68,7 +70,7 @@ class Main extends Component {
               <AppSidebarMinimizer />
             </AppSidebar>
             <main className="main">
-            {/* <AppBreadcrumb appRoutes={routes}/> */}
+              {/* <AppBreadcrumb appRoutes={routes}/> */}
               <Container fluid>
                 <Switch>
                   {routes.map((route, idx) => {
@@ -108,24 +110,22 @@ class Main extends Component {
   }
 }
 const mapStateToProps = state => {
-  return {
-
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getStatesList : () => dispatch(actions.getStatesList()),
-    getDistrictsList : () => dispatch(actions.getDistrictsList()),
-    getBeneficiaryList : () => dispatch(actions.getBeneficiaryList()),
-    getCropsList : () => dispatch(actions.getCropsList()),
-    getRolesList : () => dispatch(actions.getRolesList()),
-    getGendersList : () => dispatch(actions.getGendersList()),
-    getLanguageList : () => dispatch(actions.getLanguageList()),
-    getVillagesList : () => dispatch(actions.getVillagesList()),
-    getGrampanchayatsList : () => dispatch(actions.getGrampanchayatsList()),
-    getCropSteps : () => dispatch(actions.getCropSteps()),
-    getCropStepsMaterial : () => dispatch(actions.getCropStepsMaterial())
+    getStatesList: () => dispatch(actions.getStatesList()),
+    getDistrictsList: () => dispatch(actions.getDistrictsList()),
+    getBeneficiaryList: () => dispatch(actions.getBeneficiaryList()),
+    getCropsList: () => dispatch(actions.getCropsList()),
+    getRolesList: () => dispatch(actions.getRolesList()),
+    getGendersList: () => dispatch(actions.getGendersList()),
+    getLanguageList: () => dispatch(actions.getLanguageList()),
+    getVillagesList: () => dispatch(actions.getVillagesList()),
+    getGrampanchayatsList: () => dispatch(actions.getGrampanchayatsList()),
+    getCropSteps: () => dispatch(actions.getCropSteps()),
+    getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial())
   };
 };
-export default connect(mapStateToProps,mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -147,7 +147,7 @@ class CropStepsForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={() => this.onSubmit()}
-                    style={{ pointerEvents: "none" }}
+                    style={{ pointerEvents: "none", opacity :  0.50  }}
                   >
                     Save
                   </Button>
@@ -159,7 +159,7 @@ class CropStepsForm extends Component {
                   <Button
                     className="theme-positive-btn"
                     onClick={() => this.onSubmit()}
-                    style={{ pointerEvents: "none" }}
+                    style={{ pointerEvents: "none", opacity :  0.50  }}
                   >
                     Create
                   </Button>
