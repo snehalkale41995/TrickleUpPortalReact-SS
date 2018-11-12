@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions";
-import { Col, Row, Card, CardBody, FormGroup } from "reactstrap";
-import Cards from "../../components/Cards/Cards";
-import { Bar, Line, Pie } from "react-chartjs-2";
+import { Col, Card, CardBody, FormGroup } from "reactstrap";
+import { Bar, Line} from "react-chartjs-2";
 import * as graphConstant from "../../constants/GraphConstants";
 const data = {
   labels: [

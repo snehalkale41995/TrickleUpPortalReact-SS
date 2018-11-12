@@ -6,7 +6,6 @@ import * as actions from "../store/actions";
 import _ from "lodash";
 import {
   AppAside,
-  AppBreadcrumb,
   AppFooter,
   AppHeader,
   AppSidebar,

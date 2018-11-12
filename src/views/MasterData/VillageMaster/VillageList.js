@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button, Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
+
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import VillageForm from "./VillageForm";
@@ -35,13 +34,11 @@ class VillageList extends Component {
   }
 
   onDeleteVillage(cell, row) {
-    let componentRef = this;
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
   onDelete(row) {
     this.setState({
@@ -180,93 +177,6 @@ class VillageList extends Component {
                   onActivateVillage={this.onActivateVillage.bind(this)}
                 />
               )}
-              {/* <BootstrapTable
-                ref="table"
-                data={this.state.tableStatus ? this.props.villages : this.props.inActiveVillages}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                //exportCSV={true}
-                hover={true}
-                csvFileName="VillagesList.csv"
-              >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="VillageName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Village Name"
-                  dataSort={true}
-                >
-                  Village Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="GrampanchayatName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Grampanchayat"
-                  dataSort={true}
-                >
-                  Grampanchayat
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="DistrictName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="District"
-                  dataSort={true}
-                >
-                  District
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="State"
-                  dataSort={true}
-                >
-                  State
-                </TableHeaderColumn>
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="edit"
-                    dataFormat={this.onEditVillage.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Edit
-                  </TableHeaderColumn>
-                ) : null}
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onDeleteVillage.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Deactivate
-                  </TableHeaderColumn>
-                ) : (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onActivateVillage.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Activate
-                  </TableHeaderColumn>
-                )}
-              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal

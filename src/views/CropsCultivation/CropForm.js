@@ -3,11 +3,9 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
-import DropdownSelect from "../../components/InputElement/Dropdown";
 import InputElement from "../../components/InputElement/InputElement";
 import { AppSwitch } from "@coreui/react";
 import AppConfig from "../../constants/AppConfig";
-import CropSteps from "./CropSteps";
 import Loader from "../../components/Loader/Loader";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
@@ -35,7 +33,6 @@ class CropForm extends Component {
     };
   }
   componentDidMount() {
-    let compRef = this;
     if (this.props.match.params.id !== undefined) {
       if (this.props.cropsList.length !== 0) {
         let id = this.props.match.params.id;
@@ -69,7 +66,7 @@ class CropForm extends Component {
   }
   onImageChange(event) {
     if (event.target.files.length !== 0) {
-      let file = event.target.files[0];
+      //let file = event.target.files[0];
       let crop = { ...this.state.Crop };
       let formData = new FormData();
       formData.append("image", event.target.files[0]);

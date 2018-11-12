@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import {Col, Row} from "reactstrap";
 import CardLayout from "../../components/Cards/CardLayout";
 import Loader from "../../components/Loader/Loader";
-import InputElement from "../../components/InputElement/InputElement";
-import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import AudioCards from "../../components/Cards/AudioCards";
 import * as actions from "../../store/actions";
 import { connect } from "react-redux";

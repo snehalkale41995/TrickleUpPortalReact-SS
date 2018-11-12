@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
-import { FormGroup, Col, Button, Label } from "reactstrap";
-import DropdownSelect from "../../components/InputElement/Dropdown";
+import { FormGroup, Col, Button } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
-import { AppSwitch } from "@coreui/react";
 import AppConfig from "../../constants/AppConfig";
-import CropSteps from "./CropSteps";
 import Loader from "../../components/Loader/Loader";
 import _ from "lodash";
 
@@ -31,7 +27,6 @@ class CropStepsForm extends Component {
     };
   }
   componentDidMount() {
-    let compRef = this;
     if (this.props.match.params.id !== undefined) {
       if (this.props.cropSteps.length !== 0) {
         let id = this.props.match.params.id;

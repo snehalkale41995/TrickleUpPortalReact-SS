@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button, Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
+
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import * as constants from "../../../constants/StatusConstants";
@@ -39,7 +38,6 @@ class RolesList extends Component {
   }
 
   onDeleteState(cell, row) {
-    let componentRef = this;
     if (this.state.tableStatus) {
       return (
         <Link to={this} onClick={() => this.onDelete(row)}>

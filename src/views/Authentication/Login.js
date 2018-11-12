@@ -47,8 +47,8 @@ class Login extends Component {
         compRef.Toaster(loginError, "Login", loginErrorMsg);
       }, 1000);
     } else {
-      !user.userName || user.userName.trim().length === 0 ? this.setState({userNameRequired : true}) : null;
-      !user.password || user.password.trim().length === 0 ? this.setState({passwordRequired : true}) : null;
+      if (!user.userName || user.userName.trim().length === 0) this.setState({userNameRequired : true}) ;
+      if (!user.password || user.password.trim().length === 0)  this.setState({passwordRequired : true});
     }
   };
 

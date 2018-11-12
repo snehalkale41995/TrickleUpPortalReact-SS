@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import _ from "lodash";
-import { AppSwitch } from "@coreui/react";
 class InactiveUser extends Component {
   constructor(props) {
     super(props);

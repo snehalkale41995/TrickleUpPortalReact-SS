@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button, Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import DistrictForm from "./DistrictForm";
@@ -44,7 +42,6 @@ class DistrictsList extends Component {
   }
 
   onDeleteDistrict(cell, row) {
-    let componentRef = this;
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
@@ -103,7 +100,7 @@ class DistrictsList extends Component {
   render() {
     const sortingOptionsActive = {
       defaultSortName: "DistrictName",
-      noDataText: 'No records found for active district' ,
+      noDataText: "No records found for active district",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -127,7 +124,7 @@ class DistrictsList extends Component {
     };
     const sortingOptionsInActive = {
       defaultSortName: "DistrictName",
-      noDataText: 'No records found for inactive district' ,
+      noDataText: "No records found for inactive district",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -191,75 +188,6 @@ class DistrictsList extends Component {
                   onActivateDistrict={this.onActivateDistrict.bind(this)}
                 />
               )}
-
-              {/* <BootstrapTable
-                ref="table"
-                data={this.state.tableStatus ? this.props.districts : this.props.inactiveDistrict}
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                // exportCSV={true}
-                hover={true}
-                csvFileName="Districts List"
-              >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="DistrictName"
-                  headerAlign="left"
-                  width="60"
-                  csvHeader="District Name"
-                  dataSort={true}
-                >
-                  District Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateName"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="State Name"
-                  dataSort={true}
-                >
-                  State Name
-                </TableHeaderColumn>
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="edit"
-                    dataFormat={this.onEditDistrict.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Edit
-                  </TableHeaderColumn>
-                ) : null}
-                {
-                  this.state.tableStatus ?  <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onDeleteDistrict.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Deactivate
-                </TableHeaderColumn> :  <TableHeaderColumn
-                  dataField="delete"
-                  dataFormat={this.onActivateDistrict.bind(this)}
-                  headerAlign="left"
-                  width="20"
-                  export={false}
-                >
-                  Activate
-                </TableHeaderColumn>
-                }
-               
-              </BootstrapTable> */}
             </Col>
           </FormGroup>
         </CardLayout>

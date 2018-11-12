@@ -32,19 +32,7 @@ const AddressMaster = Loadable({
   loader: () => import("./views/MasterData/Address/Address.js"),
   loading: Loading
 });
-const StatesMaster = Loadable({
-  loader: () => import("./views/MasterData/StateMaster/States.js"),
-  loading: Loading
-});
 
-const DistrictMaster = Loadable({
-  loader: () => import("./views/MasterData/DistrictMaster/Districts.js"),
-  loading: Loading
-});
-const Villages = Loadable({
-  loader: () => import("./views/MasterData/VillageMaster/Villages.js"),
-  loading: Loading
-});
 const RolesMaster = Loadable({
   loader: () => import("./views/MasterData/RoleMaster/Roles.js"),
   loading: Loading

@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button, Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import GrampanchayatForm from "./GrampanchayatForm";
@@ -37,7 +35,6 @@ class GrampanchayatList extends Component {
   }
 
   onDeleteGrampanchayat(cell, row) {
-    let componentRef = this;
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />
@@ -96,7 +93,7 @@ class GrampanchayatList extends Component {
   render() {
     const sortingOptionsActive = {
       defaultSortName: "GrampanchayatName",
-      noDataText: 'No records found for active grampanchayat' ,
+      noDataText: "No records found for active grampanchayat",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -120,7 +117,7 @@ class GrampanchayatList extends Component {
     };
     const sortingOptionsInActive = {
       defaultSortName: "GrampanchayatName",
-      noDataText: 'No records found for inactive grampanchayat' ,
+      noDataText: "No records found for inactive grampanchayat",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -189,84 +186,6 @@ class GrampanchayatList extends Component {
                   )}
                 />
               )}
-              {/* <BootstrapTable
-                ref="table"
-                data={
-                  this.state.tableStatus
-                    ? this.props.grampanchayats
-                    : this.props.inActiveGrampanchayat
-                }
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                hover={true}
-                csvFileName="grampanchayatList.csv"
-              >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="GrampanchayatName"
-                  headerAlign="left"
-                  width="40"
-                  dataSort={true}
-                >
-                  Grampanchayat
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="DistrictName"
-                  headerAlign="left"
-                  width="40"
-                  dataSort={true}
-                >
-                  District
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateName"
-                  headerAlign="left"
-                  width="40"
-                  dataSort={true}
-                >
-                  State
-                </TableHeaderColumn>
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="edit"
-                    dataFormat={this.onEditGrampanchayat.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Edit
-                  </TableHeaderColumn>
-                ) : null}
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onDeleteGrampanchayat.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Deactivate
-                  </TableHeaderColumn>
-                ) : (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onActivateGrampanchayat.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Activate
-                  </TableHeaderColumn>
-                )}
-              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal

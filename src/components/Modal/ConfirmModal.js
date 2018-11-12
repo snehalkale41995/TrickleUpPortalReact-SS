@@ -4,10 +4,8 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  Col,
   ModalFooter
 } from "reactstrap";
-import InputElement from "../InputElement/InputElement";
 
 const ConfirmModal = props => {
   return (

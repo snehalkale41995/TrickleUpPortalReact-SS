@@ -57,7 +57,6 @@ export const getCropSteps = () => {
 };
 
 export const getCropStepsMaterial = () => {
-  let cropCultivationSteps = {};
   return dispatch => {
     axios
       .get(
@@ -70,7 +69,6 @@ export const getCropStepsMaterial = () => {
   };
 };
 export const getCropCultivationSteps = id => {
-  let cropCultivationSteps = {};
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Crops/GetCropStepMaterialData?id=${id}`)

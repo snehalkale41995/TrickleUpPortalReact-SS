@@ -35,11 +35,11 @@ class DefaultHeader extends Component {
   render() {
     let userDetails = this.state.userDetails;
     let imagePreviewUrl;
-       if(userDetails.image!=undefined && userDetails.image!==null && userDetails.image!==""){
+       if(userDetails.image !== undefined && userDetails.image !== null && userDetails.image!==""){
         imagePreviewUrl = `${AppConfig.serverURL}/${userDetails.image}`;
        }
         else{
-       imagePreviewUrl = `${AppConfig.serverURL}/\\Images\\Users\\UserImageMale.jpg`;
+       imagePreviewUrl = `${AppConfig.serverURL}/\\Images\\Users\\user.png`;
         }
         return (
       <React.Fragment>
@@ -57,7 +57,7 @@ class DefaultHeader extends Component {
       
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <img src={imagePreviewUrl} className="img-avatar" />
+              <img src={imagePreviewUrl} className="img-avatar" alt={`${AppConfig.serverURL}/\\Images\\Users\\user.png`} />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem onClick={this.onLogout}><i className="fa fa-lock" ></i> Logout</DropdownItem>

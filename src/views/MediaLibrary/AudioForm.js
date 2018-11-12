@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
-import _ from "lodash";
 class AudioForm extends Component {
   constructor(props) {
     super(props);

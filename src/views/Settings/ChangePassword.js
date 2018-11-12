@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
-import { FormGroup, Col, Button, Label } from "reactstrap";
-import DropdownSelect from "../../components/InputElement/Dropdown";
+import { FormGroup, Col, Button } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
@@ -99,21 +98,23 @@ class ChangePassword extends Component {
     ) {
       return true;
     } else {
-      !userCredential.OldPassword ||
-      userCredential.OldPassword.trim().length === 0
-        ? (userCredential.OldPasswordRequired = true)
-        : null;
-      !userCredential.NewPassword ||
-      userCredential.NewPassword.trim().length === 0
-        ? (userCredential.NewPasswordRequired = true)
-        : null;
-      userCredential.ConfirmPassword && !validPassword
-        ? (userCredential.InvalidPassword = true)
-        : null;
-      !userCredential.ConfirmPassword ||
-      userCredential.ConfirmPassword.trim().length === 0
-        ? (userCredential.ConfirmPasswordRequired = true)
-        : null;
+      if (
+        !userCredential.OldPassword ||
+        userCredential.OldPassword.trim().length === 0
+      )
+        userCredential.OldPasswordRequired = true;
+      if (
+        !userCredential.NewPassword ||
+        userCredential.NewPassword.trim().length === 0
+      )
+        userCredential.NewPasswordRequired = true;
+      if (userCredential.ConfirmPassword && !validPassword)
+        userCredential.InvalidPassword = true;
+      if (
+        !userCredential.ConfirmPassword ||
+        userCredential.ConfirmPassword.trim().length === 0
+      )
+        userCredential.ConfirmPasswordRequired = true;
       this.setState({
         userCredential: userCredential
       });

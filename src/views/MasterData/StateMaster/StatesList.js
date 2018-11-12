@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col, Button, Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import StateForm from "./StateForm";
@@ -29,12 +27,6 @@ class StatesList extends Component {
   }
   componentWillMount() {
     this.props.getStatesList();
-    let compRef = this;
-    // setTimeout(() => {
-    //   compRef.setState({
-    //     loading: false
-    //   });
-    // }, 2000);
   }
 
   onStateValueChange(value) {
@@ -44,7 +36,6 @@ class StatesList extends Component {
   }
 
   onDeleteState(cell, row) {
-    let componentRef = this;
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
         <i className="fa fa-trash" title="Delete" />

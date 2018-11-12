@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
 import CardLayout from "../../../components/Cards/CardLayout";
-import { FormGroup, Col, Button, Label } from "reactstrap";
+import { FormGroup, Col, Button } from "reactstrap";
 import InputElement from "../../../components/InputElement/InputElement";
 import StatesList from "./StatesList";
 import _ from "lodash";
 import Loader from "../../../components/Loader/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 class StatesForm extends Component {

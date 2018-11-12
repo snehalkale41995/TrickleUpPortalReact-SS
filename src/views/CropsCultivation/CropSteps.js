@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
-import DropdownSelect from "../../components/InputElement/Dropdown";
+import { FormGroup, Col} from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
@@ -19,7 +18,6 @@ class CropSteps extends Component {
   }
   componentWillMount() {
     this.props.getCropsList();
-    // this.props.getDistrictsList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -29,7 +27,6 @@ class CropSteps extends Component {
   }
 
   onDeleteState(cell, row) {
-    let componentRef = this;
     return (
       <Link to={this} style={{ pointerEvents: "none", opacity :  0.50  }}>
         <i className="fa fa-trash" title="Delete" />
@@ -50,6 +47,7 @@ class CropSteps extends Component {
       <img
         src={`${AppConfig.serverURL}/${row.MediaURL}`}
         style={{ height: 50, width: 50 }}
+        alt=""
       />
     );
   }

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
 import Loader from "../../components/Loader/Loader";
-import _ from "lodash";
 import "../../../node_modules/video-react/dist/video-react.css"; // import css
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 
