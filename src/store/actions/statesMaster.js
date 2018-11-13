@@ -45,7 +45,7 @@ export const getStatesList = () => {
         }
       })
       .catch(error => {
-        dispatch(logStateMasterError(error.response.data.error));
+        dispatch(logStateMasterError(error.response.data.Message));
       });
   };
 };
@@ -62,7 +62,7 @@ export const createState = state => {
         }
       })
       .catch(error => {
-        dispatch(logStateMasterError(error.response.data.error));
+        dispatch(logStateMasterError(error.response.data.Message));
       });
   };
 };
@@ -78,7 +78,7 @@ export const updateState = (id, state) => {
         }
       })
       .catch(error => {
-        dispatch(logStateMasterError(error.response.data.error));
+        dispatch(logStateMasterError(error.response.data.Message));
       });
   };
 };
@@ -95,7 +95,7 @@ export const deleteState = (id, state) => {
         }
       })
       .catch(error => {
-        dispatch(logStateMasterError(error.response.data.error));
+        dispatch(logStateMasterError(error.response.data.Message));
       });
   };
 };

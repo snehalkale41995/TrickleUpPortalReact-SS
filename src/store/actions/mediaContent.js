@@ -69,7 +69,7 @@ export const getAudioFiles = () => {
         }
       })
       .catch(error => {
-        dispatch(logAudioError(error.response.data.error));
+        dispatch(logAudioError(error.response.data.Message));
       });
   };
 };
@@ -89,7 +89,7 @@ export const getVideoFiles = () => {
         }
       })
       .catch(error => {
-        dispatch(logVideoError(error.response.data.error));
+        dispatch(logVideoError(error.response.data.Message));
       });
   };
 };
@@ -109,7 +109,7 @@ export const getImageFiles = () => {
         }
       })
       .catch(error => {
-        dispatch(logImageError(error.response.data.error));
+        dispatch(logImageError(error.response.data.Message));
       });
   };
 };

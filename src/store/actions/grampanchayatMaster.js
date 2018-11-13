@@ -66,7 +66,7 @@ export const getGrampanchayatsList = () => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.error));
+        dispatch(grampanchayatMasterError(error.response.data.Message));
       });
   };
 };
@@ -86,7 +86,7 @@ export const createGrampanchayat = grampanchayat => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.error));
+        dispatch(grampanchayatMasterError(error.response.data.Message));
       });
   };
 };
@@ -105,7 +105,7 @@ export const updateGrampanchayat = (id, grampanchayat) => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.error));
+        dispatch(grampanchayatMasterError(error.response.data.Message));
       });
   };
 };
@@ -124,7 +124,7 @@ export const deleteGrampanchayat = (id, grampanchayat) => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.error));
+        dispatch(grampanchayatMasterError(error.response.data.Message));
       });
   };
 };

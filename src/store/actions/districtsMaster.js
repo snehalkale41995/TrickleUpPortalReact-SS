@@ -58,7 +58,7 @@ export const getDistrictsList = () => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.error));
+        dispatch(districtMasterError(error.response.data.Message));
       });
   };
 };
@@ -78,7 +78,7 @@ export const updateDistrict = (id, district) => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.error));
+        dispatch(districtMasterError(error.response.data.Message));
       });
   };
 };
@@ -94,7 +94,7 @@ export const createDistrict = district => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.error));
+        dispatch(districtMasterError(error.response.data.Message));
       });
   };
 };
@@ -114,7 +114,7 @@ export const deleteDistrict = (id, district) => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.error));
+        dispatch(districtMasterError(error.response.data.Message));
       });
   };
 };

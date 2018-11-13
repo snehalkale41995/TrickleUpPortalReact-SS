@@ -57,7 +57,7 @@ export const getGendersList = () => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.error));
+        dispatch(logGenderMasterError(error.response.data.Message));
       });
   };
 };
@@ -75,7 +75,7 @@ export const createGender = gender => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.error));
+        dispatch(logGenderMasterError(error.response.data.Message));
       });
   };
 };
@@ -93,7 +93,7 @@ export const updateGender = (id, gender) => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.error));
+        dispatch(logGenderMasterError(error.response.data.Message));
       });
   };
 };
@@ -110,7 +110,7 @@ export const deleteGender = (id, gender) => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.error));
+        dispatch(logGenderMasterError(error.response.data.Message));
       });
   };
 };

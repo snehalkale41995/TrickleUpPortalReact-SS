@@ -97,7 +97,7 @@ export const getBeneficiaryList = () => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -116,7 +116,7 @@ export const getBeneficiaryById = id => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -140,7 +140,7 @@ export const createBeneficiary = beneficiary => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -158,7 +158,7 @@ export const postUserCredentials = user => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -174,7 +174,7 @@ export const updateBeneficiary = (id, beneficiary) => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };

@@ -5,6 +5,9 @@ import Loader from "../../components/Loader/Loader";
 import * as actions from "../../store/actions";
 import { connect } from "react-redux";
 import VideoCards from "../../components/Cards/VideoCards";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class VideoContent extends Component {
   constructor(props) {
     super(props);
@@ -14,11 +17,13 @@ class VideoContent extends Component {
   }
   componentDidMount() {
     this.props.getVideoFiles();
+    let compRef = this;
     setTimeout(() => {
-      this.setState({
-        loading: false
-      });
-    }, 2000);
+      compRef.setState({ loading: false });
+      if (compRef.props.videoError) {
+        Toaster.Toaster("Something went wrong !", compRef.props.videoError);
+      }
+    }, 1000);
   }
   render() {
     let videoCards = this.props.videoFiles.map((media, idx) => {
@@ -43,13 +48,15 @@ class VideoContent extends Component {
         active="none"
       >
         <Row>{videoCards}</Row>
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    videoFiles: state.mediaReducer.videoFiles
+    videoFiles: state.mediaReducer.videoFiles,
+    videoError: state.mediaReducer.videoError
   };
 };
 const mapDispatchToProps = dispatch => {

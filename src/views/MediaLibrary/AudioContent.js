@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import {Col, Row} from "reactstrap";
+import { Col, Row } from "reactstrap";
 import CardLayout from "../../components/Cards/CardLayout";
 import Loader from "../../components/Loader/Loader";
 import AudioCards from "../../components/Cards/AudioCards";
 import * as actions from "../../store/actions";
 import { connect } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class AudioContent extends Component {
   constructor(props) {
     super(props);
@@ -15,8 +18,12 @@ class AudioContent extends Component {
   }
   componentDidMount() {
     this.props.getAudioFiles();
+    let compRef = this;
     setTimeout(() => {
-      this.setState({ loading: false });
+      compRef.setState({ loading: false });
+      if (compRef.props.audioError) {
+        Toaster.Toaster("Something went wrong !", compRef.props.audioError);
+      }
     }, 1000);
   }
 
@@ -43,16 +50,18 @@ class AudioContent extends Component {
         buttonName="Add audio"
         //buttonLink={`${this.props.match.url}/audioUpload`}
         buttonLink={this}
-        active = "none"
+        active="none"
       >
         <Row>{audioCards}</Row>
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    audioFiles: state.mediaReducer.audioFiles
+    audioFiles: state.mediaReducer.audioFiles,
+    audioError: state.mediaReducer.audioError
   };
 };
 const mapDispatchToProps = dispatch => {
