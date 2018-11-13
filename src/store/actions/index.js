@@ -76,3 +76,7 @@ export {
 
 export { loginUser, changePassword} from "./login";
 
+export {
+    getFeedbackQuestionList
+} from "./feedback.js";
+

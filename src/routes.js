@@ -48,10 +48,11 @@ const GenderMaster = Loadable({
   loading: Loading
 });
 
-const FeedbackResponse = Loadable({
-  loader: () => import("./views/Feedback/FeedbackResponse.js"),
+const Feedback = Loadable({
+  loader: () => import("./views/Feedback/Feedback.js"),
   loading: Loading
 });
+;
 const CropsCultivations = Loadable({
   loader: () => import("./views/CropsCultivation/CropsCultivation.js"),
   loading: Loading
@@ -112,7 +113,7 @@ const routes = [
 
   {
     path: "/cropCultivations",
-    name: "States List",
+    name: "CropsCultivations",
     component: CropsCultivations
   },
 
@@ -134,9 +135,9 @@ const routes = [
     component: InactiveUser
   },
   {
-    path: "/feedbackResponses",
-    name: "FeedbackResponse",
-    component: FeedbackResponse
+    path: "/feedback",
+    name: "Feedback",
+    component: Feedback
   },
   {
     path: "/operationalUser",

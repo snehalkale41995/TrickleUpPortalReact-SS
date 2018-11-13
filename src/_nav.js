@@ -99,9 +99,21 @@ export default {
       ]
     },
     {
-      name: "Feedback Responses",
-      url: "/feedbackResponses",
-      icon: "fa fa-commenting"
+      name: "Feedbacks",
+      url: "/feedback",
+      icon: "fa fa-commenting",
+      children: [
+        {
+          name: "Feedback Questions",
+          url: "/feedback/feedbackQuestions",
+          icon: "fa fa-question"
+        },
+        {
+          name: "Feedback Responses",
+          url: "/feedback/feedbackResponse",
+          icon: "fa fa-star-half-o"
+        }
+      ]
     },
     {
       name: "Operational Users",

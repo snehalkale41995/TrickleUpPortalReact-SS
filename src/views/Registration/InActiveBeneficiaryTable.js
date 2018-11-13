@@ -10,7 +10,7 @@ class InActiveBeneficiaryTable extends Component {
         pagination={this.props.beneficiaryList.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
-        exportCSV={true}
+        exportCSV={this.props.beneficiaryList.length > 0 ? true : false}
         csvFileName="InActiveBeneficiaryList.csv"
         hover={true}
       >

@@ -76,7 +76,7 @@ export const getCropsList = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropError(error));
+        dispatch(logCropError(error.response.data.Message));
       });
   };
 };
@@ -95,7 +95,7 @@ export const getCropSteps = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error));
+        dispatch(logCropStepError(error.response.data.Message));
       });
   };
 };
@@ -116,7 +116,7 @@ export const getCropStepsMaterial = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropMaterialError(error));
+        dispatch(logCropMaterialError(error.response.data.Message));
       });
   };
 };
@@ -132,7 +132,7 @@ export const getCropCultivationSteps = id => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error));
+        dispatch(logCropStepError(error.response.data.Message));
       });
   };
 };
@@ -166,7 +166,7 @@ export const getCropAudioAllocation = cropId => {
         }
       })
       .catch(error => {
-        dispatch(logCropError(error));
+        dispatch(logCropError(error.response.data.Message));
       });
   };
 };
@@ -188,7 +188,7 @@ export const getCropStepsAudioAllocation = stepId => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error));
+        dispatch(logCropStepError(error.response.data.Message));
       });
   };
 };
@@ -210,7 +210,7 @@ export const getCropMaterialAudioAllocation = materialId => {
         }
       })
       .catch(error => {
-        dispatch(logCropMaterialError(error));
+        dispatch(logCropMaterialError(error.response.data.Message));
       });
   };
 };

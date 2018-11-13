@@ -10,7 +10,7 @@ class InActiveOperationalUserTable extends Component {
         pagination={this.props.operationalUsers.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
-        exportCSV={true}
+        exportCSV={this.props.operationalUsers.length > 0 ? true : false}
         csvFileName="InActive_OperationalUserList.csv"
         hover={true}
       >

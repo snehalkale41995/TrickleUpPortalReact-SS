@@ -192,7 +192,7 @@ export const deleteBeneficiary = (id, beneficiary) => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -210,7 +210,7 @@ export const bulkUploadBeneficiary = beneficiary => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };
@@ -246,7 +246,7 @@ export const getBulkUploadHistory = () => {
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.Message));
       });
   };
 };

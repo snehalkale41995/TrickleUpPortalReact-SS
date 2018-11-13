@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import AppConfig from "../../constants/AppConfig";
 
-class FeedbackResponse extends Component {
+class FeedbackResponses extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +18,7 @@ class FeedbackResponse extends Component {
     };
   }
   componentWillMount() {
+    this.props.getFeedbackQuestionList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -45,8 +46,8 @@ class FeedbackResponse extends Component {
 
   render() {
     const sortingOptions = {
-      //defaultSortName: "CropName",
-      noDataText: "No records found for feedback response",
+      defaultSortName: "Questions",
+      noDataText: "No records found for feedback Questions",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -62,8 +63,8 @@ class FeedbackResponse extends Component {
           value: 20
         },
         {
-          text: "All"
-          //value: this.props.cropsList.length
+          text: "All",
+          value: this.props.feedbackQuestions.length
         }
       ],
       sizePerPage: 5
@@ -71,12 +72,14 @@ class FeedbackResponse extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout name="Feedback Response">
+      <CardLayout
+        name="Feedback Response"
+      >
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              // data={this.props.cropsList}
+              data={this.props.feedbackQuestions}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -88,34 +91,15 @@ class FeedbackResponse extends Component {
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
-                // dataField="CropName"
+                dataField="Questions"
                 headerAlign="left"
                 width="40"
                 csvHeader="Crop Name"
                 dataSort={true}
               >
-                Feedback Provider Name
+                Question
               </TableHeaderColumn>
               <TableHeaderColumn
-                // dataField="FilePath"
-                headerAlign="left"
-                width="40"
-                //dataFormat={this.showImage.bind(this)}
-                csvHeader="FilePath"
-                dataSort={true}
-              >
-                Rating
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                //  dataField="Ready"
-                headerAlign="left"
-                width="40"
-                csvHeader="Active"
-                dataSort={true}
-              >
-                Comments
-              </TableHeaderColumn>
-              {/* <TableHeaderColumn
                 dataField="edit"
                 dataFormat={this.onEditState.bind(this)}
                 headerAlign="left"
@@ -132,7 +116,7 @@ class FeedbackResponse extends Component {
                 export={false}
               >
                 Deactivate
-              </TableHeaderColumn> */}
+              </TableHeaderColumn>
             </BootstrapTable>
           </Col>
         </FormGroup>
@@ -141,10 +125,14 @@ class FeedbackResponse extends Component {
   }
 }
 const mapStateToProps = state => {
-  return {};
+  return {
+    feedbackQuestions: state.feedbackReducer.feedbackQuestions
+  };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    getFeedbackQuestionList: () => dispatch(actions.getFeedbackQuestionList())
+  };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackResponse);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackResponses);
