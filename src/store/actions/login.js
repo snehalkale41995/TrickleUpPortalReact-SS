@@ -2,7 +2,6 @@ import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 
-
 export const loginUser = user => {
   return dispatch => {
     axios
@@ -10,23 +9,21 @@ export const loginUser = user => {
       .then(response => {
         if (response.data.success) {
           dispatch(storeUser(response.data.data));
-        }
-        else{
+        } else {
           dispatch(loginError(response.data.error));
         }
       })
-      .catch((error)=>{
-           dispatch(loginError(error));
+      .catch(error => {
+        dispatch(loginError(error.response.data.error));
       });
   };
 };
 
 export const storeUser = userData => {
- 
   return {
     type: actionTypes.LOGIN_USER,
     loggedInUserId: userData.UserId,
-    loggedInUserDetails : userData
+    loggedInUserDetails: userData
   };
 };
 
@@ -40,17 +37,19 @@ export const loginError = error => {
 export const changePassword = userCredentials => {
   return dispatch => {
     axios
-      .post(`${AppConfig.serverURL}/api/UserCredentials/ChangePassword`, userCredentials)
+      .post(
+        `${AppConfig.serverURL}/api/UserCredentials/ChangePassword`,
+        userCredentials
+      )
       .then(response => {
         if (response.data.success) {
           dispatch(changePasswordSuccees(response.data.data.passwordData));
-        }
-        else{
+        } else {
           dispatch(changePasswordError(response.data.error));
         }
       })
-      .catch((error)=>{
-           dispatch(changePasswordError());
+      .catch(error => {
+        dispatch(changePasswordError());
       });
   };
 };

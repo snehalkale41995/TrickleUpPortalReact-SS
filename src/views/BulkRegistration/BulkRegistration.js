@@ -55,23 +55,22 @@ class BulkRegistration extends Component {
   }
 
   handleData = (data, file) => {
-    if(data.length !== 0) {
+    if (data.length !== 0) {
       this.setState({
-        csvFileInvalid: false,
         clearCSV: false,
+        csvFileInvalid: false,
         showDataTable: true,
         CSVdata: data,
         csvFileRequired: false,
         bulkUserError: false
       });
-    }else{
+    } else {
       this.setState({
         clearCSV: true,
         CSVdata: data,
-        csvFileInvalid: true,
+        csvFileInvalid: true
       });
     }
-   
   };
   onReset() {
     this.setState({
@@ -109,9 +108,9 @@ class BulkRegistration extends Component {
       }, 1000);
     } else {
       if (beneficiaries.length === 0 && this.state.clearCSV) {
-          this.setState({
-            csvFileInvalid : true
-          })
+        this.setState({
+          csvFileInvalid: true
+        });
       } else {
         this.setState({ csvFileRequired: true });
       }
@@ -254,7 +253,8 @@ class BulkRegistration extends Component {
                         value={this.state.clearCSV ? this.state.fileName : null}
                         onChange={onChange}
                         required={this.state.csvFileRequired}
-                        invalid={this.state.csvFileInvalid}
+                        //invalid={this.state.csvFileInvalid}
+                        blankCSVFile={this.state.csvFileInvalid}
                       />
                     )}
                   />

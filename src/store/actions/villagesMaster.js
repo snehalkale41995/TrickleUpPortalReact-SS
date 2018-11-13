@@ -3,7 +3,7 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeVillagesList = (villageList, villages,inActiveVillages) => {
+export const storeVillagesList = (villageList, villages, inActiveVillages) => {
   return {
     type: actionTypes.GET_VILLAGE_LIST,
     villagesList: villageList,
@@ -11,7 +11,7 @@ export const storeVillagesList = (villageList, villages,inActiveVillages) => {
     inActiveVillages: inActiveVillages
   };
 };
-export const villageMasterError = error => {
+export const logVillageMasterError = error => {
   return {
     type: actionTypes.LOG_VILLAGE_ERROR,
     error: error
@@ -26,69 +26,85 @@ export const getVillagesList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Villages/GetVillages`)
       .then(response => {
-        let Villages = _.filter(response.data.data.Villagedata, function(
-          village
-        ) {
-          return village.Active === true;
-        });
-        inActiveVillages =  _.filter(response.data.data.Villagedata, function(
-          village
-        ) {
-          return village.Active === false;
-        });
-        Villages.forEach(village => {
-          if (village.VillageName !== null) {
-            villageList.push({
-              label: village.VillageName,
-              value: village.Id,
-              stateId: village.State,
-              districtId: village.District,
-              grampanchayatId : village.Grampanchayat
-            });
-            villages.push(village);
-          }
-        });
-        dispatch(storeVillagesList(villageList, villages,inActiveVillages));
+        if (response.data.success) {
+          let Villages = _.filter(response.data.data.Villagedata, function(
+            village
+          ) {
+            return village.Active === true;
+          });
+          inActiveVillages = _.filter(response.data.data.Villagedata, function(
+            village
+          ) {
+            return village.Active === false;
+          });
+          Villages.forEach(village => {
+            if (village.VillageName !== null) {
+              villageList.push({
+                label: village.VillageName,
+                value: village.Id,
+                stateId: village.State,
+                districtId: village.District,
+                grampanchayatId: village.Grampanchayat
+              });
+              villages.push(village);
+            }
+          });
+          dispatch(storeVillagesList(villageList, villages, inActiveVillages));
+        } else {
+          dispatch(logVillageMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(villageMasterError(error));
+        dispatch(logVillageMasterError(error.response.data.success));
       });
   };
 };
 
-export const createVillage = (village) => {
+export const createVillage = village => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Villages/PostVillage`, village)
       .then(response => {
-        dispatch(getVillagesList());
+        if (response.data.success) {
+          dispatch(getVillagesList());
+        } else {
+          dispatch(logVillageMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(villageMasterError(error));
+        dispatch(logVillageMasterError(error.response.data.success));
       });
   };
-}
-export const updateVillage = (id ,village) => {
+};
+export const updateVillage = (id, village) => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`, village)
       .then(response => {
-        dispatch(getVillagesList());
+        if (response.data.success) {
+          dispatch(getVillagesList());
+        } else {
+          dispatch(logVillageMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(villageMasterError(error));
+        dispatch(logVillageMasterError(error.response.data.success));
       });
   };
-}
+};
 export const deleteVillage = (id, village) => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Villages/PutVillage?id=${id}`, village)
       .then(response => {
-        dispatch(getVillagesList());
+        if (response.data.success) {
+          dispatch(getVillagesList());
+        } else {
+          dispatch(logVillageMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(villageMasterError(error));
+        dispatch(logVillageMasterError(error.response.data.success));
       });
   };
-}
+};

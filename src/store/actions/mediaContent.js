@@ -25,6 +25,24 @@ export const storeImageFiles = images => {
     imageFiles: images
   };
 };
+export const logAudioError = error => {
+  return {
+    type: actionTypes.LOG_AUDIO_ERROR,
+    error: error
+  };
+};
+export const logVideoError = error => {
+  return {
+    type: actionTypes.LOG_VIDEO_ERROR,
+    error: error
+  };
+};
+export const logImageError = error => {
+  return {
+    type: actionTypes.LOG_IMAGE_ERROR,
+    error: error
+  };
+};
 export const postMediaContent = fileData => {
   return dispatch => {
     axios
@@ -40,13 +58,19 @@ export const getAudioFiles = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Audios/GetAudios`)
       .then(response => {
-        let audios = response.data.data.Audios;
-        audios.forEach(audio => {
-          audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
-        });
-        dispatch(storeAudioFiles(audios));
+        if (response.data.success) {
+          let audios = response.data.data.Audios;
+          audios.forEach(audio => {
+            audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
+          });
+          dispatch(storeAudioFiles(audios));
+        } else {
+          dispatch(logAudioError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logAudioError(error.response.data.error));
+      });
   };
 };
 export const getVideoFiles = () => {
@@ -54,13 +78,19 @@ export const getVideoFiles = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Videos/GetVideos`)
       .then(response => {
-        let videos = response.data.data.Videos;
-        videos.forEach(video => {
-          video.FilePath = `${AppConfig.serverURL}/${video.FilePath}`;
-        });
-        dispatch(storeVideoFiles(videos));
+        if (response.data.success) {
+          let videos = response.data.data.Videos;
+          videos.forEach(video => {
+            video.FilePath = `${AppConfig.serverURL}/${video.FilePath}`;
+          });
+          dispatch(storeVideoFiles(videos));
+        } else {
+          dispatch(logVideoError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logVideoError(error.response.data.error));
+      });
   };
 };
 export const getImageFiles = () => {
@@ -68,12 +98,19 @@ export const getImageFiles = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Images/GetImages`)
       .then(response => {
-        let images = response.data.data.Images;
-        images.forEach(image => {
-          image.FilePath = `${AppConfig.serverURL}/${image.FilePath}`;
-        });
-        dispatch(storeImageFiles(images));
+        if (response.data.success) {
+          let images = response.data.data.Images;
+          images.forEach(image => {
+            image.FilePath = `${AppConfig.serverURL}/${image.FilePath}`;
+          });
+          dispatch(storeImageFiles(images));
+        } else {
+          dispatch(logImageError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logImageError(error.response.data.error));
+      });
   };
 };
+

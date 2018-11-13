@@ -34,12 +34,14 @@ const beneficiaryReducer = (state = initialState, action) => {
     case actionTypes.STORE_CURRENT_BENEFICIARY:
       return {
         ...state,
-        currentBeneficiary: action.currentBeneficiary
+        currentBeneficiary: action.currentBeneficiary,
+        beneficiaryError: null
       };
     case actionTypes.STORE_BULK_UPLOAD_HISTORY:
       return {
         ...state,
-        bulkUploadHistory: action.bulkUploadHistory
+        bulkUploadHistory: action.bulkUploadHistory,
+        beneficiaryError: null
       };
     case actionTypes.CLEAR_BENEFICIARY_ERROR:
       return {
@@ -49,13 +51,15 @@ const beneficiaryReducer = (state = initialState, action) => {
     case actionTypes.VALIDATE_BULKDATA_SUCCESS:
       return {
         ...state,
-        bulkUserError: false
+        bulkUserError: false,
+        beneficiaryError: null
       };
     case actionTypes.VALIDATE_BULKDATA_ERROR:
       return {
         ...state,
         bulkUserData: action.bulkUserData,
-        bulkUserError: true
+        bulkUserError: true,
+        beneficiaryError: null
       };
     default:
       return state;

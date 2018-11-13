@@ -3,12 +3,16 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeDistrictsList = (districtList, districts,inactiveDistrict) => {
+export const storeDistrictsList = (
+  districtList,
+  districts,
+  inactiveDistrict
+) => {
   return {
     type: actionTypes.GET_DISTRICT_LIST,
     districtList: districtList,
     districts: districts,
-    inactiveDistrict:inactiveDistrict
+    inactiveDistrict: inactiveDistrict
   };
 };
 export const districtMasterError = error => {
@@ -25,30 +29,36 @@ export const getDistrictsList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Districts/GetDistricts`)
       .then(response => {
-        let Districts = _.filter(response.data.data.Districts, function(
-          district
-        ) {
-          return district.Active === true;
-        });
-        inactiveDistrict =  _.filter(response.data.data.Districts, function(
-          district
-        ) {
-          return district.Active === false;
-        });
-        Districts.forEach(district => {
-          if (district.DistrictName !== null) {
-            districtList.push({
-              label: district.DistrictName,
-              value: district.Id,
-              stateId : district.State
-            });
-            districts.push(district);
-          }
-        });
-        dispatch(storeDistrictsList(districtList, districts,inactiveDistrict));
+        if (response.data.success) {
+          let Districts = _.filter(response.data.data.Districts, function(
+            district
+          ) {
+            return district.Active === true;
+          });
+          inactiveDistrict = _.filter(response.data.data.Districts, function(
+            district
+          ) {
+            return district.Active === false;
+          });
+          Districts.forEach(district => {
+            if (district.DistrictName !== null) {
+              districtList.push({
+                label: district.DistrictName,
+                value: district.Id,
+                stateId: district.State
+              });
+              districts.push(district);
+            }
+          });
+          dispatch(
+            storeDistrictsList(districtList, districts, inactiveDistrict)
+          );
+        } else {
+          dispatch(districtMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(districtMasterError(error));
+        dispatch(districtMasterError(error.response.data.error));
       });
   };
 };
@@ -60,9 +70,15 @@ export const updateDistrict = (id, district) => {
         `${AppConfig.serverURL}/api/Districts/PutDistrict?id=${id}`,
         district
       )
-      .then(response => {})
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getDistrictsList());
+        } else {
+          dispatch(districtMasterError(response.data.error));
+        }
+      })
       .catch(error => {
-        dispatch(districtMasterError(error));
+        dispatch(districtMasterError(error.response.data.error));
       });
   };
 };
@@ -70,9 +86,15 @@ export const createDistrict = district => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Districts/PostDistrict`, district)
-      .then(response => {})
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getDistrictsList());
+        } else {
+          dispatch(districtMasterError(response.data.error));
+        }
+      })
       .catch(error => {
-        dispatch(districtMasterError(error));
+        dispatch(districtMasterError(error.response.data.error));
       });
   };
 };
@@ -85,10 +107,14 @@ export const deleteDistrict = (id, district) => {
         district
       )
       .then(response => {
-        dispatch(getDistrictsList());
+        if (response.data.success) {
+          dispatch(getDistrictsList());
+        } else {
+          dispatch(districtMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(districtMasterError(error));
+        dispatch(districtMasterError(error.response.data.error));
       });
   };
 };

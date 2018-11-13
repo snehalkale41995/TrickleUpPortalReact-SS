@@ -50,6 +50,11 @@ const InputElement = props => (
         *{props.label} is invalid
       </div>
     ) : null}
+    {props.blankCSVFile ? (
+      <div  className="help-block">
+        *Blank CSV file cannot be accepted
+      </div>
+    ) : null}
   </FormGroup>
 );
 

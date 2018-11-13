@@ -60,41 +60,44 @@ export const getBeneficiaryList = () => {
     axios
       .get(`${AppConfig.serverURL}/api/Users/GetAllUsers`)
       .then(response => {
-        let activeBeneficiaryList = _.filter(response.data.data, function(
-          beneficiary
-        ) {
-          return beneficiary.Active === true && beneficiary.Role === 3;
-        });
+        if (response.data.success) {
+          let activeBeneficiaryList = _.filter(response.data.data, function(
+            beneficiary
+          ) {
+            return beneficiary.Active === true && beneficiary.Role === 3;
+          });
 
-        let inActiveBeneficiaryList = _.filter(response.data.data, function(
-          beneficiary
-        ) {
-          return beneficiary.Active === false && beneficiary.Role === 3;
-        });
+          let inActiveBeneficiaryList = _.filter(response.data.data, function(
+            beneficiary
+          ) {
+            return beneficiary.Active === false && beneficiary.Role === 3;
+          });
 
-        let activeOperationalUsers = _.filter(response.data.data, function(
-          beneficiary
-        ) {
-          return beneficiary.Active === true && beneficiary.Role === 2;
-        });
+          let activeOperationalUsers = _.filter(response.data.data, function(
+            beneficiary
+          ) {
+            return beneficiary.Active === true && beneficiary.Role === 2;
+          });
 
-        let inActiveOperationalUsers = _.filter(response.data.data, function(
-          beneficiary
-        ) {
-          return beneficiary.Active === false && beneficiary.Role === 2;
-        });
-
-        dispatch(
-          storeBeneficiaryList(
-            activeBeneficiaryList,
-            inActiveBeneficiaryList,
-            activeOperationalUsers,
-            inActiveOperationalUsers
-          )
-        );
+          let inActiveOperationalUsers = _.filter(response.data.data, function(
+            beneficiary
+          ) {
+            return beneficiary.Active === false && beneficiary.Role === 2;
+          });
+          dispatch(
+            storeBeneficiaryList(
+              activeBeneficiaryList,
+              inActiveBeneficiaryList,
+              activeOperationalUsers,
+              inActiveOperationalUsers
+            )
+          );
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.error));
       });
   };
 };
@@ -104,12 +107,16 @@ export const getBeneficiaryById = id => {
     axios
       .get(`${AppConfig.serverURL}/api/Users/GetUser/${id}`)
       .then(response => {
-        let currentBeneficiary = response.data.data.Users[0];
-        currentBeneficiary.PhoneNumber = currentBeneficiary.PhoneNumber.toString();
-        dispatch(storeCurrentBeneficiary(currentBeneficiary));
+        if (response.data.success) {
+          let currentBeneficiary = response.data.data.Users[0];
+          currentBeneficiary.PhoneNumber = currentBeneficiary.PhoneNumber.toString();
+          dispatch(storeCurrentBeneficiary(currentBeneficiary));
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error));
+        dispatch(logBeneficiaryError(error.response.data.error));
       });
   };
 };
@@ -119,14 +126,18 @@ export const createBeneficiary = beneficiary => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PostUser`, beneficiary)
       .then(response => {
-        let userCredentials = {
-          UserName: beneficiary.PhoneNumber, //addd userName [email]
-          Password: beneficiary.PhoneNumber,
-          UserId: response.data.data.id,
-          PhoneNumber: beneficiary.PhoneNumber
-        };
-        dispatch(postUserCredentials(userCredentials));
-        dispatch(clearBeneficiaryError());
+        if (response.data.success) {
+          let userCredentials = {
+            UserName: beneficiary.PhoneNumber, //addd userName [email]
+            Password: beneficiary.PhoneNumber,
+            UserId: response.data.data.id,
+            PhoneNumber: beneficiary.PhoneNumber
+          };
+          dispatch(postUserCredentials(userCredentials));
+          dispatch(clearBeneficiaryError());
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error.response.data.error));
@@ -142,7 +153,9 @@ export const postUserCredentials = user => {
         user
       )
       .then(response => {
-        //console.log("Reposnoe userCredentials", response);
+        if (!response.data.success) {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error.response.data.error));
@@ -154,7 +167,11 @@ export const updateBeneficiary = (id, beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PutUser?id=${id}`, beneficiary)
       .then(response => {
-        dispatch(clearBeneficiaryError());
+        if (response.data.success) {
+          dispatch(clearBeneficiaryError());
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error.response.data.error));
@@ -167,7 +184,12 @@ export const deleteBeneficiary = (id, beneficiary) => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/PutUser?id=${id}`, beneficiary)
       .then(response => {
-        dispatch(getBeneficiaryList());
+        if (response.data.success) {
+          dispatch(getBeneficiaryList());
+          dispatch(clearBeneficiaryError());
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));
@@ -180,7 +202,12 @@ export const bulkUploadBeneficiary = beneficiary => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/BulkUploadUser`, beneficiary)
       .then(response => {
-        dispatch(clearBeneficiaryError());
+        if (response.data.success) {
+          //dispatch(getBeneficiaryList());
+          dispatch(clearBeneficiaryError());
+        } else {
+          dispatch(logBeneficiaryError(response.data.error));
+        }
       })
       .catch(error => {
         dispatch(logBeneficiaryError(error));

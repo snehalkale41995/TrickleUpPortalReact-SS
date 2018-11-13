@@ -3,98 +3,114 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
-export const storeGendersList = (genders ,gendersList, inactiveGenders) => {
+export const storeGendersList = (genders, gendersList, inactiveGenders) => {
   return {
     type: actionTypes.GET_GENDERS,
     gendersList: gendersList,
-    genders : genders,
-    inactiveGenders : inactiveGenders
+    genders: genders,
+    inactiveGenders: inactiveGenders
   };
 };
 
+export const logGenderMasterError = error => {
+  return {
+    type: actionTypes.LOG_GENDER_ERROR,
+    error: error
+  };
+};
+
+export const createGenderSuccess = () => {
+  return {
+    type: actionTypes.CREATE_GENDER_SUCCESS
+  };
+};
+
+export const updateGenderSuccess = () => {
+  return {
+    type: actionTypes.UPDATE_GENDER_SUCCESS
+  };
+};
 export const getGendersList = () => {
   let gendersList = [];
-  let genders = [];
-  let inactiveGenders = [];
+
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Genders/GetGenders`)
       .then(response => {
-        genders =  _.filter(response.data.data.Genders, function(gender) {
-             return gender.Active === true ;
-              });
-        inactiveGenders =  _.filter(response.data.data.Genders, function(gender) {
-             return gender.Active === false ;
-              });
-        response.data.data.Genders.forEach(gender => {
-          if (gender.GenderName !== null && gender.Active) {
-            gendersList.push({ label: gender.GenderName, value: gender.Id });
-          }
-        });
-        dispatch(storeGendersList(genders,gendersList, inactiveGenders));
+        if (response.data.success) {
+          let genders = _.filter(response.data.data.Genders, function(gender) {
+            return gender.Active === true;
+          });
+          let inactiveGenders = _.filter(response.data.data.Genders, function(
+            gender
+          ) {
+            return gender.Active === false;
+          });
+          response.data.data.Genders.forEach(gender => {
+            if (gender.GenderName !== null && gender.Active) {
+              gendersList.push({ label: gender.GenderName, value: gender.Id });
+            }
+          });
+          dispatch(storeGendersList(genders, gendersList, inactiveGenders));
+        } else {
+          dispatch(logGenderMasterError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logGenderMasterError(error.response.data.error));
+      });
   };
 };
 
-
-export const createGender = (gender) => {
+export const createGender = gender => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Genders/PostGender`, gender)
       .then(response => {
-        dispatch(getGendersList());
-        dispatch(createGenderSuccess());
+        if (response.data.success) {
+          dispatch(getGendersList());
+          dispatch(createGenderSuccess());
+        } else {
+          dispatch(logGenderMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(genderMasterError(error));
+        dispatch(logGenderMasterError(error.response.data.error));
       });
   };
-}
+};
 
-export const updateGender = (id ,gender) => {
+export const updateGender = (id, gender) => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Genders/PutGender?id=${id}`, gender)
       .then(response => {
-        dispatch(getGendersList());
-         dispatch(updateGenderSuccess());
+        if (response.data.success) {
+          dispatch(getGendersList());
+          dispatch(updateGenderSuccess());
+        } else {
+          dispatch(logGenderMasterError(response.data.error));
+        }
       })
       .catch(error => {
-        dispatch(genderMasterError(error));
+        dispatch(logGenderMasterError(error.response.data.error));
       });
   };
-}
+};
 
 export const deleteGender = (id, gender) => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/Genders/PutGender?id=${id}`, gender)
       .then(response => {
+        if (response.data.success) {
           dispatch(getGendersList());
+        } else {
+          dispatch(logGenderMasterError(response.data.error));
+        }
       })
       .catch(error => {
-         dispatch(genderMasterError(error));
+        dispatch(logGenderMasterError(error.response.data.error));
       });
   };
-}
-
-export const genderMasterError = (error) => {
-  return {
-    type : actionTypes.LOG_GENDER_ERROR,
-    error : error
-  }
-}
-
-export const createGenderSuccess= () =>{
-  return {
-    type : actionTypes.CREATE_GENDER_SUCCESS
-  }
-}
-
-export const updateGenderSuccess= () =>{
-  return {
-    type : actionTypes.UPDATE_GENDER_SUCCESS
-  }
-}
-
+};
