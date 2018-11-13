@@ -75,8 +75,8 @@ class FeedbackQuestions extends Component {
       <CardLayout
         name="Feedback Questions"
         buttonName="Add question"
-        buttonLink={this}
-        active="none"
+        buttonLink={`${this.props.match.url}/QuestionForm`}
+        //active="none"
       >
         <FormGroup row>
           <Col xs="12">

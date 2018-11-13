@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import FeedbackQuestions from "./FeedbackQuestions";
 import FeedbackResponses from "./FeedbackResponses";
-
+import FeedbackQuestionForm from "./FeedbackQuestionForm";
 export default class Feedback extends Component {
   render() {
     return (
@@ -12,10 +12,10 @@ export default class Feedback extends Component {
           path={`${this.props.match.path}/feedbackQuestions`}
           component={FeedbackQuestions}
         />
-        {/* <Route
-          path={`${this.props.match.path}/crops/CropForm/:id?`}
-          component={CropForm}
-        /> */}
+        <Route
+          path={`${this.props.match.path}/feedbackQuestions/QuestionForm/:id?`}
+          component={FeedbackQuestionForm}
+        />
         <Route
           exact
           path={`${this.props.match.path}/feedbackResponse`}
