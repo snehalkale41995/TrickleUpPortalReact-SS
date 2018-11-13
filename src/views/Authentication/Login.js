@@ -174,7 +174,7 @@ class Login extends Component {
                     </CardGroup>
                   </Col>
                 </Row>
-                <ToastContainer autoClose={2000} />
+                <ToastContainer autoClose={1000} />
               </div>
             </Container>
           </main>

@@ -634,7 +634,7 @@ class RegistrationForm extends Component {
             </FormGroup>
           </div>
         </CardLayout>
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1000} />
       </div>
     );
   }

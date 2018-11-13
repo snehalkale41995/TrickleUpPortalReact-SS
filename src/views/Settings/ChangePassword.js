@@ -233,7 +233,7 @@ class ChangePassword extends Component {
                 </Button>
                 </Col> */}
           </FormGroup>
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={1000} />
         </div>
       </CardLayout>
     );

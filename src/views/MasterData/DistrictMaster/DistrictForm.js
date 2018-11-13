@@ -223,7 +223,7 @@ class DistrictForm extends Component {
             </FormGroup>
           )}
         </div>
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }

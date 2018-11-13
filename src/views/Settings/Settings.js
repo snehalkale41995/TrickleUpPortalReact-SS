@@ -579,7 +579,7 @@ class Settings extends Component {
             </Col>
           </FormGroup>
         </div>
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }

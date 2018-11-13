@@ -220,7 +220,7 @@ class DistrictsList extends Component {
               : "Are you sure you want to activate this district record ?"
           }
         />
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1000} />
       </div>
     );
   }

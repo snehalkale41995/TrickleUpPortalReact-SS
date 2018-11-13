@@ -10,6 +10,9 @@ import DropdownSelect from "../../components/InputElement/Dropdown";
 import ActiveBeneficiaryTable from "./ActiveBeneficiaryTable";
 import InActiveBeneficiaryTable from "./InActiveBeneficiaryTable";
 import * as constants from "../../constants/StatusConstants";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class RegistrationList extends Component {
   constructor(props) {
     super(props);
@@ -21,20 +24,18 @@ class RegistrationList extends Component {
     };
   }
 
-  componentDidMount() {
-    let compRef = this;
-    compRef.props.getBeneficiaryList();
+  componentWillMount() {
+    this.props.getBeneficiaryList();
     setTimeout(() => {
-      compRef.setBeneficiary();
+       this.setState({
+      loading: false
+    });
     }, 2000);
   }
-
-  setBeneficiary() {
-    let compRef = this;
-    compRef.setState({
-      loading: false
-      //beneficiaryList: beneficiaryList
-    });
+  componentDidMount() {
+    if (this.props.beneficiaryError) {
+      Toaster.Toaster("Something went wrong !", this.props.beneficiaryError);
+    }
   }
 
   onDeleteBeneficiary(cell, row) {
@@ -61,13 +62,20 @@ class RegistrationList extends Component {
   }
 
   onConfirmDelete() {
-    let compRef = this;
     let user = { ...this.state.userToDelete };
     this.state.tableStatus ? (user.Active = false) : (user.Active = true);
     this.props.deleteBeneficiary(user.Id, user);
-    setTimeout(() => {
-      compRef.setBeneficiary();
-    }, 2000);
+    let displayMessage = this.state.tableStatus
+    ? "Beneficiary deactivated successfully"
+    : "Beneficiary activated successfully";
+  setTimeout(() => {
+    let message = "";
+    this.props.beneficiaryError
+      ? (message = "Something went wrong !")
+      : (message = displayMessage);
+    Toaster.Toaster(message, this.props.beneficiaryError);
+  }, 1000);
+    
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -190,6 +198,7 @@ class RegistrationList extends Component {
               : "Are you sure you want to activate this beneficiary record ?"
           }
         />
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
@@ -197,7 +206,8 @@ class RegistrationList extends Component {
 const mapStateToProps = state => {
   return {
     activeBeneficiaryList: state.beneficiaryReducer.activeBeneficiaryList,
-    inActiveBeneficiaryList: state.beneficiaryReducer.inActiveBeneficiaryList
+    inActiveBeneficiaryList: state.beneficiaryReducer.inActiveBeneficiaryList,
+    beneficiaryError: state.beneficiaryReducer.beneficiaryError
   };
 };
 

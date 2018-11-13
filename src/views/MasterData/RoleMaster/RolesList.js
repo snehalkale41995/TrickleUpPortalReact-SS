@@ -257,7 +257,7 @@ class RolesList extends Component {
               )}
             </BootstrapTable> */}
           </Col>
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={1000} />
         </FormGroup>
         <ConfirmModal
           isOpen={this.state.modalStatus}

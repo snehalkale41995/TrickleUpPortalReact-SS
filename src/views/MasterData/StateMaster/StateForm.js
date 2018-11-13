@@ -227,7 +227,7 @@ class StatesForm extends Component {
             </FormGroup>
           )}
 
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={1000} />
         </div>
       </CardLayout>
     );

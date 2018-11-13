@@ -216,7 +216,7 @@ class GrampanchayatList extends Component {
                 : "Are you sure you want to activate this grampanchayat record ?"
             }
           />
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={1000} />
         </CardLayout>
       </div>
     );
