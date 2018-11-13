@@ -18,8 +18,6 @@ class FeedbackResponse extends Component {
     };
   }
   componentWillMount() {
-   // this.props.getCropsList();
-    // this.props.getDistrictsList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -31,28 +29,20 @@ class FeedbackResponse extends Component {
   onDeleteState(cell, row) {
     let componentRef = this;
     return (
-      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50 }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
   onEditState(cell, row) {
     return (
-      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50 }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
-  // showImage(cell, row) {
-  //   return (
-  //     <img
-  //       src={`${AppConfig.serverURL}/${row.FilePath}`}
-  //       style={{ height: 50, width: 50 }}
-  //     />
-  //   );
-  // }
+
   render() {
     const sortingOptions = {
       //defaultSortName: "CropName",
@@ -72,7 +62,7 @@ class FeedbackResponse extends Component {
           value: 20
         },
         {
-          text: "All",
+          text: "All"
           //value: this.props.cropsList.length
         }
       ],
@@ -81,14 +71,12 @@ class FeedbackResponse extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout
-        name="Feedback Response"
-      >
+      <CardLayout name="Feedback Response">
         <FormGroup row>
           <Col xs="12">
             <BootstrapTable
               ref="table"
-             // data={this.props.cropsList}
+              // data={this.props.cropsList}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -100,7 +88,7 @@ class FeedbackResponse extends Component {
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
-               // dataField="CropName"
+                // dataField="CropName"
                 headerAlign="left"
                 width="40"
                 csvHeader="Crop Name"
@@ -109,7 +97,7 @@ class FeedbackResponse extends Component {
                 Feedback Provider Name
               </TableHeaderColumn>
               <TableHeaderColumn
-               // dataField="FilePath"
+                // dataField="FilePath"
                 headerAlign="left"
                 width="40"
                 //dataFormat={this.showImage.bind(this)}
@@ -119,7 +107,7 @@ class FeedbackResponse extends Component {
                 Rating
               </TableHeaderColumn>
               <TableHeaderColumn
-              //  dataField="Ready"
+                //  dataField="Ready"
                 headerAlign="left"
                 width="40"
                 csvHeader="Active"
@@ -153,14 +141,10 @@ class FeedbackResponse extends Component {
   }
 }
 const mapStateToProps = state => {
-  return {
-    //cropsList: state.cropsReducer.cropsList
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    //getCropsList: () => dispatch(actions.getCropsList())
-  };
+  return {};
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FeedbackResponse);

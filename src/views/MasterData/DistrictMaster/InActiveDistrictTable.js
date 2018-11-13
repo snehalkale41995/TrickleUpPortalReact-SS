@@ -7,7 +7,7 @@ class InActiveDirtrictTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.districts}
-        pagination={true}
+        pagination={this.props.districts.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         // exportCSV={true}

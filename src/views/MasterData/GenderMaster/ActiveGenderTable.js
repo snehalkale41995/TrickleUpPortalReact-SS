@@ -7,7 +7,7 @@ class ActiveGenderTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.genders}
-        pagination={true}
+        pagination={this.props.genders.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

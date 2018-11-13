@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
 import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
-
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -36,7 +35,11 @@ class RolesList extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.roleMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.roleMasterError);
+    }
+  }
   onDeleteState(cell, row) {
     if (this.state.tableStatus) {
       return (
@@ -78,7 +81,6 @@ class RolesList extends Component {
       role.Active = true;
       this.props.deleteRole(role.Id, role);
     }
-    //this.setState({ loading: true });
     setTimeout(() => {
       let message = "";
       let displayMessage = compRef.state.tableStatus
@@ -87,7 +89,6 @@ class RolesList extends Component {
       compRef.props.roleMasterError
         ? (message = "Something went wrong !")
         : (message = displayMessage);
-      //compRef.setState({ loading: false });
       Toaster.Toaster(message, compRef.props.roleMasterError);
     }, 1000);
     this.setState({

@@ -7,7 +7,7 @@ class InActiveGrampanchayatTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.grampanchayats}
-        pagination={true}
+        pagination={this.props.grampanchayats.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

@@ -31,28 +31,72 @@ export const storeCurrentCropAudioAllocation = audioAllocation => {
     type: actionTypes.STORE_CROP_AUDIO_ALLOCATION,
     audioAllocation: audioAllocation
   };
-}
+};
+export const storeCurrentCropStepAudioAllocation = audioAllocation => {
+  return {
+    type: actionTypes.STORE_CROP_STEP_AUDIO_ALLOCATION,
+    audioAllocation: audioAllocation
+  };
+};
+
+export const storeCurrentCropMaterialAudioAllocation = audioAllocation => {
+  return {
+    type: actionTypes.STORE_CROP_MATERIAL_AUDIO_ALLOCATION,
+    audioAllocation: audioAllocation
+  };
+};
+export const logCropError = error => {
+  return {
+    type: actionTypes.LOG_CROP_ERROR,
+    cropError: error
+  };
+};
+export const logCropStepError = error => {
+  return {
+    type: actionTypes.LOG_CROP_STEP_ERROR,
+    cropStepError: error
+  };
+};
+export const logCropMaterialError = error => {
+  return {
+    type: actionTypes.LOG_CROP_MATERIAL_ERROR,
+    cropMaterialError: error
+  };
+};
 export const getCropsList = () => {
-  let cropsList = [];
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Crops/GetCrops?langCode=26`)
       .then(response => {
-        cropsList = response.data.data.Crops;
-        dispatch(storeCropsList(cropsList));
+        if (response.data.success) {
+          let cropsList = response.data.data.Crops;
+          dispatch(storeCropsList(cropsList));
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logCropError(error));
+      });
   };
 };
 export const getCropSteps = () => {
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/Cultivation_Steps/GetCultivation_StepsLan?langCode=26`)
+      .get(
+        `${AppConfig.serverURL}/api/Cultivation_Steps/GetCultivation_StepsLan?langCode=26`
+      )
       .then(response => {
-        let cropSteps = response.data.data.Cultivation_Steps;
-        dispatch(storeCropSteps(cropSteps));
+        if (response.data.success) {
+          let cropSteps = response.data.data.Cultivation_Steps;
+          dispatch(storeCropSteps(cropSteps));
+        } else {
+          dispatch(logCropStepError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logCropStepError(error));
+      });
   };
 };
 
@@ -63,9 +107,17 @@ export const getCropStepsMaterial = () => {
         `${AppConfig.serverURL}/api/CropSteps_Material/GetCropSteps_Material?langCode=26`
       )
       .then(response => {
-        dispatch(storeCropStepMaterials(response.data.data.CropSteps_Material));
+        if (response.data.success) {
+          dispatch(
+            storeCropStepMaterials(response.data.data.CropSteps_Material)
+          );
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logCropMaterialError(error));
+      });
   };
 };
 export const getCropCultivationSteps = id => {
@@ -73,9 +125,15 @@ export const getCropCultivationSteps = id => {
     axios
       .get(`${AppConfig.serverURL}/api/Crops/GetCropStepMaterialData?id=${id}`)
       .then(response => {
-        dispatch(storeCurrentCrop(response.data.data));
+        if (response.data.success) {
+          dispatch(storeCurrentCrop(response.data.data));
+        } else {
+          dispatch(logCropStepError(response.data.error));
+        }
       })
-      .catch(error => {});
+      .catch(error => {
+        dispatch(logCropStepError(error));
+      });
   };
 };
 export const storeCropImage = Files => {
@@ -86,23 +144,73 @@ export const storeCropImage = Files => {
         //console.log("Post Image Resopnse", response);
       })
       .catch(error => {
-       // console.log("Post Image error", error);
+        // console.log("Post Image error", error);
       });
   };
 };
-export const getCropAudioAllocation = id => {
+export const getCropAudioAllocation = cropId => {
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/Crop_AudioAllocation/Get_CropAudioAllocation?CropId=${id}`)
+      .get(
+        `${AppConfig.serverURL}/api/Crop_AudioAllocation/Get_CropAudioAllocation?CropId=${cropId}`
+      )
       .then(response => {
+        if (response.data.success) {
           let audioAllocation = response.data.data.AudioAllocation;
-          audioAllocation.forEach((audio) => {
+          audioAllocation.forEach(audio => {
             audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
-          })
+          });
           dispatch(storeCurrentCropAudioAllocation(audioAllocation));
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
       })
       .catch(error => {
-        console.log("getCropAudioAllocation werrr", error);
+        dispatch(logCropError(error));
+      });
+  };
+};
+export const getCropStepsAudioAllocation = stepId => {
+  return dispatch => {
+    axios
+      .get(
+        `${AppConfig.serverURL}/api/CropStepAudio_Allocation/GetStep_Audio?StepId=${stepId}`
+      )
+      .then(response => {
+        if (response.data.success) {
+          let audioAllocation = response.data.data.AudioAllocation;
+          audioAllocation.forEach(audio => {
+            audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
+          });
+          dispatch(storeCurrentCropStepAudioAllocation(audioAllocation));
+        } else {
+          dispatch(logCropStepError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropStepError(error));
+      });
+  };
+};
+export const getCropMaterialAudioAllocation = materialId => {
+  return dispatch => {
+    axios
+      .get(
+        `${AppConfig.serverURL}/api/CropMaterial_AudioAllocation/GetCropMaterial_Audio?MaterialId=${materialId}`
+      )
+      .then(response => {
+        if (response.data.success) {
+          let audioAllocation = response.data.data.AudioAllocation;
+          audioAllocation.forEach(audio => {
+            audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
+          });
+          dispatch(storeCurrentCropMaterialAudioAllocation(audioAllocation));
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError(error));
       });
   };
 };

@@ -7,7 +7,7 @@ class ActiveStateTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.states}
-        pagination={true}
+        pagination={this.props.states.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

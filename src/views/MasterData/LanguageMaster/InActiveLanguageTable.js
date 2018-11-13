@@ -7,7 +7,7 @@ class InActiveLanguageTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.languages}
-        pagination={true}
+        pagination={this.props.languages.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

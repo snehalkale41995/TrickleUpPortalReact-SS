@@ -34,7 +34,11 @@ class GenderList extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.genderMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.genderMasterError);
+    }
+  }
   onDeleteState(cell, row) {
     if (this.state.tableStatus) {
       return (

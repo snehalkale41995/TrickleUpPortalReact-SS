@@ -11,6 +11,9 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import _ from "lodash";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 
 //const cropData = require('./crop.json');
 class CropForm extends Component {
@@ -54,6 +57,9 @@ class CropForm extends Component {
       this.setState({
         loading: false
       });
+    }
+    if (this.props.cropError) {
+      Toaster.Toaster("Something went wrong !", this.props.cropError);
     }
   }
   onChangeName(event) {
@@ -258,24 +264,6 @@ class CropForm extends Component {
                       >
                         Audio
                       </TableHeaderColumn>
-                      {/* <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Deactivate
-              </TableHeaderColumn> */}
                     </BootstrapTable>
                   </Col>
                 </FormGroup>
@@ -289,7 +277,7 @@ class CropForm extends Component {
                 <Button
                   className="theme-positive-btn"
                   onClick={() => this.onSubmit()}
-                  style={{ pointerEvents: "none", opacity :  0.50  }}
+                  style={{ pointerEvents: "none", opacity: 0.5 }}
                 >
                   Save
                 </Button>
@@ -309,7 +297,7 @@ class CropForm extends Component {
               <Col md="1">
                 <Button
                   className="theme-reset-btn"
-                  style={{ pointerEvents: "none", opacity :  0.50  }}
+                  style={{ pointerEvents: "none", opacity: 0.5 }}
                 >
                   {" "}
                   Reset
@@ -318,6 +306,7 @@ class CropForm extends Component {
             </FormGroup>
           )}
         </CardLayout>
+        <ToastContainer autoClose={2000} />
       </div>
     );
   }
@@ -325,7 +314,8 @@ class CropForm extends Component {
 const mapStateToProps = state => {
   return {
     cropsList: state.cropsReducer.cropsList,
-    currentCropAudioAllocation: state.cropsReducer.currentCropAudioAllocation
+    currentCropAudioAllocation: state.cropsReducer.currentCropAudioAllocation,
+    cropError: state.cropsReducer.cropError
   };
 };
 

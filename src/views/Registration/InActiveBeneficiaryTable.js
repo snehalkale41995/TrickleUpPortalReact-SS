@@ -7,7 +7,7 @@ class InActiveBeneficiaryTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.beneficiaryList}
-        pagination={true}
+        pagination={this.props.beneficiaryList.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         exportCSV={true}

@@ -31,6 +31,7 @@ const CardLayout = props => (
                   <Col md="2">
                     <Link to={props.buttonLink} onClick={props.buttonClick}>
                       <Button
+                        //title={props.active === "none" ? "Work in progress"  :  props.buttonName}
                         type="button"
                         className="theme-positive-btn card-btn"
                         style={{ pointerEvents: props.active , opacity : props.active === "none" ? 0.50 : 1}}

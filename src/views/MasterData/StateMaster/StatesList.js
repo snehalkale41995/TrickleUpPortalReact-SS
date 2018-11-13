@@ -11,6 +11,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
 import ActiveStateTable from "./ActiveStateTable";
 import InActiveStateTable from "./InActiveStateTable";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 class StatesList extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +32,11 @@ class StatesList extends Component {
     this.props.getStatesList();
   }
 
+  componentDidMount() {
+    if (this.props.stateMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.stateMasterError);
+    }
+  }
   onStateValueChange(value) {
     this.setState({
       selectedState: value.value
@@ -51,8 +59,17 @@ class StatesList extends Component {
   onConfirmDelete() {
     let state = { ...this.state.stateToDelete };
     this.state.tableStatus ? (state.Active = false) : (state.Active = true);
-    //state.Active = false;
     this.props.deleteState(state.Id, state);
+    let displayMessage = this.state.tableStatus
+      ? "State deactivated successfully"
+      : "State activated successfully";
+    setTimeout(() => {
+      let message = "";
+      this.props.stateMasterError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, this.props.stateMasterError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -181,79 +198,6 @@ class StatesList extends Component {
                   onActivateState={this.onActivateState.bind(this)}
                 />
               )}
-              {/* <BootstrapTable
-                ref="table"
-                data={
-                  this.state.tableStatus
-                    ? this.props.states
-                    : this.props.inactiveStates
-                }
-                pagination={true}
-                search={true}
-                options={sortingOptions}
-                hover={true}
-                csvFileName="States List"
-              >
-                <TableHeaderColumn
-                  dataField="Id"
-                  headerAlign="left"
-                  isKey
-                  hidden
-                >
-                  Id
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  thStyle={trStyle}
-                  dataField="StateName"
-                  headerAlign="left"
-                  width="60"
-                  csvHeader="State Name"
-                  dataSort={true}
-                >
-                  State Name
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="StateCode"
-                  headerAlign="left"
-                  width="40"
-                  csvHeader="Code"
-                  dataSort={true}
-                >
-                  Code
-                </TableHeaderColumn>
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="edit"
-                    dataFormat={this.onEditState.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Edit
-                  </TableHeaderColumn>
-                ) : null}
-                {this.state.tableStatus ? (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onDeleteState.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Deactivate
-                  </TableHeaderColumn>
-                ) : (
-                  <TableHeaderColumn
-                    dataField="delete"
-                    dataFormat={this.onActivateState.bind(this)}
-                    headerAlign="left"
-                    width="20"
-                    export={false}
-                  >
-                    Activate
-                  </TableHeaderColumn>
-                )}
-              </BootstrapTable> */}
             </Col>
           </FormGroup>
           <ConfirmModal
@@ -268,6 +212,7 @@ class StatesList extends Component {
             }
           />
         </CardLayout>
+        <ToastContainer autoClose={2000} />
       </div>
     );
   }
@@ -276,7 +221,8 @@ const mapStateToProps = state => {
   return {
     statesList: state.stateReducer.statesList,
     states: state.stateReducer.states,
-    inactiveStates: state.stateReducer.inactiveStates
+    inactiveStates: state.stateReducer.inactiveStates,
+    stateMasterError: state.stateReducer.stateMasterError
   };
 };
 

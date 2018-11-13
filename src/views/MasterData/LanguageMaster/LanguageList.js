@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col,Row } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
@@ -34,7 +34,11 @@ class LanguageList extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.languageMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.languageMasterError);
+    }
+  }
   onDeleteState(cell, row) {
     if (this.state.tableStatus) {
       return (
@@ -76,7 +80,6 @@ class LanguageList extends Component {
       language.Active = true;
       this.props.deleteLanguage(language.Id, language);
     }
-    // this.setState({ loading: true });
     setTimeout(() => {
       let message = "";
       let displayMessage = compRef.state.tableStatus
@@ -85,7 +88,6 @@ class LanguageList extends Component {
       compRef.props.languageMasterError
         ? (message = "Something went wrong !")
         : (message = displayMessage);
-      // compRef.setState({ loading: false });
       Toaster.Toaster(message, compRef.props.languageMasterError);
     }, 1000);
     this.setState({
@@ -110,7 +112,7 @@ class LanguageList extends Component {
   render() {
     const sortingOptionsActive = {
       defaultSortName: "LanguageName",
-      noDataText: 'No records found for active language' ,
+      noDataText: "No records found for active language",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -134,7 +136,7 @@ class LanguageList extends Component {
     };
     const sortingOptionsInActive = {
       defaultSortName: "LanguageName",
-      noDataText: 'No records found for inactive language' ,
+      noDataText: "No records found for inactive language",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {

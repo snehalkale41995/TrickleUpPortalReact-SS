@@ -11,6 +11,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
 import ActiveDistrictTable from "./ActiveDistrictTable";
 import InActiveDistrictTable from "./InActiveDistrictTable";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 
 class DistrictsList extends Component {
   constructor(props) {
@@ -34,6 +37,11 @@ class DistrictsList extends Component {
         loading: false
       });
     }, 2000);
+  }
+  componentDidMount() {
+    if (this.props.districtMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.districtMasterError);
+    }
   }
   onDistrictValueChange(value) {
     this.setState({
@@ -60,6 +68,16 @@ class DistrictsList extends Component {
       ? (district.Active = false)
       : (district.Active = true);
     this.props.deleteDistrict(district.Id, district);
+    let displayMessage = this.state.tableStatus
+      ? "District deactivated successfully"
+      : "District activated successfully";
+    setTimeout(() => {
+      let message = "";
+      this.props.districtMasterError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, this.props.districtMasterError);
+    }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -202,6 +220,7 @@ class DistrictsList extends Component {
               : "Are you sure you want to activate this district record ?"
           }
         />
+        <ToastContainer autoClose={2000} />
       </div>
     );
   }
@@ -210,7 +229,8 @@ const mapStateToProps = state => {
   return {
     districtsList: state.districtReducer.districtsList,
     districts: state.districtReducer.districts,
-    inactiveDistrict: state.districtReducer.inactiveDistrict
+    inactiveDistrict: state.districtReducer.inactiveDistrict,
+    districtMasterError: state.districtReducer.districtMasterError
   };
 };
 

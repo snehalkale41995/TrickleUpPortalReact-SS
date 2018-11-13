@@ -38,17 +38,20 @@ class Login extends Component {
     let user = this.state.user;
     if (user.userName.trim().length > 0 && user.password.trim().length > 0) {
       this.props.loginUser(user);
-      setTimeout(() => {
-        localStorage.clear();
-      }, 900000);
+      // setTimeout(() => {
+      //   localStorage.clear();
+      //   window.location.reload();
+      // }, 1800000);
       setTimeout(() => {
         let loginError = compRef.props.loginError;
         let loginErrorMsg = compRef.props.loginErrorMsg;
         compRef.Toaster(loginError, "Login", loginErrorMsg);
       }, 1000);
     } else {
-      if (!user.userName || user.userName.trim().length === 0) this.setState({userNameRequired : true}) ;
-      if (!user.password || user.password.trim().length === 0)  this.setState({passwordRequired : true});
+      if (!user.userName || user.userName.trim().length === 0)
+        this.setState({ userNameRequired: true });
+      if (!user.password || user.password.trim().length === 0)
+        this.setState({ passwordRequired: true });
     }
   };
 
@@ -60,10 +63,10 @@ class Login extends Component {
       );
       localStorage.setItem("user", compRef.props.loggedInUserId);
       localStorage.setItem("userDetails", loggedInUserDetails);
-      // setTimeout(() => {
-      //   localStorage.clear();
-      //   window.location.reload();
-      // }, 1800000 );
+      setTimeout(() => {
+        localStorage.clear();
+        window.location.reload();
+      }, 1800000);
       toast.success(actionName + " Successfull...", {
         position: toast.POSITION.BOTTOM_RIGHT
       });

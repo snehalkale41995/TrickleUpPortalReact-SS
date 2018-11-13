@@ -7,7 +7,7 @@ class ActiveRoleTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.Roles}
-        pagination={true}
+        pagination={this.props.Roles.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

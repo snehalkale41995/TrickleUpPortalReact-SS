@@ -7,7 +7,7 @@ class ActiveVillageTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.villages}
-        pagination={true}
+        pagination={this.props.villages.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}

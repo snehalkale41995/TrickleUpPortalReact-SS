@@ -7,7 +7,7 @@ class InActiveOperationalUserTable extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.operationalUsers}
-        pagination={true}
+        pagination={this.props.operationalUsers.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         exportCSV={true}

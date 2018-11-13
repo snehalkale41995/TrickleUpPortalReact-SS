@@ -11,6 +11,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
 import ActiveGrampanchayatTable from "./ActiveGrampanchayatTable";
 import InActiveGrampanchayatTable from "./InActiveGrampanchayatTable";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 
 class GrampanchayatList extends Component {
   constructor(props) {
@@ -33,7 +36,11 @@ class GrampanchayatList extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.grampanchayatMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.grampanchayatMasterError);
+    }
+  }
   onDeleteGrampanchayat(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
@@ -53,6 +60,16 @@ class GrampanchayatList extends Component {
       ? (grampanchayat.Active = false)
       : (grampanchayat.Active = true);
     this.props.deleteGrampanchayat(grampanchayat.Id, grampanchayat);
+    let displayMessage = this.state.tableStatus
+    ? "Grampanchayat deactivated successfully"
+    : "Grampanchayat activated successfully";
+  setTimeout(() => {
+    let message = "";
+    this.props.grampanchayatMasterError
+      ? (message = "Something went wrong !")
+      : (message = displayMessage);
+    Toaster.Toaster(message, this.props.grampanchayatMasterError);
+  }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -199,6 +216,7 @@ class GrampanchayatList extends Component {
                 : "Are you sure you want to activate this grampanchayat record ?"
             }
           />
+          <ToastContainer autoClose={2000} />
         </CardLayout>
       </div>
     );
@@ -207,7 +225,8 @@ class GrampanchayatList extends Component {
 const mapStateToProps = state => {
   return {
     grampanchayats: state.grampanchayatReducer.grampanchayats,
-    inActiveGrampanchayat: state.grampanchayatReducer.inActiveGrampanchayat
+    inActiveGrampanchayat: state.grampanchayatReducer.inActiveGrampanchayat,
+    grampanchayatMasterError : state.grampanchayatReducer.grampanchayatMasterError
   };
 };
 

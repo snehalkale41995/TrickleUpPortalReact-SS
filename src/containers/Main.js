@@ -26,6 +26,10 @@ import Login from "../views/Authentication/Login";
 let routeStack;
 class Main extends Component {
   componentDidMount() {
+    setTimeout(() => {
+      localStorage.clear();
+      window.location.reload();
+    }, 1800000);
     this.props.getStatesList();
     this.props.getDistrictsList();
     this.props.getBeneficiaryList();

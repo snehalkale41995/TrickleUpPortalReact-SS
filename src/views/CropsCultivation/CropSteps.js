@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col} from "reactstrap";
+import { FormGroup, Col } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import AppConfig from "../../constants/AppConfig";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 
 class CropSteps extends Component {
   constructor(props) {
@@ -25,14 +28,17 @@ class CropSteps extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.cropStepError) {
+      Toaster.Toaster("Something went wrong !", this.props.cropStepError);
+    }
+  }
   onDeleteState(cell, row) {
     return (
-      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50  }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
   onEditState(cell, row) {
@@ -83,7 +89,7 @@ class CropSteps extends Component {
         name="Crop Steps"
         buttonName="Add crop step"
         buttonLink={this}
-        active = "none"
+        active="none"
         //buttonLink={`${this.props.match.url}/CropStepForm`}
       >
         <FormGroup row>
@@ -154,18 +160,20 @@ class CropSteps extends Component {
                 width="20"
                 export={false}
               >
-              Deactivate
+                Deactivate
               </TableHeaderColumn>
             </BootstrapTable>
           </Col>
         </FormGroup>
+        <ToastContainer autoClose={2000} />
       </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    cropSteps: state.cropsReducer.cropSteps
+    cropSteps: state.cropsReducer.cropSteps,
+    cropStepError: state.cropsReducer.cropStepError
   };
 };
 

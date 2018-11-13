@@ -7,6 +7,9 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 
 class CropsMaterial extends Component {
   constructor(props) {
@@ -23,10 +26,14 @@ class CropsMaterial extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.cropMaterialError) {
+      Toaster.Toaster("Something went wrong !", this.props.cropMaterialError);
+    }
+  }
   onDeleteState(cell, row) {
     return (
-      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50  }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
@@ -72,7 +79,7 @@ class CropsMaterial extends Component {
         name="Crop Materials"
         buttonName="Add crop material"
         buttonLink={this}
-        active = "none"
+        active="none"
         //buttonLink={`${this.props.match.url}/CropsMaterialForm`}
       >
         <FormGroup row>
@@ -134,18 +141,20 @@ class CropsMaterial extends Component {
                 width="20"
                 export={false}
               >
-              Deactivate
+                Deactivate
               </TableHeaderColumn>
             </BootstrapTable>
           </Col>
         </FormGroup>
+        <ToastContainer autoClose={2000} />
       </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    cropStepsMaterial: state.cropsReducer.cropStepsMaterial
+    cropStepsMaterial: state.cropsReducer.cropStepsMaterial,
+    cropMaterialError: state.cropsReducer.cropMaterialError
   };
 };
 

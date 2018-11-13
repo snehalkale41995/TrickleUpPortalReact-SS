@@ -8,7 +8,9 @@ import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import AppConfig from "../../constants/AppConfig";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class Crops extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +20,6 @@ class Crops extends Component {
   }
   componentWillMount() {
     this.props.getCropsList();
-    // this.props.getDistrictsList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -26,14 +27,17 @@ class Crops extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.cropError) {
+      Toaster.Toaster("Something went wrong !", this.props.cropError);
+    }
+  }
   onDeleteState(cell, row) {
     return (
-      <Link to={this} style={{ pointerEvents: "none", opacity :  0.50 }}>
+      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
         <i className="fa fa-trash" title="Delete" />
       </Link>
     );
-    //onClick={() => componentRef.deleteConfirm(row._id)}
   }
 
   onEditState(cell, row) {
@@ -48,7 +52,7 @@ class Crops extends Component {
       <img
         src={`${AppConfig.serverURL}/${row.FilePath}`}
         style={{ height: 50, width: 50 }}
-        alt =""
+        alt=""
       />
     );
   }
@@ -84,7 +88,7 @@ class Crops extends Component {
         name="Crops"
         buttonName="Add crop"
         buttonLink={this}
-        active = "none"
+        active="none"
         //buttonLink={`${this.props.match.url}/CropForm`}
       >
         <FormGroup row>
@@ -151,13 +155,15 @@ class Crops extends Component {
             </BootstrapTable>
           </Col>
         </FormGroup>
+        <ToastContainer autoClose={2000} />
       </CardLayout>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    cropsList: state.cropsReducer.cropsList
+    cropsList: state.cropsReducer.cropsList,
+    cropError: state.cropsReducer.cropError
   };
 };
 

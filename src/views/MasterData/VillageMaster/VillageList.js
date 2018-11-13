@@ -12,6 +12,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import * as constants from "../../../constants/StatusConstants";
 import ActiveVillageTable from "./ActiveVillageTable";
 import InActiveVillageTable from "./InActiveVillageTable";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../../constants/Toaster";
 class VillageList extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +35,11 @@ class VillageList extends Component {
       });
     }, 2000);
   }
-
+  componentDidMount() {
+    if (this.props.villageMasterError) {
+      Toaster.Toaster("Something went wrong !", this.props.villageMasterError);
+    }
+  }
   onDeleteVillage(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
@@ -50,6 +57,16 @@ class VillageList extends Component {
     let village = { ...this.state.villageToDelete };
     this.state.tableStatus ? (village.Active = false) : (village.Active = true);
     this.props.deleteVillage(village.Id, village);
+    let displayMessage = this.state.tableStatus
+    ? "Village deactivated successfully"
+    : "Village activated successfully";
+  setTimeout(() => {
+    let message = "";
+    this.props.villageMasterError
+      ? (message = "Something went wrong !")
+      : (message = displayMessage);
+    Toaster.Toaster(message, this.props.villageMasterError);
+  }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -191,6 +208,7 @@ class VillageList extends Component {
             }
           />
         </CardLayout>
+        <ToastContainer autoClose={1000} />
       </div>
     );
   }
@@ -198,7 +216,8 @@ class VillageList extends Component {
 const mapStateToProps = state => {
   return {
     villages: state.villageReducer.villages,
-    inActiveVillages: state.villageReducer.inActiveVillages
+    inActiveVillages: state.villageReducer.inActiveVillages,
+    villageMasterError: state.villageReducer.villageMasterError
   };
 };
 
