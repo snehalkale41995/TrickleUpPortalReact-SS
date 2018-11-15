@@ -19,7 +19,7 @@ class VillageList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       showForm: false,
       villageToEdit: {},
       villageToDelete: {},
@@ -57,16 +57,16 @@ class VillageList extends Component {
     let village = { ...this.state.villageToDelete };
     this.state.tableStatus ? (village.Active = false) : (village.Active = true);
     this.props.deleteVillage(village.Id, village);
-    let displayMessage = this.state.tableStatus
-    ? "Village deactivated successfully"
-    : "Village activated successfully";
-  setTimeout(() => {
-    let message = "";
-    this.props.villageMasterError
-      ? (message = "Something went wrong !")
-      : (message = displayMessage);
-    Toaster.Toaster(message, this.props.villageMasterError);
-  }, 1000);
+  //   let displayMessage = this.state.tableStatus
+  //   ? "Village deactivated successfully"
+  //   : "Village activated successfully";
+  // setTimeout(() => {
+  //   let message = "";
+  //   this.props.villageMasterError
+  //     ? (message = "Something went wrong !")
+  //     : (message = displayMessage);
+  //   Toaster.Toaster(message, this.props.villageMasterError);
+  // }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -174,6 +174,7 @@ class VillageList extends Component {
                 options={constants.tableStatus}
                 value={this.state.tableStatus}
                 onChange={this.onStatusChange.bind(this)}
+                search ={false}
                 simpleValue
               />
             </Col>
@@ -208,7 +209,7 @@ class VillageList extends Component {
             }
           />
         </CardLayout>
-        <ToastContainer autoClose={1000} />
+        {/* <ToastContainer autoClose={1000} /> */}
       </div>
     );
   }

@@ -5,10 +5,10 @@ import 'react-html5video/dist/styles.css';
 const VideoPlayer = props => (
   <div className="animated fadeIn">
     <Video
-      className="fixed-height"
+      className={props.dimensions ? props.dimensions : "fixed-height"}
       muted={props.mute}
       autoPlay={props.autoPlay}
-      loop
+      //loop
       controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
     >
       <source src={props.source} />

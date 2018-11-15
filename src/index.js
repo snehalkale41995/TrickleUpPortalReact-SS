@@ -5,8 +5,8 @@ import './index.css';
 import './customStyles.css'
 import App from './App';
 // disable ServiceWorker
-// import registerServiceWorker from './registerServiceWorker';
+ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 // disable ServiceWorker
-// registerServiceWorker();
+ registerServiceWorker();

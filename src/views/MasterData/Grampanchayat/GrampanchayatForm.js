@@ -117,15 +117,17 @@ class GrampanchayatForm extends Component {
             grampanchayatUpdate
           )
         : this.props.createGrampanchayat(grampanchayatCreate);
-      this.setState({ loading: true });
+      //this.setState({ loading: true });
       setTimeout(() => {
         let message = "";
+       
         compRef.props.grampanchayatMasterError
           ? (message = "Something went wrong !")
           : compRef.state.updateFlag
             ? (message = "Grampanchayat updated successfully")
             : (message = "Grampanchayat created successfully");
-        compRef.setState({ loading: false });
+            compRef.onReset();
+       // compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.grampanchayatMasterError);
         setTimeout(() => {
           if (!compRef.props.grampanchayatMasterError) {
@@ -185,93 +187,95 @@ class GrampanchayatForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout
-        name="Grampanchayat Form"
-        navigation={true}
-        navigationRoute={this}
-        onClick={() => {
-          this.setState({ showList: true });
-        }}
-      >
-        <div className="div-padding">
-          <FormGroup row />
-          <FormGroup row>
-            <Col xs="10" md="5">
-              <Label>State</Label>
-              <DropdownSelect
-                name="States"
-                placeholder="Select State..."
-                options={this.props.statesList}
-                value={grampanchayat.State}
-                required={grampanchayat.StateRequired}
-                onChange={this.onStateValueChange.bind(this)}
-                simpleValue
-              />
-            </Col>
-            <Col md="5">
-              <Label>District</Label>
-              <DropdownSelect
-                name="District"
-                placeholder="Select district..."
-                options={this.state.districtOptions}
-                value={grampanchayat.District}
-                required={grampanchayat.DistrictRequired}
-                disabled={this.state.districtDisabled}
-                onChange={this.onDistrictValueChange.bind(this)}
-                simpleValue
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col xs="10" md="5">
-              <InputElement
-                type="text"
-                label="Grampanchayat"
-                name="GrampanchayatName"
-                maxLength={255}
-                placeholder="Grampanchayat name"
-                value={grampanchayat.GrampanchayatName}
-                required={grampanchayat.GrampanchayatNameRequired}
-                onChange={event => this.onChangeHandler(event)}
-              />
-            </Col>
-            <Col md="5" />
-          </FormGroup>
+      <div className="address-tabs-margin">
+        <CardLayout
+          name="Grampanchayat Form"
+          navigation={true}
+          navigationRoute={this}
+          onClick={() => {
+            this.setState({ showList: true });
+          }}
+        >
+          <div className="div-padding">
+            <FormGroup row />
+            <FormGroup row>
+              <Col xs="10" md="5">
+                <Label>State</Label>
+                <DropdownSelect
+                  name="States"
+                  placeholder="Select State..."
+                  options={this.props.statesList}
+                  value={grampanchayat.State}
+                  required={grampanchayat.StateRequired}
+                  onChange={this.onStateValueChange.bind(this)}
+                  simpleValue
+                />
+              </Col>
+              <Col md="5">
+                <Label>District</Label>
+                <DropdownSelect
+                  name="District"
+                  placeholder="Select district..."
+                  options={this.state.districtOptions}
+                  value={grampanchayat.District}
+                  required={grampanchayat.DistrictRequired}
+                  disabled={this.state.districtDisabled}
+                  onChange={this.onDistrictValueChange.bind(this)}
+                  simpleValue
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col xs="10" md="5">
+                <InputElement
+                  type="text"
+                  label="Grampanchayat"
+                  name="GrampanchayatName"
+                  maxLength={255}
+                  placeholder="Grampanchayat name"
+                  value={grampanchayat.GrampanchayatName}
+                  required={grampanchayat.GrampanchayatNameRequired}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </Col>
+              <Col md="5" />
+            </FormGroup>
 
-          {this.state.updateFlag ? (
-            <FormGroup row>
-              <Col md="1">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={this.onSubmit.bind(this)}
-                >
-                  Save
-                </Button>
-              </Col>
-            </FormGroup>
-          ) : (
-            <FormGroup row>
-              <Col md="1">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={this.onSubmit.bind(this)}
-                >
-                  Create
-                </Button>
-              </Col>
-              <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={this.onReset.bind(this)}
-                >
-                  Reset
-                </Button>
-              </Col>
-            </FormGroup>
-          )}
-        </div>
-        <ToastContainer autoClose={1000} />
-      </CardLayout>
+            {this.state.updateFlag ? (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Save
+                  </Button>
+                </Col>
+              </FormGroup>
+            ) : (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmit.bind(this)}
+                  >
+                    Create
+                  </Button>
+                </Col>
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </FormGroup>
+            )}
+          </div>
+          <ToastContainer autoClose={1000} />
+        </CardLayout>
+      </div>
     );
   }
 }

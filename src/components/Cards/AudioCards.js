@@ -3,7 +3,7 @@ import { Row, Card, CardBody, FormGroup } from "reactstrap";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 const AudioCards = props => (
   <Card className="mx-8 bg-gray-200">
-    <CardBody className="p-4" id={props.id} onClick={props.onClick}>
+    <CardBody className="p-4 audio-card" id={props.id} onClick={props.onClick}>
       <Row className="m-1">
         <h6> {props.audioName}</h6>
       </Row>

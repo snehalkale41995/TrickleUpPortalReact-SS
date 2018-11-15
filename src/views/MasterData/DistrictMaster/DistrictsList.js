@@ -22,7 +22,7 @@ class DistrictsList extends Component {
       selectedDistrict: "",
       modalFlag: false,
       stateToEdit: {},
-      loading: true,
+      loading: false,
       showForm: false,
       modalStatus: false,
       districtToDelete: {},
@@ -68,16 +68,16 @@ class DistrictsList extends Component {
       ? (district.Active = false)
       : (district.Active = true);
     this.props.deleteDistrict(district.Id, district);
-    let displayMessage = this.state.tableStatus
-      ? "District deactivated successfully"
-      : "District activated successfully";
-    setTimeout(() => {
-      let message = "";
-      this.props.districtMasterError
-        ? (message = "Something went wrong !")
-        : (message = displayMessage);
-      Toaster.Toaster(message, this.props.districtMasterError);
-    }, 1000);
+    // let displayMessage = this.state.tableStatus
+    //   ? "District deactivated successfully"
+    //   : "District activated successfully";
+    // setTimeout(() => {
+    //   let message = "";
+    //   this.props.districtMasterError
+    //     ? (message = "Something went wrong !")
+    //     : (message = displayMessage);
+    //   Toaster.Toaster(message, this.props.districtMasterError);
+    // }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -186,6 +186,7 @@ class DistrictsList extends Component {
                 options={constants.tableStatus}
                 value={this.state.tableStatus}
                 onChange={this.onStatusChange.bind(this)}
+                search ={false}
                 simpleValue
               />
             </Col>
@@ -220,7 +221,7 @@ class DistrictsList extends Component {
               : "Are you sure you want to activate this district record ?"
           }
         />
-        <ToastContainer autoClose={1000} />
+        {/* <ToastContainer autoClose={1000} /> */}
       </div>
     );
   }

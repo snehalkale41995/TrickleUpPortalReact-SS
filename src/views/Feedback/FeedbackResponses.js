@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import CardLayout from "../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions";
-import { FormGroup, Col, Button } from "reactstrap";
+import { FormGroup, Col, Button, Progress } from "reactstrap";
 import DropdownSelect from "../../components/InputElement/Dropdown";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import AppConfig from "../../constants/AppConfig";
+import ProgressBar from "../../components/ProgressBars";
 
 class FeedbackResponses extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class FeedbackResponses extends Component {
     };
   }
   componentWillMount() {
-    this.props.getFeedbackQuestionList();
+    this.props.getUserFeedbackList();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -43,11 +44,30 @@ class FeedbackResponses extends Component {
       </Link>
     );
   }
-
+  showRatingStars(cell, row) {
+    if (cell === 1) {
+      return (
+        <ProgressBar title="Strongly Disagree" status="danger" value={cell} />
+      );
+    } else if (cell === 2) {
+      return <ProgressBar title="Disagree" status="danger" value={cell} />;
+    } else if (cell === 3) {
+      return <ProgressBar title="Neutral" status="warning" value={cell} />;
+    } else if (cell === 4) {
+      return <ProgressBar title="Agree" status="success" value={cell} />;
+    } else if (cell === 5) {
+      return (
+        <ProgressBar title="Strongly Agree" status="success" value={cell} />
+      );
+    } else {
+      return <ProgressBar title="Neutral" status="success" value={cell} />;
+    }
+  }
   render() {
     const sortingOptions = {
-      defaultSortName: "Questions",
-      noDataText: "No records found for feedback Questions",
+      defaultSortName: "Name",
+      noDataText:
+        "No records found for feedback response as we are work in progress",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {
@@ -64,7 +84,7 @@ class FeedbackResponses extends Component {
         },
         {
           text: "All",
-          value: this.props.feedbackQuestions.length
+          value: this.props.userFeedbacks.length
         }
       ],
       sizePerPage: 5
@@ -72,14 +92,12 @@ class FeedbackResponses extends Component {
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
-      <CardLayout
-        name="Feedback Response"
-      >
-        <FormGroup row>
+      <CardLayout name="Feedback Response">
+        <FormGroup row className="div-padding">
           <Col xs="12">
             <BootstrapTable
               ref="table"
-              data={this.props.feedbackQuestions}
+              data={this.props.userFeedbacks}
               pagination={true}
               search={true}
               options={sortingOptions}
@@ -87,36 +105,40 @@ class FeedbackResponses extends Component {
               hover={true}
               //csvFileName="Crops List"
             >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
+              <TableHeaderColumn
+                dataField="userId"
+                headerAlign="left"
+                isKey
+                hidden
+              >
                 Id
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="Questions"
+                dataField="Name"
                 headerAlign="left"
                 width="40"
-                csvHeader="Crop Name"
                 dataSort={true}
               >
-                Question
+                Beneficiary
               </TableHeaderColumn>
               <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditState.bind(this)}
+                dataField="Feedback"
+                headerAlign="left"
+                width="30"
+                dataFormat={this.showRatingStars.bind(this)}
+                dataSort={true}
+              >
+                Rating
+              </TableHeaderColumn>
+              {/* <TableHeaderColumn
+                dataField="Date"
+                // dataFormat={this.onEditState.bind(this)}
                 headerAlign="left"
                 width="20"
                 export={false}
               >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Deactivate
-              </TableHeaderColumn>
+                Date
+              </TableHeaderColumn> */}
             </BootstrapTable>
           </Col>
         </FormGroup>
@@ -126,13 +148,13 @@ class FeedbackResponses extends Component {
 }
 const mapStateToProps = state => {
   return {
-    feedbackQuestions: state.feedbackReducer.feedbackQuestions
+    userFeedbacks: state.feedbackReducer.userFeedbacks
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getFeedbackQuestionList: () => dispatch(actions.getFeedbackQuestionList())
+    getUserFeedbackList: () => dispatch(actions.getUserFeedbackList())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FeedbackResponses);

@@ -19,7 +19,7 @@ class GrampanchayatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       showForm: false,
       grampanchayatToEdit: {},
       grampanchayatToDelete: {},
@@ -60,16 +60,16 @@ class GrampanchayatList extends Component {
       ? (grampanchayat.Active = false)
       : (grampanchayat.Active = true);
     this.props.deleteGrampanchayat(grampanchayat.Id, grampanchayat);
-    let displayMessage = this.state.tableStatus
-    ? "Grampanchayat deactivated successfully"
-    : "Grampanchayat activated successfully";
-  setTimeout(() => {
-    let message = "";
-    this.props.grampanchayatMasterError
-      ? (message = "Something went wrong !")
-      : (message = displayMessage);
-    Toaster.Toaster(message, this.props.grampanchayatMasterError);
-  }, 1000);
+  //   let displayMessage = this.state.tableStatus
+  //   ? "Grampanchayat deactivated successfully"
+  //   : "Grampanchayat activated successfully";
+  // setTimeout(() => {
+  //   let message = "";
+  //   this.props.grampanchayatMasterError
+  //     ? (message = "Something went wrong !")
+  //     : (message = displayMessage);
+  //   Toaster.Toaster(message, this.props.grampanchayatMasterError);
+  // }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -181,6 +181,7 @@ class GrampanchayatList extends Component {
                 options={constants.tableStatus}
                 value={this.state.tableStatus}
                 onChange={this.onStatusChange.bind(this)}
+                search ={false}
                 simpleValue
               />
             </Col>
@@ -216,7 +217,7 @@ class GrampanchayatList extends Component {
                 : "Are you sure you want to activate this grampanchayat record ?"
             }
           />
-          <ToastContainer autoClose={1000} />
+          {/* <ToastContainer autoClose={1000} /> */}
         </CardLayout>
       </div>
     );

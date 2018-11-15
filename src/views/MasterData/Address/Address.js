@@ -28,16 +28,16 @@ export default class Address extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: "1",
-      loading : true
+      loading: true
     };
   }
-componentDidMount (){
-  setTimeout(() => {
-    this.setState({
-      loading : false
-    })
-  }, 2000)
-}
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      });
+    }, 2000);
+  }
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({

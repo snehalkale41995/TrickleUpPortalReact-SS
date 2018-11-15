@@ -15,6 +15,18 @@ export const logFeedbackQuestionsError = error => {
     error: error
   };
 };
+export const storeUserFeedbackList = userFeedbacks=> {
+  return {
+    type: actionTypes.STORE_USER_FEEDBACKS,
+    userFeedbacks: userFeedbacks
+  };
+};
+export const logUserFeedbackError = error => {
+  return {
+    type: actionTypes.LOG_USER_FEEDBACK_ERROR,
+    error: error
+  };
+};
 
 export const getFeedbackQuestionList = () => {
   return dispatch => {
@@ -33,6 +45,22 @@ export const getFeedbackQuestionList = () => {
   };
 };
 
+export const getUserFeedbackList = () => {
+  return dispatch => {
+    axios
+      .get(`${AppConfig.serverURL}/api/UserFeedbacks/GetUserFeedbacks`)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(storeUserFeedbackList(response.data.data.UserFeedbacks));
+        } else {
+          dispatch(logUserFeedbackError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logUserFeedbackError(error.response.data.Message));
+      });
+  };
+};
 // export const createFeedback = Feedback => {
 //   return dispatch => {
 //     axios

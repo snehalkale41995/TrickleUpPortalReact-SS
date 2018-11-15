@@ -47,7 +47,8 @@ class FeedbackQuestions extends Component {
   render() {
     const sortingOptions = {
       defaultSortName: "Questions",
-      noDataText: "No records found for feedback Questions",
+      noDataText:
+        "No records found for feedback Questions as we are work in progress",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {

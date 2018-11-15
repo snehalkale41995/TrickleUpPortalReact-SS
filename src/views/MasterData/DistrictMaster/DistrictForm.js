@@ -76,12 +76,13 @@ class DistrictForm extends Component {
         updateDistrict.UpdatedBy = 1;
         updateDistrict.UpdatedOn = new Date();
         this.props.updateDistrict(updateDistrict.Id, updateDistrict);
-        this.setState({ loading: true });
+       // this.setState({ loading: true });
         setTimeout(() => {
           compRef.props.districtMasterError
             ? (message = "Something went wrong !")
             : (message = "District updated successfully");
-          compRef.setState({ loading: false });
+            compRef.onReset();
+          //compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.districtMasterError);
           setTimeout(() => {
             if (!compRef.props.districtMasterError) {
@@ -156,6 +157,7 @@ class DistrictForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
+      <div className="address-tabs-margin">
       <CardLayout
         name="District Form"
         navigation={true}
@@ -225,6 +227,7 @@ class DistrictForm extends Component {
         </div>
         <ToastContainer autoClose={1000} />
       </CardLayout>
+      </div>
     );
   }
 }

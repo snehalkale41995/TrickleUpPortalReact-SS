@@ -60,16 +60,16 @@ class StatesList extends Component {
     let state = { ...this.state.stateToDelete };
     this.state.tableStatus ? (state.Active = false) : (state.Active = true);
     this.props.deleteState(state.Id, state);
-    let displayMessage = this.state.tableStatus
-      ? "State deactivated successfully"
-      : "State activated successfully";
-    setTimeout(() => {
-      let message = "";
-      this.props.stateMasterError
-        ? (message = "Something went wrong !")
-        : (message = displayMessage);
-      Toaster.Toaster(message, this.props.stateMasterError);
-    }, 1000);
+    // let displayMessage = this.state.tableStatus
+    //   ? "State deactivated successfully"
+    //   : "State activated successfully";
+    // setTimeout(() => {
+    //   let message = "";
+    //   this.props.stateMasterError
+    //     ? (message = "Something went wrong !")
+    //     : (message = displayMessage);
+    //   Toaster.Toaster(message, this.props.stateMasterError);
+    // }, 1000);
     this.setState({
       modalStatus: !this.state.modalStatus
     });
@@ -178,6 +178,7 @@ class StatesList extends Component {
                 options={constants.tableStatus}
                 value={this.state.tableStatus}
                 onChange={this.onStatusChange.bind(this)}
+                search ={false}
                 simpleValue
               />
             </Col>
@@ -212,7 +213,7 @@ class StatesList extends Component {
             }
           />
         </CardLayout>
-        <ToastContainer autoClose={1000} />
+        {/* <ToastContainer autoClose={1000} /> */}
       </div>
     );
   }

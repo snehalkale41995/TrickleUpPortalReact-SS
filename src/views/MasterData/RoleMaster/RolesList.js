@@ -176,6 +176,7 @@ class RolesList extends Component {
               options={constants.tableStatus}
               value={this.state.tableStatus}
               onChange={this.onTablestatusChange.bind(this)}
+              search ={false}
               simpleValue
             />
           </Col>

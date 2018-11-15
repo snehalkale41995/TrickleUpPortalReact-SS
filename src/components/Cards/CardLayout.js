@@ -19,22 +19,32 @@ const CardLayout = props => (
                   </Link>
                 ) : null}
                 <Col xs="12" md="6">
-              {
-                props.name ? 
-                <h1>{props.name}</h1> : 
-                <h3>{props.subName}</h3>
-              }
-                  
+                  {props.name ? (
+                    <h1>{props.name}</h1>
+                  ) : (
+                    <h3>{props.subName}</h3>
+                  )}
                 </Col>
                 <Col md="4" />
                 {props.buttonName ? (
                   <Col md="2">
+                    {props.gridIcon ? (
+                      <i
+                        className={props.gridIcon}
+                        style={{ fontSize: 20, padding: 9 }}
+                        onClick={props.toggleView}
+                        title={props.gridIconTitle}
+                      />
+                    ) : null}
                     <Link to={props.buttonLink} onClick={props.buttonClick}>
                       <Button
                         //title={props.active === "none" ? "Work in progress"  :  props.buttonName}
                         type="button"
                         className="theme-positive-btn card-btn"
-                        style={{ pointerEvents: props.active , opacity : props.active === "none" ? 0.50 : 1}}
+                        style={{
+                          pointerEvents: props.active,
+                          opacity: props.active === "none" ? 0.5 : 1
+                        }}
                       >
                         <i className="fa fa-plus" />&nbsp; {props.buttonName}
                       </Button>

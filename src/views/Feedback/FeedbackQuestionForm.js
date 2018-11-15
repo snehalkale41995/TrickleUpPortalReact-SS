@@ -13,20 +13,20 @@ class FeedbackQuestionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-    //   updateFlag: false,
-    //   loggedinUserId: "",
-    //   currentRole: {
-    //     Id: "",
-    //     RoleName: "",
-    //     RoleId: "",
-    //     RoleNameRequired: false,
-    //     RoleIdRequired: false,
-    //     CreatedOn: "",
-    //     CreatedBy: "",
-    //     UpdatedOn: "",
-    //     UpdatedBy: "",
-    //     Active: true
+      loading: false
+      //   updateFlag: false,
+      //   loggedinUserId: "",
+      //   currentRole: {
+      //     Id: "",
+      //     RoleName: "",
+      //     RoleId: "",
+      //     RoleNameRequired: false,
+      //     RoleIdRequired: false,
+      //     CreatedOn: "",
+      //     CreatedBy: "",
+      //     UpdatedOn: "",
+      //     UpdatedBy: "",
+      //     Active: true
       //}
     };
   }
@@ -148,7 +148,7 @@ class FeedbackQuestionForm extends Component {
     // });
   }
   render() {
-   // const { currentRole } = this.state;
+    // const { currentRole } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -167,7 +167,8 @@ class FeedbackQuestionForm extends Component {
                 placeholder="Question"
                 maxLength={255}
                 name="Question"
-               // required={currentRole.RoleNameRequired}
+                disabled={true}
+                // required={currentRole.RoleNameRequired}
                 //value={currentRole.RoleName}
                 onChange={event => this.onChangeHandler(event)}
               />
@@ -179,6 +180,7 @@ class FeedbackQuestionForm extends Component {
                 <Button
                   className="theme-positive-btn"
                   onClick={this.onSubmitState.bind(this)}
+                  style={{ pointerEvents: "none", opacity: 0.5 }}
                 >
                   Save
                 </Button>
@@ -190,6 +192,7 @@ class FeedbackQuestionForm extends Component {
                 <Button
                   className="theme-positive-btn"
                   onClick={this.onSubmitState.bind(this)}
+                  style={{ pointerEvents: "none", opacity: 0.5 }}
                 >
                   Create
                 </Button>
@@ -198,6 +201,7 @@ class FeedbackQuestionForm extends Component {
                 <Button
                   className="theme-reset-btn"
                   onClick={this.onReset.bind(this)}
+                  style={{ pointerEvents: "none", opacity: 0.5 }}
                 >
                   Reset
                 </Button>
@@ -226,4 +230,6 @@ const mapDispatchToProps = dispatch => {
     // getRoleById: (id) => dispatch(actions.getRoleById(id))
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackQuestionForm);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  FeedbackQuestionForm
+);

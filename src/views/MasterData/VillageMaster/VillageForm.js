@@ -149,15 +149,17 @@ class VillageForm extends Component {
       this.state.updateFlag
         ? this.props.updateVillage(villageUpdate.Id, villageUpdate)
         : this.props.createVillage(villageUpdate);
-      this.setState({ loading: true });
+      //this.setState({ loading: true });
       setTimeout(() => {
         let message = "";
+        
         compRef.props.villageMasterError
           ? (message = "Something went wrong !")
           : compRef.state.updateFlag
             ? (message = "Village updated successfully")
             : (message = "Village created successfully");
-        compRef.setState({ loading: false });
+            compRef.onReset();
+        //compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.villageMasterError);
         setTimeout(() => {
           if (!compRef.props.villageMasterError) {
@@ -216,6 +218,7 @@ class VillageForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
+      <div className="address-tabs-margin">
       <CardLayout
         name="Village Form"
         navigation={true}
@@ -315,6 +318,7 @@ class VillageForm extends Component {
         </div>
         <ToastContainer autoClose={1000} />
       </CardLayout>
+      </div>
     );
   }
 }

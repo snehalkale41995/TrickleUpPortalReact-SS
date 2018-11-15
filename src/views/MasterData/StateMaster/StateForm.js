@@ -73,13 +73,15 @@ class StatesForm extends Component {
         state.UpdatedOn = new Date();
         state.UpdatedBy = 1;
         this.props.updateState(state.Id, state);
-        this.setState({ loading: true });
+        //this.setState({ loading: true });
+
         setTimeout(() => {
           let message = "";
           compRef.props.stateMasterError
             ? (message = "Something went wrong !")
             : (message = "State updated successfully");
-          compRef.setState({ loading: false });
+            compRef.onReset();
+          //compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.stateMasterError);
           setTimeout(() => {
             if (!compRef.props.stateMasterError) {
@@ -99,13 +101,14 @@ class StatesForm extends Component {
         state.CreatedOn = new Date();
         state.CreatedBy = 1;
         this.props.createState(state);
-        this.setState({ loading: true });
+        //this.setState({ loading: true });
         setTimeout(() => {
           let message = "";
           compRef.props.stateMasterError
             ? (message = "Something went wrong !")
             : (message = "State created successfully");
-          compRef.setState({ loading: false });
+            compRef.onReset();
+         // compRef.setState({ loading: false });
           Toaster.Toaster(message, compRef.props.stateMasterError);
           setTimeout(() => {
             if (!compRef.props.stateMasterError) {
@@ -158,6 +161,7 @@ class StatesForm extends Component {
     ) : this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
+      <div className="address-tabs-margin">
       <CardLayout
         name="State Form"
         navigation={true}
@@ -230,6 +234,7 @@ class StatesForm extends Component {
           <ToastContainer autoClose={1000} />
         </div>
       </CardLayout>
+      </div>
     );
   }
 }
