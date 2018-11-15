@@ -87,6 +87,7 @@ class AudioContent extends Component {
         //active="none"
         gridIcon={this.state.showGridView ? "fa fa-th" : "fa fa-list"}
         toggleView={this.toggleView.bind(this)}
+        gridIconTitle ={this.state.showGridView ? "Show list view" : "Show grid view"}
       >
         {this.state.showGridView ? (
           <FormGroup row>

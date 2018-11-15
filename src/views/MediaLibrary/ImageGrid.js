@@ -6,8 +6,8 @@ class AudioGrid extends Component {
     return (
       <BootstrapTable
         ref="table"
-        data={this.props.audioFiles}
-        pagination={this.props.audioFiles.length > 0 ? true : false}
+        data={this.props.imageFiles}
+        pagination={this.props.imageFiles.length > 0 ? true : false}
         search={true}
         options={this.props.sortingOptions}
         hover={true}
@@ -16,19 +16,18 @@ class AudioGrid extends Component {
           Id
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="FileName"
+          dataField="ImageName"
           headerAlign="left"
           width="20"
           dataSort={true}
         >
-        File Name
+        Image Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="FilePath"
           dataFormat={this.props.showImage}
           headerAlign="left"
           width="20"
-          export={false}
         >
           Image
         </TableHeaderColumn>
