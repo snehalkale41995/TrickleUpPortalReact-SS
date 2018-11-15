@@ -63,6 +63,11 @@ export const logCropMaterialError = error => {
     cropMaterialError: error
   };
 };
+export const clearAudioAllocations = () => {
+  return {
+    type: actionTypes.CLEAR_AUDIO_ALLOCATIONS
+  };
+};
 export const getCropsList = () => {
   return dispatch => {
     axios

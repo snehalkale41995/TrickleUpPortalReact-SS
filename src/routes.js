@@ -84,6 +84,10 @@ const OperationalUser = Loadable({
   loader: () => import("./views/OperationalUser/OperationalUser.js"),
   loading: Loading
 });
+// const AudioAllocationForm = Loadable({
+//   loader: () => import("./views/CropsCultivation/AudioAllocationForm.js"),
+//   loading: Loading
+// });
 
 const routes = [
   { path: "/", exact: true, name: "Dashboard", component: Main },
@@ -110,13 +114,15 @@ const routes = [
   { path: "/master/address", name: "Address", component: AddressMaster },
   { path: "/master/languages", name: "Languages", component: LanguageMaster },
   { path: "/master/genders", name: "Genders", component: GenderMaster },
-
   {
     path: "/cropCultivations",
     name: "CropsCultivations",
     component: CropsCultivations
   },
-
+  // {
+  //   path: "/cropCultivations/audioAllocation",
+  //   component: AudioAllocationForm
+  // },
   {
     path: "/master/contacts",
     name: "Contacts",

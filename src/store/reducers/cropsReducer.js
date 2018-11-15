@@ -19,7 +19,8 @@ const cropsReducer = (state = initialState, action) => {
       return {
         ...state,
         cropsList: action.cropsList,
-        cropError: null
+        cropError: null,
+        currentCropAudioAllocation: []
       };
     case actionTypes.GET_CURRENT_CROP_DATA:
       return {
@@ -37,12 +38,14 @@ const cropsReducer = (state = initialState, action) => {
     case actionTypes.LOG_CROP_ERROR:
       return {
         ...state,
-        cropError: action.cropError
+        cropError: action.cropError,
+        currentCropAudioAllocation: []
       };
     case actionTypes.GET_CROPS_STEPS:
       return {
         ...state,
         cropSteps: action.cropSteps,
+        currentCropStepAudioAllocation: [],
         cropStepError: null
       };
     case actionTypes.STORE_CROP_STEP_AUDIO_ALLOCATION:
@@ -55,12 +58,14 @@ const cropsReducer = (state = initialState, action) => {
     case actionTypes.LOG_CROP_STEP_ERROR:
       return {
         ...state,
-        cropStepError: action.cropStepError
+        cropStepError: action.cropStepError,
+        currentCropStepAudioAllocation: []
       };
     case actionTypes.GET_CROPS_STEPS_MATERIAL:
       return {
         ...state,
         cropStepsMaterial: action.cropStepsMaterial,
+        currentCropMaterialAudioAllocation: [],
         cropMaterialError: null
       };
     case actionTypes.STORE_CROP_MATERIAL_AUDIO_ALLOCATION:
@@ -73,7 +78,15 @@ const cropsReducer = (state = initialState, action) => {
     case actionTypes.LOG_CROP_MATERIAL_ERROR:
       return {
         ...state,
+        currentCropMaterialAudioAllocation: [],
         cropMaterialError: action.cropMaterialError
+      };
+      case actionTypes.CLEAR_AUDIO_ALLOCATIONS:
+      return {
+        ...state,
+        currentCropAudioAllocation: [],
+        currentCropStepAudioAllocation: [],
+        currentCropMaterialAudioAllocation: [],
       };
     default:
       return state;

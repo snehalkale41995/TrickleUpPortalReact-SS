@@ -6,6 +6,7 @@ import CropsMaterial from "./CropsMaterial";
 import CropForm from "./CropForm";
 import CropStepsForm from "./CropStepsForm";
 import CropsMaterialForm from "./CropsMaterialForm";
+import AudioAllocationForm from "./AudioAllocationForm";
 
 export default class CropsCultivation extends Component {
   render() {
@@ -19,6 +20,10 @@ export default class CropsCultivation extends Component {
         <Route
           path={`${this.props.match.path}/crops/CropForm/:id?`}
           component={CropForm}
+        />
+        <Route
+          path={`${this.props.match.path}/audioAllocation/:audioCategory?/:id?`}
+          component={AudioAllocationForm}
         />
         <Route
           exact

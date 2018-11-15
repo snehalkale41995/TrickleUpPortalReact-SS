@@ -12,6 +12,9 @@ import * as actions from "../../store/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import CollapseCards from "../../components/Cards/CollapseCards";
+import AudioAllocationGrid from "./AudioAllocationGrid";
+
 class CropStepsForm extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +29,8 @@ class CropStepsForm extends Component {
         Quantity: ""
       },
       cropMaterialAudioAllocation: [],
-      loading: true
+      loading: true,
+      audioGridOpen: false
     };
   }
   componentDidMount() {
@@ -50,6 +54,7 @@ class CropStepsForm extends Component {
         }, 1000);
       }
     } else {
+      this.props.clearAudioAllocations();
       this.setState({
         loading: false
       });
@@ -72,31 +77,25 @@ class CropStepsForm extends Component {
   onSubmit() {
     this.props.history.push("/cropCultivations/CropsMaterial");
   }
+  audioToggleCollapse() {
+    this.setState({
+      audioGridOpen: !this.state.audioGridOpen
+    });
+  }
+  onAddAudio() {
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/audioAllocation/${"cropMaterial"}/${this.props.match
+          .params.id}`
+      );
+    } else {
+      this.props.history.push(
+        `/cropCultivations/audioAllocation/${"cropMaterial"}`
+      );
+    }
+  }
   render() {
     let cropMaterial = { ...this.state.cropMaterial };
-    const sortingOptions = {
-      defaultSortName: "FieldType",
-      defaultSortOrder: "asc",
-      sizePerPageList: [
-        {
-          text: "5",
-          value: 5
-        },
-        {
-          text: "10",
-          value: 10
-        },
-        {
-          text: "20",
-          value: 20
-        },
-        {
-          text: "All",
-          value: this.props.cropMaterialAudioAllocation.length
-        }
-      ],
-      sizePerPage: 5
-    };
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -173,70 +172,25 @@ class CropStepsForm extends Component {
             </Col>
           </FormGroup>
         </div>
-        {this.props.cropMaterialAudioAllocation.length > 0 ? (
-          <div style={{ marginTop: -50 }}>
-            <CardLayout
-              subName="Audio Allocation"
-              buttonName="Add Audio"
-              buttonLink={this}
-              active="none"
-            >
-              <FormGroup row>
-                <Col xs="12" style={{ marginTop: -10 }}>
-                  <BootstrapTable
-                    ref="table"
-                    data={this.props.cropMaterialAudioAllocation}
-                    pagination={true}
-                    search={true}
-                    options={sortingOptions}
-                    hover={true}
-                  >
-                    <TableHeaderColumn
-                      dataField="Id"
-                      headerAlign="left"
-                      isKey
-                      hidden
-                    >
-                      Id
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="FieldType"
-                      headerAlign="left"
-                      width="15"
-                      dataSort={true}
-                    >
-                      Field Type
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="LanguageName"
-                      headerAlign="left"
-                      width="30"
-                      dataSort={true}
-                    >
-                      Language
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="FileName"
-                      headerAlign="left"
-                      width="30"
-                      dataSort={true}
-                    >
-                      File Name
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="Audio"
-                      headerAlign="left"
-                      width="60"
-                      dataFormat={this.playAudio.bind(this)}
-                    >
-                      Audio
-                    </TableHeaderColumn>
-                  </BootstrapTable>
-                </Col>
-              </FormGroup>
-            </CardLayout>
-          </div>
-        ) : null}
+        <div style={{ marginTop: -50 }}>
+          <CollapseCards
+            subName="Audio Allocation"
+            buttonName="Add Audio"
+            buttonLink={this}
+            buttonClick={this.onAddAudio.bind(this)}
+            isOpen={this.state.audioGridOpen}
+            toggleCollapse={this.audioToggleCollapse.bind(this)}
+          >
+            <FormGroup row>
+              <Col xs="12" style={{ marginTop: -10 }}>
+                <AudioAllocationGrid
+                  audioAllocation={this.props.cropMaterialAudioAllocation}
+                  playAudio={this.playAudio.bind(this)}
+                />
+              </Col>
+            </FormGroup>
+          </CollapseCards>
+        </div>
 
         {this.state.updateFlag ? (
           <FormGroup row>
@@ -289,7 +243,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getCropMaterialAudioAllocation: id =>
-      dispatch(actions.getCropMaterialAudioAllocation(id))
+      dispatch(actions.getCropMaterialAudioAllocation(id)),
+    clearAudioAllocations: () => dispatch(actions.clearAudioAllocations())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropStepsForm);

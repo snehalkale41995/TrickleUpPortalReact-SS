@@ -2893,7 +2893,7 @@ fieldset:disabled a.btn {
 
 .btn-link:hover {
   color: #2C3A5D;
-  text-decoration: underline;
+  /* //text-decoration: underline; */
   background-color: transparent;
   border-color: transparent;
 }
@@ -14084,7 +14084,11 @@ html body .app.flex-row.align-items-center {
 .back-arrow-icon {
   font-size: 30px;
 }
-
+.collapse-arrow-icon {
+  font-size: 30px;
+  margin-right:  -5px;
+  margin-top: -8px;
+}
 .card-row-padding {
   padding: 20px;
 }
