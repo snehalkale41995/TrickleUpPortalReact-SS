@@ -7,7 +7,7 @@ const ImageCards = props => (
         <h6> {props.imageName}</h6>
       </Row>
       <FormGroup className="justify-content-xl-center py-1 my-0" row>
-        <img src={props.source} width={300} height={200} alt=""/>
+        <img src={props.source} width={300} height={200} alt="" />
       </FormGroup>
     </CardBody>
   </Card>

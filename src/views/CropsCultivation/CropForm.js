@@ -33,7 +33,9 @@ class CropForm extends Component {
       },
       audioAllocation: [],
       loading: true,
-      audioGridOpen: false
+      audioGridOpen: false,
+      videoGridOpen: false,
+      imageGridOpen: false,
     };
   }
 
@@ -117,6 +119,16 @@ class CropForm extends Component {
   audioToggleCollapse() {
     this.setState({
       audioGridOpen: !this.state.audioGridOpen
+    });
+  }
+  videoToggleCollapse() {
+    this.setState({
+      videoGridOpen: !this.state.videoGridOpen
+    });
+  }
+  imageToggleCollapse() {
+    this.setState({
+      imageGridOpen: !this.state.imageGridOpen
     });
   }
   onAddAudio() {
@@ -218,7 +230,40 @@ class CropForm extends Component {
               </FormGroup>
             </CollapseCards>
           </div>
-
+          <div style={{ marginTop: -30 }}>
+            <CollapseCards
+              subName="Image Allocation"
+              buttonName="Add Image"
+              buttonLink={this}
+              active="none"
+              //buttonClick={this.onAddAudio.bind(this)}
+              isOpen={this.state.imageGridOpen}
+              toggleCollapse={this.imageToggleCollapse.bind(this)}
+            >
+              <FormGroup row>
+                <Col xs="12" style={{ marginTop: -10 }}>
+                 
+                </Col>
+              </FormGroup>
+            </CollapseCards>
+          </div>
+          <div style={{ marginTop: -30 }}>
+            <CollapseCards
+              subName="Video Allocation"
+              buttonName="Add Video"
+              buttonLink={this}
+              active="none"
+              //buttonClick={this.onAddAudio.bind(this)}
+              isOpen={this.state.videoGridOpen}
+              toggleCollapse={this.videoToggleCollapse.bind(this)}
+            >
+              <FormGroup row>
+                <Col xs="12" style={{ marginTop: -10 }}>
+                 
+                </Col>
+              </FormGroup>
+            </CollapseCards>
+          </div>
           {this.state.updateFlag ? (
             <FormGroup row>
               <Col md="1">
@@ -237,7 +282,7 @@ class CropForm extends Component {
                 <Button
                   className="theme-positive-btn"
                   onClick={() => this.onSubmit()}
-                  style={{ pointerEvents: "none" }}
+                  style={{ pointerEvents: "none" , opacity: 0.5}}
                 >
                   Create
                 </Button>
