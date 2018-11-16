@@ -3,6 +3,17 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
+export const catchUncaughtException = (exception) => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+}
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION,
+  };
+}
 export const storeGendersList = (genders, gendersList, inactiveGenders) => {
   return {
     type: actionTypes.GET_GENDERS,
@@ -57,7 +68,7 @@ export const getGendersList = () => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.Message));
+        dispatch(logGenderMasterError("Something went wrong!"));
       });
   };
 };
@@ -75,7 +86,7 @@ export const createGender = gender => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.Message));
+        dispatch(logGenderMasterError("Something went wrong!"));
       });
   };
 };
@@ -93,7 +104,7 @@ export const updateGender = (id, gender) => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.Message));
+        dispatch(logGenderMasterError("Something went wrong!"));
       });
   };
 };
@@ -110,7 +121,7 @@ export const deleteGender = (id, gender) => {
         }
       })
       .catch(error => {
-        dispatch(logGenderMasterError(error.response.data.Message));
+        dispatch(logGenderMasterError("Something went wrong!"));
       });
   };
 };

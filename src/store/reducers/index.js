@@ -14,7 +14,7 @@ import mediaReducer from "./mediaReducer";
 import feedbackReducer from "./feedbackReducer";
 
 const rootReducer = combineReducers({
-  dashboard: dashboardReducer,
+  dashboardReducer: dashboardReducer,
   stateReducer: statesReducer,
   districtReducer: districtReducer,
   beneficiaryReducer: beneficiaryReducer,

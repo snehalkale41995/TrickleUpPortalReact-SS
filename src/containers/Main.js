@@ -4,6 +4,7 @@ import { Container } from "reactstrap";
 import { connect } from "react-redux";
 import * as actions from "../store/actions";
 import _ from "lodash";
+import ExceptionPage from "../components/ExceptionPage";
 import {
   AppAside,
   AppFooter,
@@ -41,6 +42,7 @@ class Main extends Component {
     this.props.getGrampanchayatsList();
     this.props.getCropSteps();
     this.props.getCropStepsMaterial();
+    this.props.getAudioFiles();
   }
 
   render() {
@@ -109,11 +111,14 @@ class Main extends Component {
         </Switch>
       );
     }
-    return <div>{routeStack}</div>;
+    // return this.props.uncaughtException ?  <div><ExceptionPage /></div>  :   <div>{routeStack}</div>;
+    return  <div>{routeStack}</div>;
   }
 }
 const mapStateToProps = state => {
-  return {};
+  return {
+    uncaughtException : state.dashboardReducer.uncaughtException
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -128,7 +133,8 @@ const mapDispatchToProps = dispatch => {
     getVillagesList: () => dispatch(actions.getVillagesList()),
     getGrampanchayatsList: () => dispatch(actions.getGrampanchayatsList()),
     getCropSteps: () => dispatch(actions.getCropSteps()),
-    getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial())
+    getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial()),
+    getAudioFiles: () => dispatch(actions.getAudioFiles())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

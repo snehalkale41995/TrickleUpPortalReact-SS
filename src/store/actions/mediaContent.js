@@ -7,10 +7,11 @@ export const storeMediaContent = () => {
     type: actionTypes.GET_MEDIA
   };
 };
-export const storeAudioFiles = audios => {
+export const storeAudioFiles = (audios,audioOptions) => {
   return {
     type: actionTypes.STORE_AUDIO_FILES,
-    audioFiles: audios
+    audioFiles: audios,
+    audioOptions : audioOptions
   };
 };
 export const storeVideoFiles = videos => {
@@ -60,16 +61,18 @@ export const getAudioFiles = () => {
       .then(response => {
         if (response.data.success) {
           let audios = response.data.data.Audios;
+          let audioOptions = [];
           audios.forEach(audio => {
             audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
+            audioOptions.push({label : audio.FileName , value: audio.Id})
           });
-          dispatch(storeAudioFiles(audios));
+          dispatch(storeAudioFiles(audios, audioOptions));
         } else {
           dispatch(logAudioError(response.data.error));
         }
       })
       .catch(error => {
-        dispatch(logAudioError(error.response.data.Message));
+        dispatch(logAudioError("Something went wrong!"));
       });
   };
 };
@@ -89,7 +92,7 @@ export const getVideoFiles = () => {
         }
       })
       .catch(error => {
-        dispatch(logVideoError(error.response.data.Message));
+        dispatch(logVideoError("Something went wrong!"));
       });
   };
 };
@@ -109,7 +112,7 @@ export const getImageFiles = () => {
         }
       })
       .catch(error => {
-        dispatch(logImageError(error.response.data.Message));
+        dispatch(logImageError("Something went wrong!"));
       });
   };
 };

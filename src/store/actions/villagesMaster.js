@@ -55,7 +55,7 @@ export const getVillagesList = () => {
         }
       })
       .catch(error => {
-        dispatch(logVillageMasterError(error.response.data.Message));
+        dispatch(logVillageMasterError("Something went wrong!"));
       });
   };
 };
@@ -72,7 +72,7 @@ export const createVillage = village => {
         }
       })
       .catch(error => {
-        dispatch(logVillageMasterError(error.response.data.Message));
+        dispatch(logVillageMasterError("Something went wrong!"));
       });
   };
 };
@@ -88,7 +88,7 @@ export const updateVillage = (id, village) => {
         }
       })
       .catch(error => {
-        dispatch(logVillageMasterError(error.response.data.Message));
+        dispatch(logVillageMasterError("Something went wrong!"));
       });
   };
 };
@@ -104,7 +104,7 @@ export const deleteVillage = (id, village) => {
         }
       })
       .catch(error => {
-        dispatch(logVillageMasterError(error.response.data.Message));
+        dispatch(logVillageMasterError("Something went wrong!"));
       });
   };
 };

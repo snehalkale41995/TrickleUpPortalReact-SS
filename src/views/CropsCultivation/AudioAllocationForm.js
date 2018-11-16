@@ -6,21 +6,26 @@ import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
 import DropdownSelect from "../../components/InputElement/Dropdown";
+import AsyncSelect from "react-select/lib/Async";
+import _ from "lodash";
+
 class AudioAllocationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       audioCategory: "",
-      id: ""
+      id: "",
+      inputValue: ""
     };
   }
+  state = { inputValue: "" };
+  handleInputChange = newValue => {
+    const inputValue = newValue.replace(/\W/g, "");
+    this.setState({ inputValue });
+    return inputValue;
+  };
   componentDidMount() {
-    console.log("this.props.match.params.id", this.props.match.params.id);
-    console.log(
-      "this.props.match.params.audioCategory",
-      this.props.match.params.audioCategory
-    );
     setTimeout(() => {
       this.setState({
         loading: false,
@@ -35,6 +40,16 @@ class AudioAllocationForm extends Component {
 
   onSubmitMedia() {}
   render() {
+    const filterColors = inputValue =>
+      _.filter(this.props.audioOptions, function(o) {
+        return o.label == inputValue.toLowerCase();
+      });
+
+    const loadOptions = (inputValue, callback) => {
+      setTimeout(() => {
+        callback(filterColors(inputValue));
+      }, 1000);
+    };
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -48,47 +63,27 @@ class AudioAllocationForm extends Component {
           <FormGroup row />
           <FormGroup row>
             <Col xs="12" md="5">
-            <Label>Audio category</Label>
-              <DropdownSelect 
-                  placeholder="Select audio category "
-                  //value={user.Village}
-                  //disabled={this.state.villageDisabled}
-                  //options={this.state.villageOptions}
-                  //required={this.state.villageRequired}
-                  //onChange={this.onVillageSelection.bind(this)}
-              /> 
+              <Label>Audio category</Label>
+              <DropdownSelect placeholder="Select audio category " />
             </Col>
             <Col md="5">
-            <Label>Language</Label>
-              <DropdownSelect 
-                  placeholder="Select audio category "
-                  //value={user.Village}
-                  //disabled={this.state.villageDisabled}
-                  //options={this.state.villageOptions}
-                  //required={this.state.villageRequired}
-                  //onChange={this.onVillageSelection.bind(this)}
-              /> 
+              <Label>Language</Label>
+              <DropdownSelect placeholder="Select audio category " />
             </Col>
           </FormGroup>
           <FormGroup row>
             <Col xs="12" md="5">
-            <Label>Audio</Label>
-              <DropdownSelect 
-                  placeholder="Select audio "
-                  //value={user.Village}
-                  //disabled={this.state.villageDisabled}
-                  //options={this.state.villageOptions}
-                  //required={this.state.villageRequired}
-                  //onChange={this.onVillageSelection.bind(this)}
-              /> 
+              <Label>Audio</Label>
+              <AsyncSelect
+              cacheOptions
+              loadOptions={loadOptions}
+              defaultOptions
+              onInputChange={this.handleInputChange}
+              />
             </Col>
             <Col md="5">
-              <Label></Label>
-              <AudioPlayer
-                //source={renderURL}
-                autoPlay={true}
-                //title={audioTitle}
-              />
+              <Label />
+              <AudioPlayer autoPlay={true} />
             </Col>
           </FormGroup>
 
@@ -108,7 +103,9 @@ class AudioAllocationForm extends Component {
   }
 }
 export const mapStateToProps = state => {
-  return {};
+  return {
+    audioOptions: state.mediaReducer.audioOptions
+  };
 };
 
 export const mapDispatchToProps = dispatch => {

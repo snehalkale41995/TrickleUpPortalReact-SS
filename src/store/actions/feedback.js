@@ -3,6 +3,17 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
+export const catchUncaughtException = (exception) => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+}
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION,
+  };
+}
 export const storeFeedbackQuestionsList = feedBackQuestions => {
   return {
     type: actionTypes.STORE_FEEDBACK_QUESTIONS,
@@ -40,7 +51,7 @@ export const getFeedbackQuestionList = () => {
         }
       })
       .catch(error => {
-        dispatch(logFeedbackQuestionsError(error.response.data.Message));
+        dispatch(logFeedbackQuestionsError("Something went wrong!"));
       });
   };
 };
@@ -57,7 +68,7 @@ export const getUserFeedbackList = () => {
         }
       })
       .catch(error => {
-        dispatch(logUserFeedbackError(error.response.data.Message));
+        dispatch(logUserFeedbackError("Something went wrong!"));
       });
   };
 };

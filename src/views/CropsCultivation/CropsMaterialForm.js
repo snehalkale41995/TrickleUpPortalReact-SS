@@ -110,8 +110,7 @@ class CropStepsForm extends Component {
               <InputElement
                 type="text"
                 name="Material_Name"
-                label="Material Name"
-                disabled={true}
+                label="Material Name"                 
                 placeholder="Material Name"
                 value={cropMaterial.Material_Name}
                 required={cropMaterial.Material_NameRequired}
@@ -122,8 +121,7 @@ class CropStepsForm extends Component {
               <InputElement
                 type="text"
                 name="Step_Name"
-                label="Step Name"
-                disabled={true}
+                label="Step Name"   
                 placeholder="Step Name"
                 value={cropMaterial.Step_Name}
                 required={cropMaterial.Step_NameRequired}
@@ -136,8 +134,7 @@ class CropStepsForm extends Component {
               <InputElement
                 type="text"
                 name="Material_Transaction"
-                label="Material Transaction"
-                disabled={true}
+                label="Material Transaction" 
                 placeholder="Material_Transaction"
                 value={cropMaterial.Material_Transaction}
                 required={cropMaterial.Material_TransactionRequired}
@@ -149,7 +146,6 @@ class CropStepsForm extends Component {
                 type="text"
                 name="Quantity"
                 label="Quantity"
-                disabled={true}
                 placeholder="Quantity"
                 value={cropMaterial.Quantity}
                 required={cropMaterial.QuantityRequired}
@@ -162,8 +158,7 @@ class CropStepsForm extends Component {
               <InputElement
                 type="text"
                 name="Per_Decimal_Price"
-                label="Per Decimal Price"
-                disabled={true}
+                label="Per Decimal Price" 
                 placeholder="Per_Decimal_Price"
                 value={cropMaterial.Per_Decimal_Price}
                 required={cropMaterial.Per_Decimal_PriceRequired}

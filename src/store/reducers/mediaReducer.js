@@ -2,6 +2,7 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   audioFiles: [],
+  audioOptions: [],
   videoFiles: [],
   imageFiles: [],
   audioError: null,
@@ -15,6 +16,7 @@ const mediaReducer = (state = initialState, action) => {
       return {
         ...state,
         audioFiles: action.audioFiles,
+        audioOptions : action.audioOptions,
         audioError: null
       };
     case actionTypes.STORE_VIDEO_FILES:

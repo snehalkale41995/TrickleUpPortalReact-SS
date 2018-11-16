@@ -3,6 +3,17 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
+export const catchUncaughtException = exception => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+};
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION
+  };
+};
 export const storeBeneficiaryList = (
   activeBeneficiaryList,
   inActiveBeneficiaryList,
@@ -92,12 +103,15 @@ export const getBeneficiaryList = () => {
               inActiveOperationalUsers
             )
           );
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -111,12 +125,15 @@ export const getBeneficiaryById = id => {
           let currentBeneficiary = response.data.data.Users[0];
           currentBeneficiary.PhoneNumber = currentBeneficiary.PhoneNumber.toString();
           dispatch(storeCurrentBeneficiary(currentBeneficiary));
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -135,12 +152,15 @@ export const createBeneficiary = beneficiary => {
           };
           dispatch(postUserCredentials(userCredentials));
           dispatch(clearBeneficiaryError());
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -155,10 +175,12 @@ export const postUserCredentials = user => {
       .then(response => {
         if (!response.data.success) {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -169,12 +191,15 @@ export const updateBeneficiary = (id, beneficiary) => {
       .then(response => {
         if (response.data.success) {
           dispatch(clearBeneficiaryError());
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -187,12 +212,15 @@ export const deleteBeneficiary = (id, beneficiary) => {
         if (response.data.success) {
           dispatch(getBeneficiaryList());
           dispatch(clearBeneficiaryError());
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -203,14 +231,17 @@ export const bulkUploadBeneficiary = beneficiary => {
       .post(`${AppConfig.serverURL}/api/Users/BulkUploadUser`, beneficiary)
       .then(response => {
         if (response.data.success) {
-          //dispatch(getBeneficiaryList());
+          dispatch(getBeneficiaryList());
           dispatch(clearBeneficiaryError());
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -220,12 +251,16 @@ export const bulkValidateBeneficiary = beneficiary => {
     axios
       .post(`${AppConfig.serverURL}/api/Users/ValidateUploadUser`, beneficiary)
       .then(response => {
-        if (!response.data.success)
+        if (!response.data.success) {
           dispatch(ValidateBulkDataError(response.data.data.userList));
-        else dispatch(ValidateBulkDataSuccess());
+          dispatch(clearUncaughtException());
+        } else {
+          dispatch(clearUncaughtException());
+          dispatch(ValidateBulkDataSuccess());
+        }
       })
       .catch(error => {
-        //  dispatch(logBeneficiaryError(error));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };
@@ -241,12 +276,15 @@ export const getBulkUploadHistory = () => {
             record.CreatedOn = record.CreatedOn.slice(0, 10);
           });
           dispatch(storeBulkUploadHistory(bulkUploadHistory));
+          dispatch(clearUncaughtException());
         } else {
           dispatch(logBeneficiaryError(response.data.error));
+          dispatch(clearUncaughtException());
         }
       })
       .catch(error => {
-        dispatch(logBeneficiaryError(error.response.data.Message));
+        dispatch(logBeneficiaryError("Something went wrong!"));
+        dispatch(catchUncaughtException("Something went wrong!"));
       });
   };
 };

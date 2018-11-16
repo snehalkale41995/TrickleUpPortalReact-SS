@@ -3,6 +3,17 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
+export const catchUncaughtException = (exception) => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+}
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION,
+  };
+}
 export const storeGrampanchayatList = (
   grampanchayatList,
   grampanchayats,
@@ -66,7 +77,7 @@ export const getGrampanchayatsList = () => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.Message));
+        dispatch(grampanchayatMasterError("Something went wrong!"));
       });
   };
 };
@@ -86,7 +97,7 @@ export const createGrampanchayat = grampanchayat => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.Message));
+        dispatch(grampanchayatMasterError("Something went wrong!"));
       });
   };
 };
@@ -105,7 +116,7 @@ export const updateGrampanchayat = (id, grampanchayat) => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.Message));
+        dispatch(grampanchayatMasterError("Something went wrong!"));
       });
   };
 };
@@ -124,7 +135,7 @@ export const deleteGrampanchayat = (id, grampanchayat) => {
         }
       })
       .catch(error => {
-        dispatch(grampanchayatMasterError(error.response.data.Message));
+        dispatch(grampanchayatMasterError("Something went wrong!"));
       });
   };
 };

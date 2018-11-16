@@ -87,7 +87,7 @@ class CropsMaterial extends Component {
             <BootstrapTable
               ref="table"
               data={this.props.cropStepsMaterial}
-              pagination={true}
+              pagination={this.props.cropStepsMaterial.length > 0 ? true : false}
               search={true}
               options={sortingOptions}
               //exportCSV={true}

@@ -1,18 +1,23 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  message : "Hello World"
+  uncaughtException: null
 };
 
 const dashboardReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GET_WELCOME_MESSAGE:
+    case actionTypes.CATCH_UNCAUGHT_EXCEPTION:
       return {
-        ...state
+        ...state,
+        uncaughtException: action.exception
+      };
+    case actionTypes.CLEAR_UNCAUGHT_EXCEPTION:
+      return {
+        ...state,
+        uncaughtException: null
       };
     default:
       return state;
   }
 };
 export default dashboardReducer;
-

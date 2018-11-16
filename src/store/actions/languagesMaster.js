@@ -69,7 +69,7 @@ export const getLanguageList = () => {
         }
       })
       .catch(error => {
-        dispatch(logLanguageMasterError(error.response.data.Message));
+        dispatch(logLanguageMasterError("Something went wrong!"));
       });
   };
 };
@@ -87,7 +87,7 @@ export const createLanguage = language => {
         }
       })
       .catch(error => {
-        dispatch(logLanguageMasterError(error.response.data.Message));
+        dispatch(logLanguageMasterError("Something went wrong!"));
       });
   };
 };
@@ -108,7 +108,7 @@ export const updateLanguage = (id, language) => {
         }
       })
       .catch(error => {
-        dispatch(logLanguageMasterError(error.response.data.Message));
+        dispatch(logLanguageMasterError("Something went wrong!"));
       });
   };
 };
@@ -128,7 +128,7 @@ export const deleteLanguage = (id, language) => {
         }
       })
       .catch(error => {
-        dispatch(logLanguageMasterError(error.response.data.Message));
+        dispatch(logLanguageMasterError("Something went wrong!"));
       });
   };
 };

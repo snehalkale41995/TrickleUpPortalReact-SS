@@ -14,7 +14,7 @@ export const loginUser = user => {
         }
       })
       .catch(error => {
-        dispatch(loginError(error.response.data.Message));
+        dispatch(loginError("Something went wrong!"));
       });
   };
 };

@@ -149,7 +149,6 @@ class CropStepsForm extends Component {
                     type="text"
                     name="CropName"
                     label="Crop name "
-                    disabled={true}
                     placeholder="Crop name"
                     value={cropStep.CropName}
                     required={cropStep.CropNameRequired}
@@ -165,7 +164,6 @@ class CropStepsForm extends Component {
                     label="Step Name"
                     placeholder="Step Name"
                     value={cropStep.Step_Name}
-                    disabled={true}
                     required={cropStep.Step_NameRequired}
                     onChange={event => this.onChangeName(event)}
                   />
@@ -179,7 +177,6 @@ class CropStepsForm extends Component {
                     label="Step Description"
                     placeholder="Step_Description"
                     value={cropStep.Step_Description}
-                    disabled={true}
                     //required={cropStep.CropNameRequired}
                     onChange={event => this.onChangeName(event)}
                   />
@@ -191,7 +188,6 @@ class CropStepsForm extends Component {
                     type="file"
                     name="MediaURL"
                     label="Upload media"
-                    disabled={true}
                     //placeholder="MediaURL"
                     //value={cropStep.Step_Description}
                     //required={cropStep.CropNameRequired}

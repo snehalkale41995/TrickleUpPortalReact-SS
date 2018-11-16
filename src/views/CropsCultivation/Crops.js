@@ -96,7 +96,7 @@ class Crops extends Component {
             <BootstrapTable
               ref="table"
               data={this.props.cropsList}
-              pagination={true}
+              pagination={this.props.cropsList.length > 0 ? true : false}
               search={true}
               options={sortingOptions}
               //exportCSV={true}

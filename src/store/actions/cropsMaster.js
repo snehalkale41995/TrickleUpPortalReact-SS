@@ -2,6 +2,17 @@ import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 
+export const catchUncaughtException = (exception) => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+}
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION,
+  };
+}
 export const storeCropsList = cropsList => {
   return {
     type: actionTypes.GET_CROPS,
@@ -81,7 +92,7 @@ export const getCropsList = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropError(error.response.data.Message));
+        dispatch(logCropError("Something went wrong!"));
       });
   };
 };
@@ -100,7 +111,7 @@ export const getCropSteps = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error.response.data.Message));
+        dispatch(logCropStepError("Something went wrong!"));
       });
   };
 };
@@ -121,7 +132,7 @@ export const getCropStepsMaterial = () => {
         }
       })
       .catch(error => {
-        dispatch(logCropMaterialError(error.response.data.Message));
+        dispatch(logCropMaterialError("Something went wrong!"));
       });
   };
 };
@@ -137,7 +148,7 @@ export const getCropCultivationSteps = id => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error.response.data.Message));
+        dispatch(logCropStepError("Something went wrong!"));
       });
   };
 };
@@ -171,7 +182,7 @@ export const getCropAudioAllocation = cropId => {
         }
       })
       .catch(error => {
-        dispatch(logCropError(error.response.data.Message));
+        dispatch(logCropError("Something went wrong!"));
       });
   };
 };
@@ -193,7 +204,7 @@ export const getCropStepsAudioAllocation = stepId => {
         }
       })
       .catch(error => {
-        dispatch(logCropStepError(error.response.data.Message));
+        dispatch(logCropStepError("Something went wrong!"));
       });
   };
 };
@@ -215,7 +226,7 @@ export const getCropMaterialAudioAllocation = materialId => {
         }
       })
       .catch(error => {
-        dispatch(logCropMaterialError(error.response.data.Message));
+        dispatch(logCropMaterialError("Something went wrong!"));
       });
   };
 };

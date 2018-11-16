@@ -97,7 +97,7 @@ class CropSteps extends Component {
             <BootstrapTable
               ref="table"
               data={this.props.cropSteps}
-              pagination={true}
+              pagination={this.props.cropSteps.length > 0 ? true : false}
               search={true}
               options={sortingOptions}
               //exportCSV={true}

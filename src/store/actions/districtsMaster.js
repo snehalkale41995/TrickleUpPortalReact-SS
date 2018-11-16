@@ -3,6 +3,17 @@ import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
 import _ from "lodash";
 
+export const catchUncaughtException = (exception) => {
+  return {
+    type: actionTypes.CATCH_UNCAUGHT_EXCEPTION,
+    exception: exception
+  };
+}
+export const clearUncaughtException = () => {
+  return {
+    type: actionTypes.CLEAR_UNCAUGHT_EXCEPTION,
+  };
+}
 export const storeDistrictsList = (
   districtList,
   districts,
@@ -58,7 +69,7 @@ export const getDistrictsList = () => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.Message));
+        dispatch(districtMasterError("Something went wrong!"));
       });
   };
 };
@@ -78,7 +89,7 @@ export const updateDistrict = (id, district) => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.Message));
+        dispatch(districtMasterError("Something went wrong!"));
       });
   };
 };
@@ -94,7 +105,7 @@ export const createDistrict = district => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.Message));
+        dispatch(districtMasterError("Something went wrong!"));
       });
   };
 };
@@ -114,7 +125,7 @@ export const deleteDistrict = (id, district) => {
         }
       })
       .catch(error => {
-        dispatch(districtMasterError(error.response.data.Message));
+        dispatch(districtMasterError("Something went wrong!"));
       });
   };
 };

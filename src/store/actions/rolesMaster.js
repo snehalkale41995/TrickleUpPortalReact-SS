@@ -69,7 +69,7 @@ export const getRolesList = () => {
         }
       })
       .catch(error => {
-        dispatch(logRoleMasterError(error.response.data.Message));
+        dispatch(logRoleMasterError("Something went wrong!"));
       });
   };
 };
@@ -86,7 +86,7 @@ export const createRole = role => {
         }
       })
       .catch(error => {
-        dispatch(logRoleMasterError(error.response.data.Message));
+        dispatch(logRoleMasterError("Something went wrong!"));
       });
   };
 };
@@ -103,7 +103,7 @@ export const updateRole = (id, role) => {
         }
       })
       .catch(error => {
-        dispatch(logRoleMasterError(error.response.data.Message));
+        dispatch(logRoleMasterError("Something went wrong!"));
       });
   };
 };
@@ -120,7 +120,7 @@ export const deleteRole = (id, role) => {
         }
       })
       .catch(error => {
-        dispatch(logRoleMasterError(error.response.data.Message));
+        dispatch(logRoleMasterError("Something went wrong!"));
       });
   };
 };
