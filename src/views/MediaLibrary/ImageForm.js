@@ -62,34 +62,40 @@ class ImageForm extends Component {
         navigationRoute="/mediaContent/imageContent"
       >
         <div className="div-padding">
-          <FormGroup row />
           <FormGroup row>
             <Col xs="12" md="6">
-              <InputElement
-                type="file"
-                label="Image file"
-                name="Image file"
-                accept="image/*"
-                required={imageRequired}
-                onChange={event => this.handleUploadFile(event)}
-              />
+              <FormGroup row>
+                <Col xs="12" md="10">
+                  <InputElement
+                    type="file"
+                    label="Image file"
+                    name="Image file"
+                    accept="image/*"
+                    required={imageRequired}
+                    onChange={event => this.handleUploadFile(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="12" md="3">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmitMedia.bind(this)}
+                  >
+                    Upload
+                  </Button>
+                </Col>
+              </FormGroup>
             </Col>
-            {renderURL ? (
-              <Col md="3" className="image-display">
-                <Label> {imageTitle}</Label>
-                <img src={renderURL} height={300} width={450} alt="" />
-              </Col>
-            ) : null}
-            <Col md="3" />
-          </FormGroup>
-          <FormGroup row>
-            <Col md="3">
-              <Button
-                className="theme-positive-btn"
-                onClick={this.onSubmitMedia.bind(this)}
-              >
-              Upload
-              </Button>
+            <Col xs="12" md="6">
+              <FormGroup row>
+                {renderURL ? (
+                  <Col xs="12" md="10" className="image-display">
+                    <Label> {imageTitle}</Label>
+                    <img src={renderURL} height={300} width={450} alt="" />
+                  </Col>
+                ) : null}
+              </FormGroup>
             </Col>
           </FormGroup>
         </div>

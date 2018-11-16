@@ -65,34 +65,40 @@ class VideoForm extends Component {
         navigationRoute="/mediaContent/videoContent"
       >
         <div className="div-padding">
-          <FormGroup row />
           <FormGroup row>
             <Col xs="12" md="6">
-              <InputElement
-                type="file"
-                label="Video file"
-                name="Video file"
-                accept="video/*"
-                required={videoRequired}
-                onChange={event => this.handleUploadFile(event)}
-              />
+              <FormGroup row>
+                <Col xs="12" md="10">
+                  <InputElement
+                    type="file"
+                    label="Video file"
+                    name="Video file"
+                    accept="video/*"
+                    required={videoRequired}
+                    onChange={event => this.handleUploadFile(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="12" md="3">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmitMedia.bind(this)}
+                  >
+                    Upload
+                  </Button>
+                </Col>
+              </FormGroup>
             </Col>
-            {renderURL ? (
-              <Col md="4">
-                <Label> {videoTitle}</Label>
-                <VideoPlayer source={renderURL} />
-              </Col>
-            ) : null}
-            <Col md="2" />
-          </FormGroup>
-          <FormGroup row>
-            <Col md="3">
-              <Button
-                className="theme-positive-btn"
-                onClick={this.onSubmitMedia.bind(this)}
-              >
-              Upload
-              </Button>
+            <Col xs="12" md="6">
+              <FormGroup row>
+                {renderURL ? (
+                  <Col xs="12" md="10">
+                    <Label> {videoTitle}</Label>
+                    <VideoPlayer source={renderURL} />
+                  </Col>
+                ) : null}
+              </FormGroup>
             </Col>
           </FormGroup>
         </div>

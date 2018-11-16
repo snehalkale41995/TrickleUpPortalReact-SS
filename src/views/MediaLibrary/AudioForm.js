@@ -63,37 +63,44 @@ class AudioForm extends Component {
         navigationRoute="/mediaContent/audioContent"
       >
         <div className="div-padding">
-          <FormGroup row />
           <FormGroup row>
             <Col xs="12" md="6">
-              <InputElement
-                type="file"
-                label="Audio file"
-                name="Audio file"
-                accept="audio/*"
-                required={audioRequired}
-                onChange={event => this.handleUploadFile(event)}
-              />
+              <FormGroup row>
+                <Col xs="12" md="10">
+                  <InputElement
+                    type="file"
+                    label="Audio file"
+                    name="Audio file"
+                    accept="audio/*"
+                    required={audioRequired}
+                    onChange={event => this.handleUploadFile(event)}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Col xs="12" md="3">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={this.onSubmitMedia.bind(this)}
+                  >
+                    Create
+                  </Button>
+                </Col>
+              </FormGroup>
             </Col>
-            {renderURL ? (
-              <Col md="6">
-                <Label> {audioTitle}</Label>
-                <AudioPlayer
-                  source={renderURL}
-                  autoPlay={true}
-                  title={audioTitle}
-                />
-              </Col>
-            ) : null}
-          </FormGroup>
-          <FormGroup row>
-            <Col md="3">
-              <Button
-                className="theme-positive-btn"
-                onClick={this.onSubmitMedia.bind(this)}
-              >
-                Upload
-              </Button>
+            <Col xs="12" md="6">
+              <FormGroup row>
+                {renderURL ? (
+                  <Col xs="12" md="10">
+                    <Label> {audioTitle}</Label>
+                    <AudioPlayer
+                      source={renderURL}
+                      autoPlay={false}
+                      title={audioTitle}
+                    />
+                  </Col>
+                ) : null}
+              </FormGroup>
             </Col>
           </FormGroup>
         </div>
