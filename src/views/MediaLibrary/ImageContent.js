@@ -85,12 +85,12 @@ class ImageContent extends Component {
       <CardLayout
         name="Images"
         buttonName="Add image"
-        //buttonLink={`${this.props.match.url}/imageUpload`}
-        buttonLink={this}
-        active="none"
-        gridIcon={this.state.showGridView ? "fa fa-th" : "fa fa-list"}
+        buttonLink={`${this.props.match.url}/imageUpload`}
+        //buttonLink={this}
+        //active="none"
+        gridIcon={!this.state.showGridView ? "fa fa-th" : "fa fa-list"}
         toggleView={this.toggleView.bind(this)}
-        gridIconTitle ={this.state.showGridView ? "Show list view" : "Show grid view"}
+        gridIconTitle ={!this.state.showGridView ? "Show list view" : "Show grid view"}
       >
         {this.state.showGridView ? (
           <FormGroup row>

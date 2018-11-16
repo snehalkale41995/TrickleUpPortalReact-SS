@@ -88,7 +88,7 @@ class ImageForm extends Component {
                 className="theme-positive-btn"
                 onClick={this.onSubmitMedia.bind(this)}
               >
-                Create
+              Upload
               </Button>
             </Col>
           </FormGroup>
