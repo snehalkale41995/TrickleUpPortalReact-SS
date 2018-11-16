@@ -6,9 +6,9 @@ import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
 import DropdownSelect from "../../components/InputElement/Dropdown";
-import AsyncSelect from "react-select/lib/Async";
 import _ from "lodash";
-
+import { Async } from "react-select";
+import "react-select/dist/react-select.css";
 class AudioAllocationForm extends Component {
   constructor(props) {
     super(props);
@@ -16,15 +16,11 @@ class AudioAllocationForm extends Component {
       loading: true,
       audioCategory: "",
       id: "",
-      inputValue: ""
+      audioId: "",
+      renderURL: ""
     };
   }
-  state = { inputValue: "" };
-  handleInputChange = newValue => {
-    const inputValue = newValue.replace(/\W/g, "");
-    this.setState({ inputValue });
-    return inputValue;
-  };
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({
@@ -37,18 +33,37 @@ class AudioAllocationForm extends Component {
   goBack() {
     this.props.history.goBack();
   }
-
+  handleInputChange = newValue => {
+    if (newValue !== null) {
+      let audioId = newValue;
+      let audio = _.find(this.props.audioFiles, { Id: audioId.value });
+      let renderURL = audio.FilePath;
+      this.setState({ audioId, renderURL });
+    } else {
+      this.setState({ audioId: "", renderURL: "" });
+    }
+  };
   onSubmitMedia() {}
   render() {
-    const filterColors = inputValue =>
-      _.filter(this.props.audioOptions, function(o) {
-        return o.label == inputValue.toLowerCase();
-      });
-
-    const loadOptions = (inputValue, callback) => {
+    const options = this.props.audioOptions;
+    const getOptions = (input, callback) => {
+      let filterOpt = [];
+      if (input) {
+        filterOpt = _.filter(options, function(audio) {
+          if (
+            _.includes(audio.label.toLowerCase(), input.toLowerCase()) ||
+            audio.label.toLowerCase() == input.toLowerCase()
+          ) {
+            return audio;
+          }
+        });
+      }
       setTimeout(() => {
-        callback(filterColors(inputValue));
-      }, 1000);
+        callback(null, {
+          options: filterOpt,
+          complete: true
+        });
+      }, 500);
     };
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
@@ -74,19 +89,20 @@ class AudioAllocationForm extends Component {
           <FormGroup row>
             <Col xs="12" md="5">
               <Label>Audio</Label>
-              <AsyncSelect
-              cacheOptions
-              loadOptions={loadOptions}
-              defaultOptions
-              onInputChange={this.handleInputChange}
+              <Async
+                name="form-field-name"
+                cacheOptions
+                value={this.state.audioId}
+                defaultOptions
+                onChange={this.handleInputChange.bind(this)}
+                loadOptions={getOptions}
               />
             </Col>
             <Col md="5">
               <Label />
-              <AudioPlayer autoPlay={true} />
+              <AudioPlayer source={this.state.renderURL} autoPlay={false} />
             </Col>
           </FormGroup>
-
           <FormGroup row>
             <Col md="3">
               <Button
@@ -104,7 +120,8 @@ class AudioAllocationForm extends Component {
 }
 export const mapStateToProps = state => {
   return {
-    audioOptions: state.mediaReducer.audioOptions
+    audioOptions: state.mediaReducer.audioOptions,
+    audioFiles: state.mediaReducer.audioFiles
   };
 };
 

@@ -208,6 +208,7 @@ class GrampanchayatForm extends Component {
                   value={grampanchayat.State}
                   required={grampanchayat.StateRequired}
                   onChange={this.onStateValueChange.bind(this)}
+                  search={true}
                   simpleValue
                 />
               </Col>
@@ -221,6 +222,7 @@ class GrampanchayatForm extends Component {
                   required={grampanchayat.DistrictRequired}
                   disabled={this.state.districtDisabled}
                   onChange={this.onDistrictValueChange.bind(this)}
+                  search={true}
                   simpleValue
                 />
               </Col>

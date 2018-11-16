@@ -461,6 +461,7 @@ class Settings extends Component {
                 options={this.props.gendersList}
                 value={user.Gender}
                 required={this.state.genderRequired}
+                search={true}
                 onChange={this.onGenderSelection.bind(this)}
               />
             </Col>
@@ -472,6 +473,7 @@ class Settings extends Component {
                 options={this.props.statesList}
                 value={user.State}
                 required={this.state.stateRequired}
+                search={true}
                 onChange={this.onStateSelection.bind(this)}
               />
             </Col>
@@ -487,6 +489,7 @@ class Settings extends Component {
                 disabled={this.state.districtDisabled}
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
+                search={true}
               />
             </Col>
             <Col md="5">
@@ -499,6 +502,7 @@ class Settings extends Component {
                 options={this.state.grampanchayatOptions}
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
+                search={true}
               />
             </Col>
           </FormGroup>
@@ -513,6 +517,7 @@ class Settings extends Component {
                 disabled={this.state.villageDisabled}
                 required={this.state.villageRequired}
                 onChange={this.onVillageSelection.bind(this)}
+                search={true}
               />
             </Col>
             <Col md="5">
@@ -538,6 +543,7 @@ class Settings extends Component {
                 value={user.Language}
                 required={this.state.languageRequired}
                 onChange={this.onLanguageSelection.bind(this)}
+                search={true}
               />
             </Col>
             {user.ImagePath ? (

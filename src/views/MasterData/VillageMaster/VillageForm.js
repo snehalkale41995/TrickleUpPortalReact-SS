@@ -239,6 +239,7 @@ class VillageForm extends Component {
                 value={village.State}
                 required={village.StateRequired}
                 onChange={this.onStateValueChange.bind(this)}
+                search={true}
                 simpleValue
               />
             </Col>
@@ -252,6 +253,7 @@ class VillageForm extends Component {
                 disabled={this.state.districtDisabled}
                 required={village.DistrictRequired}
                 onChange={this.onDistrictValueChange.bind(this)}
+                search={true}
                 simpleValue
               />
             </Col>
@@ -267,6 +269,7 @@ class VillageForm extends Component {
                 disabled={this.state.grampanchayatDisabled}
                 required={village.GrampanchayatRequired}
                 onChange={this.onGrampanchayatValueChange.bind(this)}
+                search={true}
                 simpleValue
               />
             </Col>

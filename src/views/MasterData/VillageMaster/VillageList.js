@@ -174,7 +174,7 @@ class VillageList extends Component {
                 options={constants.tableStatus}
                 value={this.state.tableStatus}
                 onChange={this.onStatusChange.bind(this)}
-                search ={false}
+                search={false}
                 simpleValue
               />
             </Col>

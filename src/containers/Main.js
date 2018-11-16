@@ -111,8 +111,8 @@ class Main extends Component {
         </Switch>
       );
     }
-    // return this.props.uncaughtException ?  <div><ExceptionPage /></div>  :   <div>{routeStack}</div>;
-    return  <div>{routeStack}</div>;
+   return this.props.uncaughtException ?  <div><ExceptionPage /></div>  :   <div>{routeStack}</div>;
+    //return  <div>{routeStack}</div>;
   }
 }
 const mapStateToProps = state => {

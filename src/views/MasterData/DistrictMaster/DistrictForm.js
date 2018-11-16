@@ -178,6 +178,7 @@ class DistrictForm extends Component {
                 options={this.props.statesList}
                 onChange={this.onStateSelect.bind(this)}
                 value={district.State}
+                search={true}
               />
             </Col>
             <Col xs="10" md="5">

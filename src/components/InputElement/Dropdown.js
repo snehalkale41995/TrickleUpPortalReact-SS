@@ -14,7 +14,7 @@ const DropdownSelect = props => (
       onChange={props.onChange}
       disabled ={props.disabled}
       simpleValue
-      searchable={props.search ? props.search : true}
+      searchable={props.search}
       clearable
     />
     {props.required ? (

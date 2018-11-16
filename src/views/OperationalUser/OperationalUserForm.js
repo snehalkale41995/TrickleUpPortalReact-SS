@@ -496,6 +496,7 @@ class OperationalUserForm extends Component {
                 value={user.Gender}
                 required={this.state.genderRequired}
                 onChange={this.onGenderSelection.bind(this)}
+                search={true}
               />
             </Col>
             <Col md="5">
@@ -507,6 +508,7 @@ class OperationalUserForm extends Component {
                 value={user.State}
                 required={this.state.stateRequired}
                 onChange={this.onStateSelection.bind(this)}
+                search={true}
               />
             </Col>
           </FormGroup>
@@ -521,6 +523,7 @@ class OperationalUserForm extends Component {
                 disabled={this.state.districtDisabled}
                 required={this.state.districtRequired}
                 onChange={this.onDistrictSelection.bind(this)}
+                search={true}
               />
             </Col>
             <Col md="5">
@@ -533,6 +536,7 @@ class OperationalUserForm extends Component {
                 disabled={this.state.grampanchayatDisabled}
                 required={this.state.grampanchayatRequired}
                 onChange={this.onGrampanchayatSelection.bind(this)}
+                search={true}
               />
             </Col>
           </FormGroup>
@@ -547,6 +551,7 @@ class OperationalUserForm extends Component {
                 options={this.state.villageOptions}
                 required={this.state.villageRequired}
                 onChange={this.onVillageSelection.bind(this)}
+                search={true}
               />
             </Col>
             <Col md="5">
@@ -573,6 +578,7 @@ class OperationalUserForm extends Component {
                 value={user.Language}
                 required={this.state.languageRequired}
                 onChange={this.onLanguageSelection.bind(this)}
+                search={true}
               />
             </Col>
           </FormGroup>
