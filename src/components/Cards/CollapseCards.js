@@ -6,7 +6,6 @@ import {
   CardBody,
   Button,
   CardHeader,
-  Fade,
   Collapse
 } from "reactstrap";
 import { Link } from "react-router-dom";

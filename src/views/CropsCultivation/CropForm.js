@@ -7,8 +7,6 @@ import InputElement from "../../components/InputElement/InputElement";
 import { AppSwitch } from "@coreui/react";
 import AppConfig from "../../constants/AppConfig";
 import Loader from "../../components/Loader/Loader";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import _ from "lodash";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import { ToastContainer } from "react-toastify";
@@ -53,7 +51,10 @@ class CropForm extends Component {
             updateFlag: true,
             crop: currentCrop,
             loading: false,
-            audioAllocation: this.props.currentCropAudioAllocation
+            audioAllocation: this.props.currentCropAudioAllocation,
+            audioGridOpen: true,
+            videoGridOpen: true,
+            imageGridOpen: true,
           });
         }, 1000);
       }

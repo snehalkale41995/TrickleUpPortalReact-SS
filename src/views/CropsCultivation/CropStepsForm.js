@@ -6,8 +6,6 @@ import InputElement from "../../components/InputElement/InputElement";
 import AppConfig from "../../constants/AppConfig";
 import Loader from "../../components/Loader/Loader";
 import * as actions from "../../store/actions";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import _ from "lodash";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import { ToastContainer } from "react-toastify";
@@ -51,7 +49,10 @@ class CropStepsForm extends Component {
             cropStep: currentCropStep,
             loading: false,
             cropNameDisabled: true,
-            cropStepAudioAllocation: this.props.cropStepAudioAllocation
+            cropStepAudioAllocation: this.props.cropStepAudioAllocation,
+            audioGridOpen: true,
+            //videoGridOpen: true,
+            //imageGridOpen: true
           });
         }, 1000);
       }

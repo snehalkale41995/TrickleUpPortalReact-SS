@@ -4,8 +4,6 @@ import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
 import Loader from "../../components/Loader/Loader";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import _ from "lodash";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import * as actions from "../../store/actions";
@@ -49,7 +47,10 @@ class CropStepsForm extends Component {
             cropMaterial: currentCropMaterial,
             loading: false,
             cropNameDisabled: true,
-            cropMaterialAudioAllocation: this.props.cropMaterialAudioAllocation
+            cropMaterialAudioAllocation: this.props.cropMaterialAudioAllocation,
+            audioGridOpen: true,
+           // videoGridOpen: true,
+            //imageGridOpen: true
           });
         }, 1000);
       }
