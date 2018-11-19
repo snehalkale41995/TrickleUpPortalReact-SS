@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import CardLayout from "../../components/Cards/CardLayout";
+import CardLayout from "../../../components/Cards/CardLayout";
 import { FormGroup, Col, Button } from "reactstrap";
-import InputElement from "../../components/InputElement/InputElement";
-import Loader from "../../components/Loader/Loader";
+import InputElement from "../../../components/InputElement/InputElement";
+import Loader from "../../../components/Loader/Loader";
 import _ from "lodash";
-import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
-import * as actions from "../../store/actions";
+import AudioPlayer from "../../../components/AudioPlayer/AudioPlayer";
+import * as actions from "../../../store/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as Toaster from "../../constants/Toaster";
-import CollapseCards from "../../components/Cards/CollapseCards";
-import AudioAllocationGrid from "./AudioAllocationGrid";
+import * as Toaster from "../../../constants/Toaster";
+import CollapseCards from "../../../components/Cards/CollapseCards";
+import AudioAllocationGrid from "../AudioAllocationGrid";
 
 class CropStepsForm extends Component {
   constructor(props) {

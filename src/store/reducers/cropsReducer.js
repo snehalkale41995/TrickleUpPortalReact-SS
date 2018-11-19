@@ -2,6 +2,8 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   cropsList: [],
+  activeCrops : [],
+  inActiveCrops : [],
   currentCropData: {},
   cropSteps: [],
   cropStepsMaterial: [],
@@ -19,6 +21,8 @@ const cropsReducer = (state = initialState, action) => {
       return {
         ...state,
         cropsList: action.cropsList,
+        activeCrops : action.activeCrops,
+        inActiveCrops : action.inActiveCrops, 
         cropError: null,
         currentCropAudioAllocation: []
       };

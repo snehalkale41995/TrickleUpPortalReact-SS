@@ -43,7 +43,7 @@ class GenderList extends Component {
     if (this.state.tableStatus) {
       return (
         <Link to={this} onClick={() => this.onDelete(row)}>
-          <i className="fa fa-trash" title="Dactivate" />
+          <i className="fa fa-trash" title="Deactivate" />
         </Link>
       );
     } else {
@@ -198,51 +198,6 @@ class GenderList extends Component {
                 onDeleteState={this.onDeleteState.bind(this)}
               />
             )}
-            {/* <BootstrapTable
-              ref="table"
-              data={
-                this.state.tableStatus
-                  ? this.props.genders
-                  : this.props.inactiveGenders
-              }
-              pagination={true}
-              search={true}
-              options={sortingOptions}
-              //exportCSV={true}
-              hover={true}
-              csvFileName="Language List"
-            >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
-                Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="GenderName"
-                headerAlign="left"
-                width="20"
-                csvHeader="State Name"
-                dataSort={true}
-              >
-                Gender
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Deactivate
-              </TableHeaderColumn>
-            </BootstrapTable> */}
           </Col>
           <ToastContainer autoClose={1000} />
         </FormGroup>

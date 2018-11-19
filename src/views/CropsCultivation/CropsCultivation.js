@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
-import Crops from "./Crops";
-import CropSteps from "./CropSteps";
-import CropsMaterial from "./CropsMaterial";
-import CropForm from "./CropForm";
-import CropStepsForm from "./CropStepsForm";
-import CropsMaterialForm from "./CropsMaterialForm";
+import Crops from "./Crops/Crops";
+import CropSteps from "./CropSteps/CropSteps";
+import CropsMaterial from "./CropsMaterial/CropsMaterial";
+import CropForm from "./Crops/CropForm";
+import CropStepsForm from "./CropSteps/CropStepsForm";
+import CropsMaterialForm from "./CropsMaterial/CropsMaterialForm";
 import AudioAllocationForm from "./AudioAllocationForm";
 
 export default class CropsCultivation extends Component {

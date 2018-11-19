@@ -41,12 +41,13 @@ class BulkRegistration extends Component {
       loading: false,
       showDataTable: false,
       CSVdata: [],
+      CSVdataTracker : null,
       showTableHeaderFormat: false,
       csvFileRequired: false,
       uploadFlag: false,
       bulkUserError: false,
       fileName: "",
-      clearCSV: false,
+      clearCSValue: false,
       csvFileInvalid: false
     };
   }
@@ -57,26 +58,30 @@ class BulkRegistration extends Component {
   handleData = (data, file) => {
     if (data.length !== 0) {
       this.setState({
-        clearCSV: false,
+        clearCSValue: false,
         csvFileInvalid: false,
         showDataTable: true,
         CSVdata: data,
+        CSVdataTracker : data,
         csvFileRequired: false,
         bulkUserError: false
       });
     } else {
       this.setState({
-        clearCSV: true,
+        clearCSValue: false,
         CSVdata: data,
+        CSVdataTracker : [],
+        csvFileRequired: false,
         csvFileInvalid: true
       });
     }
   };
   onReset() {
     this.setState({
-      clearCSV: true,
+      clearCSValue: true,
       showDataTable: false,
       CSVdata: [],
+      CSVdataTracker : null,
       csvFileRequired: false,
       bulkUserError: false,
       fileName: "",
@@ -106,26 +111,48 @@ class BulkRegistration extends Component {
               bulkUserError: false
             });
       }, 1000);
-    } else {
-      if (beneficiaries.length === 0 && this.state.clearCSV) {
-        this.setState({
-          csvFileInvalid: true
-        });
-      } else {
-        this.setState({ csvFileRequired: true });
-      }
-    }
+     }else if(this.state.CSVdataTracker === null){
+      this.setState({ csvFileRequired: true });
+     }else{
+      this.setState({
+        csvFileInvalid: true
+      });
+     }
+    //else if(this.state.CSVdata === null){
+    //   this.setState({ csvFileRequired: true });
+    // }else{
+    //   if (beneficiaries.length === 0 && this.state.clearCSValue) {
+    //     this.setState({
+    //       csvFileInvalid: true
+    //     });
+    //   }
+    // } 
+    
+    // else {
+    //   if (beneficiaries.length === 0 ) {
+    //     this.setState({
+    //       csvFileInvalid: true
+    //     });
+    //   } else {
+    //     this.setState({ csvFileRequired: true });
+    //   }
+    // }
   }
 
   onSubmit() {
     let beneficiaries = [...this.state.CSVdata];
     let csvFileRequired = false;
+    if(this.state.CSVdataTracker === null){
+      this.setState({ csvFileRequired: true });
+    }else if(this.state.CSVdataTracker === []){
+      this.setState({ csvFileInvalid: true });
+    }
     if (beneficiaries.length === 0) {
       csvFileRequired = true;
       this.setState({ csvFileRequired: true });
     }
     let compRef = this;
-    if (!csvFileRequired) {
+    if (!this.state.csvFileRequired && !this.state.csvFileInvalid) {
       let guid = uuid.v1(new Date());
       let currentUser = localStorage.getItem("user");
       beneficiaries.forEach(beneficiary => {
@@ -250,7 +277,7 @@ class BulkRegistration extends Component {
                         label="CSV file"
                         type="file"
                         accept=".csv"
-                        value={this.state.clearCSV ? this.state.fileName : null}
+                        value={this.state.clearCSValue ? this.state.fileName : null}
                         onChange={onChange}
                         required={this.state.csvFileRequired}
                         //invalid={this.state.csvFileInvalid}

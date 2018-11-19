@@ -50,7 +50,13 @@ export {
     getCropAudioAllocation,
     getCropStepsAudioAllocation,
     getCropMaterialAudioAllocation,
-    clearAudioAllocations
+    clearAudioAllocations,
+    createCrop,
+    updateCrop,
+    deactivateCrop,
+    createCropStep,
+    updateCropStep,
+    deleteCropStep
 } from './cropsMaster.js';
 
 export {

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import CardLayout from "../../components/Cards/CardLayout";
+import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions";
+import * as actions from "../../../store/actions";
 import { FormGroup, Col } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
+import Loader from "../../../components/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as Toaster from "../../constants/Toaster";
+import * as Toaster from "../../../constants/Toaster";
 
 class CropsMaterial extends Component {
   constructor(props) {
