@@ -270,7 +270,7 @@ class CropForm extends Component {
                 {/* {this.state.crop.renderURL !== "" ? ( */}
                 <img
                   src={this.state.crop.renderURL}
-                  className="image-display"
+                  // className="image-display"
                   height={300}
                   width={350}
                   alt=""
@@ -278,94 +278,97 @@ class CropForm extends Component {
                 {/* ) : null} */}
               </Col>
             </FormGroup>
-          </div>
-          {this.state.updateFlag ? (
-            <div>
-              <div style={{ marginTop: -50 }}>
-                <CollapseCards
-                  subName="Audio Allocation"
-                  buttonName="Add Audio"
-                  buttonLink={this}
-                  buttonClick={this.onAddAudio.bind(this)}
-                  isOpen={this.state.audioGridOpen}
-                  toggleCollapse={this.audioToggleCollapse.bind(this)}
-                >
-                  <FormGroup row>
-                    <Col xs="12" style={{ marginTop: -10 }}>
-                      <AudioAllocationGrid
-                        audioAllocation={this.props.currentCropAudioAllocation}
-                        playAudio={this.playAudio.bind(this)}
-                      />
-                    </Col>
-                  </FormGroup>
-                </CollapseCards>
-              </div>
-              <div style={{ marginTop: -30 }}>
-                <CollapseCards
-                  subName="Image Allocation"
-                  buttonName="Add Image"
-                  buttonLink={this}
-                  active="none"
-                  //buttonClick={this.onAddAudio.bind(this)}
-                  isOpen={this.state.imageGridOpen}
-                  toggleCollapse={this.imageToggleCollapse.bind(this)}
-                >
-                  <FormGroup row>
-                    <Col xs="12" style={{ marginTop: -10 }} />
-                  </FormGroup>
-                </CollapseCards>
-              </div>
-              <div style={{ marginTop: -30 }}>
-                <CollapseCards
-                  subName="Video Allocation"
-                  buttonName="Add Video"
-                  buttonLink={this}
-                  active="none"
-                  //buttonClick={this.onAddAudio.bind(this)}
-                  isOpen={this.state.videoGridOpen}
-                  toggleCollapse={this.videoToggleCollapse.bind(this)}
-                >
-                  <FormGroup row>
-                    <Col xs="12" style={{ marginTop: -10 }} />
-                  </FormGroup>
-                </CollapseCards>
-              </div>
-            </div>
-          ) : null}
 
-          {this.state.updateFlag ? (
-            <FormGroup row>
-              <Col md="1">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={() => this.onSubmit()}
-                  //style={{ pointerEvents: "none", opacity: 0.5 }}
-                >
-                  Save
-                </Button>
-              </Col>
-            </FormGroup>
-          ) : (
-            <FormGroup row>
-              <Col md="1">
-                <Button
-                  className="theme-positive-btn"
-                  onClick={() => this.onSubmit()}
-                  //style={{ pointerEvents: "none" , opacity: 0.5}}
-                >
-                  Create
-                </Button>
-              </Col>
-              <Col md="1">
-                <Button
-                  className="theme-reset-btn"
-                  onClick={() => this.onReset()}
-                >
-                  Reset
-                </Button>
-              </Col>
-            </FormGroup>
-          )}
+            {this.state.updateFlag ? (
+              <div>
+                <div style={{ marginTop: 0 }}>
+                  <CollapseCards
+                    subName="Audio Allocation"
+                    buttonName="Add Audio"
+                    buttonLink={this}
+                    buttonClick={this.onAddAudio.bind(this)}
+                    isOpen={this.state.audioGridOpen}
+                    toggleCollapse={this.audioToggleCollapse.bind(this)}
+                  >
+                    <FormGroup row>
+                      <Col xs="12" style={{ marginTop: -10 }}>
+                        <AudioAllocationGrid
+                          audioAllocation={
+                            this.props.currentCropAudioAllocation
+                          }
+                          playAudio={this.playAudio.bind(this)}
+                        />
+                      </Col>
+                    </FormGroup>
+                  </CollapseCards>
+                </div>
+                <div style={{ marginTop: -30 }}>
+                  <CollapseCards
+                    subName="Image Allocation"
+                    buttonName="Add Image"
+                    buttonLink={this}
+                    active="none"
+                    //buttonClick={this.onAddAudio.bind(this)}
+                    isOpen={this.state.imageGridOpen}
+                    toggleCollapse={this.imageToggleCollapse.bind(this)}
+                  >
+                    <FormGroup row>
+                      <Col xs="12" style={{ marginTop: -10 }} />
+                    </FormGroup>
+                  </CollapseCards>
+                </div>
+                <div style={{ marginTop: -30 }}>
+                  <CollapseCards
+                    subName="Video Allocation"
+                    buttonName="Add Video"
+                    buttonLink={this}
+                    active="none"
+                    //buttonClick={this.onAddAudio.bind(this)}
+                    isOpen={this.state.videoGridOpen}
+                    toggleCollapse={this.videoToggleCollapse.bind(this)}
+                  >
+                    <FormGroup row>
+                      <Col xs="12" style={{ marginTop: -10 }} />
+                    </FormGroup>
+                  </CollapseCards>
+                </div>
+              </div>
+            ) : null}
+
+            {this.state.updateFlag ? (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={() => this.onSubmit()}
+                    //style={{ pointerEvents: "none", opacity: 0.5 }}
+                  >
+                    Save
+                  </Button>
+                </Col>
+              </FormGroup>
+            ) : (
+              <FormGroup row>
+                <Col md="1">
+                  <Button
+                    className="theme-positive-btn"
+                    onClick={() => this.onSubmit()}
+                    //style={{ pointerEvents: "none" , opacity: 0.5}}
+                  >
+                    Create
+                  </Button>
+                </Col>
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={() => this.onReset()}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </FormGroup>
+            )}
+          </div>
         </CardLayout>
         <ToastContainer autoClose={1000} />
       </div>
@@ -378,7 +381,7 @@ const mapStateToProps = state => {
     currentCropAudioAllocation: state.cropsReducer.currentCropAudioAllocation,
     cropError: state.cropsReducer.cropError,
     activeCrops: state.cropsReducer.activeCrops,
-    inActiveCrops: state.cropsReducer.inActiveCrops,
+    inActiveCrops: state.cropsReducer.inActiveCrops
   };
 };
 

@@ -294,7 +294,7 @@ class CropStepsForm extends Component {
 
           {this.state.updateFlag ? (
             <div>
-              <div style={{ marginTop: -50 }}>
+              <div style={{ marginTop: 0 }}>
                 <CollapseCards
                   subName="Audio Allocation"
                   buttonName="Add Audio"
