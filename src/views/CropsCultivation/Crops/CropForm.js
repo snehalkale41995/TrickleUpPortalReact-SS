@@ -104,6 +104,7 @@ class CropForm extends Component {
   onSwitch(event) {
     let crop = { ...this.state.crop };
     crop.Active = event.target.checked;
+    crop.Ready = event.target.checked;
     crop.Active
       ? this.setState({
           crop: crop,
@@ -143,7 +144,8 @@ class CropForm extends Component {
       if (this.state.updateFlag) {
         this.props.updateCrop(cropUpdateData.Id, cropUpdateData);
       } else {
-        cropData.Active = true;
+        //cropData.Active = true;
+        //cropData.Ready = true;
         this.props.createCrop(cropData);
       }
       this.setState({ loading: true });

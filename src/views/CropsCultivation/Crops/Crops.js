@@ -71,9 +71,11 @@ class Crops extends Component {
     crop.ActiveOn = new Date();
     if (this.state.tableStatus) {
       crop.Active = false;
+      crop.Ready = false;
       this.props.deactivateCrop(crop.Id, crop);
     } else {
       crop.Active = true;
+      crop.Ready = true;
       this.props.deactivateCrop(crop.Id, crop);
     }
     let displayMessage = compRef.state.tableStatus

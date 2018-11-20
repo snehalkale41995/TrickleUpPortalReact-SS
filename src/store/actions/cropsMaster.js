@@ -86,7 +86,7 @@ export const clearAudioAllocations = () => {
 export const getCropsList = () => {
   return dispatch => {
     axios
-      .get(`${AppConfig.serverURL}/api/Crops/GetCrops?langCode=26`)
+      .get(`${AppConfig.serverURL}/api/Crops/GetCropsPortal?langCode=26`)
       .then(response => {
         if (response.data.success) {
           let activeCrops = _.filter(response.data.data.Crops, function(crop) {
