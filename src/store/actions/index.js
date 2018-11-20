@@ -24,9 +24,10 @@ export {
     deleteVillage
 } from './villagesMaster.js';
 export {
-    postMediaContent,
+    postAudioFile,
     getAudioFiles,
     getVideoFiles,
+    postVideoFile,
     getImageFiles
 } from './mediaContent.js'
 

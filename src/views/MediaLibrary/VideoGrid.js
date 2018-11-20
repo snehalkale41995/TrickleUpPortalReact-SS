@@ -21,16 +21,23 @@ class VideoGrid extends Component {
           width="20"
           dataSort={true}
         >
-        Video Name
+          Video Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="FilePath"
           dataFormat={this.props.playVideo}
           headerAlign="left"
           width="20"
-          export={false}
         >
           Video
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="delete"
+          //dataFormat={this.props.onDeleteState}
+          headerAlign="left"
+          width="20"
+        >
+          Deactivate
         </TableHeaderColumn>
       </BootstrapTable>
     );

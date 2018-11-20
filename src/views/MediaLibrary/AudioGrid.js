@@ -21,26 +21,24 @@ class AudioGrid extends Component {
           width="20"
           dataSort={true}
         >
-        File Name
+          File Name
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="FilePath"
           dataFormat={this.props.playAudio}
           headerAlign="left"
           width="20"
-          export={false}
         >
           Audio
         </TableHeaderColumn>
-        {/* <TableHeaderColumn
+        <TableHeaderColumn
           dataField="delete"
-          dataFormat={this.props.onDeleteState}
+          //dataFormat={this.props.onDeleteState}
           headerAlign="left"
           width="20"
-          export={false}
         >
           Deactivate
-        </TableHeaderColumn> */}
+        </TableHeaderColumn>
       </BootstrapTable>
     );
   }

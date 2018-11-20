@@ -5,6 +5,10 @@ import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
 import Loader from "../../components/Loader/Loader";
+import * as actions from "../../store/actions";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class AudioForm extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +18,8 @@ class AudioForm extends Component {
       uploadedFile: null,
       renderURL: "",
       audioTitle: "",
-      audioRequired: false
+      audioRequired: false,
+      audioName : ""
     };
   }
   componentDidMount() {
@@ -36,24 +41,50 @@ class AudioForm extends Component {
         audioFile: null,
         renderURL: "",
         audioTitle: "",
-        audioRequired: true
+        audioRequired: true,
       });
     }
   };
 
   onSubmitMedia() {
     let audioFile = this.state.audioFile;
+    let compRef = this;
     if (audioFile) {
       let audioData = new FormData();
       audioData.append("audio", audioFile);
+      this.props.postAudioFile(audioData);
       this.setState({ loading: true });
-      this.props.history.push("/mediaContent/audioContent");
+      let message = "";
+      setTimeout(() => {
+        compRef.props.audioError
+          ? (message = "Something went wrong !")
+          : (message = "Audio uploaded successfully");
+        compRef.onReset();
+        compRef.setState({ loading: false });
+        Toaster.Toaster(message, compRef.props.audioError);
+        setTimeout(() => {
+          if (!compRef.props.audioError) {
+            compRef.onReset();
+            compRef.props.history.push("/mediaContent/audioContent");
+          }
+        }, 1000);
+      }, 1000);
     } else {
       this.setState({ audioRequired: true });
     }
   }
+  onReset() {
+    this.setState({
+      audioFile: null,
+      uploadedFile: null,
+      renderURL: "",
+      audioTitle: "",
+      audioRequired: false,
+      audioName : ""
+    });
+  }
   render() {
-    const { audioTitle, renderURL, audioRequired } = this.state;
+    const { audioTitle, audioFile ,renderURL, audioRequired } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -72,18 +103,27 @@ class AudioForm extends Component {
                     label="Audio file"
                     name="Audio file"
                     accept="audio/*"
+                    value = {audioFile === null ? "" : null}
                     required={audioRequired}
                     onChange={event => this.handleUploadFile(event)}
                   />
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Col xs="12" md="3">
+                <Col xs="12" md="2">
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmitMedia.bind(this)}
                   >
-                    Create
+                    Upload
+                  </Button>
+                </Col>
+                <Col  md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
                   </Button>
                 </Col>
               </FormGroup>
@@ -104,17 +144,20 @@ class AudioForm extends Component {
             </Col>
           </FormGroup>
         </div>
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
 }
 export const mapStateToProps = state => {
-  return {};
+  return {
+    audioError: state.mediaReducer.audioError
+  };
 };
 
 export const mapDispatchToProps = dispatch => {
   return {
-    //storeMedia: fileData => dispatch(actions.postMediaContent(fileData))
+    postAudioFile: audioFile => dispatch(actions.postAudioFile(audioFile))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AudioForm);

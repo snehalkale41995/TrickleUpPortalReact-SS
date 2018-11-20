@@ -6,7 +6,10 @@ import InputElement from "../../components/InputElement/InputElement";
 import Loader from "../../components/Loader/Loader";
 import "../../../node_modules/video-react/dist/video-react.css"; // import css
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
-
+import * as actions from "../../store/actions";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class VideoForm extends Component {
   constructor(props) {
     super(props);
@@ -45,17 +48,42 @@ class VideoForm extends Component {
 
   onSubmitMedia() {
     let videoFile = this.state.videoFile;
+    let compRef = this;
     if (videoFile) {
       let videoData = new FormData();
       videoData.append("video", videoFile);
+      this.props.postVideoFile(videoData);
       this.setState({ loading: true });
-      this.props.history.push("/mediaContent/videoContent");
+      let message = "";
+      setTimeout(() => {
+        compRef.props.videoError
+          ? (message = "Something went wrong !")
+          : (message = "Video uploaded successfully");
+        compRef.onReset();
+        compRef.setState({ loading: false });
+        Toaster.Toaster(message, compRef.props.videoError);
+        setTimeout(() => {
+          if (!compRef.props.videoError) {
+            compRef.onReset();
+            compRef.props.history.push("/mediaContent/videoContent");
+          }
+        }, 1000);
+      }, 1000);
     } else {
       this.setState({ videoRequired: true });
     }
   }
+  onReset() {
+    this.setState({
+      videoFile: null,
+      uploadedFile: null,
+      renderURL: "",
+      videoTitle: "",
+      videoRequired: false
+    });
+  }
   render() {
-    const { videoTitle, renderURL, videoRequired } = this.state;
+    const { videoTitle, videoFile, renderURL, videoRequired } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -74,18 +102,27 @@ class VideoForm extends Component {
                     label="Video file"
                     name="Video file"
                     accept="video/*"
+                    value={videoFile === null ? "" : null}
                     required={videoRequired}
                     onChange={event => this.handleUploadFile(event)}
                   />
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Col xs="12" md="3">
+                <Col xs="12" md="2">
                   <Button
                     className="theme-positive-btn"
                     onClick={this.onSubmitMedia.bind(this)}
                   >
                     Upload
+                  </Button>
+                </Col>
+                <Col md="1">
+                  <Button
+                    className="theme-reset-btn"
+                    onClick={this.onReset.bind(this)}
+                  >
+                    Reset
                   </Button>
                 </Col>
               </FormGroup>
@@ -102,17 +139,20 @@ class VideoForm extends Component {
             </Col>
           </FormGroup>
         </div>
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
 }
 export const mapStateToProps = state => {
-  return {};
+  return {
+    videoError: state.mediaReducer.videoError
+  };
 };
 
 export const mapDispatchToProps = dispatch => {
   return {
-    //storeMedia: fileData => dispatch(actions.postMediaContent(fileData))
+    postVideoFile: videoFile => dispatch(actions.postVideoFile(videoFile))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VideoForm);

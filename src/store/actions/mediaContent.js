@@ -7,11 +7,11 @@ export const storeMediaContent = () => {
     type: actionTypes.GET_MEDIA
   };
 };
-export const storeAudioFiles = (audios,audioOptions) => {
+export const storeAudioFiles = (audios, audioOptions) => {
   return {
     type: actionTypes.STORE_AUDIO_FILES,
     audioFiles: audios,
-    audioOptions : audioOptions
+    audioOptions: audioOptions
   };
 };
 export const storeVideoFiles = videos => {
@@ -44,16 +44,7 @@ export const logImageError = error => {
     error: error
   };
 };
-export const postMediaContent = fileData => {
-  return dispatch => {
-    axios
-      .post(`${AppConfig.serverURL}/api/MediaContents/UploadVideo`, fileData)
-      .then(response => {
-        //console.log("Post Media response")
-      })
-      .catch(error => {});
-  };
-};
+
 export const getAudioFiles = () => {
   return dispatch => {
     axios
@@ -64,9 +55,26 @@ export const getAudioFiles = () => {
           let audioOptions = [];
           audios.forEach(audio => {
             audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
-            audioOptions.push({label : audio.FileName , value: audio.Id})
+            audioOptions.push({ label: audio.FileName, value: audio.Id });
           });
           dispatch(storeAudioFiles(audios, audioOptions));
+        } else {
+          dispatch(logAudioError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logAudioError("Something went wrong!"));
+      });
+  };
+};
+
+export const postAudioFile = audio => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/FileUpload/PostAudios`, audio)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getAudioFiles());
         } else {
           dispatch(logAudioError(response.data.error));
         }
@@ -96,6 +104,22 @@ export const getVideoFiles = () => {
       });
   };
 };
+export const postVideoFile = video => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/FileUpload/PostVideos`, video)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getVideoFiles());
+        } else {
+          dispatch(logVideoError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logVideoError("Something went wrong!"));
+      });
+  };
+};
 export const getImageFiles = () => {
   return dispatch => {
     axios
@@ -116,4 +140,3 @@ export const getImageFiles = () => {
       });
   };
 };
-
