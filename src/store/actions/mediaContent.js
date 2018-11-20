@@ -140,3 +140,19 @@ export const getImageFiles = () => {
       });
   };
 };
+export const postImageFile = image => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/FileUpload/PostImages`, image)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getImageFiles());
+        } else {
+          dispatch(logImageError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logImageError("Something went wrong!"));
+      });
+  };
+};

@@ -28,7 +28,8 @@ export {
     getAudioFiles,
     getVideoFiles,
     postVideoFile,
-    getImageFiles
+    getImageFiles,
+    postImageFile
 } from './mediaContent.js'
 
 export {
