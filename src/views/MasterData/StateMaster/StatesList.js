@@ -46,7 +46,7 @@ class StatesList extends Component {
   onDeleteState(cell, row) {
     return (
       <Link to={this} onClick={() => this.onDelete(row)}>
-        <i className="fa fa-trash" title="Delete" />
+        <i className="fa fa-trash" title="Deactivate" />
       </Link>
     );
   }

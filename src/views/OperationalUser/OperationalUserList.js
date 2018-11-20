@@ -38,7 +38,7 @@ class OperationalUserList extends Component {
     if (this.state.tableStatus) {
       return (
         <Link to={this} onClick={() => this.onDelete(row)}>
-          <i className="fa fa-trash" title="Dactivate" />
+          <i className="fa fa-trash" title="Deactivate" />
         </Link>
       );
     } else {

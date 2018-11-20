@@ -389,6 +389,7 @@ class RegistrationForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
+      UserId: "",
       UserIdRequired: false,
       UserIdInvalid: false,
       Age: "", //no

@@ -31,7 +31,7 @@ class FeedbackQuestions extends Component {
     let componentRef = this;
     return (
       <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
-        <i className="fa fa-trash" title="Delete" />
+        <i className="fa fa-trash" title="Deactivate" />
       </Link>
     );
   }

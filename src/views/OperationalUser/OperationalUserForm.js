@@ -105,9 +105,8 @@ class OperationalUserForm extends Component {
   // Method for age validation
   setAgeToNumeric(e) {
     let user = { ...this.state.user };
-    let re; 
-    if(user.Age.length==0)
-    re = /[1-9]+/g;
+    let re;
+    if (user.Age.length == 0) re = /[1-9]+/g;
     else re = /[0-9]+/g;
     if (!re.test(e.key)) {
       e.preventDefault();
@@ -343,7 +342,7 @@ class OperationalUserForm extends Component {
     let validPhone =
       /^\d+$/.test(user.PhoneNumber.trim()) &&
       user.PhoneNumber.trim().length === 10;
-    var emailTest =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let validEmail = emailTest.test(String(user.UserId).toLowerCase());
     if (user.UserId && !validEmail) {
       user.UserIdInvalid = true;
@@ -392,6 +391,7 @@ class OperationalUserForm extends Component {
       PhoneNumber: "", //no
       PhoneNumberRequired: false,
       PhoneNumberInvalid: false,
+      UserId: "",
       UserIdRequired: false,
       UserIdInvalid: false,
       Age: "", //no
