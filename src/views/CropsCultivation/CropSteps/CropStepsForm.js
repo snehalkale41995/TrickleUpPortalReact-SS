@@ -160,8 +160,12 @@ class CropStepsForm extends Component {
       }, 1000);
     } else {
       if (!cropStepData.Crop_Id) cropStepData.Crop_IdRequired = true;
-      if (!cropStepData.Step_Name) cropStepData.Step_NameRequired = true;
-      if (!cropStepData.Step_Description)
+      if (!cropStepData.Step_Name || cropStepData.Step_Name.trim().length <= 0)
+        cropStepData.Step_NameRequired = true;
+      if (
+        !cropStepData.Step_Description ||
+        cropStepData.Step_Description.trim().length <= 0
+      )
         cropStepData.Step_DescriptionRequired = true;
       this.setState({
         cropStep: cropStepData
@@ -169,7 +173,13 @@ class CropStepsForm extends Component {
     }
   }
   validCropStep(cropStep) {
-    if (cropStep.Crop_Id && cropStep.Step_Name && cropStep.Step_Description) {
+    if (
+      cropStep.Crop_Id &&
+      cropStep.Step_Name &&
+      cropStep.Step_Name.trim().length > 0 &&
+      cropStep.Step_Description &&
+      cropStep.Step_Description.trim().length > 0
+    ) {
       return true;
     } else {
       return false;

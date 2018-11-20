@@ -2,10 +2,11 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   cropsList: [],
-  activeCrops : [],
-  inActiveCrops : [],
+  activeCrops: [],
+  inActiveCrops: [],
   currentCropData: {},
   cropSteps: [],
+  cropStepList: [],
   cropStepsMaterial: [],
   currentCropAudioAllocation: [],
   currentCropStepAudioAllocation: [],
@@ -21,8 +22,8 @@ const cropsReducer = (state = initialState, action) => {
       return {
         ...state,
         cropsList: action.cropsList,
-        activeCrops : action.activeCrops,
-        inActiveCrops : action.inActiveCrops, 
+        activeCrops: action.activeCrops,
+        inActiveCrops: action.inActiveCrops,
         cropError: null,
         currentCropAudioAllocation: []
       };
@@ -49,6 +50,7 @@ const cropsReducer = (state = initialState, action) => {
       return {
         ...state,
         cropSteps: action.cropSteps,
+        cropStepList: action.cropStepList,
         currentCropStepAudioAllocation: [],
         cropStepError: null
       };
@@ -85,12 +87,12 @@ const cropsReducer = (state = initialState, action) => {
         currentCropMaterialAudioAllocation: [],
         cropMaterialError: action.cropMaterialError
       };
-      case actionTypes.CLEAR_AUDIO_ALLOCATIONS:
+    case actionTypes.CLEAR_AUDIO_ALLOCATIONS:
       return {
         ...state,
         currentCropAudioAllocation: [],
         currentCropStepAudioAllocation: [],
-        currentCropMaterialAudioAllocation: [],
+        currentCropMaterialAudioAllocation: []
       };
     default:
       return state;

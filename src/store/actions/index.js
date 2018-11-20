@@ -58,7 +58,10 @@ export {
     deactivateCrop,
     createCropStep,
     updateCropStep,
-    deleteCropStep
+    deleteCropStep,
+    createCropMaterial,
+    updateCropMaterial,
+    deleteCropMaterial
 } from './cropsMaster.js';
 
 export {

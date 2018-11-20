@@ -28,10 +28,11 @@ export const storeCurrentCrop = cropData => {
     currentCropData: cropData
   };
 };
-export const storeCropSteps = cropSteps => {
+export const storeCropSteps = (cropSteps ,cropStepList) => {
   return {
     type: actionTypes.GET_CROPS_STEPS,
-    cropSteps: cropSteps
+    cropSteps: cropSteps,
+    cropStepList : cropStepList
   };
 };
 export const storeCropStepMaterials = cropStepsMaterial => {
@@ -122,6 +123,7 @@ export const createCrop = crop => {
       .post(`${AppConfig.serverURL}/api/Crops/PostCrop`, crop)
       .then(response => {
         if (response.data.success) {
+          dispatch(getCropsList());
         } else {
           dispatch(logCropError(response.data.error));
         }
@@ -137,6 +139,7 @@ export const updateCrop = (id, crop) => {
       .post(`${AppConfig.serverURL}/api/Crops/PutCrop?id=${id}`, crop)
       .then(response => {
         if (response.data.success) {
+          dispatch(getCropsList());
         } else {
           dispatch(logCropError(response.data.error));
         }
@@ -161,7 +164,7 @@ export const deactivateCrop = (id, crop) => {
         dispatch(logCropError("Something went wrong!"));
       });
   };
- };
+};
 /**---------------------------CROP STEP FUNCTIONS ---------------------------*/
 export const getCropSteps = () => {
   return dispatch => {
@@ -172,7 +175,11 @@ export const getCropSteps = () => {
       .then(response => {
         if (response.data.success) {
           let cropSteps = response.data.data.Cultivation_Steps;
-          dispatch(storeCropSteps(cropSteps));
+          let cropStepList = [];
+          cropSteps.forEach((step => {
+            cropStepList.push({label : step.Step_Name , value : step.Id});
+          }))
+          dispatch(storeCropSteps(cropSteps,cropStepList));
         } else {
           dispatch(logCropStepError(response.data.error));
         }
@@ -185,9 +192,13 @@ export const getCropSteps = () => {
 export const createCropStep = cropStep => {
   return dispatch => {
     axios
-      .post(`${AppConfig.serverURL}/api/Cultivation_Steps/PostCultivation_Steps`, cropStep)
+      .post(
+        `${AppConfig.serverURL}/api/Cultivation_Steps/PostCultivation_Steps`,
+        cropStep
+      )
       .then(response => {
         if (response.data.success) {
+          dispatch(getCropSteps());
         } else {
           dispatch(logCropError(response.data.error));
         }
@@ -200,9 +211,13 @@ export const createCropStep = cropStep => {
 export const updateCropStep = (id, cropStep) => {
   return dispatch => {
     axios
-      .post(`${AppConfig.serverURL}/api/Cultivation_Steps/PutCultivation_Steps?id=${id}`, cropStep)
+      .post(
+        `${AppConfig.serverURL}/api/Cultivation_Steps/PutCultivation_Steps?id=${id}`,
+        cropStep
+      )
       .then(response => {
         if (response.data.success) {
+          dispatch(getCropSteps());
         } else {
           dispatch(logCropError(response.data.error));
         }
@@ -215,7 +230,10 @@ export const updateCropStep = (id, cropStep) => {
 export const deleteCropStep = (id, cropStep) => {
   return dispatch => {
     axios
-      .post(`${AppConfig.serverURL}/api/Cultivation_Steps/PutCultivation_Steps?id=${id}`, cropStep)
+      .post(
+        `${AppConfig.serverURL}/api/Cultivation_Steps/PutCultivation_Steps?id=${id}`,
+        cropStep
+      )
       .then(response => {
         if (response.data.success) {
           dispatch(getCropSteps());
@@ -249,6 +267,67 @@ export const getCropStepsMaterial = () => {
       });
   };
 };
+
+export const createCropMaterial = cropMaterial => {
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropSteps_Material/PostCropSteps_Material`,
+        cropMaterial
+      )
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropStepsMaterial());
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+
+export const updateCropMaterial = (id, cropMaterial) => {
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropSteps_Material/PutCropSteps_Material?Id=${id}`,
+        cropMaterial
+      )
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropStepsMaterial());
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+export const deleteCropMaterial = (id, cropMaterial) => {
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropSteps_Material/PutCropSteps_Material?Id=${id}`,
+        cropMaterial
+      )
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropStepsMaterial());
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+/**---------------------------CROP CULTIVATIONS FUNCTIONS ---------------------------*/
+
 export const getCropCultivationSteps = id => {
   return dispatch => {
     axios
@@ -277,6 +356,9 @@ export const storeCropImage = Files => {
       });
   };
 };
+
+/**---------------------------CROP AUDIO ALLOCATIONS FUNCTIONS ---------------------------*/
+
 export const getCropAudioAllocation = cropId => {
   return dispatch => {
     axios
@@ -299,6 +381,8 @@ export const getCropAudioAllocation = cropId => {
       });
   };
 };
+/**---------------------------CROP STEP AUDIO ALLOCATIONS FUNCTIONS ---------------------------*/
+
 export const getCropStepsAudioAllocation = stepId => {
   return dispatch => {
     axios
@@ -321,6 +405,9 @@ export const getCropStepsAudioAllocation = stepId => {
       });
   };
 };
+
+/**---------------------------CROP MATERIAL AUDIO ALLOCATIONS FUNCTIONS ---------------------------*/
+
 export const getCropMaterialAudioAllocation = materialId => {
   return dispatch => {
     axios

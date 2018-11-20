@@ -121,7 +121,7 @@ class CropForm extends Component {
   onSubmit() {
     let crop = { ...this.state.crop };
     let imagedata = crop.FilePath;
-    if (crop.CropName) {
+    if (crop.CropName && crop.CropName.trim().length > 0) {
       crop.UpdatedBy = localStorage.getItem("user");
       crop.UpdatedOn = new Date();
       crop.CreatedBy = localStorage.getItem("user");
@@ -144,8 +144,6 @@ class CropForm extends Component {
       if (this.state.updateFlag) {
         this.props.updateCrop(cropUpdateData.Id, cropUpdateData);
       } else {
-        //cropData.Active = true;
-        //cropData.Ready = true;
         this.props.createCrop(cropData);
       }
       this.setState({ loading: true });
@@ -158,7 +156,7 @@ class CropForm extends Component {
             ? (message = "Crop updated successfully")
             : (message = "Crop created successfully");
         compRef.onReset();
-        compRef.setState({ loading: false });
+        //compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.cropError);
         setTimeout(() => {
           if (!compRef.props.cropError) {
@@ -167,7 +165,8 @@ class CropForm extends Component {
         }, 1000);
       }, 1000);
     } else {
-      if (!crop.CropName) crop.CropNameRequired = true;
+      if (!crop.CropName || crop.CropName.trim().length <= 0)
+        crop.CropNameRequired = true;
       this.setState({
         crop: crop
       });
