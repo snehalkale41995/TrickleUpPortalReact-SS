@@ -22,7 +22,7 @@ export default class CropsCultivation extends Component {
           component={CropForm}
         />
         <Route
-          path={`${this.props.match.path}/audioAllocation/:audioCategory?/:id?`}
+          path={`${this.props.match.path}/audioAllocation/:audioCategory?/:id?/:audioId?`}
           component={AudioAllocationForm}
         />
         <Route

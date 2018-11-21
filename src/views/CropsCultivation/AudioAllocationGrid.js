@@ -30,8 +30,6 @@ class AudioAllocationGrid extends Component {
       <BootstrapTable
         ref="table"
         data={this.props.audioAllocation}
-        pagination={this.props.audioAllocation.length > 0 ? true : false}
-        search={true}
         options={sortingOptions}
         hover={true}
       >
@@ -69,6 +67,14 @@ class AudioAllocationGrid extends Component {
           dataFormat={this.props.playAudio}
         >
           Audio
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="Edit"
+          headerAlign="left"
+          width="30"
+          dataFormat={this.props.onEdit}
+        >
+          Edit
         </TableHeaderColumn>
       </BootstrapTable>
     );

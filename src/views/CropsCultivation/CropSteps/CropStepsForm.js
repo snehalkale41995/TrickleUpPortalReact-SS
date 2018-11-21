@@ -14,6 +14,7 @@ import * as Toaster from "../../../constants/Toaster";
 import CollapseCards from "../../../components/Cards/CollapseCards";
 import AudioAllocationGrid from "../AudioAllocationGrid";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
+import { Link } from "react-router-dom";
 
 class CropStepsForm extends Component {
   constructor(props) {
@@ -42,10 +43,10 @@ class CropStepsForm extends Component {
   }
   componentDidMount() {
     if (this.props.match.params.id !== undefined) {
-      if (this.props.cropSteps.length !== 0) {
+      if (this.props.activeCropSteps.length !== 0) {
         let id = this.props.match.params.id;
         this.props.getCropStepsAudioAllocation(id);
-        let currentCropStep = _.find(this.props.cropSteps, function(cropStep) {
+        let currentCropStep = _.find(this.props.activeCropSteps, function(cropStep) {
           return cropStep.Id == id;
         });
         currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
@@ -88,28 +89,7 @@ class CropStepsForm extends Component {
       cropStep: cropStep
     });
   }
-  // onImageChange(event) {
-  //   if (event.target.files.length !== 0) {
-  //     let file = event.target.files[0];
-  //     let cropStep = { ...this.state.cropStep };
-  //     let data = new FormData();
-  //     data.append("FileName", file.name);
-  //     data.append("FileSize", file.size);
-  //     data.append("MediaType", file.type);
-  //     cropStep.FilePath = data;
-  //     cropStep.CropImageRequired = false;
-  //     cropStep.renderURL = URL.createObjectURL(event.target.files[0]);
-  //     this.setState({
-  //       cropStep: cropStep
-  //     });
-  //   } else {
-  //     let cropStep = { ...this.state.cropStep };
-  //     cropStep.FilePath = "";
-  //     cropStep.renderURL = "";
-  //     this.setState({ cropStep: cropStep });
-  //   }
-  // }
-
+ 
   onSubmit() {
     let cropStepData = { ...this.state.cropStep };
     if (this.validCropStep(cropStepData)) {
@@ -204,6 +184,22 @@ class CropStepsForm extends Component {
         `/cropCultivations/audioAllocation/${"cropStep"}`
       );
     }
+  }
+  onEditAudio(cell, row){
+    return (
+      <Link to={this} onClick={() => this.onEditAudioFile(row)}>
+        <i className="fa fa-pencil" title="Edit" />
+      </Link>
+    );
+   
+  }
+  onEditAudioFile(row){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/audioAllocation/${"cropStep"}/${this.props.match.params
+          .id}/${row.AudioId}`
+      );
+    } 
   }
   onReset() {
     this.setState({
@@ -318,6 +314,7 @@ class CropStepsForm extends Component {
                       <AudioAllocationGrid
                         audioAllocation={this.props.cropStepAudioAllocation}
                         playAudio={this.playAudio.bind(this)}
+                        onEdit = {this.onEditAudio.bind(this)}
                       />
                     </Col>
                   </FormGroup>
@@ -365,7 +362,8 @@ class CropStepsForm extends Component {
 const mapStateToProps = state => {
   return {
     cropsList: state.cropsReducer.cropsList,
-    cropSteps: state.cropsReducer.cropSteps,
+    activeCropSteps :state.cropsReducer.activeCropSteps ,
+    InactiveCropSteps: state.cropsReducer.InactiveCropSteps,
     cropStepAudioAllocation: state.cropsReducer.currentCropStepAudioAllocation,
     cropStepError: state.cropsReducer.cropStepError
   };

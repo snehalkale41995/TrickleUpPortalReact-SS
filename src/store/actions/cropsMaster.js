@@ -28,17 +28,26 @@ export const storeCurrentCrop = cropData => {
     currentCropData: cropData
   };
 };
-export const storeCropSteps = (cropSteps ,cropStepList) => {
+export const storeCropSteps = (
+  activeCropSteps,
+  InactiveCropSteps,
+  cropStepList
+) => {
   return {
     type: actionTypes.GET_CROPS_STEPS,
-    cropSteps: cropSteps,
-    cropStepList : cropStepList
+    activeCropSteps: activeCropSteps,
+    InactiveCropSteps: InactiveCropSteps,
+    cropStepList: cropStepList
   };
 };
-export const storeCropStepMaterials = cropStepsMaterial => {
+export const storeCropStepMaterials = (
+  activeCropMaterial,
+  inActiveCropMaterial
+) => {
   return {
     type: actionTypes.GET_CROPS_STEPS_MATERIAL,
-    cropStepsMaterial: cropStepsMaterial
+    activeCropMaterial: activeCropMaterial,
+    inActiveCropMaterial: inActiveCropMaterial
   };
 };
 export const storeCurrentCropAudioAllocation = audioAllocation => {
@@ -175,11 +184,19 @@ export const getCropSteps = () => {
       .then(response => {
         if (response.data.success) {
           let cropSteps = response.data.data.Cultivation_Steps;
+          let activeCropSteps = _.filter(cropSteps, function(step) {
+            return step.Active === true;
+          });
+          let InactiveCropSteps = _.filter(cropSteps, function(step) {
+            return step.Active === false;
+          });
           let cropStepList = [];
-          cropSteps.forEach((step => {
-            cropStepList.push({label : step.Step_Name , value : step.Id});
-          }))
-          dispatch(storeCropSteps(cropSteps,cropStepList));
+          activeCropSteps.forEach(step => {
+            cropStepList.push({ label: step.Step_Name, value: step.Id });
+          });
+          dispatch(
+            storeCropSteps(activeCropSteps, InactiveCropSteps, cropStepList)
+          );
         } else {
           dispatch(logCropStepError(response.data.error));
         }
@@ -255,8 +272,20 @@ export const getCropStepsMaterial = () => {
       )
       .then(response => {
         if (response.data.success) {
+          let activeCropMaterial = _.filter(
+            response.data.data.CropSteps_Material,
+            function(material) {
+              return material.Active == true;
+            }
+          );
+          let inActiveCropMaterial = _.filter(
+            response.data.data.CropSteps_Material,
+            function(material) {
+              return material.Active == false;
+            }
+          );
           dispatch(
-            storeCropStepMaterials(response.data.data.CropSteps_Material)
+            storeCropStepMaterials(activeCropMaterial, inActiveCropMaterial)
           );
         } else {
           dispatch(logCropMaterialError(response.data.error));
@@ -381,6 +410,61 @@ export const getCropAudioAllocation = cropId => {
       });
   };
 };
+export const createCropAudioAllocation = cropAudioObj => {
+  let cropAudioAllocation = _.pick(cropAudioObj, [
+    "CropId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "CreatedBy",
+    "CreatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/Crop_AudioAllocation/PostCrop_AudioAllocation`,
+        cropAudioAllocation
+      )
+      .then(response => {
+        if (response.data.success) {
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropError("Something went wrong!"));
+      });
+  };
+};
+export const updateCropAudioAllocation = (id, cropAudioObj) => {
+  let cropAudioAllocation = _.pick(cropAudioObj, [
+    "Id",
+    "CropId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "UpdatedBy",
+    "UpdatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/Crop_AudioAllocation/PutCrop_AudioAllocation?id=${id}`,
+        cropAudioAllocation
+      )
+      .then(response => {
+        if (response.data.success) {
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropError("Something went wrong!"));
+      });
+  };
+};
 /**---------------------------CROP STEP AUDIO ALLOCATIONS FUNCTIONS ---------------------------*/
 
 export const getCropStepsAudioAllocation = stepId => {
@@ -405,7 +489,61 @@ export const getCropStepsAudioAllocation = stepId => {
       });
   };
 };
-
+export const createCropStepsAudioAllocation = cropStepAudioObj => {
+  let cropStepAudio = _.pick(cropStepAudioObj, [
+    "StepId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "CreatedBy",
+    "CreatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropStepAudio_Allocation/PostCropStepAudio_Allocation`,
+        cropStepAudio
+      )
+      .then(response => {
+        if (response.data.success) {
+        } else {
+          dispatch(logCropStepError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropStepError("Something went wrong!"));
+      });
+  };
+};
+export const updateCropStepsAudioAllocation = (Id, cropStepAudioObj) => {
+  let cropStepAudio = _.pick(cropStepAudioObj, [
+    "Id",
+    "StepId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "UpdatedBy",
+    "UpdatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropStepAudio_Allocation/PutCropStepAudio_Allocation?id=${Id}`,
+        cropStepAudio
+      )
+      .then(response => {
+        if (response.data.success) {
+        } else {
+          dispatch(logCropStepError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropStepError("Something went wrong!"));
+      });
+  };
+};
 /**---------------------------CROP MATERIAL AUDIO ALLOCATIONS FUNCTIONS ---------------------------*/
 
 export const getCropMaterialAudioAllocation = materialId => {
@@ -421,6 +559,59 @@ export const getCropMaterialAudioAllocation = materialId => {
             audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
           });
           dispatch(storeCurrentCropMaterialAudioAllocation(audioAllocation));
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+export const createCropMaterialAudioAllocation = cropMaterialAudioObj => {
+  let cropMaterialAudio = _.pick(cropMaterialAudioObj, [
+    "MaterialId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "CreatedBy",
+    "CreatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropMaterial_AudioAllocation/PostCropMaterial_AudioAllocation`,cropMaterialAudio
+      )
+      .then(response => {
+        if (response.data.success) {
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+export const updateCropMaterialAudioAllocation = (Id, cropMaterialAudioObj) => {
+  let cropMaterialAudio = _.pick(cropMaterialAudioObj, [
+    "Id",
+    "MaterialId",
+    "LangId",
+    "FieldType",
+    "AudioId",
+    "UpdatedBy",
+    "UpdatedOn",
+    "Active"
+  ]);
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropMaterial_AudioAllocation/PutCropMaterial_AudioAllocation?id=${Id}`,cropMaterialAudio
+      )
+      .then(response => {
+        if (response.data.success) {
         } else {
           dispatch(logCropMaterialError(response.data.error));
         }

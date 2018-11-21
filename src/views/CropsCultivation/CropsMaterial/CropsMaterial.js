@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardLayout from "../../../components/Cards/CardLayout";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { FormGroup, Col } from "reactstrap";
+import { FormGroup, Col, Row } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 import { Link } from "react-router-dom";
@@ -10,12 +10,21 @@ import Loader from "../../../components/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
+import * as constants from "../../../constants/StatusConstants";
+import DropdownSelect from "../../../components/InputElement/Dropdown";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import ActiveCropMaterialTable from "./ActiveCropMaterialTable";
+import InActiveCropMaterialTable from "./InActiveCropMaterialTable";
 
 class CropsMaterial extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true
+      modalFlag: false,
+      loading: true,
+      modalStatus: false,
+      cropMaterialToDelete: {},
+      tableStatus: true
     };
   }
   componentWillMount() {
@@ -31,121 +40,123 @@ class CropsMaterial extends Component {
       Toaster.Toaster("Something went wrong !", this.props.cropMaterialError);
     }
   }
-  onDeleteState(cell, row) {
-    return (
-      <Link to={this} style={{ pointerEvents: "none", opacity: 0.5 }}>
-        <i className="fa fa-trash" title="Deactivate" />
-      </Link>
-    );
+  onDeleteMaterial(cell, row) {
+    if (this.state.tableStatus) {
+      return (
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i className="fa fa-trash" title="Deactivate" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={this} onClick={() => this.onDelete(row)}>
+          <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+        </Link>
+      );
+    }
+  }
+  onDelete(row) {
+    this.setState({
+      cropMaterialToDelete: row
+    });
+    this.onModalToggle();
   }
 
-  onEditState(cell, row) {
+  onConfirmDelete() {
+    let cropMaterial = { ...this.state.cropMaterialToDelete };
+    let compRef = this;
+    cropMaterial.ActiveBy = localStorage.getItem("user");
+    cropMaterial.ActiveOn = new Date();
+    if (this.state.tableStatus) {
+      cropMaterial.Active = false;
+      this.props.deleteCropMaterial(cropMaterial.Id, cropMaterial);
+    } else {
+      cropMaterial.Active = true;
+      this.props.deleteCropMaterial(cropMaterial.Id, cropMaterial);
+    }
+    let displayMessage = compRef.state.tableStatus
+      ? "Crop deactivated successfully"
+      : "Crop activated successfully";
+    setTimeout(() => {
+      let message = "";
+      compRef.props.cropMaterialError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, compRef.props.cropMaterialError);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+
+  onEditMaterial(cell, row) {
     return (
       <Link to={`${this.props.match.url}/CropsMaterialForm/${row.Id}`}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
   }
-
+  onTablestatusChange(value) {
+    if (value != null) {
+      this.setState({
+        tableStatus: value
+      });
+    }
+  }
   render() {
-    const sortingOptions = {
-      defaultSortName: "Material_Name",
-      noDataText: "No records found for crop step materials",
-      defaultSortOrder: "asc",
-      sizePerPageList: [
-        {
-          text: "5",
-          value: 5
-        },
-        {
-          text: "10",
-          value: 10
-        },
-        {
-          text: "20",
-          value: 20
-        },
-        {
-          text: "All",
-          value: this.props.cropStepsMaterial.length
-        }
-      ],
-      sizePerPage: 5
-    };
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
       <CardLayout
         name="Crop Materials"
         buttonName="Add crop material"
-       // buttonLink={this}
-        //active="none"
         buttonLink={`${this.props.match.url}/CropsMaterialForm`}
       >
+        <Row className="address-drop-margin">
+          <Col xs="12" md="10" />
+          <Col md="2">
+            <DropdownSelect
+              label="Status"
+              options={constants.tableStatus}
+              value={this.state.tableStatus}
+              onChange={this.onTablestatusChange.bind(this)}
+              search={false}
+              simpleValue
+            />
+          </Col>
+        </Row>
         <FormGroup row>
           <Col xs="12">
-            <BootstrapTable
-              ref="table"
-              data={this.props.cropStepsMaterial}
-              pagination={this.props.cropStepsMaterial.length > 0 ? true : false}
-              search={true}
-              options={sortingOptions}
-              //exportCSV={true}
-              hover={true}
-              csvFileName="Crops List"
-            >
-              <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
-                Id
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Material_Name"
-                headerAlign="left"
-                width="30"
-                csvHeader="Material_Name"
-                dataSort={true}
-              >
-                Material Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Step_Name"
-                headerAlign="left"
-                width="70"
-                csvHeader="Crop Name"
-                dataSort={true}
-              >
-                Step Name
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="Quantity"
-                headerAlign="left"
-                width="30"
-                csvHeader="Crop Name"
-                dataSort={true}
-              >
-                Quantity
-              </TableHeaderColumn>
-
-              <TableHeaderColumn
-                dataField="edit"
-                dataFormat={this.onEditState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Edit
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                dataField="delete"
-                dataFormat={this.onDeleteState.bind(this)}
-                headerAlign="left"
-                width="20"
-                export={false}
-              >
-                Deactivate
-              </TableHeaderColumn>
-            </BootstrapTable>
+            {this.state.tableStatus ? (
+              <ActiveCropMaterialTable
+                cropMaterial={this.props.activeCropMaterial}
+                onEdit={this.onEditMaterial.bind(this)}
+                onDelete={this.onDeleteMaterial.bind(this)}
+              />
+            ) : (
+              <InActiveCropMaterialTable
+                cropMaterial={this.props.inActiveCropMaterial}
+                onDelete={this.onDeleteMaterial.bind(this)}
+              />
+            )}
           </Col>
         </FormGroup>
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title={this.state.tableStatus ? "Deactivate" : "Activate"}
+          message={
+            this.state.tableStatus
+              ? "Are you sure you want to deactivate this crop material record ?"
+              : "Are you sure you want to activate this crop material record ?"
+          }
+        />
         <ToastContainer autoClose={1000} />
       </CardLayout>
     );
@@ -153,14 +164,16 @@ class CropsMaterial extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cropStepsMaterial: state.cropsReducer.cropStepsMaterial,
+    activeCropMaterial: state.cropsReducer.activeCropMaterial,
+    inActiveCropMaterial: state.cropsReducer.inActiveCropMaterial,
     cropMaterialError: state.cropsReducer.cropMaterialError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCropsList: () => dispatch(actions.getCropsList())
+    getCropsList: () => dispatch(actions.getCropsList()),
+    deleteCropMaterial : (id,cropMaterial) => dispatch(actions.deleteCropMaterial(id,cropMaterial))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropsMaterial);

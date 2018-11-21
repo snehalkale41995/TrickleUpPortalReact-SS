@@ -14,6 +14,8 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import CollapseCards from "../../../components/Cards/CollapseCards";
 import AudioAllocationGrid from "../AudioAllocationGrid";
+import { Link } from "react-router-dom";
+
 class CropForm extends Component {
   constructor(props) {
     super(props);
@@ -82,25 +84,6 @@ class CropForm extends Component {
       crop: crop
     });
   }
-  // onImageChange(event) {
-  //   if (event.target.files.length !== 0) {
-  //     //let file = event.target.files[0];
-  //     let crop = { ...this.state.Crop };
-  //     let formData = new FormData();
-  //     formData.append("image", event.target.files[0]);
-  //     crop.FilePath = formData;
-  //     crop.CropImageRequired = false;
-  //     crop.renderURL = URL.createObjectURL(event.target.files[0]);
-  //     this.setState({
-  //       crop: crop
-  //     });
-  //   } else {
-  //     let crop = { ...this.state.crop };
-  //     crop.FilePath = "";
-  //     crop.renderURL = "";
-  //     this.setState({ crop: crop });
-  //   }
-  // }
   onSwitch(event) {
     let crop = { ...this.state.crop };
     crop.Active = event.target.checked;
@@ -193,9 +176,23 @@ class CropForm extends Component {
         `/cropCultivations/audioAllocation/${"crop"}/${this.props.match.params
           .id}`
       );
-    } else {
-      this.props.history.push(`/cropCultivations/audioAllocation/${"crop"}`);
     }
+  }
+  onEditAudio(cell, row){
+    return (
+      <Link to={this} onClick={() => this.onEditAudioFile(row)}>
+        <i className="fa fa-pencil" title="Edit" />
+      </Link>
+    );
+   
+  }
+  onEditAudioFile(row){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/audioAllocation/${"crop"}/${this.props.match.params
+          .id}/${row.AudioId}`
+      );
+    } 
   }
   onReset() {
     this.setState({
@@ -298,6 +295,7 @@ class CropForm extends Component {
                             this.props.currentCropAudioAllocation
                           }
                           playAudio={this.playAudio.bind(this)}
+                          onEdit = {this.onEditAudio.bind(this)}
                         />
                       </Col>
                     </FormGroup>

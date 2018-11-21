@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../../constants/Toaster";
 import CollapseCards from "../../../components/Cards/CollapseCards";
 import AudioAllocationGrid from "../AudioAllocationGrid";
-
+import { Link } from "react-router-dom";
 class CropMaterialForm extends Component {
   constructor(props) {
     super(props);
@@ -44,10 +44,10 @@ class CropMaterialForm extends Component {
   }
   componentDidMount() {
     if (this.props.match.params.id !== undefined) {
-      if (this.props.cropStepsMaterial.length !== 0) {
+      if (this.props.activeCropMaterial.length !== 0) {
         let id = this.props.match.params.id;
         this.props.getCropMaterialAudioAllocation(id);
-        let currentCropMaterial = _.find(this.props.cropStepsMaterial, function(
+        let currentCropMaterial = _.find(this.props.activeCropMaterial, function(
           cropMaterial
         ) {
           return cropMaterial.Id == id;
@@ -202,6 +202,22 @@ class CropMaterialForm extends Component {
       );
     }
   }
+  onEditAudio(cell, row){
+    return (
+      <Link to={this} onClick={() => this.onEditAudioFile(row)}>
+        <i className="fa fa-pencil" title="Edit" />
+      </Link>
+    );
+   
+  }
+  onEditAudioFile(row){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/audioAllocation/${"cropMaterial"}/${this.props.match.params
+          .id}/${row.AudioId}`
+      );
+    } 
+  }
   render() {
     let cropMaterial = { ...this.state.cropMaterial };
     return this.state.loading ? (
@@ -291,6 +307,7 @@ class CropMaterialForm extends Component {
                     <AudioAllocationGrid
                       audioAllocation={this.props.cropMaterialAudioAllocation}
                       playAudio={this.playAudio.bind(this)}
+                      onEdit = {this.onEditAudio.bind(this)}
                     />
                   </Col>
                 </FormGroup>
@@ -338,7 +355,8 @@ class CropMaterialForm extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cropStepsMaterial: state.cropsReducer.cropStepsMaterial,
+    activeCropMaterial :state.cropsReducer.activeCropMaterial,
+    inActiveCropMaterial : state.cropsReducer.inActiveCropMaterial,
     cropMaterialAudioAllocation:
       state.cropsReducer.currentCropMaterialAudioAllocation,
     cropMaterialError: state.cropsReducer.cropMaterialError,

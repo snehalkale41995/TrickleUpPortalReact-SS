@@ -146,14 +146,14 @@ class CropSteps extends Component {
           <Col xs="12">
             {this.state.tableStatus ? (
               <ActiveCropStepTable
-                cropSteps={this.props.cropSteps}
+                cropSteps={this.props.activeCropSteps}
                 showImage={this.showImage.bind(this)}
                 onEdit={this.onEditCropStep.bind(this)}
                 onDelete={this.onDeleteCropStep.bind(this)}
               />
             ) : (
               <InActiveCropStepTable
-                cropSteps={this.props.cropSteps}
+                cropSteps={this.props.InactiveCropSteps}
                 showImage={this.showImage.bind(this)}
                 onDelete={this.onDeleteCropStep.bind(this)}
               />
@@ -178,7 +178,8 @@ class CropSteps extends Component {
 }
 const mapStateToProps = state => {
   return {
-    cropSteps: state.cropsReducer.cropSteps,
+    activeCropSteps :state.cropsReducer.activeCropSteps ,
+    InactiveCropSteps: state.cropsReducer.InactiveCropSteps,
     cropStepError: state.cropsReducer.cropStepError
   };
 };

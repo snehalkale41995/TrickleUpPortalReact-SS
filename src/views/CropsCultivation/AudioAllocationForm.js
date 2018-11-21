@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import * as actions from "../../store/actions";
 import CardLayout from "../../components/Cards/CardLayout";
 import { FormGroup, Col, Button, Label } from "reactstrap";
 import InputElement from "../../components/InputElement/InputElement";
@@ -9,42 +10,221 @@ import DropdownSelect from "../../components/InputElement/Dropdown";
 import _ from "lodash";
 import { Async } from "react-select";
 import "react-select/dist/react-select.css";
+import * as options from "../../constants/StatusConstants";
 class AudioAllocationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
+      updateFlag: false,
+      audioAllocation: {
+        Id: "",
+        StepId: "",
+        CropId: "",
+        MaterialId: "",
+        LangId: "",
+        LangIdRequired: false,
+        FieldType: "",
+        FieldTypeRequired: false,
+        AudioId: "",
+        AudioIdRequired: false,
+        CreatedBy: "",
+        CreatedOn: "",
+        UpdatedBy: "",
+        UpdatedOn: "",
+        Active: true
+      },
+      fieldTypeOptions: [],
       audioCategory: "",
       id: "",
-      audioId: "",
+      audioValue: "",
       renderURL: ""
     };
   }
-
+  componentWillMount() {
+    let audioCategory = this.props.match.params.audioCategory;
+    let id = this.props.match.params.id;
+    if (audioCategory === "crop") {
+      this.props.getCropAudioAllocation(id);
+    } else if (audioCategory === "cropStep") {
+      this.props.getCropStepsAudioAllocation(id);
+    } else {
+      this.props.getCropMaterialAudioAllocation(id);
+    }
+  }
   componentDidMount() {
     setTimeout(() => {
-      this.setState({
-        loading: false,
-        audioCategory: this.props.match.params.audioCategory,
-        id: this.props.match.params.id
-      });
-    }, 2000);
+      let audioAllocation = { ...this.state.audioAllocation };
+      let id = parseInt(this.props.match.params.id);
+      let audioCategory = this.props.match.params.audioCategory;
+      if (
+        this.props.match.params.id !== undefined &&
+        this.props.match.params.audioCategory !== undefined &&
+        this.props.match.params.audioId !== undefined
+      ) {
+        let audioId = parseInt(this.props.match.params.audioId);
+        let audioFile = _.find(this.props.audioFiles, { Id: audioId });
+        let audioValue = _.find(this.props.audioOptions, {
+          value: audioId
+        });
+        let audio = [];
+        let fieldTypeOptions = [];
+        let renderURL = "";
+        if (audioCategory === "crop") {
+          audio = _.find(this.props.cropAudioAllocation, {
+            CropId: id,
+            AudioId: audioId
+          });
+          fieldTypeOptions = options.cropFieldOptions;
+        } else if (audioCategory === "cropStep") {
+          audio = _.find(this.props.cropStepAudioAllocation, {
+            StepId: id,
+            AudioId: audioId
+          });
+          fieldTypeOptions = options.cropStepFieldOptions;
+        } else {
+          audio = _.find(this.props.cropMaterialAudioAllocation, {
+            MaterialId: id,
+            AudioId: audioId
+          });
+          fieldTypeOptions = options.cropMaterialFieldOptions;
+        }
+        this.setState({
+          audioAllocation: audio,
+          fieldTypeOptions: fieldTypeOptions,
+          loading: false,
+          renderURL: audioFile.FilePath,
+          audioValue: audioValue,
+          updateFlag: true,
+          audioCategory: audioCategory
+        });
+      } else {
+        let fieldTypeOptions = [];
+        if (audioCategory === "crop") {
+          audioAllocation.CropId = id;
+          fieldTypeOptions = options.cropFieldOptions;
+        } else if (audioCategory === "cropStep") {
+          audioAllocation.StepId = id;
+          fieldTypeOptions = options.cropStepFieldOptions;
+        } else {
+          audioAllocation.MaterialId = id;
+          fieldTypeOptions = options.cropMaterialFieldOptions;
+        }
+        this.setState({
+          audioAllocation,
+          fieldTypeOptions: fieldTypeOptions,
+          loading: false,
+          audioCategory: audioCategory
+        });
+      }
+    }, 1000);
   }
   goBack() {
     this.props.history.goBack();
   }
-  handleInputChange = newValue => {
-    if (newValue !== null) {
-      let audioId = newValue;
-      let audio = _.find(this.props.audioFiles, { Id: audioId.value });
+  handleAudioChange = audioSelected => {
+    let audioAllocation = { ...this.state.audioAllocation };
+    if (audioSelected !== null) {
+      audioAllocation.AudioId = audioSelected.value;
+      audioAllocation.AudioIdRequired = false;
+      let audioValue = audioSelected;
+      let audio = _.find(this.props.audioFiles, { Id: audioSelected.value });
       let renderURL = audio.FilePath;
-      this.setState({ audioId, renderURL });
+      this.setState({ audioAllocation, renderURL, audioValue });
     } else {
-      this.setState({ audioId: "", renderURL: "" });
+      audioAllocation.AudioId = "";
+      //audioAllocation.AudioIdRequired = true;
+      this.setState({ audioAllocation, renderURL: "", audioValue: "" });
     }
   };
-  onSubmitMedia() {}
+  handleFieldValueChange(fieldValue) {
+    let audioAllocation = { ...this.state.audioAllocation };
+    audioAllocation.FieldType = fieldValue;
+    audioAllocation.FieldTypeRequired = false;
+    this.setState({ audioAllocation });
+  }
+  handleLanguageChange(languageValue) {
+    let audioAllocation = { ...this.state.audioAllocation };
+    audioAllocation.LangId = languageValue;
+    audioAllocation.LangIdRequired = false;
+    this.setState({ audioAllocation });
+  }
+  onSubmit() {
+    let audioAllocation = { ...this.state.audioAllocation };
+    if (this.validAllocation(audioAllocation)) {
+      if (this.state.updateFlag) {
+        audioAllocation.UpdatedBy = localStorage.getItem("user");
+        audioAllocation.UpdatedOn = new Date();
+        if (this.state.audioCategory === "crop") {
+          this.props.updateCropAudioAllocation(
+            audioAllocation.Id,
+            audioAllocation
+          );
+        } else if (this.state.audioCategory === "cropStep") {
+          this.props.updateCropStepsAudioAllocation(
+            audioAllocation.Id,
+            audioAllocation
+          );
+        } else {
+          this.props.updateCropMaterialAudioAllocation(
+            audioAllocation.Id,
+            audioAllocation
+          );
+        }
+      } else {
+        audioAllocation.CreatedBy = localStorage.getItem("user");
+        audioAllocation.CreatedOn = new Date();
+        if (this.state.audioCategory === "crop") {
+          this.props.createCropAudioAllocation(audioAllocation);
+        } else if (this.state.audioCategory === "cropStep") {
+          this.props.createCropStepsAudioAllocation(audioAllocation);
+        } else {
+          this.props.createCropMaterialAudioAllocation(audioAllocation);
+        }
+      }
+      // this.setState({ loading: true });
+      // let message = "";
+      // let compRef = this;
+      // setTimeout(() => {
+      //   compRef.props.cropStepError
+      //     ? (message = "Something went wrong !")
+      //     : compRef.state.updateFlag
+      //       ? (message = "Crop step updated successfully")
+      //       : (message = "Crop step created successfully");
+      //   compRef.onReset();
+      //   compRef.setState({ loading: false });
+      //   Toaster.Toaster(message, compRef.props.cropStepError);
+      //   setTimeout(() => {
+      //     if (!compRef.props.cropStepError) {
+      //       compRef.props.history.push("/cropCultivations/CropSteps");
+      //     }
+      //   }, 1000);
+      // }, 1000);
+    } else {
+      if (!audioAllocation.FieldType) audioAllocation.FieldTypeRequired = true;
+      if (!audioAllocation.LangId) audioAllocation.LangIdRequired = true;
+      if (!audioAllocation.AudioId) audioAllocation.AudioIdRequired = true;
+      this.setState({
+        audioAllocation
+      });
+    }
+  }
+  validAllocation(audioAllocation) {
+    if (
+      audioAllocation.FieldType &&
+      audioAllocation.LangId &&
+      audioAllocation.AudioId &&
+      (audioAllocation.CropId ||
+        audioAllocation.StepId ||
+        audioAllocation.MaterialId)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   render() {
+    const { audioAllocation } = this.state;
     const options = this.props.audioOptions;
     const getOptions = (input, callback) => {
       let filterOpt = [];
@@ -78,12 +258,26 @@ class AudioAllocationForm extends Component {
           <FormGroup row />
           <FormGroup row>
             <Col xs="12" md="5">
-              <Label>Audio category</Label>
-              <DropdownSelect placeholder="Select audio category " />
+              <Label>Field Type</Label>
+              <DropdownSelect
+                name="Field type"
+                placeholder="Select field type"
+                options={this.state.fieldTypeOptions}
+                value={audioAllocation.FieldType}
+                required={audioAllocation.FieldTypeRequired}
+                onChange={this.handleFieldValueChange.bind(this)}
+              />
             </Col>
             <Col md="5">
               <Label>Language</Label>
-              <DropdownSelect placeholder="Select audio category " />
+              <DropdownSelect
+                name="Language"
+                placeholder="Select language "
+                options={this.props.languagesList}
+                value={audioAllocation.LangId}
+                required={audioAllocation.LangIdRequired}
+                onChange={this.handleLanguageChange.bind(this)}
+              />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -92,11 +286,14 @@ class AudioAllocationForm extends Component {
               <Async
                 name="form-field-name"
                 cacheOptions
-                value={this.state.audioId}
+                value={this.state.audioValue}
                 defaultOptions
-                onChange={this.handleInputChange.bind(this)}
+                onChange={this.handleAudioChange.bind(this)}
                 loadOptions={getOptions}
               />
+              {audioAllocation.AudioIdRequired ? (
+                <div className="help-block">*Audio is required</div>
+              ) : null}
             </Col>
             <Col md="5">
               <Label />
@@ -104,14 +301,33 @@ class AudioAllocationForm extends Component {
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Col md="3">
+            {this.state.updateFlag ? (
+              <Col md="2">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Save
+                </Button>
+              </Col>
+            ) : (
+              <Col md="2">
+                <Button
+                  className="theme-positive-btn"
+                  onClick={this.onSubmit.bind(this)}
+                >
+                  Create
+                </Button>
+              </Col>
+            )}
+            {/* <Col md="3">
               <Button
                 className="theme-positive-btn"
-                onClick={this.onSubmitMedia.bind(this)}
+                onClick={this.onSubmit.bind(this)}
               >
                 Create
               </Button>
-            </Col>
+            </Col> */}
           </FormGroup>
         </div>
       </CardLayout>
@@ -121,13 +337,34 @@ class AudioAllocationForm extends Component {
 export const mapStateToProps = state => {
   return {
     audioOptions: state.mediaReducer.audioOptions,
-    audioFiles: state.mediaReducer.audioFiles
+    audioFiles: state.mediaReducer.audioFiles,
+    cropAudioAllocation: state.cropsReducer.currentCropAudioAllocation,
+    cropStepAudioAllocation: state.cropsReducer.currentCropStepAudioAllocation,
+    cropMaterialAudioAllocation:
+      state.cropsReducer.currentCropMaterialAudioAllocation,
+    languagesList: state.languagesReducer.languagesList
   };
 };
 
 export const mapDispatchToProps = dispatch => {
   return {
-    //storeMedia: fileData => dispatch(actions.postMediaContent(fileData))
+    getCropAudioAllocation: id => dispatch(actions.getCropAudioAllocation(id)),
+    getCropStepsAudioAllocation: id =>
+      dispatch(actions.getCropStepsAudioAllocation(id)),
+    getCropMaterialAudioAllocation: id =>
+      dispatch(actions.getCropMaterialAudioAllocation(id)),
+    createCropAudioAllocation: audioAllocation =>
+      dispatch(actions.createCropAudioAllocation(audioAllocation)),
+    updateCropAudioAllocation: (id, audioAllocation) =>
+      dispatch(actions.updateCropAudioAllocation(id, audioAllocation)),
+    createCropStepsAudioAllocation: audioAllocation =>
+      dispatch(actions.createCropStepsAudioAllocation(audioAllocation)),
+    updateCropStepsAudioAllocation: (id, audioAllocation) =>
+      dispatch(actions.updateCropStepsAudioAllocation(id, audioAllocation)),
+    createCropMaterialAudioAllocation: audioAllocation =>
+      dispatch(actions.createCropMaterialAudioAllocation(audioAllocation)),
+    updateCropMaterialAudioAllocation: (id, audioAllocation) =>
+      dispatch(actions.updateCropMaterialAudioAllocation(id, audioAllocation))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(
