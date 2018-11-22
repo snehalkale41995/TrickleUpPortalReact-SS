@@ -43,6 +43,7 @@ class Main extends Component {
     this.props.getCropSteps();
     this.props.getCropStepsMaterial();
     this.props.getAudioFiles();
+    this.props.getImageFiles();
   }
 
   render() {
@@ -134,7 +135,9 @@ const mapDispatchToProps = dispatch => {
     getGrampanchayatsList: () => dispatch(actions.getGrampanchayatsList()),
     getCropSteps: () => dispatch(actions.getCropSteps()),
     getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial()),
-    getAudioFiles: () => dispatch(actions.getAudioFiles())
+    getAudioFiles: () => dispatch(actions.getAudioFiles()),
+    getImageFiles: () => dispatch(actions.getImageFiles()),
+
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

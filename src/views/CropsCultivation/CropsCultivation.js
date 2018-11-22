@@ -7,7 +7,7 @@ import CropForm from "./Crops/CropForm";
 import CropStepsForm from "./CropSteps/CropStepsForm";
 import CropsMaterialForm from "./CropsMaterial/CropsMaterialForm";
 import AudioAllocationForm from "./AudioAllocationForm";
-
+import ImageAllocationForm from "./ImageAllocationForm";
 export default class CropsCultivation extends Component {
   render() {
     return (
@@ -21,10 +21,7 @@ export default class CropsCultivation extends Component {
           path={`${this.props.match.path}/crops/CropForm/:id?`}
           component={CropForm}
         />
-        <Route
-          path={`${this.props.match.path}/audioAllocation/:audioCategory?/:id?/:audioId?`}
-          component={AudioAllocationForm}
-        />
+        
         <Route
           exact
           path={`${this.props.match.path}/CropSteps`}
@@ -42,6 +39,14 @@ export default class CropsCultivation extends Component {
         <Route
           path={`${this.props.match.path}/CropsMaterial/CropsMaterialForm/:id?`}
           component={CropsMaterialForm}
+        />
+        <Route
+          path={`${this.props.match.path}/audioAllocation/:audioCategory?/:id?/:audioId?`}
+          component={AudioAllocationForm}
+        />
+        <Route
+          path={`${this.props.match.path}/imageAllocation/:imageCategory?/:id?`}
+          component={ImageAllocationForm}
         />
       </div>
     );

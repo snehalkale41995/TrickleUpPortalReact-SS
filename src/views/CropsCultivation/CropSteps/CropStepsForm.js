@@ -15,6 +15,8 @@ import CollapseCards from "../../../components/Cards/CollapseCards";
 import AudioAllocationGrid from "../AudioAllocationGrid";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { Link } from "react-router-dom";
+import ImageAllocationGrid from "../ImageAllocationGrid";
+
 
 class CropStepsForm extends Component {
   constructor(props) {
@@ -37,8 +39,10 @@ class CropStepsForm extends Component {
         renderURL: ""
       },
       cropStepAudioAllocation: [],
+      imageAllocation : [],
       loading: true,
-      audioGridOpen: false
+      audioGridOpen: false,
+      imageGridOpen : false,
     };
   }
   componentDidMount() {
@@ -49,19 +53,25 @@ class CropStepsForm extends Component {
         let currentCropStep = _.find(this.props.activeCropSteps, function(cropStep) {
           return cropStep.Id == id;
         });
-        currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
-        setTimeout(() => {
-          this.setState({
-            updateFlag: true,
-            cropStep: currentCropStep,
-            loading: false,
-            cropNameDisabled: true,
-            cropStepAudioAllocation: this.props.cropStepAudioAllocation,
-            audioGridOpen: true
-            //videoGridOpen: true,
-            //imageGridOpen: true
+        if(currentCropStep !== undefined){
+          currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
+          let imageAllocation = _.filter(this.props.imageFiles, {
+            FilePath: currentCropStep.renderURL
           });
-        }, 1000);
+          setTimeout(() => {
+            this.setState({
+              updateFlag: true,
+              cropStep: currentCropStep,
+              loading: false,
+              cropNameDisabled: true,
+              cropStepAudioAllocation: this.props.cropStepAudioAllocation,
+              audioGridOpen: true,
+              imageAllocation: imageAllocation,
+              //videoGridOpen: true,
+              imageGridOpen: true
+            });
+          }, 1000);
+        }
       }
     } else {
       this.props.clearAudioAllocations();
@@ -168,9 +178,23 @@ class CropStepsForm extends Component {
   playAudio(cell, row) {
     return <AudioPlayer autoPlay={false} source={row.FilePath} />;
   }
+  showImage(cell, row){
+    return (
+      <img
+        src={row.FilePath}
+        style={{ height: 50, width: 50 }}
+        alt=""
+      />
+    );
+  }
   audioToggleCollapse() {
     this.setState({
       audioGridOpen: !this.state.audioGridOpen
+    });
+  }
+  imageToggleCollapse() {
+    this.setState({
+      imageGridOpen: !this.state.imageGridOpen
     });
   }
   onAddAudio() {
@@ -182,6 +206,14 @@ class CropStepsForm extends Component {
     } else {
       this.props.history.push(
         `/cropCultivations/audioAllocation/${"cropStep"}`
+      );
+    }
+  }
+  onAddImage(){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/imageAllocation/${"cropStep"}/${this.props.match.params
+          .id}`
       );
     }
   }
@@ -252,6 +284,7 @@ class CropStepsForm extends Component {
                     type="text"
                     name="Step_Name"
                     label="Step name"
+                    maxLength={250}
                     placeholder="Step name"
                     value={cropStep.Step_Name}
                     required={cropStep.Step_NameRequired}
@@ -264,6 +297,7 @@ class CropStepsForm extends Component {
                   <InputElement
                     type="textarea"
                     name="Step_Description"
+                    maxLength={500}
                     label="Step description"
                     placeholder="Step description"
                     value={cropStep.Step_Description}
@@ -272,19 +306,7 @@ class CropStepsForm extends Component {
                   />
                 </Col>
               </FormGroup>
-              {/* <FormGroup row>
-                <Col xs="10" md="8">
-                  {/* <InputElement
-                    type="file"
-                    name="MediaURL"
-                    label="Upload media"
-                    //placeholder="MediaURL"
-                    //value={cropStep.Step_Description}
-                    //required={cropStep.Crop_IdRequired}
-                    onChange={event => this.onImageChange(event)}
-                  /> 
-                </Col>
-              </FormGroup> */}
+              
             </Col>
             <Col md="6">
               {/* {this.state.cropStep.renderURL !== "" ? ( */}
@@ -310,7 +332,7 @@ class CropStepsForm extends Component {
                   toggleCollapse={this.audioToggleCollapse.bind(this)}
                 >
                   <FormGroup row>
-                    <Col xs="12" style={{ marginTop: -10 }}>
+                    <Col xs="12" >
                       <AudioAllocationGrid
                         audioAllocation={this.props.cropStepAudioAllocation}
                         playAudio={this.playAudio.bind(this)}
@@ -320,6 +342,25 @@ class CropStepsForm extends Component {
                   </FormGroup>
                 </CollapseCards>
               </div>
+              <div style={{ marginTop: -30 }}>
+                  <CollapseCards
+                    subName="Image Allocation"
+                    buttonName={this.state.imageAllocation.length === 0  ? "Add Image" : null}
+                    buttonLink={this}
+                    buttonClick={this.onAddImage.bind(this)}
+                    isOpen={this.state.imageGridOpen}
+                    toggleCollapse={this.imageToggleCollapse.bind(this)}
+                  >
+                    <FormGroup row>
+                      <Col xs="12">
+                        <ImageAllocationGrid
+                            imageAllocation = {this.state.imageAllocation}
+                            showImage ={this.showImage.bind(this)}
+                        />
+                      </Col>
+                    </FormGroup> 
+                  </CollapseCards>
+                </div>
             </div>
           ) : null}
           {this.state.updateFlag ? (
@@ -365,7 +406,8 @@ const mapStateToProps = state => {
     activeCropSteps :state.cropsReducer.activeCropSteps ,
     InactiveCropSteps: state.cropsReducer.InactiveCropSteps,
     cropStepAudioAllocation: state.cropsReducer.currentCropStepAudioAllocation,
-    cropStepError: state.cropsReducer.cropStepError
+    cropStepError: state.cropsReducer.cropStepError,
+    imageFiles: state.mediaReducer.imageFiles
   };
 };
 

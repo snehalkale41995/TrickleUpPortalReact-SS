@@ -5,6 +5,7 @@ const initialState = {
   audioOptions: [],
   videoFiles: [],
   imageFiles: [],
+  imageOptions: [],
   audioError: null,
   videoError: null,
   imageError: null
@@ -29,7 +30,8 @@ const mediaReducer = (state = initialState, action) => {
       return {
         ...state,
         imageError: null,
-        imageFiles: action.imageFiles
+        imageFiles: action.imageFiles,
+        imageOptions: action.imageOptions
       };
     case actionTypes.LOG_AUDIO_ERROR:
       return {

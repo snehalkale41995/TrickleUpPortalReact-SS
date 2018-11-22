@@ -154,7 +154,7 @@ class RegistrationList extends Component {
     ) : (
       <CardLayout
         name="Beneficiary List"
-        buttonName="Add beneficiary"
+        buttonName="Add Beneficiary"
         buttonLink={`${this.props.match.url}/registration`}
       >
         <Row className="address-drop-margin">

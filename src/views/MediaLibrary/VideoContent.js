@@ -86,7 +86,7 @@ class VideoContent extends Component {
     ) : (
       <CardLayout
         name="Videos"
-        buttonName="Add video"
+        buttonName="Add Video"
         buttonLink={`${this.props.match.url}/videoUpload`}
         //buttonLink={this}
         //active="none"

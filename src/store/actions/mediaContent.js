@@ -20,10 +20,11 @@ export const storeVideoFiles = videos => {
     videoFiles: videos
   };
 };
-export const storeImageFiles = images => {
+export const storeImageFiles = (images, imageOptions) => {
   return {
     type: actionTypes.STORE_IMAGE_FILES,
-    imageFiles: images
+    imageFiles: images,
+    imageOptions: imageOptions
   };
 };
 export const logAudioError = error => {
@@ -127,10 +128,16 @@ export const getImageFiles = () => {
       .then(response => {
         if (response.data.success) {
           let images = response.data.data.Images;
+          let imageOptions = [];
           images.forEach(image => {
+            imageOptions.push({
+              label: image.ImageName,
+              value: image.Id,
+              FilePath: image.FilePath
+            });
             image.FilePath = `${AppConfig.serverURL}/${image.FilePath}`;
           });
-          dispatch(storeImageFiles(images));
+          dispatch(storeImageFiles(images, imageOptions));
         } else {
           dispatch(logImageError(response.data.error));
         }

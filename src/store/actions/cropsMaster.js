@@ -158,6 +158,22 @@ export const updateCrop = (id, crop) => {
       });
   };
 };
+export const updateCropImage = (id, crop) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Crops/UpdateCropImagePath?id=${id}`, crop)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropsList());
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropError("Something went wrong!"));
+      });
+  };
+};
 export const deactivateCrop = (id, crop) => {
   return dispatch => {
     axios
@@ -244,6 +260,26 @@ export const updateCropStep = (id, cropStep) => {
       });
   };
 };
+export const updateCropStepImage = (id, cropStep) => {
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/Cultivation_Steps/UpdateCropsStepsImage?id=${id}`,
+        cropStep
+      )
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropSteps());
+        } else {
+          dispatch(logCropError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropError("Something went wrong!"));
+      });
+  };
+};
+
 export const deleteCropStep = (id, cropStep) => {
   return dispatch => {
     axios
@@ -322,6 +358,27 @@ export const updateCropMaterial = (id, cropMaterial) => {
     axios
       .post(
         `${AppConfig.serverURL}/api/CropSteps_Material/PutCropSteps_Material?Id=${id}`,
+        cropMaterial
+      )
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getCropStepsMaterial());
+        } else {
+          dispatch(logCropMaterialError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logCropMaterialError("Something went wrong!"));
+      });
+  };
+};
+
+
+export const updateCropMaterialImage = (id, cropMaterial) => {
+  return dispatch => {
+    axios
+      .post(
+        `${AppConfig.serverURL}/api/CropSteps_Material/UpdateMaterialImage?Id=${id}`,
         cropMaterial
       )
       .then(response => {

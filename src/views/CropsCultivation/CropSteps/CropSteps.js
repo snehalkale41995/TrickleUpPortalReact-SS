@@ -77,8 +77,8 @@ class CropSteps extends Component {
       this.props.deleteCropStep(cropStep.Id, cropStep);
     }
     let displayMessage = compRef.state.tableStatus
-      ? "Crop deactivated successfully"
-      : "Crop activated successfully";
+      ? "Crop step deactivated successfully"
+      : "Crop step activated successfully";
     setTimeout(() => {
       let message = "";
       compRef.props.cropStepError
@@ -126,7 +126,7 @@ class CropSteps extends Component {
     ) : (
       <CardLayout
         name="Crop Steps"
-        buttonName="Add crop step"
+        buttonName="Add Crop Step"
         buttonLink={`${this.props.match.url}/CropStepForm`}
       >
         <Row className="address-drop-margin">

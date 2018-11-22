@@ -159,7 +159,7 @@ class OperationalUserList extends Component {
     ) : (
       <CardLayout
         name="Operational Users"
-        buttonName="Add User"
+        buttonName="Add Operational User"
         buttonLink={`${this.props.match.url}/operationalUser`}
       >
         <Row className="address-drop-margin">

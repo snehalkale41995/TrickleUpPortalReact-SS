@@ -84,7 +84,7 @@ class ImageContent extends Component {
     ) : (
       <CardLayout
         name="Images"
-        buttonName="Add image"
+        buttonName="Add Image"
         buttonLink={`${this.props.match.url}/imageUpload`}
         //buttonLink={this}
         //active="none"

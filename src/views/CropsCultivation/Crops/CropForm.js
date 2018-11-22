@@ -15,7 +15,7 @@ import * as Toaster from "../../../constants/Toaster";
 import CollapseCards from "../../../components/Cards/CollapseCards";
 import AudioAllocationGrid from "../AudioAllocationGrid";
 import { Link } from "react-router-dom";
-
+import ImageAllocationGrid from "../ImageAllocationGrid";
 class CropForm extends Component {
   constructor(props) {
     super(props);
@@ -28,10 +28,12 @@ class CropForm extends Component {
         CropNameRequired: false,
         CropImageRequired: false,
         Active: true,
+        Ready: true,
         Cultivation_Steps: [],
         renderURL: ""
       },
       audioAllocation: [],
+      imageAllocation: [],
       loading: true,
       audioGridOpen: false,
       videoGridOpen: false,
@@ -47,24 +49,32 @@ class CropForm extends Component {
         let currentCrop = _.find(this.props.activeCrops, function(crop) {
           return crop.Id == id;
         });
-        let cropStatus = "Inactive";
-        if (currentCrop.Ready) {
-          cropStatus = "Active";
-          currentCrop.Active = true;
-        }
-        currentCrop.renderURL = `${AppConfig.serverURL}/${currentCrop.FilePath}`;
-        setTimeout(() => {
-          this.setState({
-            updateFlag: true,
-            crop: currentCrop,
-            loading: false,
-            audioAllocation: this.props.currentCropAudioAllocation,
-            audioGridOpen: true,
-            videoGridOpen: true,
-            imageGridOpen: true,
-            cropStatus: cropStatus
+        if(currentCrop !== undefined){
+          if (currentCrop.Ready) {
+            currentCrop.Active = true;
+          } else {
+            currentCrop.Active = false;
+          }
+          currentCrop.renderURL = `${AppConfig.serverURL}/${currentCrop.FilePath}`;
+          let imageAllocation = _.filter(this.props.imageFiles, {
+            FilePath: currentCrop.renderURL
           });
-        }, 1000);
+          setTimeout(() => {
+            this.setState({
+              updateFlag: true,
+              crop: currentCrop,
+              loading: false,
+              audioAllocation: this.props.currentCropAudioAllocation,
+              audioGridOpen: true,
+              videoGridOpen: true,
+              imageGridOpen: true,
+              imageAllocation: imageAllocation
+            });
+          }, 1000);
+        }
+        else{
+          this.props.history.push("/cropCultivations/crops");
+        }
       }
     } else {
       this.props.clearAudioAllocations();
@@ -84,22 +94,18 @@ class CropForm extends Component {
       crop: crop
     });
   }
-  onSwitch(event) {
-    let crop = { ...this.state.crop };
-    crop.Active = event.target.checked;
-    crop.Ready = event.target.checked;
-    crop.Active
-      ? this.setState({
-          crop: crop,
-          cropStatus: "Active"
-        })
-      : this.setState({
-          crop: crop,
-          cropStatus: "Inactive"
-        });
-  }
+
   playAudio(cell, row) {
     return <AudioPlayer autoPlay={false} source={row.FilePath} />;
+  }
+  showImage(cell, row){
+    return (
+      <img
+        src={row.FilePath}
+        style={{ height: 50, width: 50 }}
+        alt=""
+      />
+    );
   }
   onSubmit() {
     let crop = { ...this.state.crop };
@@ -115,14 +121,16 @@ class CropForm extends Component {
         "FilePath",
         "UpdatedBy",
         "UpdatedOn",
-        "Active"
+        "Active",
+        "Ready"
       ]);
       let cropData = _.pick(crop, [
         "CropName",
         "FilePath",
         "CreatedBy",
         "CreatedOn",
-        "Active"
+        "Active",
+        "Ready"
       ]);
       if (this.state.updateFlag) {
         this.props.updateCrop(cropUpdateData.Id, cropUpdateData);
@@ -178,21 +186,28 @@ class CropForm extends Component {
       );
     }
   }
-  onEditAudio(cell, row){
+  onAddImage(){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/imageAllocation/${"crop"}/${this.props.match.params
+          .id}`
+      );
+    }
+  }
+  onEditAudio(cell, row) {
     return (
       <Link to={this} onClick={() => this.onEditAudioFile(row)}>
         <i className="fa fa-pencil" title="Edit" />
       </Link>
     );
-   
   }
-  onEditAudioFile(row){
+  onEditAudioFile(row) {
     if (this.props.match.params.id !== undefined) {
       this.props.history.push(
         `/cropCultivations/audioAllocation/${"crop"}/${this.props.match.params
           .id}/${row.AudioId}`
       );
-    } 
+    }
   }
   onReset() {
     this.setState({
@@ -228,39 +243,12 @@ class CropForm extends Component {
                       type="text"
                       name="CropName"
                       label="Crop name "
+                      maxLength={250}
                       placeholder="Crop name"
                       value={crop.CropName}
                       required={crop.CropNameRequired}
                       onChange={event => this.onChangeName(event)}
                     />
-                  </Col>
-                </FormGroup>
-                {/* <FormGroup row>
-                  <Col xs="10" md="8">
-                    <InputElement
-                      type="file"
-                      accept="image/*"
-                      name="Crop Image"
-                      label="Crop Image"
-                      required={crop.CropImageRequired}
-                      onChange={event => this.onImageChange(event)}
-                    />
-                  </Col>
-                </FormGroup> */}
-                <FormGroup row>
-                  <Col xs="10" md="8">
-                    <Label />
-                    <Label>
-                      Crop status :
-                      <AppSwitch
-                        className={"mx-2"}
-                        variant={"pill"}
-                        color={"primary"}
-                        checked={crop.Active}
-                        onChange={this.onSwitch.bind(this)}
-                      />
-                      {this.state.cropStatus}
-                    </Label>
                   </Col>
                 </FormGroup>
               </Col>
@@ -289,13 +277,13 @@ class CropForm extends Component {
                     toggleCollapse={this.audioToggleCollapse.bind(this)}
                   >
                     <FormGroup row>
-                      <Col xs="12" style={{ marginTop: -10 }}>
+                      <Col xs="12">
                         <AudioAllocationGrid
                           audioAllocation={
                             this.props.currentCropAudioAllocation
                           }
                           playAudio={this.playAudio.bind(this)}
-                          onEdit = {this.onEditAudio.bind(this)}
+                          onEdit={this.onEditAudio.bind(this)}
                         />
                       </Col>
                     </FormGroup>
@@ -304,19 +292,23 @@ class CropForm extends Component {
                 <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
-                    buttonName="Add Image"
+                    buttonName={this.state.imageAllocation.length === 0  ? "Add Image" : null}
                     buttonLink={this}
-                    active="none"
-                    //buttonClick={this.onAddAudio.bind(this)}
+                    buttonClick={this.onAddImage.bind(this)}
                     isOpen={this.state.imageGridOpen}
                     toggleCollapse={this.imageToggleCollapse.bind(this)}
                   >
                     <FormGroup row>
-                      <Col xs="12" style={{ marginTop: -10 }} />
-                    </FormGroup>
+                      <Col xs="12">
+                        <ImageAllocationGrid
+                            imageAllocation = {this.state.imageAllocation}
+                            showImage ={this.showImage.bind(this)}
+                        />
+                      </Col>
+                    </FormGroup> 
                   </CollapseCards>
                 </div>
-                <div style={{ marginTop: -30 }}>
+                {/*  <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Video Allocation"
                     buttonName="Add Video"
@@ -330,7 +322,7 @@ class CropForm extends Component {
                       <Col xs="12" style={{ marginTop: -10 }} />
                     </FormGroup>
                   </CollapseCards>
-                </div>
+                </div> */}
               </div>
             ) : null}
 
@@ -380,7 +372,8 @@ const mapStateToProps = state => {
     currentCropAudioAllocation: state.cropsReducer.currentCropAudioAllocation,
     cropError: state.cropsReducer.cropError,
     activeCrops: state.cropsReducer.activeCrops,
-    inActiveCrops: state.cropsReducer.inActiveCrops
+    inActiveCrops: state.cropsReducer.inActiveCrops,
+    imageFiles: state.mediaReducer.imageFiles
   };
 };
 

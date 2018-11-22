@@ -39,7 +39,7 @@ class AudioAllocationGrid extends Component {
         <TableHeaderColumn
           dataField="FieldType"
           headerAlign="left"
-          width="15"
+          width="30"
           dataSort={true}
         >
           Field Type
@@ -70,7 +70,7 @@ class AudioAllocationGrid extends Component {
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="Edit"
-          headerAlign="left"
+          headerAlign= "left"
           width="30"
           dataFormat={this.props.onEdit}
         >

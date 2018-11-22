@@ -163,7 +163,7 @@ class LanguageList extends Component {
     ) : (
       <CardLayout
         name="Languages"
-        buttonName="Add language"
+        buttonName="Add Language"
         buttonLink={`${this.props.match.url}/LanguageForm`}
       >
         <Row className="address-drop-margin">

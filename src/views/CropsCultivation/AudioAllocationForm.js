@@ -11,6 +11,9 @@ import _ from "lodash";
 import { Async } from "react-select";
 import "react-select/dist/react-select.css";
 import * as options from "../../constants/StatusConstants";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as Toaster from "../../constants/Toaster";
 class AudioAllocationForm extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +41,8 @@ class AudioAllocationForm extends Component {
       audioCategory: "",
       id: "",
       audioValue: "",
-      renderURL: ""
+      renderURL: "",
+      error : ""
     };
   }
   componentWillMount() {
@@ -182,24 +186,44 @@ class AudioAllocationForm extends Component {
           this.props.createCropMaterialAudioAllocation(audioAllocation);
         }
       }
-      // this.setState({ loading: true });
-      // let message = "";
-      // let compRef = this;
-      // setTimeout(() => {
-      //   compRef.props.cropStepError
-      //     ? (message = "Something went wrong !")
-      //     : compRef.state.updateFlag
-      //       ? (message = "Crop step updated successfully")
-      //       : (message = "Crop step created successfully");
-      //   compRef.onReset();
-      //   compRef.setState({ loading: false });
-      //   Toaster.Toaster(message, compRef.props.cropStepError);
-      //   setTimeout(() => {
-      //     if (!compRef.props.cropStepError) {
-      //       compRef.props.history.push("/cropCultivations/CropSteps");
-      //     }
-      //   }, 1000);
-      // }, 1000);
+      let message= "";
+      let compRef = this;
+      this.setState({ loading: true });
+      if (this.state.audioCategory === "crop") {
+        if(this.props.cropError){
+          this.setState({error : this.props.cropError });
+        }else{
+          this.setState({error : "" });
+        }
+      } else if (this.state.audioCategory === "cropStep") {
+        if(this.props.cropStepError){
+          this.setState({error : this.props.cropStepError });
+        }else{
+          this.setState({error : "" });
+        }
+      } else {
+        if(this.props.cropMaterialError){
+          this.setState({error : this.props.cropMaterialError });
+        }else{
+          this.setState({error : "" });
+        }
+      }
+
+      setTimeout(() => {
+        compRef.state.error
+          ? (message = "Something went wrong !")
+          : compRef.state.updateFlag
+            ? (message = "Audio allocation updated successfully")
+            : (message = "Audio allocation created successfully");
+        compRef.onReset();
+        compRef.setState({ loading: false });
+        Toaster.Toaster(message,compRef.state.error);
+        setTimeout(() => {
+          if (!compRef.state.error) {
+            compRef.goBack();
+          }
+        }, 1000);
+      }, 1000);
     } else {
       if (!audioAllocation.FieldType) audioAllocation.FieldTypeRequired = true;
       if (!audioAllocation.LangId) audioAllocation.LangIdRequired = true;
@@ -222,6 +246,27 @@ class AudioAllocationForm extends Component {
     } else {
       return false;
     }
+  }
+  onReset(){
+    this.setState({
+      audioAllocation: {
+        Id: "",
+        LangId: "",
+        LangIdRequired: false,
+        FieldType: "",
+        FieldTypeRequired: false,
+        AudioId: "",
+        AudioIdRequired: false,
+        CreatedBy: "",
+        CreatedOn: "",
+        UpdatedBy: "",
+        UpdatedOn: "",
+        Active: true
+      },
+      audioValue: "",
+      renderURL: "",
+      error : ""
+    })
   }
   render() {
     const { audioAllocation } = this.state;
@@ -295,14 +340,15 @@ class AudioAllocationForm extends Component {
                 <div className="help-block">*Audio is required</div>
               ) : null}
             </Col>
-            <Col md="5">
+            {this.state.renderURL ? <Col md="5">
               <Label />
               <AudioPlayer source={this.state.renderURL} autoPlay={false} />
-            </Col>
+            </Col> : null}
           </FormGroup>
-          <FormGroup row>
+          
             {this.state.updateFlag ? (
-              <Col md="2">
+              <FormGroup row>
+              <Col xs="12" md="2">
                 <Button
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
@@ -310,8 +356,10 @@ class AudioAllocationForm extends Component {
                   Save
                 </Button>
               </Col>
+              </FormGroup>
             ) : (
-              <Col md="2">
+              <FormGroup row>
+              <Col xs="12"  md="1">
                 <Button
                   className="theme-positive-btn"
                   onClick={this.onSubmit.bind(this)}
@@ -319,6 +367,15 @@ class AudioAllocationForm extends Component {
                   Create
                 </Button>
               </Col>
+              <Col md="1">
+                <Button
+                  className="theme-reset-btn"
+                  onClick={this.onReset.bind(this)}
+                >
+                  Reset
+                </Button>
+              </Col>
+              </FormGroup>
             )}
             {/* <Col md="3">
               <Button
@@ -328,8 +385,9 @@ class AudioAllocationForm extends Component {
                 Create
               </Button>
             </Col> */}
-          </FormGroup>
+          
         </div>
+        <ToastContainer autoClose={1000} />
       </CardLayout>
     );
   }
@@ -342,7 +400,10 @@ export const mapStateToProps = state => {
     cropStepAudioAllocation: state.cropsReducer.currentCropStepAudioAllocation,
     cropMaterialAudioAllocation:
       state.cropsReducer.currentCropMaterialAudioAllocation,
-    languagesList: state.languagesReducer.languagesList
+    languagesList: state.languagesReducer.languagesList,
+    cropMaterialError: state.cropsReducer.cropMaterialError,
+    cropError: state.cropsReducer.cropError,
+    cropStepError: state.cropsReducer.cropStepError
   };
 };
 

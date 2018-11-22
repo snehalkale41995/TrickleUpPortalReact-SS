@@ -28,6 +28,7 @@ class CropsMaterial extends Component {
     };
   }
   componentWillMount() {
+    this.props.getCropStepsMaterial();
     let compRef = this;
     setTimeout(() => {
       compRef.setState({
@@ -75,8 +76,8 @@ class CropsMaterial extends Component {
       this.props.deleteCropMaterial(cropMaterial.Id, cropMaterial);
     }
     let displayMessage = compRef.state.tableStatus
-      ? "Crop deactivated successfully"
-      : "Crop activated successfully";
+      ? "Crop material deactivated successfully"
+      : "Crop material activated successfully";
     setTimeout(() => {
       let message = "";
       compRef.props.cropMaterialError
@@ -114,7 +115,7 @@ class CropsMaterial extends Component {
     ) : (
       <CardLayout
         name="Crop Materials"
-        buttonName="Add crop material"
+        buttonName="Add Crop Material"
         buttonLink={`${this.props.match.url}/CropsMaterialForm`}
       >
         <Row className="address-drop-margin">
@@ -172,7 +173,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCropsList: () => dispatch(actions.getCropsList()),
+    getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial()),
     deleteCropMaterial : (id,cropMaterial) => dispatch(actions.deleteCropMaterial(id,cropMaterial))
   };
 };
