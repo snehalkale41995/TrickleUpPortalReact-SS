@@ -398,7 +398,7 @@ class CropMaterialForm extends Component {
                     </FormGroup>
                   </CollapseCards>
                 </div>
-                <div style={{ marginTop: -30 }}>
+                {/* <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
                     buttonName={
@@ -420,7 +420,7 @@ class CropMaterialForm extends Component {
                       </Col>
                     </FormGroup>
                   </CollapseCards>
-                </div>
+                </div> */}
               </div>
             ) : null}
           </FormGroup>

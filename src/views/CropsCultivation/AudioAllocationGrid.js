@@ -72,9 +72,9 @@ class AudioAllocationGrid extends Component {
           dataField="Edit"
           headerAlign= "left"
           width="30"
-          dataFormat={this.props.onEdit}
+          dataFormat={this.props.onDelete}
         >
-          Edit
+          Delete
         </TableHeaderColumn>
       </BootstrapTable>
     );

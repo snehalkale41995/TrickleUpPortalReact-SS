@@ -52,7 +52,7 @@ class Crops extends Component {
     } else {
       return (
         <Link to={this} onClick={() => this.onDelete(row)}>
-          <i class="fa fa-check-square-o" aria-hidden="true" title="Activate" />
+          <i className="fa fa-check-square-o" aria-hidden="true" title="Activate" />
         </Link>
       );
     }

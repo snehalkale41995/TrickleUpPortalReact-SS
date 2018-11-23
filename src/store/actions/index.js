@@ -66,7 +66,7 @@ export {
     updateCropMaterialImage,
     deleteCropMaterial,
     createCropAudioAllocation,
-    updateCropAudioAllocation,
+    deleteCropAudioAllocation,
     createCropStepsAudioAllocation,
     updateCropStepsAudioAllocation,
     createCropMaterialAudioAllocation,

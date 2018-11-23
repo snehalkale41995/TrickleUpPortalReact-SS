@@ -99,7 +99,23 @@ class ImageAllocationForm extends Component {
         "UpdatedBy",
         "UpdatedOn"
       ]);
-      //this.props.updateCropImage(image.Id, image);
+      this.props.updateCropImage(image.Id, image);
+      this.setState({ loading: true });
+      let message = "";
+      let compRef = this;
+      setTimeout(() => {
+        compRef.props.cropError
+          ? (message = "Something went wrong !")
+          : (message = "Crop image allocation successfully");
+        compRef.onReset();
+        compRef.setState({ loading: false });
+        Toaster.Toaster(message, compRef.props.cropError);
+        setTimeout(() => {
+          if (!compRef.props.cropError) {
+            compRef.goBack();
+          }
+        }, 1000);
+      }, 1000);
     } else {
       !imageAllocation.FilePath ? (imageAllocation.imageRequired = true) : null;
       this.setState({ imageAllocation });

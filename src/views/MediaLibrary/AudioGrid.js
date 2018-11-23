@@ -31,14 +31,14 @@ class AudioGrid extends Component {
         >
           Audio
         </TableHeaderColumn>
-        <TableHeaderColumn
+        {/* <TableHeaderColumn
           dataField="delete"
           //dataFormat={this.props.onDeleteState}
           headerAlign="left"
           width="20"
         >
           Deactivate
-        </TableHeaderColumn>
+        </TableHeaderColumn> */}
       </BootstrapTable>
     );
   }

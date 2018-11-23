@@ -319,7 +319,7 @@ class CropStepsForm extends Component {
               {/* ) : null} */}
             </Col>
           </FormGroup>
-
+        
           {this.state.updateFlag ? (
             <div>
               <div style={{ marginTop: 0 }}>
@@ -342,7 +342,7 @@ class CropStepsForm extends Component {
                   </FormGroup>
                 </CollapseCards>
               </div>
-              <div style={{ marginTop: -30 }}>
+              {/* <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
                     buttonName={this.state.imageAllocation.length === 0  ? "Add Image" : null}
@@ -360,7 +360,7 @@ class CropStepsForm extends Component {
                       </Col>
                     </FormGroup> 
                   </CollapseCards>
-                </div>
+                </div> */}
             </div>
           ) : null}
           {this.state.updateFlag ? (

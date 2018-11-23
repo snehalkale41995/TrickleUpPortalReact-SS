@@ -494,7 +494,7 @@ export const createCropAudioAllocation = cropAudioObj => {
       });
   };
 };
-export const updateCropAudioAllocation = (id, cropAudioObj) => {
+export const deleteCropAudioAllocation = (id, cropAudioObj) => {
   let cropAudioAllocation = _.pick(cropAudioObj, [
     "Id",
     "CropId",

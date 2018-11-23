@@ -14,7 +14,7 @@ const ConfirmModal = props => {
         isOpen={props.isOpen}
         toggle={props.onModalToggle}
         className={
-          props.title === "Deactivate" ? "modal-danger " : "modal-success "
+          props.title === "Deactivate" || props.title === "Delete" ? "modal-danger " : "modal-success "
         }
       >
         <ModalHeader>{props.title}</ModalHeader>

@@ -160,10 +160,10 @@ class AudioAllocationForm extends Component {
         audioAllocation.UpdatedBy = localStorage.getItem("user");
         audioAllocation.UpdatedOn = new Date();
         if (this.state.audioCategory === "crop") {
-          this.props.updateCropAudioAllocation(
-            audioAllocation.Id,
-            audioAllocation
-          );
+          // this.props.deleteCropAudioAllocation(
+          //   audioAllocation.Id,
+          //   audioAllocation
+          // );
         } else if (this.state.audioCategory === "cropStep") {
           this.props.updateCropStepsAudioAllocation(
             audioAllocation.Id,
@@ -416,8 +416,8 @@ export const mapDispatchToProps = dispatch => {
       dispatch(actions.getCropMaterialAudioAllocation(id)),
     createCropAudioAllocation: audioAllocation =>
       dispatch(actions.createCropAudioAllocation(audioAllocation)),
-    updateCropAudioAllocation: (id, audioAllocation) =>
-      dispatch(actions.updateCropAudioAllocation(id, audioAllocation)),
+    // deleteCropAudioAllocation: (id, audioAllocation) =>
+    //   dispatch(actions.deleteCropAudioAllocation(id, audioAllocation)),
     createCropStepsAudioAllocation: audioAllocation =>
       dispatch(actions.createCropStepsAudioAllocation(audioAllocation)),
     updateCropStepsAudioAllocation: (id, audioAllocation) =>
