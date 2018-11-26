@@ -430,10 +430,10 @@ class CropMaterialForm extends Component {
             </Col>
           </FormGroup>
 
-          <FormGroup row>
+          
             {this.state.updateFlag ? (
               <div style={{ marginTop: 0 }}>
-                <div>
+                
                   <CollapseCards
                     subName="Audio Allocation"
                     buttonName="Add Audio"
@@ -455,7 +455,7 @@ class CropMaterialForm extends Component {
                       </Col>
                     </FormGroup>
                   </CollapseCards>
-                </div>
+                
                 {/* <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
@@ -481,11 +481,11 @@ class CropMaterialForm extends Component {
                 </div> */}
               </div>
             ) : null}
-          </FormGroup>
+         
 
           {this.state.updateFlag ? (
             <FormGroup row>
-              <Col xs="3" md="1">
+              <Col xs="12" md="1">
                 <Button
                   className="theme-positive-btn"
                   onClick={() => this.onSubmit()}
@@ -496,7 +496,7 @@ class CropMaterialForm extends Component {
             </FormGroup>
           ) : (
             <FormGroup row>
-              <Col xs="5" md="1">
+              <Col xs="12" md="1">
                 <Button
                   className="theme-positive-btn"
                   onClick={() => this.onSubmit()}
