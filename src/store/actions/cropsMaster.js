@@ -573,7 +573,7 @@ export const createCropStepsAudioAllocation = cropStepAudioObj => {
       });
   };
 };
-export const updateCropStepsAudioAllocation = (Id, cropStepAudioObj) => {
+export const deleteCropStepsAudioAllocation = (Id, cropStepAudioObj) => {
   let cropStepAudio = _.pick(cropStepAudioObj, [
     "Id",
     "StepId",

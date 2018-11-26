@@ -165,10 +165,10 @@ class AudioAllocationForm extends Component {
           //   audioAllocation
           // );
         } else if (this.state.audioCategory === "cropStep") {
-          this.props.updateCropStepsAudioAllocation(
-            audioAllocation.Id,
-            audioAllocation
-          );
+          // this.props.updateCropStepsAudioAllocation(
+          //   audioAllocation.Id,
+          //   audioAllocation
+          // );
         } else {
           this.props.updateCropMaterialAudioAllocation(
             audioAllocation.Id,
@@ -420,8 +420,8 @@ export const mapDispatchToProps = dispatch => {
     //   dispatch(actions.deleteCropAudioAllocation(id, audioAllocation)),
     createCropStepsAudioAllocation: audioAllocation =>
       dispatch(actions.createCropStepsAudioAllocation(audioAllocation)),
-    updateCropStepsAudioAllocation: (id, audioAllocation) =>
-      dispatch(actions.updateCropStepsAudioAllocation(id, audioAllocation)),
+    // updateCropStepsAudioAllocation: (id, audioAllocation) =>
+    //   dispatch(actions.updateCropStepsAudioAllocation(id, audioAllocation)),
     createCropMaterialAudioAllocation: audioAllocation =>
       dispatch(actions.createCropMaterialAudioAllocation(audioAllocation)),
     updateCropMaterialAudioAllocation: (id, audioAllocation) =>

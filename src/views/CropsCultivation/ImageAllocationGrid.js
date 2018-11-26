@@ -3,11 +3,15 @@ import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist/react-bootstrap-table.min.css";
 class ImageAllocationGrid extends Component {
   render() {
+    const options= {
+      noDataText : "There is no image allocation."
+    }
     return (
       <BootstrapTable
         ref="table"
         data={this.props.imageAllocation}
         hover={true}
+        options={options}
       >
         <TableHeaderColumn dataField="Id" headerAlign="left" isKey hidden>
           Id

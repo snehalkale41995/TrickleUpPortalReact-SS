@@ -16,14 +16,15 @@ import AudioAllocationGrid from "../AudioAllocationGrid";
 import DropdownSelect from "../../../components/InputElement/Dropdown";
 import { Link } from "react-router-dom";
 import ImageAllocationGrid from "../ImageAllocationGrid";
-
-
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 class CropStepsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       updateFlag: false,
       cropNameDisabled: false,
+      itemToDelete: "",
+      audioToDelete: {},
       cropStep: {
         Crop_Id: "",
         MediaURL: "",
@@ -39,6 +40,8 @@ class CropStepsForm extends Component {
         renderURL: ""
       },
       cropStepAudioAllocation: [],
+      activeAudioAllocation: [],
+      inActiveAudioAllocation :[],
       imageAllocation : [],
       loading: true,
       audioGridOpen: false,
@@ -49,29 +52,7 @@ class CropStepsForm extends Component {
     if (this.props.match.params.id !== undefined) {
       if (this.props.activeCropSteps.length !== 0) {
         let id = this.props.match.params.id;
-        this.props.getCropStepsAudioAllocation(id);
-        let currentCropStep = _.find(this.props.activeCropSteps, function(cropStep) {
-          return cropStep.Id == id;
-        });
-        if(currentCropStep !== undefined){
-          currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
-          let imageAllocation = _.filter(this.props.imageFiles, {
-            FilePath: currentCropStep.renderURL
-          });
-          setTimeout(() => {
-            this.setState({
-              updateFlag: true,
-              cropStep: currentCropStep,
-              loading: false,
-              cropNameDisabled: true,
-              cropStepAudioAllocation: this.props.cropStepAudioAllocation,
-              audioGridOpen: true,
-              imageAllocation: imageAllocation,
-              //videoGridOpen: true,
-              imageGridOpen: true
-            });
-          }, 1000);
-        }
+        this.setCurrentStepToState(id);
       }
     } else {
       this.props.clearAudioAllocations();
@@ -81,6 +62,42 @@ class CropStepsForm extends Component {
     }
     if (this.props.cropStepError) {
       Toaster.Toaster("Something went wrong !", this.props.cropStepError);
+    }
+  }
+  setCurrentStepToState(id){
+    let compRef = this;
+    this.props.getCropStepsAudioAllocation(id);
+    let currentCropStep = _.find(this.props.activeCropSteps, function(cropStep) {
+      return cropStep.Id == id;
+    });
+    if(currentCropStep !== undefined){
+      currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
+      let imageAllocation = _.filter(this.props.imageFiles, {
+        FilePath: currentCropStep.renderURL
+      });
+      setTimeout(() => {
+        let activeAudioAllocation = _.filter(
+          compRef.props.cropStepAudioAllocation,
+          { Active: true }
+        );
+        let inActiveAudioAllocation = _.filter(
+          compRef.props.cropStepAudioAllocation,
+          { Active: false }
+        );
+        compRef.setState({
+          updateFlag: true,
+          cropStep: currentCropStep,
+          loading: false,
+          cropNameDisabled: true,
+          cropStepAudioAllocation: compRef.props.cropStepAudioAllocation,
+          activeAudioAllocation: activeAudioAllocation,
+          inActiveAudioAllocation :inActiveAudioAllocation,
+          audioGridOpen: true,
+          imageAllocation: imageAllocation,
+          //videoGridOpen: true,
+          imageGridOpen: true
+        });
+      }, 1000);
     }
   }
   onChangeName(event) {
@@ -175,6 +192,25 @@ class CropStepsForm extends Component {
       return false;
     }
   }
+  onReset() {
+    this.setState({
+      cropStep: {
+        Crop_Id: "",
+        MediaURL: "",
+        Step_Name: "",
+        Step_Description: "",
+        Crop_IdRequired: false,
+        Step_NameRequired: false,
+        Step_DescriptionRequired: false,
+        CreatedBy: "",
+        CreatedOn: "",
+        UpdatedBy: "",
+        UpdatedOn: "",
+        renderURL: ""
+      }
+    });
+  }
+  /**--------------------------Audio allocation functions-------------------------------------- */
   playAudio(cell, row) {
     return <AudioPlayer autoPlay={false} source={row.FilePath} />;
   }
@@ -192,11 +228,6 @@ class CropStepsForm extends Component {
       audioGridOpen: !this.state.audioGridOpen
     });
   }
-  imageToggleCollapse() {
-    this.setState({
-      imageGridOpen: !this.state.imageGridOpen
-    });
-  }
   onAddAudio() {
     if (this.props.match.params.id !== undefined) {
       this.props.history.push(
@@ -206,14 +237,6 @@ class CropStepsForm extends Component {
     } else {
       this.props.history.push(
         `/cropCultivations/audioAllocation/${"cropStep"}`
-      );
-    }
-  }
-  onAddImage(){
-    if (this.props.match.params.id !== undefined) {
-      this.props.history.push(
-        `/cropCultivations/imageAllocation/${"cropStep"}/${this.props.match.params
-          .id}`
       );
     }
   }
@@ -233,24 +256,59 @@ class CropStepsForm extends Component {
       );
     } 
   }
-  onReset() {
+  
+  onDeleteAudio(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.deleteAudio(row)}>
+        <i className="fa fa-trash" title="Delete" />
+      </Link>
+    );
+  }
+  deleteAudio(row) {
+    this.setState({ audioToDelete: row });
+    this.onModalToggle("audio");
+  }
+  onModalToggle(itemToDelete) {
     this.setState({
-      cropStep: {
-        Crop_Id: "",
-        MediaURL: "",
-        Step_Name: "",
-        Step_Description: "",
-        Crop_IdRequired: false,
-        Step_NameRequired: false,
-        Step_DescriptionRequired: false,
-        CreatedBy: "",
-        CreatedOn: "",
-        UpdatedBy: "",
-        UpdatedOn: "",
-        renderURL: ""
-      }
+      itemToDelete: itemToDelete,
+      modalStatus: !this.state.modalStatus
     });
   }
+  onConfirmDeleteAudio() {
+    let audioToDelete = { ...this.state.audioToDelete };
+    let compRef = this;
+    audioToDelete.Active = false;
+    audioToDelete.ActiveBy = localStorage.getItem("user");
+    audioToDelete.ActiveOn = new Date();
+    this.props.deleteCropStepsAudioAllocation(audioToDelete.Id, audioToDelete);
+    let displayMessage = "Crop step audio removed successfully";
+    setTimeout(() => {
+      let message = "";
+      compRef.props.cropError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, compRef.props.cropError);
+      compRef.setCurrentStepToState(this.props.match.params.id);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  /**-------------------------------Image allocation functions----------------------------------- */
+  imageToggleCollapse() {
+    this.setState({
+      imageGridOpen: !this.state.imageGridOpen
+    });
+  }
+  onAddImage(){
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/imageAllocation/${"cropStep"}/${this.props.match.params
+          .id}`
+      );
+    }
+  }
+  /**---------------------------------Render function=---------------------------------- */
   render() {
     let cropStep = { ...this.state.cropStep };
     return this.state.loading ? (
@@ -334,9 +392,10 @@ class CropStepsForm extends Component {
                   <FormGroup row>
                     <Col xs="12" >
                       <AudioAllocationGrid
-                        audioAllocation={this.props.cropStepAudioAllocation}
+                        audioAllocation={this.state.activeAudioAllocation}
                         playAudio={this.playAudio.bind(this)}
                         onEdit = {this.onEditAudio.bind(this)}
+                        onDelete={this.onDeleteAudio.bind(this)}
                       />
                     </Col>
                   </FormGroup>
@@ -396,6 +455,24 @@ class CropStepsForm extends Component {
           )}
         </div>
         <ToastContainer autoClose={1000} />
+        {this.state.itemToDelete === "image" ? (
+          <ConfirmModal
+            isOpen={this.state.modalStatus}
+            onModalToggle={this.onModalToggle.bind(this)}
+            onConfirmDelete={this.onConfirmDeleteImage.bind(this)}
+            title="Delete"
+            message="Are you sure you want to remove this image ?"
+          />
+        ) : (
+          <ConfirmModal
+            isOpen={this.state.modalStatus}
+            onModalToggle={this.onModalToggle.bind(this)}
+            onConfirmDelete={this.onConfirmDeleteAudio.bind(this)}
+            title="Delete"
+            message="Are you sure you want to remove this audio ?"
+          />
+        )}
+
       </CardLayout>
     );
   }
@@ -418,7 +495,9 @@ const mapDispatchToProps = dispatch => {
     clearAudioAllocations: () => dispatch(actions.clearAudioAllocations()),
     createCropStep: cropStep => dispatch(actions.createCropStep(cropStep)),
     updateCropStep: (id, cropStep) =>
-      dispatch(actions.updateCropStep(id, cropStep))
+      dispatch(actions.updateCropStep(id, cropStep)),
+      deleteCropStepsAudioAllocation: (id, audioAllocation) =>
+      dispatch(actions.deleteCropStepsAudioAllocation(id, audioAllocation)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropStepsForm);

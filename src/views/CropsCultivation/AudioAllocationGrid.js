@@ -5,6 +5,7 @@ class AudioAllocationGrid extends Component {
   render() {
     const sortingOptions = {
       defaultSortName: "FieldType",
+      noDataText : "There is no audio allocation.",
       defaultSortOrder: "asc",
       sizePerPageList: [
         {

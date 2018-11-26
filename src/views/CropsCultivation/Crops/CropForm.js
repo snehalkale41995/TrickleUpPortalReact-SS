@@ -164,7 +164,7 @@ class CropForm extends Component {
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.cropError);
         setTimeout(() => {
-          if (!compRef.props.cropError && !compRef.state.updateFlag) {
+          if (!compRef.props.cropError) {
             compRef.onReset();
             compRef.props.history.push("/cropCultivations/crops");
           }
