@@ -40,7 +40,8 @@ class CropMaterialForm extends Component {
         UpdatedBy: "",
         CreatedOn: "",
         UpdatedOn: "",
-        Active: true
+        Active: true,
+        renderURL : ""
       },
       activeAudioAllocation: [],
       inActiveAudioAllocation: [],
@@ -417,12 +418,15 @@ class CropMaterialForm extends Component {
               </FormGroup>
             </Col>
             <Col md="4">
-              <img
+            {
+              this.state.cropMaterial.renderURL ?  <img
                 src={this.state.cropMaterial.renderURL}
                 height={300}
                 width={350}
                 alt=""
-              />
+              /> : null
+            }
+             
             </Col>
           </FormGroup>
 

@@ -367,14 +367,14 @@ class CropStepsForm extends Component {
               
             </Col>
             <Col md="6">
-              {/* {this.state.cropStep.renderURL !== "" ? ( */}
+              {this.state.cropStep.renderURL ? ( 
               <img
                 src={this.state.cropStep.renderURL}
                 height={300}
                 width={350}
                 alt=""
               />
-              {/* ) : null} */}
+               ) : null}
             </Col>
           </FormGroup>
         
