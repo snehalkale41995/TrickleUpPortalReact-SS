@@ -73,7 +73,7 @@ export {
     createCropStepsAudioAllocation,
     deleteCropStepsAudioAllocation,
     createCropMaterialAudioAllocation,
-    updateCropMaterialAudioAllocation
+    deleteCropMaterialAudioAllocation
 } from './cropsMaster.js';
 
 export {

@@ -284,10 +284,10 @@ class CropStepsForm extends Component {
     let displayMessage = "Crop step audio removed successfully";
     setTimeout(() => {
       let message = "";
-      compRef.props.cropError
+      compRef.props.cropStepError
         ? (message = "Something went wrong !")
         : (message = displayMessage);
-      Toaster.Toaster(message, compRef.props.cropError);
+      Toaster.Toaster(message, compRef.props.cropStepError);
       compRef.setCurrentStepToState(this.props.match.params.id);
     }, 1000);
     this.setState({

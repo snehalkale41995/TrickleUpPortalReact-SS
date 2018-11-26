@@ -170,10 +170,10 @@ class AudioAllocationForm extends Component {
           //   audioAllocation
           // );
         } else {
-          this.props.updateCropMaterialAudioAllocation(
-            audioAllocation.Id,
-            audioAllocation
-          );
+          // this.props.deleteCropMaterialAudioAllocation(
+          //   audioAllocation.Id,
+          //   audioAllocation
+          // );
         }
       } else {
         audioAllocation.CreatedBy = localStorage.getItem("user");
@@ -424,8 +424,8 @@ export const mapDispatchToProps = dispatch => {
     //   dispatch(actions.updateCropStepsAudioAllocation(id, audioAllocation)),
     createCropMaterialAudioAllocation: audioAllocation =>
       dispatch(actions.createCropMaterialAudioAllocation(audioAllocation)),
-    updateCropMaterialAudioAllocation: (id, audioAllocation) =>
-      dispatch(actions.updateCropMaterialAudioAllocation(id, audioAllocation))
+    // deleteCropMaterialAudioAllocation: (id, audioAllocation) =>
+    //   dispatch(actions.deleteCropMaterialAudioAllocation(id, audioAllocation))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(

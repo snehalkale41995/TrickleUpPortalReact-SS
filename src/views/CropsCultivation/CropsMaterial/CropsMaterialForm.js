@@ -16,17 +16,19 @@ import AudioAllocationGrid from "../AudioAllocationGrid";
 import { Link } from "react-router-dom";
 import ImageAllocationGrid from "../ImageAllocationGrid";
 import AppConfig from "../../../constants/AppConfig";
-
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 class CropMaterialForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       updateFlag: false,
       cropNameDisabled: false,
+      itemToDelete: "",
+      audioToDelete: {},
       cropMaterial: {
         Step_Id: "",
         Material_Name: "",
-        Material_Transaction: "",
+        Material_Transaction: "Debit",
         Per_Decimal_Price: "",
         Quantity: "",
         Step_IdRequired: false,
@@ -40,6 +42,8 @@ class CropMaterialForm extends Component {
         UpdatedOn: "",
         Active: true
       },
+      activeAudioAllocation: [],
+      inActiveAudioAllocation: [],
       cropMaterialAudioAllocation: [],
       imageAllocation: [],
       loading: true,
@@ -50,35 +54,7 @@ class CropMaterialForm extends Component {
     if (this.props.match.params.id !== undefined) {
       if (this.props.activeCropMaterial.length !== 0) {
         let id = this.props.match.params.id;
-        this.props.getCropMaterialAudioAllocation(id);
-        let currentCropMaterial = _.find(
-          this.props.activeCropMaterial,
-          function(cropMaterial) {
-            return cropMaterial.Id == id;
-          }
-        );
-        if (currentCropMaterial !== undefined) {
-          currentCropMaterial.renderURL = `${AppConfig.serverURL}/${currentCropMaterial.Image_Path}`;
-          let imageAllocation = _.filter(this.props.imageFiles, {
-            FilePath: currentCropMaterial.renderURL
-          });
-          setTimeout(() => {
-            this.setState({
-              updateFlag: true,
-              cropMaterial: currentCropMaterial,
-              loading: false,
-              cropNameDisabled: true,
-              cropMaterialAudioAllocation: this.props
-                .cropMaterialAudioAllocation,
-              audioGridOpen: true,
-              imageAllocation: imageAllocation
-              // videoGridOpen: true,
-              //imageGridOpen: true
-            });
-          }, 1000);
-        } else {
-          this.props.history.push("/cropCultivations/CropsMaterial");
-        }
+        this.setCurrentMaterialToState(id);
       }
     } else {
       this.props.clearAudioAllocations();
@@ -88,6 +64,47 @@ class CropMaterialForm extends Component {
     }
     if (this.props.cropMaterialError) {
       Toaster.Toaster("Something went wrong !", this.props.cropMaterialError);
+    }
+  }
+  setCurrentMaterialToState(id) {
+    let compRef = this;
+    this.props.getCropMaterialAudioAllocation(id);
+    let currentCropMaterial = _.find(this.props.activeCropMaterial, function(
+      cropMaterial
+    ) {
+      return cropMaterial.Id == id;
+    });
+    if (currentCropMaterial !== undefined) {
+      currentCropMaterial.renderURL = `${AppConfig.serverURL}/${currentCropMaterial.Image_Path}`;
+      let imageAllocation = _.filter(this.props.imageFiles, {
+        FilePath: currentCropMaterial.renderURL
+      });
+      setTimeout(() => {
+        let activeAudioAllocation = _.filter(
+          compRef.props.cropMaterialAudioAllocation,
+          { Active: true }
+        );
+        let inActiveAudioAllocation = _.filter(
+          compRef.props.cropMaterialAudioAllocation,
+          { Active: false }
+        );
+        compRef.setState({
+          updateFlag: true,
+          cropMaterial: currentCropMaterial,
+          loading: false,
+          cropNameDisabled: true,
+          cropMaterialAudioAllocation:
+            compRef.props.cropMaterialAudioAllocation,
+          activeAudioAllocation: activeAudioAllocation,
+          inActiveAudioAllocation: inActiveAudioAllocation,
+          audioGridOpen: true,
+          imageAllocation: imageAllocation
+          // videoGridOpen: true,
+          //imageGridOpen: true
+        });
+      }, 1000);
+    } else {
+      this.props.history.push("/cropCultivations/CropsMaterial");
     }
   }
   onChangeHandler(event) {
@@ -106,12 +123,7 @@ class CropMaterialForm extends Component {
       cropMaterial: cropMaterial
     });
   }
-  playAudio(cell, row) {
-    return <AudioPlayer autoPlay={false} source={row.FilePath} />;
-  }
-  showImage(cell, row) {
-    return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
-  }
+
   onSubmit() {
     let cropMaterial = { ...this.state.cropMaterial };
     if (this.validCropMaterial(cropMaterial)) {
@@ -190,6 +202,7 @@ class CropMaterialForm extends Component {
       });
     }
   }
+
   validCropMaterial(cropMaterial) {
     if (
       cropMaterial.Material_Name &&
@@ -223,21 +236,21 @@ class CropMaterialForm extends Component {
       }
     });
   }
-
+  // Method for set only Numeric
+  setInputToNumeric(e) {
+    const re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+  /**----------------------Audio Allocation functions- ------------------------------ */
   audioToggleCollapse() {
     this.setState({
       audioGridOpen: !this.state.audioGridOpen
     });
   }
-  videoToggleCollapse() {
-    this.setState({
-      videoGridOpen: !this.state.videoGridOpen
-    });
-  }
-  imageToggleCollapse() {
-    this.setState({
-      imageGridOpen: !this.state.imageGridOpen
-    });
+  playAudio(cell, row) {
+    return <AudioPlayer autoPlay={false} source={row.FilePath} />;
   }
   onAddAudio() {
     if (this.props.match.params.id !== undefined) {
@@ -248,14 +261,6 @@ class CropMaterialForm extends Component {
     } else {
       this.props.history.push(
         `/cropCultivations/audioAllocation/${"cropMaterial"}`
-      );
-    }
-  }
-  onAddImage() {
-    if (this.props.match.params.id !== undefined) {
-      this.props.history.push(
-        `/cropCultivations/imageAllocation/${"cropMaterial"}/${this.props.match
-          .params.id}`
       );
     }
   }
@@ -274,13 +279,61 @@ class CropMaterialForm extends Component {
       );
     }
   }
-  // Method for set only Numeric
-  setInputToNumeric(e) {
-    const re = /[0-9]+/g;
-    if (!re.test(e.key)) {
-      e.preventDefault();
-    }
+  onDeleteAudio(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.deleteAudio(row)}>
+        <i className="fa fa-trash" title="Delete" />
+      </Link>
+    );
   }
+  deleteAudio(row) {
+    this.setState({ audioToDelete: row });
+    this.onModalToggle("audio");
+  }
+  onModalToggle(itemToDelete) {
+    this.setState({
+      itemToDelete: itemToDelete,
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onConfirmDeleteAudio() {
+    let audioToDelete = { ...this.state.audioToDelete };
+    let compRef = this;
+    audioToDelete.Active = false;
+    audioToDelete.ActiveBy = localStorage.getItem("user");
+    audioToDelete.ActiveOn = new Date();
+    this.props.deleteCropMaterialAudioAllocation(audioToDelete.Id, audioToDelete);
+    let displayMessage = "Crop material audio removed successfully";
+    setTimeout(() => {
+      let message = "";
+      compRef.props.cropMaterialError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, compRef.props.cropMaterialError);
+      compRef.setCurrentMaterialToState(this.props.match.params.id);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  /***------------------Image Allocation functions -------------------------------------- */
+  // imageToggleCollapse() {
+  //   this.setState({
+  //     imageGridOpen: !this.state.imageGridOpen
+  //   });
+  // }
+  // showImage(cell, row) {
+  //   return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
+  // }
+  // onAddImage() {
+  //   if (this.props.match.params.id !== undefined) {
+  //     this.props.history.push(
+  //       `/cropCultivations/imageAllocation/${"cropMaterial"}/${this.props.match
+  //         .params.id}`
+  //     );
+  //   }
+  // }
+
   render() {
     let cropMaterial = { ...this.state.cropMaterial };
     return this.state.loading ? (
@@ -389,10 +442,11 @@ class CropMaterialForm extends Component {
                       <Col xs="12">
                         <AudioAllocationGrid
                           audioAllocation={
-                            this.props.cropMaterialAudioAllocation
+                            this.state.activeAudioAllocation
                           }
                           playAudio={this.playAudio.bind(this)}
                           onEdit={this.onEditAudio.bind(this)}
+                          onDelete={this.onDeleteAudio.bind(this)}
                         />
                       </Col>
                     </FormGroup>
@@ -457,6 +511,23 @@ class CropMaterialForm extends Component {
             </FormGroup>
           )}
         </div>
+        {this.state.itemToDelete === "image" ? (
+          <ConfirmModal
+            isOpen={this.state.modalStatus}
+            onModalToggle={this.onModalToggle.bind(this)}
+            onConfirmDelete={this.onConfirmDeleteImage.bind(this)}
+            title="Delete"
+            message="Are you sure you want to remove this image ?"
+          />
+        ) : (
+          <ConfirmModal
+            isOpen={this.state.modalStatus}
+            onModalToggle={this.onModalToggle.bind(this)}
+            onConfirmDelete={this.onConfirmDeleteAudio.bind(this)}
+            title="Delete"
+            message="Are you sure you want to remove this audio ?"
+          />
+        )}
         <ToastContainer autoClose={1000} />
       </CardLayout>
     );
@@ -483,7 +554,9 @@ const mapDispatchToProps = dispatch => {
     createCropMaterial: cropMaterial =>
       dispatch(actions.createCropMaterial(cropMaterial)),
     updateCropMaterial: (id, cropMaterial) =>
-      dispatch(actions.updateCropMaterial(id, cropMaterial))
+      dispatch(actions.updateCropMaterial(id, cropMaterial)),
+    deleteCropMaterialAudioAllocation: (id, audio) =>
+      dispatch(actions.deleteCropMaterialAudioAllocation(id, audio))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropMaterialForm);
