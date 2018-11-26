@@ -10,13 +10,20 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import AudioGrid from "./AudioGrid";
 import AudioPlayer from "../../components/AudioPlayer/AudioPlayer";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from "lodash";
+import { Link } from "react-router-dom";
+
+
 class AudioContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
       renderURL: "",
-      showGridView: false
+      showGridView: false,
+      audioToDelete: "",
+      modalStatus: false
     };
   }
   componentDidMount() {
@@ -27,7 +34,43 @@ class AudioContent extends Component {
       if (compRef.props.audioError) {
         Toaster.Toaster("Something went wrong !", compRef.props.audioError);
       }
+    }, 2000);
+  }
+  onDeleteAudio(cell, row){
+    return (
+      <Link to={this} onClick={() => this.confirmDelete(row)}>
+        <i className="fa fa-trash" title="Deactivate" />
+      </Link>
+    );
+  }
+  confirmDelete(audio) {
+    this.setState({
+      audioToDelete: audio
+    });
+    this.onModalToggle();
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onConfirmDelete() {
+    let audio = _.pick(this.state.audioToDelete, ["Id", "Active"]);
+    audio.Active = false;
+    this.props.deleteAudioFile(audio.Id, audio);
+    this.setState({ loading: true });
+    let displayMessage = "Audio deactivated successfully";
+    setTimeout(() => {
+      let message = "";
+      this.props.audioError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      this.setState({ loading: false });
+      Toaster.Toaster(message, this.props.audioError);
     }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
   }
   playAudio(cell, row) {
     return <AudioPlayer autoPlay={false} source={row.FilePath} />;
@@ -66,6 +109,8 @@ class AudioContent extends Component {
       return (
         <Col xs="12" md="4" key={idx}>
           <AudioCards
+            link={this}
+            onDelete={() => this.confirmDelete(media)}
             audioName={media.FileName}
             autoPlay={false}
             mute={true}
@@ -87,7 +132,9 @@ class AudioContent extends Component {
         //active="none"
         gridIcon={!this.state.showGridView ? "fa fa-th" : "fa fa-list"}
         toggleView={this.toggleView.bind(this)}
-        gridIconTitle ={!this.state.showGridView ? "Show list view" : "Show grid view"}
+        gridIconTitle={
+          !this.state.showGridView ? "Show list view" : "Show grid view"
+        }
       >
         {this.state.showGridView ? (
           <FormGroup row>
@@ -96,6 +143,7 @@ class AudioContent extends Component {
                 audioFiles={this.props.audioFiles}
                 sortingOptions={sortingOptions}
                 playAudio={this.playAudio.bind(this)}
+                onDeleteAudio={this.onDeleteAudio.bind(this)}
               />
             </Col>
           </FormGroup>
@@ -103,6 +151,13 @@ class AudioContent extends Component {
           <FormGroup row>{audioCards}</FormGroup>
         )}
         <ToastContainer autoClose={1000} />
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title={"Deactivate"}
+          message="Are you sure you want to deactivate this audio ?"
+        />
       </CardLayout>
     );
   }
@@ -115,7 +170,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    getAudioFiles: () => dispatch(actions.getAudioFiles())
+    getAudioFiles: () => dispatch(actions.getAudioFiles()),
+    deleteAudioFile: (id, audio) => dispatch(actions.deleteAudioFile(id, audio))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AudioContent);

@@ -14134,7 +14134,7 @@ html body .app.flex-row.align-items-center {
 }
 
 .audio-card {
-  height: 125px;
+  height: 90px;
   margin-top: -20px;
 }
 
@@ -14154,4 +14154,12 @@ html body .app.flex-row.align-items-center {
 .video-grid-dimens {
   height: 100px !important;
   width: 200px !important;
+}
+.delete-btn {
+  margin-top: 1px;
+  margin-right: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size : 18px;
 }

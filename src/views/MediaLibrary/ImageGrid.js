@@ -31,6 +31,14 @@ class AudioGrid extends Component {
         >
           Image
         </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="delete"
+          dataFormat={this.props.onDeleteImage}
+          headerAlign="left"
+          width="20"
+        >
+          Deactivate
+        </TableHeaderColumn>
       </BootstrapTable>
     );
   }

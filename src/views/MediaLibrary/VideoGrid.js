@@ -31,14 +31,14 @@ class VideoGrid extends Component {
         >
           Video
         </TableHeaderColumn>
-        {/* <TableHeaderColumn
+        <TableHeaderColumn
           dataField="delete"
-          //dataFormat={this.props.onDeleteState}
+          dataFormat={this.props.onDeleteVideo}
           headerAlign="left"
           width="20"
         >
           Deactivate
-        </TableHeaderColumn> */}
+        </TableHeaderColumn>
       </BootstrapTable>
     );
   }

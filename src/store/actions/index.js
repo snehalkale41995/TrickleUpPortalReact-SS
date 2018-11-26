@@ -26,10 +26,13 @@ export {
 export {
     postAudioFile,
     getAudioFiles,
+    deleteAudioFile,
     getVideoFiles,
     postVideoFile,
+    deleteVideoFile,
     getImageFiles,
-    postImageFile
+    postImageFile,
+    deleteImageFile
 } from './mediaContent.js'
 
 export {

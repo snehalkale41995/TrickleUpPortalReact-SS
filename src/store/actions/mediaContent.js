@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import axios from "axios";
 import AppConfig from "../../constants/AppConfig";
+import _ from "lodash";
 
 export const storeMediaContent = () => {
   return {
@@ -52,7 +53,7 @@ export const getAudioFiles = () => {
       .get(`${AppConfig.serverURL}/api/Audios/GetAudios`)
       .then(response => {
         if (response.data.success) {
-          let audios = response.data.data.Audios;
+          let audios = _.filter(response.data.data.Audios, {Active : true});
           let audioOptions = [];
           audios.forEach(audio => {
             audio.FilePath = `${AppConfig.serverURL}/${audio.FilePath}`;
@@ -85,13 +86,30 @@ export const postAudioFile = audio => {
       });
   };
 };
+export const deleteAudioFile = (audioId, audio) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Audios/DeactiveAudio?id=${audioId}`,audio)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getAudioFiles());
+        } else {
+          dispatch(logAudioError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logAudioError("Something went wrong!"));
+      });
+  };
+};
 export const getVideoFiles = () => {
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Videos/GetVideos`)
       .then(response => {
         if (response.data.success) {
-          let videos = response.data.data.Videos;
+          
+          let videos = _.filter(response.data.data.Videos, {Active : true});
           videos.forEach(video => {
             video.FilePath = `${AppConfig.serverURL}/${video.FilePath}`;
           });
@@ -121,13 +139,29 @@ export const postVideoFile = video => {
       });
   };
 };
+export const deleteVideoFile = (id,video) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Videos/DeactiveVideo?id=${id}`, video)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getVideoFiles());
+        } else {
+          dispatch(logVideoError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logVideoError("Something went wrong!"));
+      });
+  };
+};
 export const getImageFiles = () => {
   return dispatch => {
     axios
       .get(`${AppConfig.serverURL}/api/Images/GetImages`)
       .then(response => {
         if (response.data.success) {
-          let images = response.data.data.Images;
+          let images =  _.filter(response.data.data.Images, {Active : true});
           let imageOptions = [];
           images.forEach(image => {
             imageOptions.push({
@@ -151,6 +185,22 @@ export const postImageFile = image => {
   return dispatch => {
     axios
       .post(`${AppConfig.serverURL}/api/FileUpload/PostImages`, image)
+      .then(response => {
+        if (response.data.success) {
+          dispatch(getImageFiles());
+        } else {
+          dispatch(logImageError(response.data.error));
+        }
+      })
+      .catch(error => {
+        dispatch(logImageError("Something went wrong!"));
+      });
+  };
+};
+export const deleteImageFile = (id, image) => {
+  return dispatch => {
+    axios
+      .post(`${AppConfig.serverURL}/api/Images/PutImage?id=${id}`, image)
       .then(response => {
         if (response.data.success) {
           dispatch(getImageFiles());

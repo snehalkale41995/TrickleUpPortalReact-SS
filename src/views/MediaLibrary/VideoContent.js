@@ -10,12 +10,17 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import VideoGrid from "./VideoGrid";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from "lodash";
+import { Link } from "react-router-dom";
 class VideoContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      showGridView: false
+      showGridView: false,
+      modalStatus :false,
+      videoToDelete : ""
     };
   }
   componentDidMount() {
@@ -26,11 +31,47 @@ class VideoContent extends Component {
       if (compRef.props.videoError) {
         Toaster.Toaster("Something went wrong !", compRef.props.videoError);
       }
-    }, 1000);
+    }, 2000);
   }
   toggleView() {
     this.setState({
       showGridView: !this.state.showGridView
+    });
+  }
+  onDeleteVideo(cell, row){
+    return (
+      <Link to={this} onClick={() => this.confirmDelete(row)}>
+        <i className="fa fa-trash" title="Deactivate" />
+      </Link>
+    );
+  }
+  confirmDelete(video) {
+    this.setState({
+      videoToDelete: video
+    });
+    this.onModalToggle();
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onConfirmDelete() {
+    let video = _.pick(this.state.videoToDelete, ["Id", "Active"]);
+    video.Active = false;
+    this.props.deleteVideoFile(video.Id, video);
+    this.setState({ loading: true });
+    let displayMessage = "Video deactivated successfully";
+    setTimeout(() => {
+      let message = "";
+      this.props.videoError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      this.setState({ loading: false });
+      Toaster.Toaster(message, this.props.videoError);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
     });
   }
   playVideo(cell, row) {
@@ -74,6 +115,8 @@ class VideoContent extends Component {
       return (
         <Col xs="12" md="4" key={idx}>
           <VideoCards
+          link={this}
+          onDelete={() => this.confirmDelete(media)}
             videoName={media.VideoName}
             id={idx}
             source={media.FilePath}
@@ -92,7 +135,9 @@ class VideoContent extends Component {
         //active="none"
         gridIcon={!this.state.showGridView ? "fa fa-th" : "fa fa-list"}
         toggleView={this.toggleView.bind(this)}
-        gridIconTitle ={!this.state.showGridView ? "Show list view" : "Show grid view"}
+        gridIconTitle={
+          !this.state.showGridView ? "Show list view" : "Show grid view"
+        }
       >
         {this.state.showGridView ? (
           <FormGroup row>
@@ -101,6 +146,7 @@ class VideoContent extends Component {
                 videoFiles={this.props.videoFiles}
                 sortingOptions={sortingOptions}
                 playVideo={this.playVideo.bind(this)}
+                onDeleteVideo={this.onDeleteVideo.bind(this)}
               />
             </Col>
           </FormGroup>
@@ -108,6 +154,13 @@ class VideoContent extends Component {
           <Row>{videoCards}</Row>
         )}
         <ToastContainer autoClose={1000} />
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this video ?"
+        />
       </CardLayout>
     );
   }
@@ -120,7 +173,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    getVideoFiles: () => dispatch(actions.getVideoFiles())
+    getVideoFiles: () => dispatch(actions.getVideoFiles()),
+    deleteVideoFile: (id,video) => dispatch(actions.deleteVideoFile(id,video))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VideoContent);

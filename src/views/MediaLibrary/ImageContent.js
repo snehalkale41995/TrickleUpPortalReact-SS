@@ -10,13 +10,19 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
 import ImageGrid from "./ImageGrid";
 import AppConfig from "../../constants/AppConfig";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import _ from "lodash";
+import { Link } from "react-router-dom";
+
 
 class ImageContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      showGridView: false
+      showGridView: false,
+      modalStatus: false,
+      imageToDelete: ""
     };
   }
   componentDidMount() {
@@ -27,20 +33,50 @@ class ImageContent extends Component {
       if (compRef.props.imageError) {
         Toaster.Toaster("Something went wrong !", compRef.props.imageError);
       }
-    }, 1000);
+    }, 2000);
   }
   showImage(cell, row) {
-    return (
-      <img
-        src={row.FilePath}
-        style={{ height: 50, width: 50 }}
-        alt=""
-      />
-    );
+    return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
   }
   toggleView() {
     this.setState({
       showGridView: !this.state.showGridView
+    });
+  }
+  onDeleteImage(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.confirmDelete(row)}>
+        <i className="fa fa-trash" title="Deactivate" />
+      </Link>
+    );
+  }
+  confirmDelete(image) {
+    this.setState({
+      imageToDelete: image
+    });
+    this.onModalToggle();
+  }
+  onModalToggle() {
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onConfirmDelete() {
+    let image = _.pick(this.state.imageToDelete, ["Id", "Active"]);
+    image.Active = false;
+    this.props.deleteImageFile(image.Id, image);
+    this.setState({ loading: true });
+    let displayMessage = "Image deactivated successfully";
+    setTimeout(() => {
+      let message = "";
+      this.props.imageError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      this.setState({ loading: false });
+      Toaster.Toaster(message, this.props.imageError);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
     });
   }
   render() {
@@ -72,6 +108,8 @@ class ImageContent extends Component {
       return (
         <Col xs="12" md="4" key={idx}>
           <ImageCards
+            link={this}
+            onDelete={() => this.confirmDelete(media)}
             imageName={media.ImageName}
             id={idx}
             source={media.FilePath}
@@ -90,7 +128,9 @@ class ImageContent extends Component {
         //active="none"
         gridIcon={!this.state.showGridView ? "fa fa-th" : "fa fa-list"}
         toggleView={this.toggleView.bind(this)}
-        gridIconTitle ={!this.state.showGridView ? "Show list view" : "Show grid view"}
+        gridIconTitle={
+          !this.state.showGridView ? "Show list view" : "Show grid view"
+        }
       >
         {this.state.showGridView ? (
           <FormGroup row>
@@ -99,13 +139,20 @@ class ImageContent extends Component {
                 imageFiles={this.props.imageFiles}
                 sortingOptions={sortingOptions}
                 showImage={this.showImage.bind(this)}
+                onDeleteImage={this.onDeleteImage.bind(this)}
               />
             </Col>
           </FormGroup>
         ) : (
           <FormGroup row>{imageCards}</FormGroup>
         )}
-
+        <ConfirmModal
+          isOpen={this.state.modalStatus}
+          onModalToggle={this.onModalToggle.bind(this)}
+          onConfirmDelete={this.onConfirmDelete.bind(this)}
+          title="Deactivate"
+          message="Are you sure you want to deactivate this image ?"
+        />
         <ToastContainer autoClose={1000} />
       </CardLayout>
     );
@@ -119,7 +166,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    getImageFiles: () => dispatch(actions.getImageFiles())
+    getImageFiles: () => dispatch(actions.getImageFiles()),
+    deleteImageFile: (id, image) => dispatch(actions.deleteImageFile(id, image))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ImageContent);
