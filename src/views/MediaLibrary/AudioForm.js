@@ -9,6 +9,7 @@ import * as actions from "../../store/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import _ from "lodash";
 class AudioForm extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,9 @@ class AudioForm extends Component {
       renderURL: "",
       audioTitle: "",
       audioRequired: false,
-      audioName : ""
+      audioInvalid :false,
+      audioName : "",
+      isAudio : true
     };
   }
   componentDidMount() {
@@ -49,7 +52,7 @@ class AudioForm extends Component {
   onSubmitMedia() {
     let audioFile = this.state.audioFile;
     let compRef = this;
-    if (audioFile) {
+    if(this.validAudioFile(audioFile)){
       let audioData = new FormData();
       audioData.append("audio", audioFile);
       this.props.postAudioFile(audioData);
@@ -69,8 +72,20 @@ class AudioForm extends Component {
           }
         }, 1000);
       }, 1000);
+    }
+  }
+  validAudioFile(audio){
+    if (audio && audio.type !== "" && _.includes(audio.type , "audio")) {
+      this.setState({ isAudio: true });
+      return true;
     } else {
-      this.setState({ audioRequired: true });
+      if (!audio) {
+        this.setState({ audioRequired: true });
+      }
+      if (audio && (audio.type === "" || !_.includes(audio.type, "audio"))) {
+        this.setState({ audioInvalid: true });
+      }
+      return false;
     }
   }
   onReset() {
@@ -80,11 +95,12 @@ class AudioForm extends Component {
       renderURL: "",
       audioTitle: "",
       audioRequired: false,
+      audioInvalid : false,
       audioName : ""
     });
   }
   render() {
-    const { audioTitle, audioFile ,renderURL, audioRequired } = this.state;
+    const { audioTitle, audioFile ,renderURL, audioRequired, audioInvalid } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -105,6 +121,7 @@ class AudioForm extends Component {
                     accept="audio/*"
                     value = {audioFile === null ? "" : null}
                     required={audioRequired}
+                    invalid={audioInvalid}
                     onChange={event => this.handleUploadFile(event)}
                   />
                 </Col>

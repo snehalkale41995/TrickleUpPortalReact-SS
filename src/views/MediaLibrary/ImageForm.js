@@ -8,6 +8,7 @@ import * as actions from "../../store/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import _ from "lodash";
 class ImageForm extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +18,8 @@ class ImageForm extends Component {
       uploadedFile: null,
       renderURL: "",
       imageTitle: "",
-      imageRequired: false
+      imageRequired: false,
+      imageInvalid: false
     };
   }
   componentDidMount() {
@@ -47,7 +49,7 @@ class ImageForm extends Component {
   onSubmitMedia() {
     let imageFile = this.state.imageFile;
     let compRef = this;
-    if (imageFile) {
+    if (this.validImage(imageFile)) {
       let imageData = new FormData();
       imageData.append("image", imageFile);
       this.props.postImageFile(imageData);
@@ -56,7 +58,7 @@ class ImageForm extends Component {
       setTimeout(() => {
         compRef.props.imageError
           ? (message = "Something went wrong !")
-          : (message = "Video uploaded successfully");
+          : (message = "Image uploaded successfully");
         compRef.onReset();
         compRef.setState({ loading: false });
         Toaster.Toaster(message, compRef.props.imageError);
@@ -67,8 +69,20 @@ class ImageForm extends Component {
           }
         }, 1000);
       }, 1000);
+    }
+  }
+  validImage(image){
+    if (image && image.type !== "" && _.includes(image.type , "image")) {
+      this.setState({ isAudio: true });
+      return true;
     } else {
-      this.setState({ imageRequired: true });
+      if (!image) {
+        this.setState({ imageRequired: true });
+      }
+      if (image && (image.type === "" || !_.includes(image.type, "image"))) {
+        this.setState({ imageInvalid: true });
+      }
+      return false;
     }
   }
   onReset() {
@@ -77,11 +91,12 @@ class ImageForm extends Component {
       uploadedFile: null,
       renderURL: "",
       imageTitle: "",
-      imageRequired: false
+      imageRequired: false,
+      imageInvalid: false
     });
   }
   render() {
-    const { imageTitle, imageFile, renderURL, imageRequired } = this.state;
+    const { imageTitle, imageFile, renderURL, imageRequired, imageInvalid } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -102,6 +117,7 @@ class ImageForm extends Component {
                     accept="image/*"
                     value={imageFile === null ? "" : null}
                     required={imageRequired}
+                    invalid={imageInvalid}
                     onChange={event => this.handleUploadFile(event)}
                   />
                 </Col>

@@ -10,6 +10,7 @@ import * as actions from "../../store/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Toaster from "../../constants/Toaster";
+import _ from "lodash";
 class VideoForm extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,9 @@ class VideoForm extends Component {
       uploadedFile: null,
       renderURL: "",
       videoTitle: "",
-      videoRequired: false
+      videoRequired: false,
+      videoInvalid: false,
+      isVideo: true
     };
   }
   componentDidMount() {
@@ -34,7 +37,8 @@ class VideoForm extends Component {
         videoFile: video,
         renderURL: URL.createObjectURL(video),
         videoTitle: video.name,
-        videoRequired: false
+        videoRequired: false,
+        videoInvalid: false
       });
     } else {
       this.setState({
@@ -49,7 +53,7 @@ class VideoForm extends Component {
   onSubmitMedia() {
     let videoFile = this.state.videoFile;
     let compRef = this;
-    if (videoFile) {
+    if (this.validVideo(videoFile)) {
       let videoData = new FormData();
       videoData.append("video", videoFile);
       this.props.postVideoFile(videoData);
@@ -69,8 +73,20 @@ class VideoForm extends Component {
           }
         }, 1000);
       }, 1000);
+    }
+  }
+  validVideo(video) {
+    if (video && video.type !== "" && _.includes(video.type, "video")) {
+      this.setState({ isVideo: true });
+      return true;
     } else {
-      this.setState({ videoRequired: true });
+      if (!video) {
+        this.setState({ videoRequired: true });
+      }
+      if (video && (video.type === "" || !_.includes(video.type, "video"))) {
+        this.setState({ videoInvalid: true });
+      }
+      return false;
     }
   }
   onReset() {
@@ -79,11 +95,18 @@ class VideoForm extends Component {
       uploadedFile: null,
       renderURL: "",
       videoTitle: "",
+      videoInvalid: false,
       videoRequired: false
     });
   }
   render() {
-    const { videoTitle, videoFile, renderURL, videoRequired } = this.state;
+    const {
+      videoTitle,
+      videoFile,
+      renderURL,
+      videoRequired,
+      videoInvalid
+    } = this.state;
     return this.state.loading ? (
       <Loader loading={this.state.loading} />
     ) : (
@@ -104,6 +127,7 @@ class VideoForm extends Component {
                     accept="video/*"
                     value={videoFile === null ? "" : null}
                     required={videoRequired}
+                    invalid={videoInvalid}
                     onChange={event => this.handleUploadFile(event)}
                   />
                 </Col>
