@@ -71,7 +71,7 @@ class CropStepsForm extends Component {
       return cropStep.Id == id;
     });
     if(currentCropStep !== undefined){
-      currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.MediaURL}`;
+      currentCropStep.renderURL = `${AppConfig.serverURL}/${currentCropStep.ImagePath}`;
       let imageAllocation = _.filter(this.props.imageFiles, {
         FilePath: currentCropStep.renderURL
       });
@@ -308,6 +308,48 @@ class CropStepsForm extends Component {
       );
     }
   }
+  showImage(cell, row) {
+    return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
+  }
+  onDeleteCropStepImage(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.onModalToggle("image")}>
+        <i className="fa fa-trash" title="Delete" />
+      </Link>
+    );
+  }
+  onModalToggle(itemToDelete) {
+    this.setState({
+      itemToDelete: itemToDelete,
+      modalStatus: !this.state.modalStatus
+    });
+  }
+  onConfirmDeleteImage() {
+    let cropStep = { ...this.state.cropStep };
+    let compRef = this;
+    cropStep.UpdatedBy = localStorage.getItem("user");
+    cropStep.UpdatedOn = new Date();
+    cropStep.ImagePath = null;
+    let cropUpdateData = _.pick(cropStep, [
+      "Id",
+      "FilePath",
+      "UpdatedBy",
+      "UpdatedOn"
+    ]);
+    this.props.updateCropStepImage(cropUpdateData.Id, cropUpdateData);
+    let displayMessage = "Crop step image removed successfully";
+    setTimeout(() => {
+      let message = "";
+      compRef.props.cropStepError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, compRef.props.cropStepError);
+      compRef.setCurrentCropToState(this.props.match.params.id);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
   /**---------------------------------Render function=---------------------------------- */
   render() {
     let cropStep = { ...this.state.cropStep };
@@ -401,7 +443,7 @@ class CropStepsForm extends Component {
                   </FormGroup>
                 </CollapseCards>
               </div>
-              {/* <div style={{ marginTop: -30 }}>
+              <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
                     buttonName={this.state.imageAllocation.length === 0  ? "Add Image" : null}
@@ -415,11 +457,12 @@ class CropStepsForm extends Component {
                         <ImageAllocationGrid
                             imageAllocation = {this.state.imageAllocation}
                             showImage ={this.showImage.bind(this)}
+                            onDelete={this.onDeleteCropStepImage.bind(this)}
                         />
                       </Col>
                     </FormGroup> 
                   </CollapseCards>
-                </div> */}
+                </div>
             </div>
           ) : null}
           {this.state.updateFlag ? (
@@ -498,6 +541,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.updateCropStep(id, cropStep)),
       deleteCropStepsAudioAllocation: (id, audioAllocation) =>
       dispatch(actions.deleteCropStepsAudioAllocation(id, audioAllocation)),
+      updateCropStepImage: (id, imageAllocate) =>
+      dispatch(actions.updateCropStepImage(id, imageAllocate)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropStepsForm);

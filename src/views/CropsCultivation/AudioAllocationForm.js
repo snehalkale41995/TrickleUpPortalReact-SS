@@ -261,7 +261,10 @@ class AudioAllocationForm extends Component {
         CreatedOn: "",
         UpdatedBy: "",
         UpdatedOn: "",
-        Active: true
+        Active: true,
+        CropId : this.props.match.params.id,
+        StepId : this.props.match.params.id,
+        MaterialId : this.props.match.params.id,
       },
       audioValue: "",
       renderURL: "",

@@ -106,7 +106,7 @@ class CropSteps extends Component {
   showImage(cell, row) {
     return (
       <img
-        src={`${AppConfig.serverURL}/${row.MediaURL}`}
+        src={`${AppConfig.serverURL}/${row.ImagePath}`}
         style={{ height: 50, width: 50 }}
         alt=""
       />

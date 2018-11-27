@@ -35,6 +35,7 @@ class CropMaterialForm extends Component {
         Material_NameRequired: false,
         Material_TransactionRequired: false,
         Per_Decimal_PriceRequired: false,
+        Per_Decimal_PriceInValid: false,
         QuantityRequired: false,
         CreatedBy: "",
         UpdatedBy: "",
@@ -112,6 +113,7 @@ class CropMaterialForm extends Component {
     let cropMaterial = { ...this.state.cropMaterial };
     cropMaterial[event.target.name] = event.target.value;
     cropMaterial[event.target.name + "Required"] = false;
+    cropMaterial[event.target.name + "InValid"] = false;
     this.setState({
       cropMaterial: cropMaterial
     });
@@ -180,6 +182,7 @@ class CropMaterialForm extends Component {
         }, 1000);
       }, 1000);
     } else {
+      let validPrice = /^\d+$/.test(cropMaterial.Per_Decimal_Price.toString())
       if (
         !cropMaterial.Material_Name ||
         cropMaterial.Material_Name.trim().length <= 0
@@ -195,6 +198,9 @@ class CropMaterialForm extends Component {
         cropMaterial.Per_Decimal_Price.toString().trim().length <= 0
       )
         cropMaterial.Per_Decimal_PriceRequired = true;
+        if(!validPrice){
+          cropMaterial.Per_Decimal_PriceInValid = true;
+        }
       if (!cropMaterial.Quantity || cropMaterial.Quantity.trim().length <= 0)
         cropMaterial.QuantityRequired = true;
       if (!cropMaterial.Step_Id) cropMaterial.Step_IdRequired = true;
@@ -205,6 +211,7 @@ class CropMaterialForm extends Component {
   }
 
   validCropMaterial(cropMaterial) {
+    let validPrice = /^\d+$/.test(cropMaterial.Per_Decimal_Price.toString())
     if (
       cropMaterial.Material_Name &&
       cropMaterial.Material_Name.trim().length > 0 &&
@@ -212,6 +219,7 @@ class CropMaterialForm extends Component {
       cropMaterial.Material_Transaction.trim().length > 0 &&
       cropMaterial.Per_Decimal_Price &&
       cropMaterial.Per_Decimal_Price.toString().trim().length > 0 &&
+      validPrice &&
       cropMaterial.Quantity &&
       cropMaterial.Quantity.trim().length > 0 &&
       cropMaterial.Step_Id
@@ -233,6 +241,7 @@ class CropMaterialForm extends Component {
         Material_NameRequired: false,
         Material_TransactionRequired: false,
         Per_Decimal_PriceRequired: false,
+        Per_Decimal_PriceInValid :false,
         QuantityRequired: false
       }
     });
@@ -412,6 +421,7 @@ class CropMaterialForm extends Component {
                     placeholder="Per_Decimal_Price"
                     value={cropMaterial.Per_Decimal_Price}
                     required={cropMaterial.Per_Decimal_PriceRequired}
+                    invalid= {cropMaterial.Per_Decimal_PriceInValid}
                     onChange={event => this.onChangeHandler(event)}
                   />
                 </Col>
