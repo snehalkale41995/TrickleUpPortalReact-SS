@@ -60,14 +60,14 @@ class ImageAllocationForm extends Component {
           return cropMaterial.Id === parseInt(id);
         });
       }
-      if(imageAllocation !== undefined){
+      if (imageAllocation !== undefined) {
         imageAllocation.imageRequired = false;
         this.setState({
           loading: false,
           imageAllocation
         });
-      }else{
-          this.goBack();
+      } else {
+        this.goBack();
       }
     }, 1000);
   }
@@ -78,6 +78,8 @@ class ImageAllocationForm extends Component {
     let imageAllocation = { ...this.state.imageAllocation };
     if (imageSelected !== null) {
       imageAllocation.FilePath = imageSelected.FilePath;
+      imageAllocation.Image_Path = imageSelected.FilePath;
+      imageAllocation.ImagePath = imageSelected.FilePath;
       imageAllocation.imageRequired = false;
       let imageValue = imageSelected;
       let renderURL = `${AppConfig.serverURL}/${imageSelected.FilePath}`;
@@ -93,25 +95,67 @@ class ImageAllocationForm extends Component {
     if (imageAllocation.FilePath) {
       imageAllocation.UpdatedBy = localStorage.getItem("user");
       imageAllocation.UpdatedOn = new Date();
-      let image = _.pick(imageAllocation, [
-        "Id",
-        "FilePath",
-        "UpdatedBy",
-        "UpdatedOn"
-      ]);
-      this.props.updateCropImage(image.Id, image);
-      this.setState({ loading: true });
+      let image = {};
+      let imageCategory = this.props.match.params.imageCategory;
+      if (imageCategory === "crop") {
+        image = _.pick(imageAllocation, [
+          "Id",
+          "FilePath",
+          "UpdatedBy",
+          "UpdatedOn"
+        ]);
+        this.props.updateCropImage(image.Id, image);
+      } else if (imageCategory === "cropStep") {
+        image = _.pick(imageAllocation, [
+          "Id",
+          "ImagePath",
+          "UpdatedBy",
+          "UpdatedOn"
+        ]);
+        // update crop step image
+        this.props.updateCropsStepsImage(image.Id, image);
+      } else {
+        image = _.pick(imageAllocation, [
+          "Id",
+          "Image_Path",
+          "UpdatedBy",
+          "UpdatedOn"
+        ]);
+        this.props.updateCropMaterialImage(image.Id, image);
+        // update crop step image
+      }
       let message = "";
       let compRef = this;
+      this.setState({ loading: true });
+      if (imageCategory === "crop") {
+        if (this.props.cropError) {
+          this.setState({ error: this.props.cropError });
+        } else {
+          this.setState({ error: "" });
+        }
+      } else if (imageCategory === "cropStep") {
+        if (this.props.cropStepError) {
+          this.setState({ error: this.props.cropStepError });
+        } else {
+          this.setState({ error: "" });
+        }
+      } else {
+        if (this.props.cropMaterialError) {
+          this.setState({ error: this.props.cropMaterialError });
+        } else {
+          this.setState({ error: "" });
+        }
+      }
+
       setTimeout(() => {
-        compRef.props.cropError
+        compRef.state.error
           ? (message = "Something went wrong !")
-          : (message = "Crop image allocation successfully");
+          : (message = "Image allocation successfully");
         compRef.onReset();
         compRef.setState({ loading: false });
-        Toaster.Toaster(message, compRef.props.cropError);
+        Toaster.Toaster(message, compRef.state.error);
         setTimeout(() => {
-          if (!compRef.props.cropError) {
+          if (!compRef.state.error) {
             compRef.goBack();
           }
         }, 1000);
@@ -240,6 +284,7 @@ export const mapStateToProps = state => {
     cropMaterialError: state.cropsReducer.cropMaterialError,
     cropError: state.cropsReducer.cropError,
     cropStepError: state.cropsReducer.cropStepError,
+
     activeCrops: state.cropsReducer.activeCrops,
     activeCropSteps: state.cropsReducer.activeCropSteps,
     activeCropMaterial: state.cropsReducer.activeCropMaterial
@@ -253,8 +298,10 @@ export const mapDispatchToProps = dispatch => {
     getCropStepsMaterial: () => dispatch(actions.getCropStepsMaterial()),
     updateCropImage: (id, imageAllocate) =>
       dispatch(actions.updateCropImage(id, imageAllocate)),
-    UpdateCropsStepsImage: (id, imageAllocate) =>
-      dispatch(actions.updateCropStepImage(id, imageAllocate))
+    updateCropsStepsImage: (id, imageAllocate) =>
+      dispatch(actions.updateCropStepImage(id, imageAllocate)),
+    updateCropMaterialImage: (id, imageAllocate) =>
+      dispatch(actions.updateCropMaterialImage(id, imageAllocate))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(
