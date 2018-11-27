@@ -100,9 +100,9 @@ class CropMaterialForm extends Component {
           activeAudioAllocation: activeAudioAllocation,
           inActiveAudioAllocation: inActiveAudioAllocation,
           audioGridOpen: true,
-          imageAllocation: imageAllocation
+          imageAllocation: imageAllocation,
           // videoGridOpen: true,
-          //imageGridOpen: true
+          imageGridOpen: true
         });
       }, 1000);
     } else {
@@ -327,22 +327,58 @@ class CropMaterialForm extends Component {
     });
   }
   /***------------------Image Allocation functions -------------------------------------- */
-  // imageToggleCollapse() {
-  //   this.setState({
-  //     imageGridOpen: !this.state.imageGridOpen
-  //   });
-  // }
-  // showImage(cell, row) {
-  //   return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
-  // }
-  // onAddImage() {
-  //   if (this.props.match.params.id !== undefined) {
-  //     this.props.history.push(
-  //       `/cropCultivations/imageAllocation/${"cropMaterial"}/${this.props.match
-  //         .params.id}`
-  //     );
-  //   }
-  // }
+  imageToggleCollapse() {
+    this.setState({
+      imageGridOpen: !this.state.imageGridOpen
+    });
+  }
+  showImage(cell, row) {
+    return <img src={row.FilePath} style={{ height: 50, width: 50 }} alt="" />;
+  }
+  onAddImage() {
+    if (this.props.match.params.id !== undefined) {
+      this.props.history.push(
+        `/cropCultivations/imageAllocation/${"cropMaterial"}/${this.props.match
+          .params.id}`
+      );
+    }
+  }
+  
+    onDeleteCropMaterialImage(cell, row) {
+    return (
+      <Link to={this} onClick={() => this.onModalToggle("image")}>
+        <i className="fa fa-trash" title="Delete" />
+      </Link>
+    );
+  }
+
+  onConfirmDeleteImage() {
+    let cropMaterial = { ...this.state.cropMaterial };
+    let compRef = this;
+    cropMaterial.UpdatedBy = localStorage.getItem("user");
+    cropMaterial.UpdatedOn = new Date();
+    cropMaterial.Image_Path = null;
+    let cropUpdateData = _.pick(cropMaterial, [
+      "Id",
+      "Image_Path",
+      "UpdatedBy",
+      "UpdatedOn"
+    ]);
+    this.props.updateCropMaterialImage(cropUpdateData.Id, cropUpdateData);
+    let displayMessage = "Crop material image removed successfully";
+    setTimeout(() => {
+      let message = "";
+      compRef.props.cropMaterialError
+        ? (message = "Something went wrong !")
+        : (message = displayMessage);
+      Toaster.Toaster(message, compRef.props.cropMaterialError);
+      compRef.setCurrentMaterialToState(this.props.match.params.id);
+    }, 1000);
+    this.setState({
+      modalStatus: !this.state.modalStatus
+    });
+  }
+
 
   render() {
     let cropMaterial = { ...this.state.cropMaterial };
@@ -466,7 +502,7 @@ class CropMaterialForm extends Component {
                     </FormGroup>
                   </CollapseCards>
                 
-                {/* <div style={{ marginTop: -30 }}>
+                 <div style={{ marginTop: -30 }}>
                   <CollapseCards
                     subName="Image Allocation"
                     buttonName={
@@ -484,11 +520,12 @@ class CropMaterialForm extends Component {
                         <ImageAllocationGrid
                           imageAllocation={this.state.imageAllocation}
                           showImage={this.showImage.bind(this)}
+                          onDelete={this.onDeleteCropMaterialImage.bind(this)}
                         />
                       </Col>
                     </FormGroup>
                   </CollapseCards>
-                </div> */}
+                </div> 
               </div>
             ) : null}
          
@@ -555,7 +592,6 @@ const mapStateToProps = state => {
       state.cropsReducer.currentCropMaterialAudioAllocation,
     cropMaterialError: state.cropsReducer.cropMaterialError,
     cropStepList: state.cropsReducer.cropStepList,
-    cropMaterialError: state.cropsReducer.cropMaterialError,
     imageFiles: state.mediaReducer.imageFiles
   };
 };
@@ -570,7 +606,9 @@ const mapDispatchToProps = dispatch => {
     updateCropMaterial: (id, cropMaterial) =>
       dispatch(actions.updateCropMaterial(id, cropMaterial)),
     deleteCropMaterialAudioAllocation: (id, audio) =>
-      dispatch(actions.deleteCropMaterialAudioAllocation(id, audio))
+      dispatch(actions.deleteCropMaterialAudioAllocation(id, audio)),
+    updateCropMaterialImage: (id, imageAllocate) =>
+      dispatch(actions.updateCropMaterialImage(id, imageAllocate))
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CropMaterialForm);
